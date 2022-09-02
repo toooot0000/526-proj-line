@@ -84,6 +84,8 @@ namespace Core{
                 for (int i = 0; i < count; i++){
                     lineRenderer.SetPosition(i, _circleDetector.points[i]);
                 }
+                // TODO Add the circled balls detection
+                
             } else{
                 lineRenderer.positionCount = positionCount + 1;
                 lineRenderer.SetPosition(positionCount, worldPosition);
