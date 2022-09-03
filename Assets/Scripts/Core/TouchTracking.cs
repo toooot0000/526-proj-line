@@ -12,6 +12,7 @@ namespace Core{
         public new Camera camera;
         public LineColliderGenerator lineColliderGenerator;
         public GameObject touchCollider;
+        public CircleCollider polygonCollider;
         
         private Boolean _isTracing = false;
         private RectTransform _rect;
@@ -33,7 +34,7 @@ namespace Core{
         public void StartTracking(){
             _isTracing = true;
             lineRenderer.positionCount = 0;
-            // lineColliderGenerator.ClearPoints();
+            _circleDetector.points.Clear();
         }
 
         public void StopTracking(){
@@ -85,7 +86,7 @@ namespace Core{
                     lineRenderer.SetPosition(i, _circleDetector.points[i]);
                 }
                 // TODO Add the circled balls detection
-                
+                polygonCollider.SetCircle(circle.Select(v => (Vector2)polygonCollider.transform.InverseTransformPoint(v)).ToArray());
             } else{
                 lineRenderer.positionCount = positionCount + 1;
                 lineRenderer.SetPosition(positionCount, worldPosition);
