@@ -11,16 +11,21 @@ namespace Core{
         public LineRenderer lineRenderer;
         public new Camera camera;
         public LineColliderGenerator lineColliderGenerator;
-        public GameObject touchCollider;
+        public TouchCollider touchCollider;
         public CircleCollider polygonCollider;
-        
+        public float totalLineLength;
+        public LengthBar lengthBar;
+
+
         private Boolean _isTracing = false;
         private RectTransform _rect;
         private CircleDetector _circleDetector;
+        private float _currentLineLength = 0;
 
         private void Start(){
             _rect = GetComponent<RectTransform>();
             _circleDetector = new CircleDetector();
+            touchCollider.SetEnabled(false);
         }
 
         private void Update(){
@@ -33,13 +38,16 @@ namespace Core{
 
         public void StartTracking(){
             _isTracing = true;
+            touchCollider.SetEnabled(true);
             lineRenderer.positionCount = 0;
             _circleDetector.points.Clear();
+            _currentLineLength = 0;
         }
 
         public void StopTracking(){
             if (!_isTracing) return;
             _isTracing = false;
+            touchCollider.SetEnabled(false);
         }
 
         private Vector2 GetCurrentTouchPosition(){
@@ -61,6 +69,7 @@ namespace Core{
 
         private void TraceTouchPosition(){
             if (!_isTracing) return;
+            if (_currentLineLength >= totalLineLength) return;
 #if UNITY_STANDALONE || UNITY_WEBGL
             var inputPosition = Input.mousePosition;
 #else
@@ -70,29 +79,35 @@ namespace Core{
                 inputPosition.y,
                 camera.nearClipPlane));
             worldPosition.z = -.1f;
-            var positionCount = lineRenderer.positionCount;
-            if (positionCount > 0 &&
-                (worldPosition - lineRenderer.GetPosition(positionCount - 1)).magnitude < minDistance)
-                return;
             
+            var positionCount = lineRenderer.positionCount;
             touchCollider.transform.SetPositionAndRotation(worldPosition, Quaternion.Euler(0, 0, 0));
-
+            
+            // Length validate
+            var curSegLength = 0.0f;
+            if (positionCount > 0){
+                var remain = totalLineLength - _currentLineLength;
+                curSegLength = (worldPosition - lineRenderer.GetPosition(positionCount - 1)).magnitude;
+                if (curSegLength < minDistance) return;
+                curSegLength = Mathf.Min(curSegLength, remain);
+            }
+            
+            // Circle handling 
             _circleDetector.AddPoint(worldPosition);
             var circle = _circleDetector.DetectCircle();
             if (circle != null){
-                var count = _circleDetector.points.Count;
-                lineRenderer.positionCount = count;
-                for (int i = 0; i < count; i++){
-                    lineRenderer.SetPosition(i, _circleDetector.points[i]);
-                }
                 // TODO Add the circled balls detection
-                polygonCollider.SetCircle(circle.Select(v => (Vector2)polygonCollider.transform.InverseTransformPoint(v)).ToArray());
-            } else{
-                lineRenderer.positionCount = positionCount + 1;
-                lineRenderer.SetPosition(positionCount, worldPosition);
+                polygonCollider.SetCircle(circle
+                    .Select(v => (Vector2)polygonCollider.transform.InverseTransformPoint(v)).ToArray());
             }
+            
+            // Add point to lineRenderer
+            lineRenderer.positionCount = positionCount + 1;
+            lineRenderer.SetPosition(positionCount, worldPosition);
+            
+            // Add length
+            _currentLineLength += curSegLength;
+            lengthBar.Percentage = 100 - _currentLineLength / totalLineLength * 100;
         }
-
-
     }
 }
