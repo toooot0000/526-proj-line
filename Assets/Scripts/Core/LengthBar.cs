@@ -22,17 +22,14 @@ namespace Core{
     public class LengthBar: MonoBehaviour{
 
         public AnimationCurve tweenCurve;
-        public float tweenTime = 0.2f;
+        public float tweenMaxSpeed = 20f;
 
         private float _percentage = 100.0f;
+        private float _currentPercentage = 100f;
 
         public float Percentage{
             get => _percentage;
-            set{
-                var newPer = Mathf.Clamp(value, .0f, 100f);
-                UpdateLine(newPer);
-                _percentage = newPer;
-            }
+            set => _percentage = Mathf.Clamp(value, .0f, 100f);
         }
 
         private LineRenderer _line;
@@ -48,25 +45,19 @@ namespace Core{
             _line.SetPosition(1, PercentageToLocalPosition(100));
         }
 
+        private void Update(){
+            var diff =  _percentage - _currentPercentage;
+            var speed = Mathf.Sign(diff) * tweenCurve.Evaluate(Mathf.Abs(diff)/100) * tweenMaxSpeed;
+            _currentPercentage += speed * Time.deltaTime;
+            _currentPercentage = Mathf.Clamp(_currentPercentage, 0, 100f);
+            _line.SetPosition(1, PercentageToLocalPosition(_currentPercentage));
+        }
+
         private Vector3 PercentageToLocalPosition(float percentage){
             var rect = ((RectTransform)transform).rect;
             return new Vector3(
                 Mathf.Lerp(rect.position.x, rect.position.x + rect.size.x, percentage / 100.0f),
                 rect.position.y + rect.size.y/2f, transform.position.z);
-        }
-
-        private void UpdateLine(float newPer){
-            if (_coroutine != null){
-                StopCoroutine(_coroutine);   
-            }
-
-            var start = new Vector3Wrapper(PercentageToLocalPosition(_percentage));
-            var end = new Vector3Wrapper(PercentageToLocalPosition(newPer));
-            var tween = new Tween<Vector3Wrapper>(start, end, tweenTime, tweenCurve);
-            var enumerator = TweenUtility.MakeEnumerator(tween, wrapper => {
-                _line.SetPosition(1, wrapper.vec);
-            });
-            _coroutine = StartCoroutine(enumerator);
         }
 
     }
