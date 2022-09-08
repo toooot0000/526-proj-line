@@ -1,4 +1,5 @@
 using System;
+using Core.SizeSyncer;
 using Extensions;
 using UnityEditor;
 using UnityEngine;
@@ -17,11 +18,11 @@ namespace Core{
             rectTrans.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
             rectTrans.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(0, 0, 0));
 
-            foreach (var syncer in GetComponentsInChildren<SpriteSyncSizeWithRectTransform>()){
+            foreach (var syncer in GetComponentsInChildren<SpriteSizeSyncer>()){
                 syncer.SyncSize();
             }
 
-            foreach (var syncer in GetComponentsInChildren<BoxCollider2DSyncSizeWithRectTransform>()){
+            foreach (var syncer in GetComponentsInChildren<BaseColliderSizeSyncer>()){
                 syncer.SyncSize();
             }
         }
