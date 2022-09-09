@@ -15,6 +15,7 @@ namespace Core2{
 
         private RectTransform _transform;
         private Rigidbody2D _rigidbody2D;
+        private Vector2 _prevVelocity;
 
         public TouchTrigger trigger;
 
@@ -24,16 +25,19 @@ namespace Core2{
             _rigidbody2D.freezeRotation = true;
             trigger.PointerDown += _ => OnPointerDown();
             trigger.PointerUp += _ => OnPointerUp();
+            _prevVelocity = Vector2.zero;
         }
 
         private void FixedUpdate(){
             if (!_isPressed){
+                _prevVelocity = _rigidbody2D.velocity;
                 return;
             }
             var dis = Mathf.Abs(Input.mousePosition.x - _originPosition.x);
             var sign = Mathf.Sign(Input.mousePosition.x - _originPosition.x);
             var speed = sign * maxSpeed * speedCurve.Evaluate(dis / maxDistance);
-            _rigidbody2D.velocity = new Vector2(speed, 0);
+            _prevVelocity = new Vector2(speed, 0);
+            _rigidbody2D.velocity = _prevVelocity;
         }
 
         private void OnPointerDown(){
@@ -48,7 +52,8 @@ namespace Core2{
         private void OnCollisionEnter2D(Collision2D col){
             if (col.collider.CompareTag("Ball")) return;
             if (col.collider.gameObject.layer == LayerMask.NameToLayer("Wall")){
-                _rigidbody2D.velocity = new Vector2(-_rigidbody2D.velocity.x, 0);
+                _prevVelocity = new Vector2(-_prevVelocity.x, 0);
+                _rigidbody2D.velocity = _prevVelocity;
             }
         }
     }
