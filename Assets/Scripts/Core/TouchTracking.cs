@@ -96,7 +96,6 @@ namespace Core{
             _circleDetector.AddPoint(worldPosition);
             var circle = _circleDetector.DetectCircle();
             if (circle != null){
-                // TODO Add the circled balls detection
                 polygonCollider.SetCircle(circle
                     .Select(v => (Vector2)polygonCollider.transform.InverseTransformPoint(v)).ToArray());
             }
