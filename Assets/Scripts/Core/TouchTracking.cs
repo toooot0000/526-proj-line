@@ -14,7 +14,7 @@ namespace Core{
         public TouchCollider touchCollider;
         public CircleCollider polygonCollider;
         public float totalLineLength;
-        public LengthBar lengthBar;
+        public ProgressBar progressBar;
 
 
         private Boolean _isTracing = false;
@@ -106,7 +106,7 @@ namespace Core{
             
             // Add length
             _currentLineLength += curSegLength;
-            lengthBar.Percentage = 100 - _currentLineLength / totalLineLength * 100;
+            progressBar.Percentage = 100 - _currentLineLength / totalLineLength * 100;
         }
     }
 }
