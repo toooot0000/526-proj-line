@@ -13,6 +13,7 @@ namespace Core.Model{
         public int rarity;
         public Type type;
         public int ballId;
+        public Ball ball;
         public int ballNum;
         public String chargeEffect;
         public String combEffect;

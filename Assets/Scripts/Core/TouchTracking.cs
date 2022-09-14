@@ -5,6 +5,9 @@ using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
+ * TODO need to be refactored!
+ */
 namespace Core{
     public class TouchTracking : MonoBehaviour{
         public float minDistance = 5f;

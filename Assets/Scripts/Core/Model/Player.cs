@@ -6,7 +6,7 @@ namespace Core.Model{
 
         public int hpUpLimit;
         public int currentHp;
-        public int[] gears;
+        public Gear[] gears;
         public int gearUpLimit;
         public int energy;
         
