@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 
 namespace Core.Model{
+    public delegate void ModelEvent(Game game, GameModel model);
+
     public class Game: GameModel{
 
         public enum Turn{
@@ -9,18 +11,20 @@ namespace Core.Model{
         }
 
         public Turn turn = Turn.Player;
-        public List<Ball> currentSelectBalls = new List<Ball>();
         
         public Player player;
-        public Enemy[] enemies;
+        public List<Enemy> enemies;
 
         public Game(GameModel parent = null) : base(parent){
             currentGame = this;
-            player = new Player(this);
-            enemies = new Enemy[3]{ new Enemy(this), new Enemy(this), new Enemy(this) };
+            player = new(this);
+            enemies = new();
+            enemies.Add(new(this));
+            enemies.Add(new(this));
+            enemies.Add(new(this));
         }
 
-        public List<Ball> GetAllBalls(){
+        public List<Ball> GetAllSkillBalls(){
             var ret = new List<Ball>();
             foreach (var item in player.gears){
                 for (var i = 0; i < item.ballNum; i++){

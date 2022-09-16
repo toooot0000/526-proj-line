@@ -1,8 +1,7 @@
-﻿using System;
-using Core.Balls;
+﻿using Core.Balls;
 using UnityEngine;
 
-namespace Core{
+namespace Core.PlayArea{
     public class TouchCollider: MonoBehaviour{
         private CircleCollider2D _collider2D;
 

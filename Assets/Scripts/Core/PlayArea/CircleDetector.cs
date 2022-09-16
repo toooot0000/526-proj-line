@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using LineUtility = Utility.LineUtility;
 
-namespace Core{
+namespace Core.PlayArea{
     public class CircleDetector{
 
         public List<Vector2> points;

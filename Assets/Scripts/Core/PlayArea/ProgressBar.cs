@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using Utility;
 
-namespace Core{
+namespace Core.PlayArea{
     readonly struct Vector3Wrapper : ITweenArithmetic<Vector3Wrapper>{
         public readonly Vector3 vec;
 

@@ -1,10 +1,7 @@
-using System;
-using Core.SizeSyncer;
 using Extensions;
-using UnityEditor;
 using UnityEngine;
 
-namespace Core{
+namespace Core.SizeSyncer{
     public class RootSyncSize : MonoBehaviour
     {
         // Start is called before the first frame update

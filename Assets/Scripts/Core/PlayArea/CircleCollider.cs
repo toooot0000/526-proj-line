@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Core.Balls;
 using UnityEngine;
 
-namespace Core{
+namespace Core.PlayArea{
     public class CircleCollider: MonoBehaviour{
 
         private PolygonCollider2D _collider2D;

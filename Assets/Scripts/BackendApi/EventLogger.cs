@@ -35,7 +35,7 @@ namespace BackendApi
     public class EventLogger : MonoBehaviour
     {
         private readonly string _server;
-        private static readonly HttpClient Client = new HttpClient();
+        private static readonly HttpClient Client = new();
         public static string serverURL = "http://localhost:8080";
         
         public EventLogger(){

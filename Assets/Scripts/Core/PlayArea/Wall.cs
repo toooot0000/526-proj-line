@@ -1,9 +1,7 @@
-﻿using System;
-using Core.Balls;
-using Unity.VisualScripting;
+﻿using Core.Balls;
 using UnityEngine;
 
-namespace Core{
+namespace Core.PlayArea{
     public class Wall: MonoBehaviour{
         public Vector2 velocityChangeRate = Vector2.one;
 

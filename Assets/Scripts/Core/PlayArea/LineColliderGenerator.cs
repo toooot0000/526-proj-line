@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Extensions;
 using UnityEngine;
-using UnityEngine.Rendering;
 
-namespace Core{
+namespace Core.PlayArea{
     [RequireComponent(typeof(LineRenderer))]
     public class LineColliderGenerator: MonoBehaviour{
         public float widthFactor = 1;

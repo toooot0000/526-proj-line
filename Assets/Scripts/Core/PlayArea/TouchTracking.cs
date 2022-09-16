@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
-using UnityEngine.UI;
 
 /*
  * TODO need to be refactored!
  */
-namespace Core{
+namespace Core.PlayArea{
     public class TouchTracking : MonoBehaviour{
         public float minDistance = 5f;
         public LineRenderer lineRenderer;

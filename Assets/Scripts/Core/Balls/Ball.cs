@@ -1,8 +1,10 @@
+using Core.Model;
+using Core.PlayArea;
 using UnityEngine;
 
 namespace Core.Balls{
     [RequireComponent(typeof(Collider2D))]
-    
+    [RequireComponent(typeof(BallConfig))]
     public class Ball : MonoBehaviour{
         public enum State{
             Free,
@@ -17,12 +19,15 @@ namespace Core.Balls{
         private RectTransform _rectTransform;
         private SpriteRenderer _sprite;
 
-        public Model.Ball model;
+        private Model.Ball _model;
+        private Game _game;
         
 
         private void Start(){
             _rectTransform = GetComponent<RectTransform>();
             _sprite = GetComponent<SpriteRenderer>();
+            _game = GameManager.shared.game;
+            _model = GetComponent<BallConfig>().modelBall;
         }
 
         private void Update(){
@@ -38,12 +43,14 @@ namespace Core.Balls{
             Debug.Log("Hit Touch!");
             _sprite.color = Color.yellow;
             currentState = State.Touched;
+            _game.player.AddHitBall(_model);
         }
 
         public void OnBeingCircled(){
             Debug.Log("Circled!");
             currentState = State.Circled;
             _sprite.color = Color.blue;
+            _game.player.AddCircledBall(_model);
         }
     }
 }
