@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Core.SizeSyncer{
+namespace Core.Common.SizeSyncer{
     public class CircleCollider2DSizeSyncer: BaseColliderSizeSyncer{
         protected override Collider2D GetCollider2D(){
             return GetComponent<CircleCollider2D>();

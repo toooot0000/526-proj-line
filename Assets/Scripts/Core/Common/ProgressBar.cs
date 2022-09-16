@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Utility;
 
-namespace Core.PlayArea{
+namespace Core.Common{
     readonly struct Vector3Wrapper : ITweenArithmetic<Vector3Wrapper>{
         public readonly Vector3 vec;
 

@@ -5,8 +5,7 @@ using System.Text;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace BackendApi
-{
+namespace BackendApi{
 
     public interface ILoggableEvent {
         public string URLPath{ get; }

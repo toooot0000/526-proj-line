@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Core.Balls{
+namespace Core.PlayArea.Balls{
     public class BallSpawner: MonoBehaviour{
         public GameObject ballPrefab;
         public void Spawn(Model.Ball ball){
@@ -11,7 +10,7 @@ namespace Core.Balls{
             newBallObject.transform.localPosition = GenerateRandomLocalPosition();
         }
         private Vector3 GenerateRandomLocalPosition(){
-            return Vector3.zero;
+            return Vector3.zero; // TODO
         }
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Core.SizeSyncer{
+namespace Core.Common.SizeSyncer{
     [RequireComponent(typeof(RectTransform))]
     [RequireComponent(typeof(BoxCollider2D))]
     public class BoxCollider2DSizeSyncer : BaseColliderSizeSyncer{

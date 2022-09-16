@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Core.SizeSyncer{
+namespace Core.Common.SizeSyncer{
     [RequireComponent(typeof(CapsuleCollider2D))]
     public class CapsuleCollider2DSizeSyncer : BaseColliderSizeSyncer{
         protected override Collider2D GetCollider2D(){

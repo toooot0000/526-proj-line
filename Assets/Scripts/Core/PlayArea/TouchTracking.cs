@@ -1,6 +1,11 @@
 using System;
+using System.Collections;
 using System.Linq;
+using Core.Common;
+using Core.Model;
+using Unity.VisualScripting;
 using UnityEngine;
+using Utility;
 
 /*
  * TODO need to be refactored!
@@ -21,19 +26,17 @@ namespace Core.PlayArea{
         private RectTransform _rect;
         private CircleDetector _circleDetector;
         private float _currentLineLength = 0;
+        private Game _game;
 
         private void Start(){
             _rect = GetComponent<RectTransform>();
             _circleDetector = new CircleDetector();
             touchCollider.SetEnabled(false);
+            _game = GameManager.shared.game;
         }
 
         private void Update(){
             TraceTouchPosition();
-        }
-
-        private void FixedUpdate(){
-            if (!_isTracing) return;
         }
 
         public void StartTracking(){
@@ -48,6 +51,7 @@ namespace Core.PlayArea{
             if (!_isTracing) return;
             _isTracing = false;
             touchCollider.SetEnabled(false);
+            StartCoroutine(CoroutineUtility.Delayed(() => _game.SwitchTurn()));
         }
 
         private Vector2 GetCurrentTouchPosition(){

@@ -1,7 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Core.SizeSyncer{
+namespace Core.Common.SizeSyncer{
     [RequireComponent(typeof(RectTransform))]
     [RequireComponent(typeof(Collider2D))]
     public abstract class BaseColliderSizeSyncer: MonoBehaviour{

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Core.SizeSyncer{
+namespace Core.Common.SizeSyncer{
     [RequireComponent(typeof(SpriteRenderer))]
     [RequireComponent(typeof(RectTransform))]
     public class SpriteSizeSyncer : MonoBehaviour{

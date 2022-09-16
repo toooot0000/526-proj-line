@@ -1,9 +1,8 @@
-﻿using System;
-using Extensions;
+﻿using Extensions;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Core.Balls{
+namespace Core.PlayArea.Balls{
     public class BallConfig: MonoBehaviour{
         public Model.Ball modelBall;
         private void Start(){

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BackendApi;
 
 namespace Core.Model{
@@ -35,16 +36,7 @@ namespace Core.Model{
         }
 
         public int GetTotalPoint(){
-            var ret = 0;
-            foreach (var ball in hitBalls){
-                ret += ball.point;
-            }
-
-            foreach (var ball in circledBalls){
-                ret += ball.point * 2;
-            }
-            return ret;
+            return hitBalls.Sum(ball => ball.point) + circledBalls.Sum(ball => ball.point * 2);
         }
-
     }
 }

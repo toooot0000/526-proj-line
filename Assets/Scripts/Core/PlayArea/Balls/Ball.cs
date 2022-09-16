@@ -1,8 +1,7 @@
 using Core.Model;
-using Core.PlayArea;
 using UnityEngine;
 
-namespace Core.Balls{
+namespace Core.PlayArea.Balls{
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(BallConfig))]
     public class Ball : MonoBehaviour{

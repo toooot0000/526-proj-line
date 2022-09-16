@@ -3,9 +3,11 @@
 namespace Core.Model{
     public delegate void ModelEvent(Game game, GameModel model);
 
+    public delegate void SimpleModelEvent(Game game);
+
     public class Game: GameModel{
 
-        public enum Turn{
+        public enum Turn {
             Player,
             Enemy,
         }
@@ -14,6 +16,8 @@ namespace Core.Model{
         
         public Player player;
         public List<Enemy> enemies;
+
+        public event SimpleModelEvent OnTurnChanged;
 
         public Game(GameModel parent = null) : base(parent){
             currentGame = this;
@@ -33,6 +37,14 @@ namespace Core.Model{
             }
             return ret;
         }
-        
+
+        public void SwitchTurn(){
+            if (turn == Turn.Player){
+                turn = Turn.Enemy;
+            } else{
+                turn = Turn.Player;
+            }
+            OnTurnChanged?.Invoke(this);
+        }
     }
 }
