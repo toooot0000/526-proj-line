@@ -1,5 +1,6 @@
 using Core.Model;
 using UnityEngine;
+using Utility;
 
 namespace Core.PlayArea.Balls{
     [RequireComponent(typeof(Collider2D))]
@@ -43,6 +44,8 @@ namespace Core.PlayArea.Balls{
             _sprite.color = Color.yellow;
             currentState = State.Touched;
             _game.player.AddHitBall(_model);
+            var fun = CoroutineUtility.FadeOut(0.2f, GetComponent<Renderer>(), () => Destroy(this));
+            StartCoroutine(fun());
         }
 
         public void OnBeingCircled(){
@@ -50,6 +53,8 @@ namespace Core.PlayArea.Balls{
             currentState = State.Circled;
             _sprite.color = Color.blue;
             _game.player.AddCircledBall(_model);
+            var fun = CoroutineUtility.FadeOut(0.2f, GetComponent<Renderer>(), () => Destroy(this));
+            StartCoroutine(fun());
         }
     }
 }
