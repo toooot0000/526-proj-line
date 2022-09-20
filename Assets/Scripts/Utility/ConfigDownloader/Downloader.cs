@@ -13,7 +13,12 @@ namespace Utility.ConfigDownloader{
         [MenuItem("CustomMethods/Download ^#d")]
         public static void DownloadConfig(){
             var process = new Process();
+#if UNITY_EDITOR_WIN
             var args = $"\"{Directory.GetCurrentDirectory()}\\Assets\\Scripts\\Utility\\ConfigDownloader\\DownloadConfig.py\"";
+#elif UNITY_EDITOR_OSX
+            var args = $"\"{Directory.GetCurrentDirectory()}/Assets/Scripts/Utility/ConfigDownloader/DownloadConfig.py\"";
+#endif
+            Debug.Log(args);
             process.StartInfo = new(){
                 FileName = GetPythonPath(),
                 Arguments = args,
@@ -21,7 +26,11 @@ namespace Utility.ConfigDownloader{
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 RedirectStandardInput = true,
+#if UNITY_EDITOR_WIN
                 WorkingDirectory = $"{Directory.GetCurrentDirectory()}\\Assets\\Scripts\\Utility\\ConfigDownloader\\"
+#elif UNITY_EDITOR_OSX
+                WorkingDirectory = $"{Directory.GetCurrentDirectory()}/Assets/Scripts/Utility/ConfigDownloader/"
+#endif
             };
             process.Start();
             Debug.Log(process.StandardOutput.ReadToEnd());

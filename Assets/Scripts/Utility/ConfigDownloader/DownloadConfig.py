@@ -7,7 +7,7 @@ import time
 @click.command()
 @click.option("--url", default="https://docs.google.com/spreadsheets/d/1RTdsZDXUJVgTDkMQZk0yj5RYDeXrmniR_uRMyzD5WSo/export", help="the url of config table")
 @click.option("--local_filename", default="config.xlsx")
-@click.option("--csv_dir", default="Resources/Configs")
+@click.option("--csv_dir", default="./Resources/Configs")
 def download_config(url, local_filename, csv_dir):
     with requests.get(url, stream=True) as r:
         r.raise_for_status()
