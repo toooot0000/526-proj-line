@@ -2,7 +2,7 @@
 using UnityEngine;
 
 namespace Utility.Loader{
-    public class CsvLoader{
+    public static class CsvLoader{
         public static Dictionary<int, Dictionary<string, object>> Load(string filename){
             var file = Resources.Load<TextAsset>(filename);
             if (file == null){

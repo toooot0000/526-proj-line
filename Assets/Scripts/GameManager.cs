@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using BackendApi;
 using Core;
 using Core.Model;
 using UnityEngine;
+using Utility.Loader;
 using LineUtility = Utility.LineUtility;
 
 public class GameManager : MonoBehaviour{
@@ -26,9 +28,15 @@ public class GameManager : MonoBehaviour{
     }
 
 
-    private void InitGame(){
-        if (game == null){
-            game = new Game();
-        }
+    private void InitGame() {
+        PreInit();
+        game ??= new Game();
+        var balls = CsvLoader.Load("Configs/balls");
+        Debug.Log(balls.ToString());
+    }
+
+    private void PreInit() {
+        // Backend API url
+        EventLogger.serverURL = "https://test526.wn.r.appspot.com/";
     }
 }
