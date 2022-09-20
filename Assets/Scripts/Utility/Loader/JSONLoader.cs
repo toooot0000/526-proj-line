@@ -1,10 +1,10 @@
 using UnityEngine;
 
-namespace Utility
+namespace Utility.Loader
 {
-    public class JSONReader
+    public class JSONLoader
     {
-        public static T ImportJson<T>(string path)
+        public static T Load<T>(string path)
         {
             TextAsset textAsset = Resources.Load<TextAsset>(path);
             return JsonUtility.FromJson<T>(textAsset.text);
