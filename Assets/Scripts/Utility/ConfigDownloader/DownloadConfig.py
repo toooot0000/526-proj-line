@@ -2,6 +2,7 @@
 import click
 import requests
 import os
+import time
 
 @click.command()
 @click.option("--url", default="https://docs.google.com/spreadsheets/d/1RTdsZDXUJVgTDkMQZk0yj5RYDeXrmniR_uRMyzD5WSo/export", help="the url of config table")
@@ -15,6 +16,7 @@ def download_config(url, local_filename, csv_dir):
                 f.write(
                     chunk)
         convert_file(local_filename, csv_dir)
+    os.remove(local_filename)
 
 def convert_file(local_filename, csv_dir):
     if not os.path.exists(csv_dir):
