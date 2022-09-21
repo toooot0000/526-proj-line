@@ -18,7 +18,6 @@ namespace Utility.ConfigDownloader{
 #elif UNITY_EDITOR_OSX
             var args = $"\"{Directory.GetCurrentDirectory()}/Assets/Scripts/Utility/ConfigDownloader/DownloadConfig.py\"";
 #endif
-            Debug.Log(args);
             process.StartInfo = new(){
                 FileName = GetPythonPath(),
                 Arguments = args,

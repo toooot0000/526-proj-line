@@ -1,3 +1,4 @@
+using System.Linq;
 using BackendApi;
 using Core.Model;
 using UnityEngine;
@@ -24,13 +25,21 @@ public class GameManager : MonoBehaviour{
 
     private void InitGame() {
         PreInit();
-        game ??= new Game();
-        var balls = CsvLoader.Load("Configs/balls");
-        Debug.Log(balls.ToString());
+        game ??= new();
+        
     }
 
     private void PreInit() {
         // Backend API url
         EventLogger.serverURL = "https://test526.wn.r.appspot.com/";
+    }
+
+    private void LogTable(string tableName){
+        var table = CsvLoader.Load(tableName);
+        foreach (var pair in table){
+            Debug.Log(pair.Key.ToString());
+            var msg = pair.Value.Aggregate("", (current, content) => current + $"{content.Key} = {content.Value}, ");
+            Debug.Log(msg);
+        }
     }
 }
