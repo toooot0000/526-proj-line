@@ -2,10 +2,16 @@ using UnityEngine;
 
 namespace Core.UI{
     public abstract class UIBase: MonoBehaviour, IUserInterface{
-        public abstract void Open();
+        public virtual void Open(){
+            OnOpen?.Invoke(this);
+        }
 
-        public abstract void Close();
+        public virtual void Close(){
+            OnClose?.Invoke(this);
+        }
 
         public string Name => "Base";
+        public event UINormalEvent OnOpen;
+        public event UINormalEvent OnClose;
     }
 }

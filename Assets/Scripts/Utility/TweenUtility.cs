@@ -40,5 +40,19 @@ namespace Utility{
                 callback(tween.GetCurrentValue(time));
             }
         }
+        
+        public static Func<IEnumerator> Lerp(float seconds, Action before, Action<float> update, Action finish){
+            IEnumerator Inner(){
+                before();
+                float curTime = 0;
+                while (curTime < seconds) {
+                    curTime += Time.deltaTime;
+                    update(curTime / seconds);
+                    yield return null;
+                }
+                finish();
+            }
+            return Inner;
+        }
     }
 }
