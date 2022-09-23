@@ -7,6 +7,10 @@ namespace Core.Model{
         public int currentHp;
         public int attack = 1;
 
+        public event ModelEvent OnAttack;
+        public event ModelEvent OnBeingAttacked;
+        public event ModelEvent OnDie;
+
         public Enemy(GameModel parent) : base(parent){
             currentHp = hpUpLimit;
         }

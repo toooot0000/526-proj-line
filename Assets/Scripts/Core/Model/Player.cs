@@ -18,6 +18,10 @@ namespace Core.Model{
 
         public event ModelEvent OnHitBall;
         public event ModelEvent OnCircledBall;
+
+        public event ModelEvent OnAttack;
+        public event ModelEvent OnBeingAttacked;
+        public event ModelEvent OnDie;
         
         public void TakeDamage(Damage damage){
             currentHp -= damage.point;
@@ -37,6 +41,9 @@ namespace Core.Model{
 
         public int GetTotalPoint(){
             return hitBalls.Sum(ball => ball.point) + circledBalls.Sum(ball => ball.point * 2);
+        }
+        public void Attack(){
+            OnAttack?.Invoke(currentGame, this);
         }
     }
 }

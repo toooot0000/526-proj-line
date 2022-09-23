@@ -1,5 +1,5 @@
-﻿using Extensions;
-using UnityEngine;
+﻿using UnityEngine;
+using Utility.Extensions;
 using Random = UnityEngine.Random;
 
 namespace Core.PlayArea.Balls{

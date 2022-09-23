@@ -1,7 +1,6 @@
-﻿using Unity;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Extensions{
+namespace Utility.Extensions{
     public static class Vector2Extension {
      
         public static Vector2 Rotate(this Vector2 v, float degrees) {

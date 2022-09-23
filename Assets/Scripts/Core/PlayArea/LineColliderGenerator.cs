@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Extensions;
 using UnityEngine;
+using Utility.Extensions;
 
 namespace Core.PlayArea{
     [RequireComponent(typeof(LineRenderer))]

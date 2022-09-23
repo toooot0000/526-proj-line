@@ -15,17 +15,17 @@ namespace Core.Model{
         public Turn turn = Turn.Player;
         
         public Player player;
-        public List<Enemy> enemies;
+        // public List<Enemy> enemies;
 
+        public Stage curStage;
+        
         public event SimpleModelEvent OnTurnChanged;
+        
 
         public Game(GameModel parent = null) : base(parent){
             currentGame = this;
             player = new(this);
-            enemies = new();
-            enemies.Add(new(this));
-            enemies.Add(new(this));
-            enemies.Add(new(this));
+            curStage = new(this, new[]{ new Enemy(this), new Enemy(this) });
         }
 
         public List<Ball> GetAllSkillBalls(){
