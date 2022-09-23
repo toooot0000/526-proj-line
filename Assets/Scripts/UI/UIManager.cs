@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Core.PlayArea;
 using UnityEngine;
@@ -21,7 +22,11 @@ namespace UI{
              }
              shared = this;
          }
- 
+
+         private void Start() {
+             OpenUI("UIGameStart");
+         }
+
          public UIBase OpenUI(string uiPrefabName){
              var cur = _uiList.Find(uiBase => uiBase.name == uiPrefabName);
              if( cur != null){
