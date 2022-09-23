@@ -18,7 +18,7 @@ namespace Core.DisplayArea.Player{
                     _controller.PlayAnimation(PlayerAnimationController.PlayerAnimation.Attack);
                 _model.OnBeingAttacked += (game, model) => {
                     _controller.PlayAnimation(PlayerAnimationController.PlayerAnimation.BeingAttacked);
-                    bar.Percentage = (float)_model.currentHp / _model.hpUpLimit;
+                    bar.Percentage = (float)_model.currentHp / _model.hpUpLimit * 100;
                 };
                 _model.OnDie += (game, model) =>
                     _controller.PlayAnimation(PlayerAnimationController.PlayerAnimation.Die);

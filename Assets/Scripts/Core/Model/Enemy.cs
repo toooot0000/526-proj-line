@@ -1,9 +1,10 @@
 ﻿using System;
+using UnityEngine;
 
 namespace Core.Model{
     [Serializable]
     public class Enemy: GameModel, IDamageable{
-        public int hpUpLimit = 1000;
+        public int hpUpLimit = 10;
         public int currentHp;
         public int attack = 1;
 
@@ -16,6 +17,7 @@ namespace Core.Model{
         }
         public void TakeDamage(Damage damage){
             currentHp -= damage.point;
+            Debug.Log($"Enemy take damage(point {damage.point}, current HP: {currentHp})");
             OnBeingAttacked?.Invoke(currentGame, this);
         }
 

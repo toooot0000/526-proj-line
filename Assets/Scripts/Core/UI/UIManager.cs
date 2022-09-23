@@ -6,6 +6,8 @@ using Utility;
 namespace Core.UI{
      public delegate void UINormalEvent(UIBase ui);
      public class UIManager: MonoBehaviour{
+         public Shade shade;
+         
          public const string ResourcesFolder = "UIs/";
          public static UIManager shared;
 
@@ -38,13 +40,17 @@ namespace Core.UI{
                  return null;
              }
              _uiList.Add(cur);
-             cur.OnClose += RemoveUI;
+             shade.SetActive(true);
+             cur.OnClose += CloseUI;
              StartCoroutine(CoroutineUtility.Delayed(() => cur.Open()));
              return cur;
          }
 
-         public void RemoveUI(UIBase ui){
+         public void CloseUI(UIBase ui){
              _uiList.Remove(ui);
+             if (_uiList.Count == 0){
+                 shade.SetActive(false);
+             }
          }
 
 

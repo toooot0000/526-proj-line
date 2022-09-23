@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BackendApi;
+using UnityEngine;
 
 namespace Core.Model{
     [Serializable]
@@ -25,7 +26,10 @@ namespace Core.Model{
         
         public void TakeDamage(Damage damage){
             currentHp -= damage.point;
+            Debug.Log($"Player take damage(point {damage.point}, current HP: {currentHp})");
+            OnBeingAttacked?.Invoke(currentGame, this);
         }
+
 
         public Player(GameModel parent) : base(parent){ }
 
@@ -48,6 +52,9 @@ namespace Core.Model{
                 type = Damage.Type.Physics,
                 target = currentGame.CurEnemy
             };
+            hitBalls.Clear();
+            circledBalls.Clear();
+            Debug.Log($"Player attack! with point {dmg.point.ToString()}");
             dmg.target.TakeDamage(dmg);
             OnAttack?.Invoke(currentGame, this);
         }
