@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Extensions{
+namespace Utility.Extensions{
     public static class CameraExtension{
         public static Vector2 ScreenSizeInWorldUnit(this Camera cmr){
             var screenSize = new Vector2(Screen.width, Screen.height);

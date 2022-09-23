@@ -1,5 +1,5 @@
-using Extensions;
 using UnityEngine;
+using Utility.Extensions;
 
 namespace Core.Common.SizeSyncer{
     public class RootSyncSize : MonoBehaviour

@@ -1,20 +1,18 @@
-﻿using System;
+using Core.Common;
 using UnityEngine;
-using UnityEngine.UIElements;
-using ProgressBar = Core.Common.ProgressBar;
 
 namespace Core.DisplayArea.Player{
     [RequireComponent(typeof(PlayerAnimationController))]
-    public class Player: MonoBehaviour{
+    public class Enemy: MonoBehaviour{
 
         public ProgressBar bar;
         
-        private Model.Player _model = null;
+        private Model.Enemy _model = null;
         private PlayerAnimationController _controller;
 
         private void Start(){
             _controller = GetComponent<PlayerAnimationController>();
-            _model = GameManager.shared.game.player;
+            _model = GameManager.shared.game.curStage.enemies[0];
             if (_model != null){
                 _model.OnAttack += (game, model) => 
                     _controller.PlayAnimation(PlayerAnimationController.PlayerAnimation.Attack);
