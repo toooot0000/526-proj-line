@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Core.UI.Container{
+namespace UI.Container{
     public class UIContainerFlexBox: MonoBehaviour{
         public enum Direction{
             Vertical,

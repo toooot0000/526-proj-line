@@ -1,8 +1,7 @@
-using System;
 using UnityEngine;
 using Utility;
 
-namespace Core.UI{
+namespace UI{
     public class UISelectGear: UIBase{
         private bool _inAnimation = false;
         private CanvasGroup _canvasGroup;

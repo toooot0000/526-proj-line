@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Core.UI{
+namespace UI{
     public abstract class UIBase: MonoBehaviour, IUserInterface{
         public virtual void Open(){
             OnOpen?.Invoke(this);
