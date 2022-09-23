@@ -43,6 +43,12 @@ namespace Core.Model{
             return hitBalls.Sum(ball => ball.point) + circledBalls.Sum(ball => ball.point * 2);
         }
         public void Attack(){
+            var dmg = new Damage(){
+                point = GetTotalPoint(),
+                type = Damage.Type.Physics,
+                target = currentGame.CurEnemy
+            };
+            dmg.target.TakeDamage(dmg);
             OnAttack?.Invoke(currentGame, this);
         }
     }

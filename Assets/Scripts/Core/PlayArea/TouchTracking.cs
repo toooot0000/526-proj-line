@@ -51,7 +51,7 @@ namespace Core.PlayArea{
             if (!_isTracing) return;
             _isTracing = false;
             touchCollider.SetEnabled(false);
-            StartCoroutine(CoroutineUtility.Delayed(() => _game.SwitchTurn()));
+            StartCoroutine(CoroutineUtility.Delayed(() => _game.player.Attack()));
         }
 
         private Vector2 GetCurrentTouchPosition(){
