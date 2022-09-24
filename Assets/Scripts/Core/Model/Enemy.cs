@@ -31,12 +31,11 @@ namespace Core.Model{
             var enemy = CsvLoader.TryToLoad("Configs/enemies", id);
             if (enemy == null) return;
             try {
-                type = EnumUtility.GetValue<Type>(ball["type"] as string);
-                desc = ball["desc"] as string;
-                special = ball["special"] as string;
-                cooldown = (int)ball["cooldown"];
-                hpUpLimit = (int)ball["hp"];
-                attack = (int)ball["attack"];
+                desc = enemy["desc"] as string;
+                special = enemy["special"] as string;
+                cooldown = (int)enemy["cooldown"];
+                hpUpLimit = (int)enemy["hp"];
+                attack = (int)enemy["attack"];
             }
             catch (Exception e) {
             }
