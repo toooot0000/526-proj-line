@@ -12,7 +12,8 @@ namespace Core.Model{
         public Gear[] gears;
         public int gearUpLimit;
         public int energy;
-
+        public float armor;
+        
         public List<Ball> hitBalls = new();
         public List<Ball> circledBalls = new();
 
@@ -51,5 +52,47 @@ namespace Core.Model{
             dmg.target.TakeDamage(dmg);
             OnAttack?.Invoke(currentGame, this);
         }
+        
+        public Gear[] Add<Gear>(Gear[] gears, Gear item)
+        {
+            if (gears == null)
+            {
+                gears = new Gear[]{};
+            }
+
+            Gear[] result = new Gear[gears.Length + 1];
+            gears.CopyTo(result, 0);
+            result[gears.Length] = item;
+            return result;
+        }
+
+        public Gear[] DeleteAt<Gear>(Gear[] gears, int index)
+        {
+            Gear[] res = new Gear[gears.Length - 1];
+            if( index > 0 )
+                Array.Copy(gears, 0, res, 0, index);
+
+            if( index < gears.Length - 1 )
+                Array.Copy(gears, index + 1, res, index, gears.Length - index - 1);
+
+            return res;
+        }
+
+        public Gear GetItem<Gear>(Gear[] gears, int index, Gear defaultGear)
+        {
+            if (index < gears.Length)
+            {
+                return gears[index];
+            }
+            return defaultGear;
+        }
+
+        public Gear[] GetAllItem<Gear>(Gear[] gears)
+        {
+            Gear[] res = new Gear[gears.Length];
+            gears.CopyTo(res, 0);
+            return res;
+        }
+        
     }
 }
