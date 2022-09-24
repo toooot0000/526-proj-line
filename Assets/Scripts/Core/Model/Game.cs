@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 
 namespace Core.Model{
     public delegate void ModelEvent(Game game, GameModel model);
@@ -22,6 +23,7 @@ namespace Core.Model{
         public Enemy CurEnemy => curStage.enemies[0];
         
         public event SimpleModelEvent OnTurnChanged;
+        public event SimpleModelEvent OnGameEnd;
         
 
         public Game(GameModel parent = null) : base(parent){
@@ -48,6 +50,7 @@ namespace Core.Model{
             }
             OnTurnChanged?.Invoke(this);
         }
+        
 
         private void LoadStage(){
             curStage = new(this, new[]{ new Enemy(this)});
@@ -57,6 +60,14 @@ namespace Core.Model{
         private void InitPlayer(){
             player = new(this);
             player.OnAttack += (game, model) => SwitchTurn();
+            player.OnDie += (game,model) => End();
+        }
+
+        public void End()
+        {
+            // blabla
+            
+            OnGameEnd?.Invoke(this);
         }
     }
 }

@@ -25,12 +25,12 @@ public class GameManager : MonoBehaviour{
 
     private void Update()
     {
-        // if(Input.GetKeyUp("k"))
-        // {
-        //     print("kill the current enemy!\n");
-        //     game.CurEnemy.Die();
-        //
-        // }
+        if(Input.GetKeyUp("p"))
+        {
+             print("Game Over!\n");
+             game.player.CurrentHp = 0;
+        
+        }
     }
 
 
