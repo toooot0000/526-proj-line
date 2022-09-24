@@ -33,6 +33,10 @@ namespace Core.Model{
             if (ball == null) return;
             try {
                 type = EnumUtility.GetValue<Type>(ball["type"] as string);
+                desc = ball["desc"] as string;
+                point = ball["point"] as int;
+                speed = ball["speed"] as float;
+                size = ball["size"] as float;
             }
             catch (Exception e) {
             }
