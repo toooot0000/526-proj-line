@@ -13,15 +13,15 @@ namespace Core.Model{
             Shield,
         }
         public int id;
-        public String name;
-        public String desc;
+        public string name;
+        public string desc;
         public int rarity;
         public Type type;
         public int ballId;
         public Ball ball;
         public int ballNum;
-        public String chargeEffect;
-        public String combEffect;
+        public string chargeEffect;
+        public string combEffect;
         public int cooldown;
         public Gear(GameModel parent) : base(parent){ }
 
@@ -38,7 +38,11 @@ namespace Core.Model{
             catch (Exception e) {
                 type = Type.Weapon;
             }
-            
+            ball = new Ball(parent, (int)gear["ball_id"]);
+            ballNum = (int)gear["ball_num"];
+            chargeEffect = gear["charge_effect"] as string;
+            combEffect = gear["combo_effect"] as string;
+            cooldown = (int)gear["cooldown"];
         }
         
     }

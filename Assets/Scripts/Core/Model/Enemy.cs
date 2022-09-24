@@ -30,15 +30,11 @@ namespace Core.Model{
             this.id = id;
             var enemy = CsvLoader.TryToLoad("Configs/enemies", id);
             if (enemy == null) return;
-            try {
-                desc = enemy["desc"] as string;
-                special = enemy["special"] as string;
-                cooldown = (int)enemy["cooldown"];
-                hpUpLimit = (int)enemy["hp"];
-                attack = (int)enemy["attack"];
-            }
-            catch (Exception e) {
-            }
+            desc = enemy["desc"] as string;
+            special = enemy["special"] as string;
+            cooldown = (int)enemy["cooldown"];
+            hpUpLimit = (int)enemy["hp"];
+            attack = (int)enemy["attack"];
         }
         
         public void TakeDamage(Damage damage){
