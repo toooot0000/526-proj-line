@@ -5,8 +5,13 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Utility.Loader{
+    using Table = Dictionary<int, Dictionary<string, object>>;
+    using TableInfo = Dictionary<string, object>;
+
     public static class CsvLoader{
-        public static Dictionary<int, Dictionary<string, object>> Load(string filename){
+        private static Dictionary<string, Table> _prevLoaded;
+        public static Table Load(string filename) {
+            if (_prevLoaded.ContainsKey(filename)) return _prevLoaded[filename];
             var file = Resources.Load<TextAsset>(filename);
             if (file == null){
                 Debug.LogError($"Can't find resources with name {filename}");
@@ -38,6 +43,8 @@ namespace Utility.Loader{
                     ret[id][key] = ParseValue(type, line[j]);
                 }
             }
+
+            _prevLoaded[filename] = ret;
             return ret;
         }
 
@@ -66,6 +73,16 @@ namespace Utility.Loader{
                 }
             }
             return ret.ToArray();
+        }
+
+        public static TableInfo TryToLoad(string filename, int id) {
+            var table = Load(filename);
+            if (table == null) return null;
+            if (!table.ContainsKey(id)) {
+                Debug.LogError($"Wrong id in table '{filename}', id = {id}");
+                return null;
+            }
+            return table[id];
         }
     }
 }

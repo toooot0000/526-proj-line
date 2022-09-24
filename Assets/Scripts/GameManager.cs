@@ -3,6 +3,7 @@ using System.Linq;
 using BackendApi;
 using Core.Model;
 using UnityEngine;
+using Utility;
 using Utility.Loader;
 
 public class GameManager : MonoBehaviour{
@@ -44,12 +45,16 @@ public class GameManager : MonoBehaviour{
         EventLogger.serverURL = "https://test526.wn.r.appspot.com/";
     }
 
-    private void LogTable(string tableName){
+    public void LogTable(string tableName){
         var table = CsvLoader.Load(tableName);
         foreach (var pair in table){
             Debug.Log(pair.Key.ToString());
             var msg = pair.Value.Aggregate("", (current, content) => current + $"{content.Key} = {content.Value}, ");
             Debug.Log(msg);
         }
+    }
+
+    public void Delayed(int frames, Action modelAction) {
+        StartCoroutine(CoroutineUtility.Delayed(frames, modelAction));
     }
 }

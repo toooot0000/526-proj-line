@@ -50,8 +50,10 @@ namespace Core.Model{
         }
 
         private void LoadStage(){
-            curStage = new(this, new[]{ new Enemy(this)});
-            curStage.enemies[0].OnAttack += (game, model) => SwitchTurn();
+            // dummy code
+            // curStage = new(this, new[]{ new Enemy(this)});
+            // curStage.enemies[0].OnAttack += (game, model) => SwitchTurn();
+            curStage = new Stage(this, 0);
         }
 
         private void InitPlayer(){

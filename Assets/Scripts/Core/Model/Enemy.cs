@@ -1,4 +1,6 @@
 ﻿using System;
+using UnityEngine;
+using Utility.Loader;
 
 namespace Core.Model{
     [Serializable]
@@ -14,6 +16,13 @@ namespace Core.Model{
         public Enemy(GameModel parent) : base(parent){
             currentHp = hpUpLimit;
         }
+
+        public Enemy(GameModel parent, int id) : base(parent) {
+            var enemy = CsvLoader.TryToLoad("Configs/enemies", id);
+            if (enemy == null) return;
+            
+        }
+        
         public void TakeDamage(Damage damage){
             currentHp -= damage.point;
             OnBeingAttacked?.Invoke(currentGame, this);

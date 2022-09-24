@@ -21,7 +21,8 @@ namespace Utility{
             yield return new WaitForSeconds(seconds);
             action();
         }
-
+        
+        [Obsolete("Please Use TweenUtility!")]
         public static Func<IEnumerator> FadeOut(float seconds, Renderer renderer, Action finishCallBack) {
             IEnumerator Inner()
             {

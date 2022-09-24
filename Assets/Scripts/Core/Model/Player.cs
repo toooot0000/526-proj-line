@@ -49,8 +49,8 @@ namespace Core.Model{
                 type = Damage.Type.Physics,
                 target = currentGame.CurEnemy
             };
-            dmg.target.TakeDamage(dmg);
             OnAttack?.Invoke(currentGame, this);
+            dmg.target.TakeDamage(dmg);
         }
 
         public float ChargeEffect()
