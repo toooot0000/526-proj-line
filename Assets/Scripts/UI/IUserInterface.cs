@@ -1,4 +1,4 @@
-namespace Core.UI{
+namespace UI{
     public interface IUserInterface{
         public void Open();
         public void Close();

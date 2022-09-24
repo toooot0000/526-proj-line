@@ -1,11 +1,15 @@
 using System;
- using System.Collections.Generic;
- using UnityEngine;
+using System.Collections.Generic;
+using Core.PlayArea;
+using UnityEngine;
 using Utility;
 
-namespace Core.UI{
-     public delegate void UINormalEvent(UIBase ui);
-     public class UIManager: MonoBehaviour{
+namespace UI{
+    public delegate void UINormalEvent(UIBase ui);
+     public class UIManager: MonoBehaviour {
+
+         public Shade shade;
+
          public const string ResourcesFolder = "UIs/";
          public static UIManager shared;
 
@@ -18,7 +22,11 @@ namespace Core.UI{
              }
              shared = this;
          }
- 
+
+         private void Start() {
+             OpenUI("UIGameStart");
+         }
+
          public UIBase OpenUI(string uiPrefabName){
              var cur = _uiList.Find(uiBase => uiBase.name == uiPrefabName);
              if( cur != null){
@@ -38,6 +46,7 @@ namespace Core.UI{
                  return null;
              }
              _uiList.Add(cur);
+             shade.SetActive(true);
              cur.OnClose += RemoveUI;
              StartCoroutine(CoroutineUtility.Delayed(() => cur.Open()));
              return cur;
@@ -45,6 +54,9 @@ namespace Core.UI{
 
          public void RemoveUI(UIBase ui){
              _uiList.Remove(ui);
+             if (_uiList.Count == 0) {
+                 shade.SetActive(false);
+             }
          }
 
 
