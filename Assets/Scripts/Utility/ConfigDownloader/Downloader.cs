@@ -7,6 +7,7 @@ using Debug = UnityEngine.Debug;
 using Directory = System.IO.Directory;
 
 namespace Utility.ConfigDownloader{
+#if UNITY_EDITOR
     public static class Downloader{
         private static string _pyDir = "";
         
@@ -69,4 +70,5 @@ namespace Utility.ConfigDownloader{
 #endif
         }
     }
+#endif
 }

@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.InputSystem.Controls;
 
 namespace BackendApi{
 
@@ -20,6 +21,13 @@ namespace BackendApi{
         public int skillId;
         public int uses;
         public string URLPath => "logSkillUses";
+    }
+
+    public struct ItemInteract : ILoggableEvent{
+        public int itemId;
+        public string status;
+        public int count;
+        public string URLPath => "logItemsInteract";
     }
     
     /**
