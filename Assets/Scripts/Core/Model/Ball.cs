@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Core.Model{
     [Serializable]
@@ -15,6 +16,9 @@ namespace Core.Model{
         public int point;
         public float size;
         public float speed;
+        public float charge;
+        public float combo;
+        
         public Ball(GameModel parent) : base(parent){ }
     }
 }

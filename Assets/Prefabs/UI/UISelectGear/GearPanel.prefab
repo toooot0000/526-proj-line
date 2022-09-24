@@ -33,10 +33,10 @@ RectTransform:
   m_Father: {fileID: 1602367365367601544}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.7965, y: -100.3754}
-  m_SizeDelta: {x: 294.407, y: 396.1588}
+  m_AnchorMin: {x: 0.18647017, y: 0.5}
+  m_AnchorMax: {x: 0.81687635, y: 0.5}
+  m_AnchoredPosition: {x: -0.57629395, y: -85.808}
+  m_SizeDelta: {x: -1.311966, y: 278.26}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8994490192508982045
 CanvasRenderer:
@@ -76,12 +76,6 @@ MonoBehaviour:
 
     This
     is Desc
-
-    This is Desc
-
-    This is Desc
-
-    This is Desc
 
     This is Desc'
   m_isRightToLeft: 0
@@ -265,7 +259,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.18647017, y: 0.68069434}
   m_AnchorMax: {x: 0.81687635, y: 0.934}
-  m_AnchoredPosition: {x: -0.5535431, y: 0.8518982}
+  m_AnchoredPosition: {x: -0.55352783, y: 0.8518982}
   m_SizeDelta: {x: -1.5412768, y: -0.34127343}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8455303102796146686

@@ -19,5 +19,6 @@ namespace Core.Model{
         public String combEffect;
         public int cooldown;
         public Gear(GameModel parent) : base(parent){ }
+        
     }
 }

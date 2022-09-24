@@ -9,9 +9,10 @@ namespace Core.Model{
 
         public int hpUpLimit;
         public int currentHp;
-        public Gear[] gears;
+        public List<Gear> gears;
         public int gearUpLimit;
         public int energy;
+        public float armor;
 
         public List<Ball> hitBalls = new();
         public List<Ball> circledBalls = new();
@@ -50,6 +51,60 @@ namespace Core.Model{
             };
             dmg.target.TakeDamage(dmg);
             OnAttack?.Invoke(currentGame, this);
+        }
+
+        public float ChargeEffect()
+        {
+            float points = 0;
+            if (circledBalls.Count == 0) {
+                return points;
+            }
+            else {
+                Dictionary<Ball, int> res = new Dictionary<Ball, int>();
+                for (int i = 0; i < circledBalls.Count; i++) {
+                    if (res.ContainsKey(circledBalls[i])) {
+                        res[circledBalls[i]] += 1;
+                    }
+                    else {
+                        res.Add(circledBalls[i],1);
+                    }
+                }
+
+                foreach (Ball circled in res.Keys) {
+                    points += circled.charge * circled.point * res[circled];
+                }
+            }
+            return points;
+        }
+        
+        public float ComboEffect(){
+            float points = 0;
+            if(hitBalls.Count == 0) {
+                return points;
+            }
+            else {
+                Dictionary<Ball, int> record = new Dictionary<Ball, int>();
+                for( int j = 0; j < hitBalls.Count; j++) {
+                    if(record.ContainsKey(hitBalls[j])){
+                        record[hitBalls[j]] += 1;
+                    }else{
+                        record.Add(hitBalls[j], 1);
+                    }
+                }
+                foreach(Ball hitBall in record.Keys){
+                    if(record[hitBall] >= 2){
+                        if (hitBall.type != Ball.Type.Defend) {
+                            points += hitBall.combo * hitBall.point * record[hitBall];
+                        }
+                        else {
+                            points += hitBall.combo * hitBall.point * record[hitBall];
+                            armor += points;
+                        }
+                    }
+                }
+                return points;
+            }
+
         }
     }
 }
