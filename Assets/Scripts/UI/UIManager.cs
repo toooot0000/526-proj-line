@@ -25,10 +25,11 @@ namespace UI{
              GameManager.shared.game.curStage.OnStageBeaten += ((game, model) =>
              {
                  UISelectGear selectGear = this.OpenUI("UISelectGear") as UISelectGear;
-                 Gear[] gears = new Gear[3];
                  selectGear.LoadGearPanel(new Gear[] { new Gear(GameManager.shared.game),new Gear(GameManager.shared.game)});
              });
+             GameManager.shared.game.OnGameEnd += ((game) => { OpenUI("UIGameEnd"); });
          }
+         
 
          private void Start() {
              OpenUI("UIGameStart");

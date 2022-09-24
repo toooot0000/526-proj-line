@@ -8,7 +8,20 @@ namespace Core.Model{
     public class Player: GameModel, IDamageable{
 
         public int hpUpLimit;
-        public int currentHp;
+
+        private int _currentHp = 0;
+        public int CurrentHp
+        {
+            set
+            {
+                _currentHp = value;
+                if (value == 0)
+                {
+                    OnDie?.Invoke(currentGame, this);
+                }
+            }
+            get => _currentHp;
+        }
         public List<Gear> gears;
         public int gearUpLimit;
         public int energy;
@@ -25,7 +38,7 @@ namespace Core.Model{
         public event ModelEvent OnDie;
         
         public void TakeDamage(Damage damage){
-            currentHp -= damage.point;
+            CurrentHp -= damage.point;
         }
 
         public Player(GameModel parent) : base(parent){ }

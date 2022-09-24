@@ -22,6 +22,8 @@ namespace Core.Model{
         public Enemy CurEnemy => curStage.enemies[0];
         
         public event SimpleModelEvent OnTurnChanged;
+        public event SimpleModelEvent OnGameEnd;
+        
         public event SimpleModelEvent OnStageLoaded;
 
 
@@ -58,6 +60,14 @@ namespace Core.Model{
         private void InitPlayer(){
             player = new(this);
             player.OnAttack += (game, model) => SwitchTurn();
+            player.OnDie += (game,model) => End();
+        }
+
+        public void End()
+        {
+            // blabla
+            
+            OnGameEnd?.Invoke(this);
         }
     }
 }
