@@ -41,7 +41,6 @@ namespace UI{
                  _uiList.Remove(cur);
                  _uiList.Add(cur);
                  return cur;
-                 
              }
              var ui = Resources.Load<GameObject>($"{ResourcesFolder}{uiPrefabName}");
              if (ui == null){
