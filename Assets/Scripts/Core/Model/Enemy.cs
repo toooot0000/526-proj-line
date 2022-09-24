@@ -27,5 +27,10 @@ namespace Core.Model{
             });
             OnAttack?.Invoke(currentGame, this);
         }
+
+        public void Die()
+        {
+            OnDie?.Invoke(currentGame, this);
+        }
     }
 }

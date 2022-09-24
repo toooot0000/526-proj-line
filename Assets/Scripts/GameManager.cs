@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using BackendApi;
 using Core.Model;
@@ -22,11 +23,20 @@ public class GameManager : MonoBehaviour{
         Application.targetFrameRate = 120;
     }
 
+    private void Update()
+    {
+        // if(Input.GetKeyUp("k"))
+        // {
+        //     print("kill the current enemy!\n");
+        //     game.CurEnemy.Die();
+        //
+        // }
+    }
+
 
     private void InitGame() {
         PreInit();
         game ??= new();
-        
     }
 
     private void PreInit() {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Core.Model;
 using Core.PlayArea;
 using UnityEngine;
 using Utility;
@@ -21,6 +22,12 @@ namespace UI{
                  Destroy(this);
              }
              shared = this;
+             GameManager.shared.game.curStage.OnStageBeaten += ((game, model) =>
+             {
+                 UISelectGear selectGear = this.OpenUI("UISelectGear") as UISelectGear;
+                 Gear[] gears = new Gear[3];
+                 selectGear.LoadGearPanel(new Gear[] { new Gear(GameManager.shared.game),new Gear(GameManager.shared.game)});
+             });
          }
 
          private void Start() {

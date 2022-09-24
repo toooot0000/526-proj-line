@@ -93,6 +93,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf622bd0f2014fd3b8a97b0e542ab79c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  panel: {fileID: 4218930586469224347}
+  gearPanelPrefab: {fileID: 1602367365367601551, guid: e49463b210fa9114abf0a1316c7cbf86, type: 3}
 --- !u!225 &5696985027301674146
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -543,10 +545,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 4218930584767410299}
-  - {fileID: 7184446654238013907}
-  - {fileID: 1796448638550293174}
+  m_Children: []
   m_Father: {fileID: 4218930585700535610}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -608,6 +607,7 @@ MonoBehaviour:
   padding: {x: 30, y: 30}
   gap: 20
   direction: 1
+<<<<<<< HEAD
 --- !u!1001 &1068061359350752062
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -926,3 +926,5 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1602367365367601544, guid: e49463b210fa9114abf0a1316c7cbf86, type: 3}
   m_PrefabInstance: {fileID: 8469169233106018395}
   m_PrefabAsset: {fileID: 0}
+=======
+>>>>>>> 9cbdef4 (Add StageBeaten)
