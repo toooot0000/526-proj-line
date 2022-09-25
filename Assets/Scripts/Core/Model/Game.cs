@@ -22,12 +22,15 @@ namespace Core.Model{
         public Enemy CurEnemy => curStage.enemies[0];
         
         public event SimpleModelEvent OnTurnChanged;
+        public event SimpleModelEvent OnGameEnd;
         
+        public event SimpleModelEvent OnStageLoaded;
+
 
         public Game(GameModel parent = null) : base(parent){
             currentGame = this;
             InitPlayer();
-            LoadStage();
+            LoadStage(0);
         }
 
         public List<Ball> GetAllSkillBalls(){
@@ -40,7 +43,7 @@ namespace Core.Model{
             return ret;
         }
 
-        private void SwitchTurn(){
+        public void SwitchTurn(){
             if (turn == Turn.Player){
                 turn = Turn.Enemy;
             } else{
@@ -49,14 +52,21 @@ namespace Core.Model{
             OnTurnChanged?.Invoke(this);
         }
 
-        private void LoadStage(){
-            curStage = new(this, new[]{ new Enemy(this), new Enemy(this) });
-            curStage.enemies[0].OnAttack += (game, model) => SwitchTurn();
+        private void LoadStage(int id){
+            curStage = new Stage(this, id);
+            
+            OnStageLoaded?.Invoke(this);
         }
 
         private void InitPlayer(){
             player = new(this);
-            player.OnAttack += (game, model) => SwitchTurn();
+        }
+
+        public void End()
+        {
+            // blabla
+            
+            OnGameEnd?.Invoke(this);
         }
     }
 }

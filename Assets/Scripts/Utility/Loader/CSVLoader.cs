@@ -5,8 +5,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Utility.Loader{
+    using Table = Dictionary<int, Dictionary<string, object>>;
+    using TableInfo = Dictionary<string, object>;
+
     public static class CsvLoader{
-        public static Dictionary<int, Dictionary<string, object>> Load(string filename){
+        private static readonly Dictionary<string, Table> PrevLoaded = new();
+        public const string EmptyString = "__empty";
+        public static Table Load(string filename) {
+            if (PrevLoaded.ContainsKey(filename)) return PrevLoaded[filename];
             var file = Resources.Load<TextAsset>(filename);
             if (file == null){
                 Debug.LogError($"Can't find resources with name {filename}");
@@ -38,18 +44,21 @@ namespace Utility.Loader{
                     ret[id][key] = ParseValue(type, line[j]);
                 }
             }
+
+            PrevLoaded[filename] = ret;
             return ret;
         }
 
         private static object ParseValue(string typename, string val) => typename.ToLower() switch{
             "int" => int.Parse(val),
-            "string" => val,
+            "string" => val.Equals(EmptyString)? "": val,
             "float" => float.Parse(val),
             _ => val
         };
 
         private static string[] ParseLine(string lines, char deli){
             lines = lines.Replace("\r", "");
+            if (!lines.EndsWith(deli)) lines += deli;
             List<string> ret = new();
             var inQuote = false;
             var lastInd = 0;
@@ -66,6 +75,16 @@ namespace Utility.Loader{
                 }
             }
             return ret.ToArray();
+        }
+
+        public static TableInfo TryToLoad(string filename, int id) {
+            var table = Load(filename);
+            if (table == null) return null;
+            if (!table.ContainsKey(id)) {
+                Debug.LogError($"Wrong id in table '{filename}', id = {id}");
+                return null;
+            }
+            return table[id];
         }
     }
 }

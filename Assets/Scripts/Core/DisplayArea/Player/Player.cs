@@ -20,11 +20,12 @@ namespace Core.DisplayArea.Player{
                     _controller.PlayAnimation(PlayerAnimationController.PlayerAnimation.Attack);
                 _model.OnBeingAttacked += (game, model) => {
                     _controller.PlayAnimation(PlayerAnimationController.PlayerAnimation.BeingAttacked);
-                    bar.Percentage = (float)_model.currentHp / _model.hpUpLimit * 100;
+                    bar.Percentage = (float)_model.CurrentHp / _model.hpUpLimit*100f;
                 };
                 _model.OnDie += (game, model) =>
                     _controller.PlayAnimation(PlayerAnimationController.PlayerAnimation.Die);
             }
+            
         }
     }
 }

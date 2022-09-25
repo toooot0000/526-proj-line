@@ -36,6 +36,7 @@ namespace Core.PlayArea{
         }
 
         private void Update(){
+            if (GameManager.shared.game.turn != Game.Turn.Player) return;
             TraceTouchPosition();
         }
 
@@ -60,14 +61,17 @@ namespace Core.PlayArea{
         }
 
         private void OnMouseDown(){
+            if (GameManager.shared.game.turn != Game.Turn.Player) return;
             StartTracking();
         }
 
         private void OnMouseExit(){
+            if (GameManager.shared.game.turn != Game.Turn.Player) return;
             StopTracking();
         }
 
         private void OnMouseUp(){
+            if (GameManager.shared.game.turn != Game.Turn.Player) return;
             StopTracking();
         }
 

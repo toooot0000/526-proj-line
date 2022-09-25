@@ -8,11 +8,22 @@ namespace Core.Model{
     [Serializable]
     public class Player: GameModel, IDamageable{
 
-        public int hpUpLimit;
-        public int currentHp;
-        public Gear[] gears;
+        public int hpUpLimit = 100;
+
+        private int _currentHp = 0;
+        public int CurrentHp
+        {
+            set {
+                _currentHp = value;
+                if (value == 0) Die();
+            }
+            get => _currentHp;
+        }
+
+        public List<Gear> gears;
         public int gearUpLimit;
         public int energy;
+        public float armor;
 
         public List<Ball> hitBalls = new();
         public List<Ball> circledBalls = new();
@@ -25,13 +36,14 @@ namespace Core.Model{
         public event ModelEvent OnDie;
         
         public void TakeDamage(Damage damage){
-            currentHp -= damage.point;
-            Debug.Log($"Player take damage(point {damage.point}, current HP: {currentHp})");
+            CurrentHp -= damage.point;
             OnBeingAttacked?.Invoke(currentGame, this);
         }
 
 
-        public Player(GameModel parent) : base(parent){ }
+        public Player(GameModel parent) : base(parent) {
+            CurrentHp = hpUpLimit;
+        }
 
         public void AddHitBall(Ball ball){
             hitBalls.Add(ball);
@@ -46,17 +58,75 @@ namespace Core.Model{
         public int GetTotalPoint(){
             return hitBalls.Sum(ball => ball.point) + circledBalls.Sum(ball => ball.point * 2);
         }
-        public void Attack(){
+        public void Attack() {
+            if (currentGame.turn != Game.Turn.Player) return;
             var dmg = new Damage(){
                 point = GetTotalPoint(),
                 type = Damage.Type.Physics,
                 target = currentGame.CurEnemy
             };
-            hitBalls.Clear();
-            circledBalls.Clear();
-            Debug.Log($"Player attack! with point {dmg.point.ToString()}");
-            dmg.target.TakeDamage(dmg);
             OnAttack?.Invoke(currentGame, this);
+            dmg.target.TakeDamage(dmg);
+            currentGame.SwitchTurn();
+        }
+        
+        private void Die() {
+            OnDie?.Invoke(currentGame, this);
+            currentGame.End();
+        }
+
+        public float ChargeEffect()
+        {
+            float points = 0;
+            if (circledBalls.Count == 0) {
+                return points;
+            }
+            else {
+                Dictionary<Ball, int> res = new Dictionary<Ball, int>();
+                for (int i = 0; i < circledBalls.Count; i++) {
+                    if (res.ContainsKey(circledBalls[i])) {
+                        res[circledBalls[i]] += 1;
+                    }
+                    else {
+                        res.Add(circledBalls[i],1);
+                    }
+                }
+
+                foreach (Ball circled in res.Keys) {
+                    points += circled.charge * circled.point * res[circled];
+                }
+            }
+            return points;
+        }
+        
+        public float ComboEffect(){
+            float points = 0;
+            if(hitBalls.Count == 0) {
+                return points;
+            }
+            else {
+                Dictionary<Ball, int> record = new Dictionary<Ball, int>();
+                for( int j = 0; j < hitBalls.Count; j++) {
+                    if(record.ContainsKey(hitBalls[j])){
+                        record[hitBalls[j]] += 1;
+                    }else{
+                        record.Add(hitBalls[j], 1);
+                    }
+                }
+                foreach(Ball hitBall in record.Keys){
+                    if(record[hitBall] >= 2){
+                        if (hitBall.type != Ball.Type.Defend) {
+                            points += hitBall.combo * hitBall.point * record[hitBall];
+                        }
+                        else {
+                            points += hitBall.combo * hitBall.point * record[hitBall];
+                            armor += points;
+                        }
+                    }
+                }
+                return points;
+            }
+
         }
     }
 }
