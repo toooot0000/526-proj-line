@@ -43,7 +43,7 @@ namespace Core.Model{
             return ret;
         }
 
-        private void SwitchTurn(){
+        public void SwitchTurn(){
             if (turn == Turn.Player){
                 turn = Turn.Enemy;
             } else{
@@ -54,13 +54,12 @@ namespace Core.Model{
 
         private void LoadStage(int id){
             curStage = new Stage(this, id);
+            
             OnStageLoaded?.Invoke(this);
         }
 
         private void InitPlayer(){
             player = new(this);
-            player.OnAttack += (game, model) => SwitchTurn();
-            player.OnDie += (game,model) => End();
         }
 
         public void End()

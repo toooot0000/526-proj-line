@@ -57,4 +57,8 @@ public class GameManager : MonoBehaviour{
     public void Delayed(int frames, Action modelAction) {
         StartCoroutine(CoroutineUtility.Delayed(frames, modelAction));
     }
+
+    public void Delayed(float seconds, Action modelAction) {
+        StartCoroutine(CoroutineUtility.Delayed(seconds, modelAction));
+    }
 }

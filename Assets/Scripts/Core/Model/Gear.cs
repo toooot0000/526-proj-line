@@ -21,7 +21,7 @@ namespace Core.Model{
         public Ball ball;
         public int ballNum;
         public string chargeEffect;
-        public string combEffect;
+        public string comboEffect;
         public int cooldown;
         public Gear(GameModel parent) : base(parent){ }
 
@@ -41,7 +41,7 @@ namespace Core.Model{
             ball = new Ball(parent, (int)gear["ball_id"]);
             ballNum = (int)gear["ball_num"];
             chargeEffect = gear["charge_effect"] as string;
-            combEffect = gear["combo_effect"] as string;
+            comboEffect = gear["combo_effect"] as string;
             cooldown = (int)gear["cooldown"];
         }
         

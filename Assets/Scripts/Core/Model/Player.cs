@@ -7,21 +7,18 @@ namespace Core.Model{
     [Serializable]
     public class Player: GameModel, IDamageable{
 
-        public int hpUpLimit;
+        public int hpUpLimit = 100;
 
         private int _currentHp = 0;
         public int CurrentHp
         {
-            set
-            {
+            set {
                 _currentHp = value;
-                if (value == 0)
-                {
-                    OnDie?.Invoke(currentGame, this);
-                }
+                if (value == 0) Die();
             }
             get => _currentHp;
         }
+
         public List<Gear> gears;
         public int gearUpLimit;
         public int energy;
@@ -39,9 +36,12 @@ namespace Core.Model{
         
         public void TakeDamage(Damage damage){
             CurrentHp -= damage.point;
+            OnBeingAttacked?.Invoke(currentGame, this);
         }
 
-        public Player(GameModel parent) : base(parent){ }
+        public Player(GameModel parent) : base(parent) {
+            CurrentHp = hpUpLimit;
+        }
 
         public void AddHitBall(Ball ball){
             hitBalls.Add(ball);
@@ -56,7 +56,8 @@ namespace Core.Model{
         public int GetTotalPoint(){
             return hitBalls.Sum(ball => ball.point) + circledBalls.Sum(ball => ball.point * 2);
         }
-        public void Attack(){
+        public void Attack() {
+            if (currentGame.turn != Game.Turn.Player) return;
             var dmg = new Damage(){
                 point = GetTotalPoint(),
                 type = Damage.Type.Physics,
@@ -64,6 +65,12 @@ namespace Core.Model{
             };
             OnAttack?.Invoke(currentGame, this);
             dmg.target.TakeDamage(dmg);
+            currentGame.SwitchTurn();
+        }
+        
+        private void Die() {
+            OnDie?.Invoke(currentGame, this);
+            currentGame.End();
         }
 
         public float ChargeEffect()

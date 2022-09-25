@@ -9,9 +9,10 @@ namespace Utility.Loader{
     using TableInfo = Dictionary<string, object>;
 
     public static class CsvLoader{
-        private static Dictionary<string, Table> _prevLoaded;
+        private static readonly Dictionary<string, Table> PrevLoaded = new();
+        public const string EmptyString = "__empty";
         public static Table Load(string filename) {
-            if (_prevLoaded.ContainsKey(filename)) return _prevLoaded[filename];
+            if (PrevLoaded.ContainsKey(filename)) return PrevLoaded[filename];
             var file = Resources.Load<TextAsset>(filename);
             if (file == null){
                 Debug.LogError($"Can't find resources with name {filename}");
@@ -44,19 +45,20 @@ namespace Utility.Loader{
                 }
             }
 
-            _prevLoaded[filename] = ret;
+            PrevLoaded[filename] = ret;
             return ret;
         }
 
         private static object ParseValue(string typename, string val) => typename.ToLower() switch{
             "int" => int.Parse(val),
-            "string" => val,
+            "string" => val.Equals(EmptyString)? "": val,
             "float" => float.Parse(val),
             _ => val
         };
 
         private static string[] ParseLine(string lines, char deli){
             lines = lines.Replace("\r", "");
+            if (!lines.EndsWith(deli)) lines += deli;
             List<string> ret = new();
             var inQuote = false;
             var lastInd = 0;

@@ -6,7 +6,15 @@ namespace Core.Model{
     [Serializable]
     public class Enemy: GameModel, IDamageable{
         public int hpUpLimit = 1000;
-        public int currentHp;
+        private int _currentHp;
+
+        public int CurrentHp {
+            set {
+                _currentHp = value;
+                if (value == 0) Die();
+            }
+            get => _currentHp;
+        }
         public int attack = 1;
 
         public int id;
@@ -23,7 +31,7 @@ namespace Core.Model{
         public event ModelEvent OnDie;
 
         public Enemy(GameModel parent) : base(parent){
-            currentHp = hpUpLimit;
+            CurrentHp = hpUpLimit;
         }
 
         public Enemy(GameModel parent, int id) : base(parent) {
@@ -35,25 +43,37 @@ namespace Core.Model{
             cooldown = (int)enemy["cooldown"];
             hpUpLimit = (int)enemy["hp"];
             attack = (int)enemy["attack"];
+            CurrentHp = hpUpLimit;
         }
         
         public void TakeDamage(Damage damage){
-            currentHp -= damage.point;
+            CurrentHp -= damage.point;
             OnBeingAttacked?.Invoke(currentGame, this);
         }
 
         public void Attack(){
+            OnAttack?.Invoke(currentGame, this);
             currentGame.player.TakeDamage(new Damage(){
                 point = attack,
                 type = Damage.Type.Physics,
                 target = currentGame.player
             });
-            OnAttack?.Invoke(currentGame, this);
+            currentGame.SwitchTurn();
         }
 
-        public void Die()
-        {
+        private void DelayedAttack(Game game) {
+            if (game.turn != Game.Turn.Enemy) return;
+            GameManager.shared.Delayed(2.0f, Attack);
+            
+        }
+
+        public void Die() {
+            currentGame.OnTurnChanged -= DelayedAttack;
             OnDie?.Invoke(currentGame, this);
+        }
+
+        public void BecomeCurrent() {
+            currentGame.OnTurnChanged += DelayedAttack;
         }
     }
 }
