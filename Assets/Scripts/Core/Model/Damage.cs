@@ -4,10 +4,12 @@ namespace Core.Model{
     
     public interface IDamageable{
         public void TakeDamage(Damage damage);
+        public int CurrentHp{ get; set; }
+        public int HpUpLimit{ get; set; }
     }
     
     [Serializable]
-    public struct Damage{
+    public class Damage: GameModel{
 
         public enum Type{
             Physics,
@@ -17,5 +19,7 @@ namespace Core.Model{
         public int point;
         public Type type;
         public IDamageable target;
+        public IDamageable source;
+        public Damage(GameModel parent) : base(parent){ }
     }
 }

@@ -18,6 +18,7 @@ namespace Core.Model{
 
         public event ModelEvent OnStageBeaten;
         public event ModelEvent OnEnemyChanged;
+        public event ModelEvent OnProcessDamage;
 
         public Stage(GameModel parent, Enemy[] enemies) : base(parent)
         {
@@ -51,6 +52,12 @@ namespace Core.Model{
                 enemy.OnDie += ForwardCurrentEnemy;
             }
             CurrentEnemy.BecomeCurrent();
+        }
+
+        public void ProcessDamage(Damage dmg){
+            dmg.target.TakeDamage(dmg);
+            OnProcessDamage?.Invoke(currentGame, dmg);
+            currentGame.SwitchTurn();
         }
     }
 }

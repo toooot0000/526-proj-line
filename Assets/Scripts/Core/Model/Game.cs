@@ -15,11 +15,10 @@ namespace Core.Model{
         public Turn turn = Turn.Player;
         
         public Player player;
-        // public List<Enemy> enemies;
 
-        public Stage curStage;
+        public Stage currentStage;
 
-        public Enemy CurEnemy => curStage.enemies[0];
+        public Enemy CurrentEnemy => currentStage.CurrentEnemy;
         
         public event SimpleModelEvent OnTurnChanged;
         public event SimpleModelEvent OnGameEnd;
@@ -53,7 +52,7 @@ namespace Core.Model{
         }
 
         private void LoadStage(int id){
-            curStage = new Stage(this, id);
+            currentStage = new Stage(this, id);
             
             OnStageLoaded?.Invoke(this);
         }

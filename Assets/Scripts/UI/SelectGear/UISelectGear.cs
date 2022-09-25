@@ -50,8 +50,8 @@ namespace UI{
             {
                 // Instance GearPanel
                 var gearPanel = Instantiate(gearPanelPrefab, panel.transform);
-                gearPanel.GetComponentInChildren<Image>().color = Color.black;
-                gearPanel.GetComponentInChildren<TextMeshProUGUI>().text = gear.desc;
+                // gearPanel.GetComponentInChildren<Image>().color = Color.black;
+                // gearPanel.GetComponentInChildren<TextMeshProUGUI>().text = gear.desc;
             }
             panel.UpdateLayout();
         }

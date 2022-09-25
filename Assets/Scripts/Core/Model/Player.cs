@@ -8,7 +8,7 @@ namespace Core.Model{
     [Serializable]
     public class Player: GameModel, IDamageable{
 
-        public int hpUpLimit = 100;
+        public int HpUpLimit{ set; get; }
 
         private int _currentHp = 0;
         public int CurrentHp
@@ -30,7 +30,6 @@ namespace Core.Model{
 
         public event ModelEvent OnHitBall;
         public event ModelEvent OnCircledBall;
-
         public event ModelEvent OnAttack;
         public event ModelEvent OnBeingAttacked;
         public event ModelEvent OnDie;
@@ -41,8 +40,9 @@ namespace Core.Model{
         }
 
 
-        public Player(GameModel parent) : base(parent) {
-            CurrentHp = hpUpLimit;
+        public Player(GameModel parent) : base(parent){
+            HpUpLimit = 100;        // TODO
+            CurrentHp = HpUpLimit;
         }
 
         public void AddHitBall(Ball ball){
@@ -60,14 +60,14 @@ namespace Core.Model{
         }
         public void Attack() {
             if (currentGame.turn != Game.Turn.Player) return;
-            var dmg = new Damage(){
+            var dmg = new Damage(currentGame){
                 point = GetTotalPoint(),
                 type = Damage.Type.Physics,
-                target = currentGame.CurEnemy
+                target = currentGame.CurrentEnemy,
+                source = this
             };
             OnAttack?.Invoke(currentGame, this);
-            dmg.target.TakeDamage(dmg);
-            currentGame.SwitchTurn();
+            currentGame.currentStage.ProcessDamage(dmg);
         }
         
         private void Die() {

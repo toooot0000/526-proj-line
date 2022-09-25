@@ -22,9 +22,8 @@ namespace UI{
                  Destroy(this);
              }
              shared = this;
-             GameManager.shared.game.curStage.OnStageBeaten += ((game, model) =>
-             {
-                 UISelectGear selectGear = this.OpenUI("UISelectGear") as UISelectGear;
+             GameManager.shared.game.currentStage.OnStageBeaten += ((game, model) => {
+                 var selectGear = OpenUI("UISelectGear") as UISelectGear;
                  selectGear.LoadGearPanel(new Gear[] { new Gear(GameManager.shared.game),new Gear(GameManager.shared.game)});
              });
              GameManager.shared.game.OnGameEnd += ((game) => { OpenUI("UIGameEnd"); });
@@ -35,6 +34,7 @@ namespace UI{
              OpenUI("UIGameStart");
          }
 
+         // ReSharper disable Unity.PerformanceAnalysis
          public UIBase OpenUI(string uiPrefabName){
              var cur = _uiList.Find(uiBase => uiBase.name == uiPrefabName);
              if( cur != null){

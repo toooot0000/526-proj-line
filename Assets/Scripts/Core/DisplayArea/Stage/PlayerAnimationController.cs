@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
-using Utility;
 using Utility.Extensions;
 
-namespace Core.DisplayArea.Player{
+namespace Core.DisplayArea.Stage{
     [RequireComponent(typeof(Animator))]
     public class PlayerAnimationController : MonoBehaviour{
         
