@@ -42,16 +42,16 @@ namespace Core.DisplayArea.Stage{
 
 
         public void Attack(){
-            animationController.PlayAnimation(PlayerAnimation.Attack);
+            animationController.Play(PlayerAnimation.Attack);
         }
 
         public void ProcessDamage(){
             damageNumberDisplay.Number = damage.raw.point;
             CurrentHp -= damage.raw.point;
             if (isDead){
-                damage.target.animationController.PlayAnimation(PlayerAnimation.Die, damage.resolvedCallback);
+                damage.target.animationController.Play(PlayerAnimation.Die, damage.resolvedCallback);
             } else{
-                damage.target.animationController.PlayAnimation(PlayerAnimation.BeingAttacked, damage.resolvedCallback);
+                damage.target.animationController.Play(PlayerAnimation.BeingAttacked, damage.resolvedCallback);
             }
         }
         

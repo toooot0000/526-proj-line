@@ -21,9 +21,15 @@ namespace Core.DisplayArea.Stage{
         public void BindToCurrentEnemy(){
             if (GameManager.shared.game.CurrentEnemy != null){
                 Model = GameManager.shared.game.CurrentEnemy;
-                StartCoroutine(CoroutineUtility.Delayed(0.1f, () => {
-                    animationController.PlayAnimation(PlayerAnimation.Appear);
-                }));
+                animationController.Play(PlayerAnimation.Appear);
+            }
+        }
+        
+        public void BindToCurrentEnemy(Action callback){
+            if (GameManager.shared.game.CurrentEnemy != null){
+                isDead = false;
+                Model = GameManager.shared.game.CurrentEnemy;
+                animationController.Play(PlayerAnimation.Appear, callback);
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Core.Model;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -17,7 +18,8 @@ namespace Core.PlayArea.Balls{
                 _ballModels.Remove((Model.Ball)model);
                 if (_ballModels.Count == 0)
                 {
-                    SpawnRandom();
+                    // SpawnRandom();
+                    SpawnBalls();
                 }
             };
             GameManager.shared.game.player.OnCircledBall += (game, model) =>
@@ -25,10 +27,12 @@ namespace Core.PlayArea.Balls{
                 _ballModels.Remove((Model.Ball)model);
                 if (_ballModels.Count == 0)
                 {
-                    SpawnRandom();
+                    // SpawnRandom();
+                    SpawnBalls();
                 }
             };
-            SpawnRandom();
+            // SpawnRandom();
+            SpawnBalls();
         }
 
         public void Spawn(Model.Ball ball){
@@ -36,10 +40,11 @@ namespace Core.PlayArea.Balls{
             var newBallConfig = newBallObject.GetComponent<BallConfig>();
             newBallConfig.modelBall = ball;
             newBallObject.transform.localPosition = GenerateRandomLocalPosition();
+            newBallConfig.UpdateConfig();
             _ballModels.Add(ball);
         }
         
-        public void SpawnRandom()
+        public void SpawnRandom()       // Temp
         {
             for (int i = 0; i < randomSpawnNumber; i++)
             {
@@ -55,6 +60,13 @@ namespace Core.PlayArea.Balls{
 
         private Vector3 GenerateRandomLocalPosition(){
             return Vector3.zero; // TODO
+        }
+
+        public void SpawnBalls(){
+            var balls = GameManager.shared.game.GetAllSkillBalls();
+            foreach (var ball in balls){
+                Spawn(ball);
+            }
         }
     }
 }

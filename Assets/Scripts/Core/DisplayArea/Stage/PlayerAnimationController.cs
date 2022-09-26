@@ -9,13 +9,13 @@ namespace Core.DisplayArea.Stage{
     }
 
     public enum PlayerAnimation{
-        [Description("TrgAttack")]
+        [Description("Attack")]
         Attack,
-        [Description("TrgBeingAttacked")]
+        [Description("BeingAttacked")]
         BeingAttacked,
-        [Description("TrgDie")]
+        [Description("Die")]
         Die,
-        [Description("TrgAppear")]
+        [Description("Appear")]
         Appear,
     }
 }

@@ -34,17 +34,22 @@ namespace Core.Model{
         public event ModelEvent OnBeingAttacked;
         public event ModelEvent OnDie;
         
+
+        public Player(GameModel parent) : base(parent){
+            HpUpLimit = 100;        // TODO
+            CurrentHp = HpUpLimit;
+            gears = new List<Gear>(){
+                new Gear(this, id: -1)
+            };
+        }
+
+        
         public void TakeDamage(Damage damage){
             CurrentHp -= damage.point;
             OnBeingAttacked?.Invoke(currentGame, this);
         }
 
-
-        public Player(GameModel parent) : base(parent){
-            HpUpLimit = 100;        // TODO
-            CurrentHp = HpUpLimit;
-        }
-
+        
         public void AddHitBall(Ball ball){
             hitBalls.Add(ball);
             OnHitBall?.Invoke(currentGame, ball);

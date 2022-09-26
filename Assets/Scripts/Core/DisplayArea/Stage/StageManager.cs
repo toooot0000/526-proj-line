@@ -37,8 +37,10 @@ namespace Core.DisplayArea.Stage{
                 target = target,
                 raw = dmg,
                 resolvedCallback = () => {
-                    if(target.isDead && target is Enemy enemy1) enemy1.BindToCurrentEnemy();
-                    StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn));
+                    if(target.isDead && target is Enemy enemy1) enemy1.BindToCurrentEnemy(
+                            () => StartCoroutine(CoroutineUtility.Delayed(2f, GameManager.shared.game.SwitchTurn))
+                        );
+                    else StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn));
                 }
             };
             player.damage = dmgWrp;
