@@ -43,11 +43,7 @@ namespace Core.Model{
         }
 
         public void SwitchTurn(){
-            if (turn == Turn.Player){
-                turn = Turn.Enemy;
-            } else{
-                turn = Turn.Player;
-            }
+            turn = turn == Turn.Player ? Turn.Enemy : Turn.Player;
             OnTurnChanged?.Invoke(this);
         }
 

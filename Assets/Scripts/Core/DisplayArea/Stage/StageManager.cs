@@ -1,20 +1,22 @@
 using System;
 using Core.Model;
 using UnityEngine;
+using Utility;
 
 namespace Core.DisplayArea.Stage{
     public class StageManager: MonoBehaviour{
 
-        public struct DamageWrapper{
+        public class DamageWrapper{
             public DamageableView source;
             public DamageableView target;
             public Damage raw;
+            public Action resolvedCallback;
         }
         
         private Model.Stage _modelStage;
         public Player player;
         public Enemy enemy;
-        
+
         private void Start(){
             GameManager.shared.game.OnStageLoaded += OnStageLoaded;
             OnStageLoaded(GameManager.shared.game);
@@ -29,14 +31,19 @@ namespace Core.DisplayArea.Stage{
 
         private void OnProcessDamage(Game game, GameModel model){
             var dmg = (model as Damage)!;
+            DamageableView target = player.Model == dmg.target ? player : enemy;
             var dmgWrp = new DamageWrapper(){
                 source = player.Model == dmg.source ? player : enemy,
-                target = player.Model == dmg.target ? player : enemy,
-                raw = dmg
+                target = target,
+                raw = dmg,
+                resolvedCallback = () => {
+                    if(target.isDead && target is Enemy enemy1) enemy1.BindToCurrentEnemy();
+                    StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn));
+                }
             };
             player.damage = dmgWrp;
             enemy.damage = dmgWrp;
-            dmgWrp.source.animationController.PlayAnimation(PlayerAnimationController.PlayerAnimation.Attack);
+            dmgWrp.source.Attack();
         }
     }
 }

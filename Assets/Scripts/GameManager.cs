@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour{
 
     public Game game;
 
+    public bool isAcceptingInput = true;
+
     private void Awake()
     {
         if (shared != null){
@@ -24,20 +26,15 @@ public class GameManager : MonoBehaviour{
         Application.targetFrameRate = 120;
     }
 
-    private void Update()
-    {
-        if(Input.GetKeyUp("p"))
-        {
-             print("Game Over!\n");
-             game.player.CurrentHp = 0;
-        
-        }
-    }
+    private void Update(){ }
 
 
     private void InitGame() {
         PreInit();
         game ??= new();
+        game.OnTurnChanged += game1 => {
+            if (game1.turn == Game.Turn.Player) isAcceptingInput = true;
+        };
     }
 
     private void PreInit() {

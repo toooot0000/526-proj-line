@@ -67,6 +67,8 @@ namespace Core.Model{
                 source = this
             };
             OnAttack?.Invoke(currentGame, this);
+            hitBalls.Clear();
+            circledBalls.Clear();
             currentGame.currentStage.ProcessDamage(dmg);
         }
         

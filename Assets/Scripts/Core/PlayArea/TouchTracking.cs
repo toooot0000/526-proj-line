@@ -36,7 +36,7 @@ namespace Core.PlayArea{
         }
 
         private void Update(){
-            if (GameManager.shared.game.turn != Game.Turn.Player) return;
+            if (!GameManager.shared.isAcceptingInput) return;
             TraceTouchPosition();
         }
 
@@ -50,9 +50,11 @@ namespace Core.PlayArea{
 
         public void StopTracking(){
             if (!_isTracing) return;
+            if (_game.player.GetTotalPoint() == 0) return;
             _isTracing = false;
             touchCollider.SetEnabled(false);
             StartCoroutine(CoroutineUtility.Delayed(() => _game.player.Attack()));
+            GameManager.shared.isAcceptingInput = false;
         }
 
         private Vector2 GetCurrentTouchPosition(){
@@ -61,17 +63,17 @@ namespace Core.PlayArea{
         }
 
         private void OnMouseDown(){
-            if (GameManager.shared.game.turn != Game.Turn.Player) return;
+            if (!GameManager.shared.isAcceptingInput) return;
             StartTracking();
         }
 
         private void OnMouseExit(){
-            if (GameManager.shared.game.turn != Game.Turn.Player) return;
+            if (!GameManager.shared.isAcceptingInput) return;
             StopTracking();
         }
 
         private void OnMouseUp(){
-            if (GameManager.shared.game.turn != Game.Turn.Player) return;
+            if (!GameManager.shared.isAcceptingInput) return;
             StopTracking();
         }
 

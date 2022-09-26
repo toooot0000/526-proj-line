@@ -22,11 +22,6 @@ namespace UI{
                  Destroy(this);
              }
              shared = this;
-             GameManager.shared.game.currentStage.OnStageBeaten += ((game, model) => {
-                 var selectGear = OpenUI("UISelectGear") as UISelectGear;
-                 selectGear.LoadGearPanel(new Gear[] { new Gear(GameManager.shared.game),new Gear(GameManager.shared.game)});
-             });
-             GameManager.shared.game.OnGameEnd += ((game) => { OpenUI("UIGameEnd"); });
          }
          
 

@@ -16,6 +16,8 @@ namespace Core.Model{
 
         public Enemy CurrentEnemy => _enemyIndex < enemies.Length ? enemies[_enemyIndex] : null;
 
+        public int RemainingEnemyNumber => enemies.Length - _enemyIndex;
+
         public event ModelEvent OnStageBeaten;
         public event ModelEvent OnEnemyChanged;
         public event ModelEvent OnProcessDamage;
@@ -47,7 +49,7 @@ namespace Core.Model{
             }
         }
 
-        private void BindEvents() {
+        private void BindEvents(){
             foreach (var enemy in enemies) {
                 enemy.OnDie += ForwardCurrentEnemy;
             }
@@ -57,7 +59,6 @@ namespace Core.Model{
         public void ProcessDamage(Damage dmg){
             dmg.target.TakeDamage(dmg);
             OnProcessDamage?.Invoke(currentGame, dmg);
-            currentGame.SwitchTurn();
         }
     }
 }

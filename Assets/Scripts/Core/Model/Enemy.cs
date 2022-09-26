@@ -11,7 +11,7 @@ namespace Core.Model{
         public int CurrentHp {
             set {
                 _currentHp = value;
-                if (value == 0) Die();
+                if (value <= 0) Die();
             }
             get => _currentHp;
         }
@@ -64,7 +64,7 @@ namespace Core.Model{
 
         private void DelayedAttack(Game game) {
             if (game.turn != Game.Turn.Enemy) return;
-            GameManager.shared.Delayed(2.0f, Attack);
+            GameManager.shared.Delayed(0.1f, Attack);
         }
 
         public void Die() {
