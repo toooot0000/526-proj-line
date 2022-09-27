@@ -50,7 +50,7 @@ namespace Utility.Loader{
         }
 
         private static object ParseValue(string typename, string val) => typename.ToLower() switch{
-            "int" => int.Parse(val),
+            "int" => (int)Math.Round(float.Parse(val)),
             "string" => val.Equals(EmptyString)? "": val,
             "float" => float.Parse(val),
             _ => val
