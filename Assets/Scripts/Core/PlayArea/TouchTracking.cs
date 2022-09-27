@@ -27,6 +27,7 @@ namespace Core.PlayArea{
         private CircleDetector _circleDetector;
         private float _currentLineLength = 0;
         private Game _game;
+        
 
         private void Start(){
             _rect = GetComponent<RectTransform>();

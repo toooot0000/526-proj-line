@@ -1,5 +1,6 @@
 using System;
 using Core.Model;
+using UI;
 using UnityEngine;
 using Utility;
 
@@ -37,9 +38,16 @@ namespace Core.DisplayArea.Stage{
                 target = target,
                 raw = dmg,
                 resolvedCallback = () => {
-                    if(target.isDead && target is Enemy enemy1) enemy1.BindToCurrentEnemy(
-                            () => StartCoroutine(CoroutineUtility.Delayed(2f, GameManager.shared.game.SwitchTurn))
-                        );
+                    if(target.isDead && target is Enemy enemy1) {
+                        if(game.CurrentEnemy != null){
+                            enemy1.BindToCurrentEnemy(
+                                () => StartCoroutine(CoroutineUtility.Delayed(2f, GameManager.shared.game.SwitchTurn))
+                            );
+                        }
+                        else {
+                            UIManager.shared.OpenUI("UISelectGear");
+                        }
+                    }
                     else StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn));
                 }
             };
@@ -47,5 +55,7 @@ namespace Core.DisplayArea.Stage{
             enemy.damage = dmgWrp;
             dmgWrp.source.Attack();
         }
+        
+        
     }
 }

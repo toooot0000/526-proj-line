@@ -26,11 +26,9 @@ namespace Core.DisplayArea.Stage{
         }
         
         public void BindToCurrentEnemy(Action callback){
-            if (GameManager.shared.game.CurrentEnemy != null){
-                isDead = false;
-                Model = GameManager.shared.game.CurrentEnemy;
-                animationController.Play(PlayerAnimation.Appear, callback);
-            }
+            isDead = false;
+            Model = GameManager.shared.game.CurrentEnemy;
+            animationController.Play(PlayerAnimation.Appear, callback);
         }
     }
 }

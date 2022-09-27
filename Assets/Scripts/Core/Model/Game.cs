@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Core.Model{
     public delegate void ModelEvent(Game game, GameModel model);
@@ -22,6 +23,8 @@ namespace Core.Model{
         
         public event SimpleModelEvent OnTurnChanged;
         public event SimpleModelEvent OnGameEnd;
+
+        [NotNull] public event SimpleModelEvent OnGameComplete;
         
         public event SimpleModelEvent OnStageLoaded;
 
@@ -47,10 +50,15 @@ namespace Core.Model{
             OnTurnChanged?.Invoke(this);
         }
 
-        private void LoadStage(int id){
+        private void LoadStage(int id) {
+            if (id == -1) {
+                Complete();
+                return;
+            }
             currentStage = new Stage(this, id);
-            
             OnStageLoaded?.Invoke(this);
+            turn =  Turn.Player;
+            OnTurnChanged?.Invoke(this);
         }
 
         private void InitPlayer(){
@@ -62,6 +70,16 @@ namespace Core.Model{
             // blabla
             
             OnGameEnd?.Invoke(this);
+        }
+
+        public void Complete() {
+            // blabla
+            
+            OnGameComplete?.Invoke(this);
+        }
+
+        public void GoToNextStage() {
+            LoadStage(currentStage.nextStage);
         }
     }
 }

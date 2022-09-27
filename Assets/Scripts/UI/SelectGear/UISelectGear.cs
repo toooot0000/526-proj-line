@@ -55,5 +55,10 @@ namespace UI{
             }
             panel.UpdateLayout();
         }
+
+        public void ConfirmButtonEvent() {
+            StartCoroutine(CoroutineUtility.Delayed(GameManager.shared.game.GoToNextStage));
+            Close();
+        }
     }
 }

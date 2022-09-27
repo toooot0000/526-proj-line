@@ -22,6 +22,8 @@ namespace Core.Model{
         public event ModelEvent OnEnemyChanged;
         public event ModelEvent OnProcessDamage;
 
+        public int nextStage = 0;
+
         public Stage(GameModel parent, Enemy[] enemies) : base(parent)
         {
             this.enemies = enemies;
@@ -31,6 +33,7 @@ namespace Core.Model{
         public Stage(GameModel parent, int id) : base(parent) {
             var info = CsvLoader.TryToLoad("Configs/stages", id);
             if (info == null) return;
+            nextStage = (int)info["next_stage"];
             enemies = (info["enemies"] as string)!.Split(";").Select((s => new Enemy(parent, int.Parse(s)) )).ToArray();
             bonusGears = (info["bonus_gears"] as string)!.Split(";").Select((s => new Gear(parent, int.Parse(s)) )).ToArray();
             BindEvents();
