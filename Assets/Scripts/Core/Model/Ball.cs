@@ -19,6 +19,15 @@ namespace Core.Model{
         public float charge;
         public float combo;
         
-        public Ball(GameModel parent) : base(parent){ }
+        public Ball(GameModel parent, int id, String desc, Type type, int point, float size, float speed, float charge, float combo): base(parent){
+            this.id = id;
+            this.desc = desc;
+            this.type = type;
+            this.point = point;
+            this.size = size;
+            this.speed = speed;
+            this.charge = charge;
+            this.combo = combo;
+        }
     }
 }

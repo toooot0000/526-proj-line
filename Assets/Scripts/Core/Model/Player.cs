@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using Utility.Loader;
 using BackendApi;
+using Unity.VisualScripting;
 
 namespace Core.Model{
     [Serializable]
@@ -16,6 +19,9 @@ namespace Core.Model{
 
         public List<Ball> hitBalls = new();
         public List<Ball> circledBalls = new();
+        
+        public DataTable gearTable;
+        public DataTable artifactTable;
 
         public event ModelEvent OnHitBall;
         public event ModelEvent OnCircledBall;
@@ -29,6 +35,17 @@ namespace Core.Model{
         }
 
         public Player(GameModel parent) : base(parent){ }
+        
+        public Player(GameModel parent, int hpUpLimit, int energy, float armor) : base(parent){
+            this.hpUpLimit = 100;
+            currentHp = hpUpLimit;
+            gears = new List<Gear>();
+            gearUpLimit = 3;
+            this.energy = energy;
+            this.armor = 0;
+            gearTable = LoadData("gears.csv");
+            artifactTable = LoadData("artifacts.csv");
+        }
 
         public void AddHitBall(Ball ball){
             hitBalls.Add(ball);
@@ -106,5 +123,40 @@ namespace Core.Model{
             }
 
         }
+
+        public void GetGear(int id)
+        {
+            if (gearTable.Rows.Count > id)
+            {
+                DataRow row = gearTable.Rows[id];
+                Gear gear = new Gear(this, row);
+                gears.Add(gear);
+            }
+        }
+
+        public DataTable LoadData(string filename)
+        {
+            DataTable dt = new DataTable();
+            dt = CsvLoader.LoadCsv(filename);
+            return dt;
+        }
+
+
+        // public Dictionary<int, Dictionary<string, object>> LoadData(string filename)
+        // {
+        //     Dictionary<int, Dictionary<string, object>> data = CsvLoader.Load(filename);
+        //     foreach (int id in data.Keys)
+        //     {
+        //         foreach (string key in data[id].Keys)
+        //         {
+        //             Console.Out.WriteLine("id: " + id + " key: " + key + " value: " + data[id][key]);
+        //         }
+        //     }
+        //     return data;
+        // }
+        
+        
+        
+        
     }
 }

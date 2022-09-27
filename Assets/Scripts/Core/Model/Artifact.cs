@@ -6,6 +6,11 @@ namespace Core.Model{
         public int id;
         public String desc;
         public int rarity;
-        public Artifact(GameModel parent) : base(parent){ }
+
+        public Artifact(int id, String desc, int rarity, GameModel parent) : base(parent){
+            this.id = id;
+            this.desc = desc;
+            this.rarity = rarity;
+        }
     }
 }
