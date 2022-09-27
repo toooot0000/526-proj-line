@@ -36,7 +36,7 @@ namespace Utility.Loader{
             var types = ParseLine(lines[2], ',');
             for(var i = 3; i<lines.Length; i++){
                 var line = ParseLine(lines[i], ',');
-                var id = int.Parse(line[idInd]);
+                var id = (int)Math.Round(float.Parse(line[idInd]));
                 ret[id] = new();
                 for (var j = 0; j < line.Length; j++){
                     var key = keys[j];
