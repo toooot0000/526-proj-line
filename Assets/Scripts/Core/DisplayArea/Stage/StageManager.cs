@@ -11,7 +11,7 @@ namespace Core.DisplayArea.Stage{
             public DamageableView source;
             public DamageableView target;
             public Damage raw;
-            public Action resolvedCallback;
+            public Action<DamageWrapper> resolvedCallback;
         }
         
         private Model.Stage _modelStage;
@@ -37,25 +37,30 @@ namespace Core.DisplayArea.Stage{
                 source = player.Model == dmg.source ? player : enemy,
                 target = target,
                 raw = dmg,
-                resolvedCallback = () => {
-                    if(target.isDead && target is Enemy enemy1) {
-                        if(game.CurrentEnemy != null){
-                            enemy1.BindToCurrentEnemy(
-                                () => StartCoroutine(CoroutineUtility.Delayed(2f, GameManager.shared.game.SwitchTurn))
-                            );
-                        }
-                        else {
-                            UIManager.shared.OpenUI("UISelectGear");
-                        }
-                    }
-                    else StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn));
-                }
+                resolvedCallback = OnDamageResolved
             };
             player.damage = dmgWrp;
             enemy.damage = dmgWrp;
             dmgWrp.source.Attack();
         }
-        
+
+        private void OnDamageResolved(DamageWrapper dmg){
+            if(dmg.target.isDead && dmg.target is Enemy enemy1) {
+                if(dmg.raw.currentGame.CurrentEnemy != null){
+                    enemy1.BindToCurrentEnemy(
+                        () => StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn))
+                    );
+                }
+                else {
+                    if (dmg.raw.currentGame.HasNextStage){
+                        UIManager.shared.OpenUI("UISelectGear");
+                    } else{
+                        UIManager.shared.OpenUI("UIGameComplete");
+                    }
+                }
+            }
+            else StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn));
+        }
         
     }
 }

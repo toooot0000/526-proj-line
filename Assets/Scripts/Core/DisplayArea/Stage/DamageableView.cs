@@ -49,9 +49,9 @@ namespace Core.DisplayArea.Stage{
             damageNumberDisplay.Number = damage.raw.point;
             CurrentHp -= damage.raw.point;
             if (isDead){
-                damage.target.animationController.Play(PlayerAnimation.Die, damage.resolvedCallback);
+                damage.target.animationController.Play(PlayerAnimation.Die, () => damage.resolvedCallback(damage));
             } else{
-                damage.target.animationController.Play(PlayerAnimation.BeingAttacked, damage.resolvedCallback);
+                damage.target.animationController.Play(PlayerAnimation.BeingAttacked, () => damage.resolvedCallback(damage));
             }
         }
         

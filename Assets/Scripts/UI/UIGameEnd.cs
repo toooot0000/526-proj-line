@@ -12,6 +12,17 @@ namespace UI {
             _canvasGroup.alpha = 1;
         }
 
+        public override void Open(){
+            base.Open();
+            _inAnimation = true;
+            var coroutine = TweenUtility.Lerp(0.2f, 
+                () => _canvasGroup.alpha = 0, 
+                i => _canvasGroup.alpha = i, 
+                () => _inAnimation = false
+            );
+            StartCoroutine(coroutine());
+        }
+
         public override void Close(){
             _inAnimation = true;
             var coroutine = TweenUtility.Lerp(0.2f, 

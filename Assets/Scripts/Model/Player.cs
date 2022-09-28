@@ -31,14 +31,22 @@ namespace Model{
         public event ModelEvent OnAttack;
         public event ModelEvent OnBeingAttacked;
         public event ModelEvent OnDie;
+        public event ModelEvent OnGearChanged;
+        public event ModelEvent OnInit;
         
 
         public Player(GameModel parent) : base(parent){
+            Init();
+        }
+
+        public void Init(){
             HpUpLimit = 100;        // TODO
             CurrentHp = HpUpLimit;
             gears = new List<Gear>(){
                 new Gear(this, id: -1)
             };
+            OnGearChanged?.Invoke(currentGame, this);
+            OnInit?.Invoke(currentGame, this);
         }
 
         
@@ -132,6 +140,18 @@ namespace Model{
                 return points;
             }
 
+        }
+
+        public void AddGear(Gear gear){
+            gears.Add(gear);
+            OnGearChanged?.Invoke(currentGame, this);
+        }
+
+        public void RemoveGear(int id){
+            var ind = gears.FindIndex(g => g.id == id);
+            if (ind == -1) return;
+            gears.RemoveAt(ind);
+            OnGearChanged?.Invoke(currentGame, this);
         }
     }
 }
