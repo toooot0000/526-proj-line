@@ -26,6 +26,8 @@ namespace Model{
         public List<Ball> hitBalls = new();
         public List<Ball> circledBalls = new();
 
+        public Gear CurrentGear => gears.Count > 0? gears[^1] : null;
+
         public event ModelEvent OnHitBall;
         public event ModelEvent OnCircledBall;
         public event ModelEvent OnAttack;

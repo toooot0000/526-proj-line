@@ -23,6 +23,7 @@ namespace Model{
         public string chargeEffect;
         public string comboEffect;
         public int cooldown;
+        public string imgPath;
         public Gear(GameModel parent) : base(parent){ }
 
         public Gear(GameModel parent, int id) : base(parent) {
@@ -43,6 +44,7 @@ namespace Model{
             chargeEffect = gear["charge_effect"] as string;
             comboEffect = gear["combo_effect"] as string;
             cooldown = (int)gear["cooldown"];
+            imgPath = gear["img_path"] as string;
         }
         
     }

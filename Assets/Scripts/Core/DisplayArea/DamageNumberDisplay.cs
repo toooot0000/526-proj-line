@@ -1,29 +1,28 @@
-﻿using System;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 namespace Core.DisplayArea{
     [RequireComponent(typeof(TextMeshProUGUI))]
-    public class DamageNumberDisplay: MonoBehaviour{
+    public class DamageNumberDisplay : MonoBehaviour{
+        public float maxSpeed = 5f;
+
+        public float totalTime = 0.5f;
+
+        public AnimationCurve curve;
+
+        private float _curSpeed;
+        private float _curTime;
 
         private TextMeshProUGUI _textMesh;
+
+        private readonly Vector2 _velocity = Vector2.up;
+
         public int Number{
             set{
                 _textMesh.text = $"-{value.ToString()}";
                 StartFloating();
             }
         }
-
-        private Vector2 _velocity = Vector2.up;
-
-        public float maxSpeed = 5f;
-
-        private float _curSpeed = 0;
-        private float _curTime = 0;
-
-        public float totalTime = 0.5f;
-
-        public AnimationCurve curve;
 
         private void Start(){
             _textMesh = GetComponent<TextMeshProUGUI>();
@@ -44,6 +43,5 @@ namespace Core.DisplayArea{
             _curTime = 0;
             _textMesh.alpha = 1;
         }
-        
     }
 }

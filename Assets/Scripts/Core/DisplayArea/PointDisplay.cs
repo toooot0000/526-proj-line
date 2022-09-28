@@ -19,7 +19,7 @@ namespace Core.DisplayArea{
         }
 
         private void UpdateNumber(){
-            _text.text = $"{_game.player.GetTotalPoint().ToString()}";
+            _text.text = $"Current Energy: {_game.player.GetTotalPoint().ToString()}";
         }
     }
 }
