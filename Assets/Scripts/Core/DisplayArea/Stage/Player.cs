@@ -1,5 +1,4 @@
 ﻿using System;
-using Core.Model;
 using TMPro;
 using UI;
 using UnityEngine;

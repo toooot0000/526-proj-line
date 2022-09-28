@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BackendApi;
-using UnityEngine;
 
-namespace Core.Model{
+namespace Model{
     [Serializable]
     public class Player: GameModel, IDamageable{
 

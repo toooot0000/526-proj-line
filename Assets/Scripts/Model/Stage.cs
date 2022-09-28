@@ -1,11 +1,7 @@
-using System.Collections.Generic;
 using System.Linq;
-using UI;
-using UnityEngine;
-using UnityEngine.Animations;
 using Utility.Loader;
 
-namespace Core.Model{
+namespace Model{
     public class Stage: GameModel{
 
         public readonly Enemy[] enemies;

@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using BackendApi;
-using Core.Model;
+using Model;
 using UnityEngine;
 using Utility;
 using Utility.Loader;

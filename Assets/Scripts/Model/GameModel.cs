@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Core.Model{
+namespace Model{
     public class GameModel{
         public Game currentGame;
         public GameModel parent;

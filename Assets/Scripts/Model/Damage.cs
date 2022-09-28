@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Core.Model{
+namespace Model{
     
     public interface IDamageable{
         public void TakeDamage(Damage damage);

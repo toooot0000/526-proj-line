@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using Core.Common;
-using Core.Model;
+using Model;
 using Unity.VisualScripting;
 using UnityEngine;
 using Utility;

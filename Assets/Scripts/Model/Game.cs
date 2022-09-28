@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Core.Model{
+namespace Model{
     public delegate void ModelEvent(Game game, GameModel model);
 
     public delegate void SimpleModelEvent(Game game);

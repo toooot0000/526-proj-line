@@ -1,8 +1,7 @@
 ﻿using System;
-using UnityEngine;
 using Utility.Loader;
 
-namespace Core.Model{
+namespace Model{
     [Serializable]
     public class Enemy: GameModel, IDamageable{
         public int HpUpLimit{ set; get; }

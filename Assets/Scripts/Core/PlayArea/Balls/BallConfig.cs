@@ -6,12 +6,12 @@ using Random = UnityEngine.Random;
 namespace Core.PlayArea.Balls{
     public class BallConfig: MonoBehaviour{
 
-        public static Dictionary<Model.Ball.Type, Color> colors = new(){
-            {Model.Ball.Type.Physics, Color.white},
-            {Model.Ball.Type.Magic, Color.blue},
-            {Model.Ball.Type.Defend, Color.yellow}
+        public static Dictionary<global::Model.Ball.Type, Color> colors = new(){
+            {global::Model.Ball.Type.Physics, Color.white},
+            {global::Model.Ball.Type.Magic, Color.blue},
+            {global::Model.Ball.Type.Defend, Color.yellow}
         };
-        public Model.Ball modelBall;
+        public global::Model.Ball modelBall;
 
         private void Start(){
             UpdateConfig();

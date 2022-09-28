@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Core.Model{
+namespace Model{
     [Serializable]
     public class Artifact: GameModel{
         public int id;

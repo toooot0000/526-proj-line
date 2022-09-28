@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Core.Model;
 using Core.PlayArea;
 using UnityEngine;
 using Utility;

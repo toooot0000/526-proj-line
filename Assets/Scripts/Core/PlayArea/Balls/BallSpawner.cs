@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Core.Model;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -8,14 +7,14 @@ namespace Core.PlayArea.Balls{
     public class BallSpawner: MonoBehaviour{
         public GameObject ballPrefab;
         public int randomSpawnNumber = 5;
-        private readonly List<Model.Ball> _ballModels = new();
+        private readonly List<global::Model.Ball> _ballModels = new();
 
 
         private void Start()
         {
             GameManager.shared.game.player.OnHitBall += (game, model) =>
             {
-                _ballModels.Remove((Model.Ball)model);
+                _ballModels.Remove((global::Model.Ball)model);
                 if (_ballModels.Count == 0)
                 {
                     // SpawnRandom();
@@ -24,7 +23,7 @@ namespace Core.PlayArea.Balls{
             };
             GameManager.shared.game.player.OnCircledBall += (game, model) =>
             {
-                _ballModels.Remove((Model.Ball)model);
+                _ballModels.Remove((global::Model.Ball)model);
                 if (_ballModels.Count == 0)
                 {
                     // SpawnRandom();
@@ -35,7 +34,7 @@ namespace Core.PlayArea.Balls{
             SpawnBalls();
         }
 
-        public void Spawn(Model.Ball ball){
+        public void Spawn(global::Model.Ball ball){
             var newBallObject = Instantiate(ballPrefab, transform, false);
             var newBallConfig = newBallObject.GetComponent<BallConfig>();
             newBallConfig.modelBall = ball;
@@ -48,7 +47,7 @@ namespace Core.PlayArea.Balls{
         {
             for (int i = 0; i < randomSpawnNumber; i++)
             {
-                var model = new Model.Ball(GameManager.shared.game)
+                var model = new global::Model.Ball(GameManager.shared.game)
                 {
                     point = Random.Range(1, 10),
                     size = Random.Range(1, 3) / 2.0f,

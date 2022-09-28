@@ -1,6 +1,6 @@
 using System;
 using Core.Common;
-using Core.Model;
+using Model;
 using TMPro;
 using UnityEngine;
 using Utility;
@@ -14,8 +14,8 @@ namespace Core.DisplayArea.Stage{
         
         public bool isDead = false;
 
-        private Model.IDamageable _model = null;
-        public virtual Model.IDamageable Model{
+        private IDamageable _model = null;
+        public virtual IDamageable Model{
             set{
                 _model = value;
                 CurrentHp = _model.HpUpLimit;

@@ -1,4 +1,4 @@
-using Core.Model;
+using Model;
 using TMPro;
 using UI.Container;
 using UnityEngine;

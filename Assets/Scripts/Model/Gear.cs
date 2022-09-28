@@ -3,7 +3,7 @@ using System.ComponentModel;
 using Utility;
 using Utility.Loader;
 
-namespace Core.Model{
+namespace Model{
     [Serializable]
     public class Gear: GameModel{
         public enum Type{

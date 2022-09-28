@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using Utility;
 using Utility.Loader;
 
-namespace Core.Model{
+namespace Model{
     [Serializable]
     public class Ball: GameModel{
         public enum Type{

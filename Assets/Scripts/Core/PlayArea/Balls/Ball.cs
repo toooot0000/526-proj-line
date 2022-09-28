@@ -1,4 +1,4 @@
-using Core.Model;
+using Model;
 using UnityEngine;
 using Utility;
 
@@ -19,7 +19,7 @@ namespace Core.PlayArea.Balls{
         private RectTransform _rectTransform;
         private SpriteRenderer _sprite;
 
-        private Model.Ball _model;
+        private global::Model.Ball _model;
         private Game _game;
         
 
