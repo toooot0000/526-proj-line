@@ -6,7 +6,7 @@
             {
                 "type": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
                 "key": "buildOutputDirList",
-                "value": "{\"m_Value\":\"/Users/jerryye/Desktop/Projects/Unity/526-proj-line/Build/test;/Users/jerryye/Desktop/Projects/Unity/526-proj-line/Build;E:/Unity/Projects/Proj - Line/Build/Web;;;;;;;\"}"
+                "value": "{\"m_Value\":\"D:/Projects/Proj - Line/Builds/Web;D:/Projects/Proj - Line/Builds/Web/Build;/Users/jerryye/Desktop/Projects/Unity/526-proj-line/Build/test;/Users/jerryye/Desktop/Projects/Unity/526-proj-line/Build;E:/Unity/Projects/Proj - Line/Build/Web;;;;;\"}"
             },
             {
                 "type": "System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
