@@ -16,6 +16,7 @@ namespace UI{
         public TextMeshProUGUI text;
         public Image image;
         public int id;
+        public GameObject highLight;
         void Start()
         {
                             
@@ -27,7 +28,7 @@ namespace UI{
         
         }
 
-        public void onClick()
+        public void Click()
         {
             this.OnClick?.Invoke(GameManager.shared.game,this.id);
         }

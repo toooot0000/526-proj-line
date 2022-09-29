@@ -1,6 +1,8 @@
 using Model;
 using TMPro;
 using UI.Container;
+using Unity.VisualScripting;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility;
@@ -12,7 +14,8 @@ namespace UI{
         public UIContainerFlexBox panel;
         public GameObject gearPanelPrefab;
         public int selectedId = -1;
-        public GameObject[] items = new GameObject[3];
+        public GameObject[] itemPanels = new GameObject[3];
+        public Gear[] items = new Gear[3];
         private void Start(){
             _canvasGroup = GetComponent<CanvasGroup>();
             _canvasGroup.alpha = 0;
@@ -27,6 +30,7 @@ namespace UI{
             i => _canvasGroup.alpha = i, 
             () => _inAnimation = false
             );
+            LoadGearPanel(GameManager.shared.game.currentStage.bonusGears);
             StartCoroutine(coroutine());
         }
 
@@ -50,22 +54,33 @@ namespace UI{
             int cnt = 0;
             foreach (var gear in gears)
             {
+                print(cnt + " : " + gear.name);
                 // Instance GearPanel
                 var gearPanel = Instantiate(gearPanelPrefab, panel.transform);
-                gearPanel.GetComponentInChildren<Image>().color = Color.black;
+                gearPanel.GetComponentInChildren<Image>().sprite = Resources.Load<Sprite>(gear.imgPath);
+                gearPanel.GetComponentInChildren<Image>().color = Color.green;
                 gearPanel.GetComponentInChildren<TextMeshProUGUI>().text = gear.desc;
+                print("desc:"+gear.desc);
                 gearPanel.GetComponent<UIGearPanel>().id = cnt++;
                 gearPanel.GetComponent<UIGearPanel>().OnClick += (game,id) =>
                 {
+                    print("click : " + id);
                     ChangeSelectedItemTo(id);
                 };
-                items[cnt - 1] = gearPanel;
+                itemPanels[cnt - 1] = gearPanel;
+                items[cnt - 1] = gear;
             }
             panel.UpdateLayout();
         }
 
         public void ConfirmButtonEvent() {
             StartCoroutine(CoroutineUtility.Delayed(GameManager.shared.game.GoToNextStage));
+            GameManager.shared.game.player.AddGear(items[selectedId]);
+            foreach (var gear in GameManager.shared.game.player.gears)
+            {
+                print(gear.id);
+                print(gear.name);
+            }
             Close();
         }
 
@@ -77,12 +92,15 @@ namespace UI{
             {
                 selectedId = id;
                 //do the highlight
+                itemPanels[id].GetComponent<UIGearPanel>().highLight.GetComponent<CanvasGroup>().alpha = 1;
             }
             else
             {
+                //undo the last highlight
+                itemPanels[selectedId].GetComponent<UIGearPanel>().highLight.GetComponent<CanvasGroup>().alpha = 0;
                 selectedId = id;
                 //do the highlight
-                //undo the last highlight
+                itemPanels[id].GetComponent<UIGearPanel>().highLight.GetComponent<CanvasGroup>().alpha = 1;
             }
         }
     }
