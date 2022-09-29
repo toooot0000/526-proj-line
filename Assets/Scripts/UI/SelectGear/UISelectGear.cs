@@ -11,7 +11,8 @@ namespace UI{
         private CanvasGroup _canvasGroup;
         public UIContainerFlexBox panel;
         public GameObject gearPanelPrefab;
-
+        public int selectedId = -1;
+        public GameObject[] items = new GameObject[3];
         private void Start(){
             _canvasGroup = GetComponent<CanvasGroup>();
             _canvasGroup.alpha = 0;
@@ -46,12 +47,19 @@ namespace UI{
 
         public void LoadGearPanel(Gear[] gears)
         {
+            int cnt = 0;
             foreach (var gear in gears)
             {
                 // Instance GearPanel
                 var gearPanel = Instantiate(gearPanelPrefab, panel.transform);
-                // gearPanel.GetComponentInChildren<Image>().color = Color.black;
-                // gearPanel.GetComponentInChildren<TextMeshProUGUI>().text = gear.desc;
+                gearPanel.GetComponentInChildren<Image>().color = Color.black;
+                gearPanel.GetComponentInChildren<TextMeshProUGUI>().text = gear.desc;
+                gearPanel.GetComponent<UIGearPanel>().id = cnt++;
+                gearPanel.GetComponent<UIGearPanel>().OnClick += (game,id) =>
+                {
+                    ChangeSelectedItemTo(id);
+                };
+                items[cnt - 1] = gearPanel;
             }
             panel.UpdateLayout();
         }
@@ -59,6 +67,23 @@ namespace UI{
         public void ConfirmButtonEvent() {
             StartCoroutine(CoroutineUtility.Delayed(GameManager.shared.game.GoToNextStage));
             Close();
+        }
+
+        public void ChangeSelectedItemTo(int id)
+        {
+            if (selectedId == id)
+                return;
+            if (selectedId == -1)
+            {
+                selectedId = id;
+                //do the highlight
+            }
+            else
+            {
+                selectedId = id;
+                //do the highlight
+                //undo the last highlight
+            }
         }
     }
 }

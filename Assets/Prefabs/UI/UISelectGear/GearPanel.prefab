@@ -146,6 +146,7 @@ GameObject:
   - component: {fileID: 3404136542638305714}
   - component: {fileID: 7257259413777076634}
   - component: {fileID: 1350886992998416702}
+  - component: {fileID: 6653747482740698438}
   m_Layer: 5
   m_Name: GearPanel
   m_TagString: Untagged
@@ -213,6 +214,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6653747482740698438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3856945214929679831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 955a3bb35e41347188b4f4304d7361ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 4972243552132386242}
+  image: {fileID: 6775655841559812469}
 --- !u!1 &7605130745810226049
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,7 +263,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.33534363, y: 0.7292522}
   m_AnchorMax: {x: 0.65717196, y: 0.9585043}
-  m_AnchoredPosition: {x: -4.714626, y: 4.2152557}
+  m_AnchoredPosition: {x: -4.71463, y: 4.215271}
   m_SizeDelta: {x: 0.037716545, y: 6.8545103}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7857791631187628664
