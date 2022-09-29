@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.InputSystem.Controls;
 
@@ -42,7 +43,7 @@ namespace BackendApi{
     public class EventLogger
     {
         private static readonly HttpClient Client = new();
-        public static string serverURL = "http://localhost:8080";
+        public static string serverURL = "http://localhost:8080/";
 
         private static EventLogger _shared;
         public static EventLogger Shared => _shared ?? new EventLogger();

@@ -1,3 +1,4 @@
+using BackendApi;
 using Model;
 using TMPro;
 using UI.Container;
@@ -76,11 +77,13 @@ namespace UI{
         public void ConfirmButtonEvent() {
             StartCoroutine(CoroutineUtility.Delayed(GameManager.shared.game.GoToNextStage));
             GameManager.shared.game.player.AddGear(items[selectedId]);
-            foreach (var gear in GameManager.shared.game.player.gears)
+            EventLogger.serverURL = "http://localhost:8080/";
+            EventLogger.Shared.Log(new EventItemInteract()
             {
-                print(gear.id);
-                print(gear.name);
-            }
+                itemId = items[selectedId].id,
+                status = "obtained",
+                count  = 1
+            });
             Close();
         }
 
