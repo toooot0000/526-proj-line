@@ -45,11 +45,11 @@ namespace Model{
 
         public List<Ball> GetAllSkillBalls(){
             var ret = new List<Ball>();
-            foreach (var item in player.gears){
-                for (var i = 0; i < item.ballNum; i++){
-                    ret.Add(item.ball);
+            // foreach (var item in player.gears){
+                for (var i = 0; i < player.CurrentGear.ballNum; i++){
+                    ret.Add(player.CurrentGear.ball);
                 }
-            }
+            // }
             return ret;
         }
 
@@ -79,7 +79,7 @@ namespace Model{
 
         public void Complete() {
             // blabla
-            
+            Debug.Log("Game Complete!");
             OnGameComplete?.Invoke(this);
         }
 

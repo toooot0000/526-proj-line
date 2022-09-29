@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 7257259413777076634}
   - component: {fileID: 6653747482740698438}
   - component: {fileID: 1701377886892381676}
+  - component: {fileID: 346889802008706922}
   m_Layer: 5
   m_Name: GearPanel
   m_TagString: Untagged
@@ -200,8 +201,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: {fileID: 4972243552132386242}
   image: {fileID: 6775655841559812469}
-  id: 0
-  highLight: {fileID: 5215121392960247123}
+  highLight: {fileID: 4786230317331233191}
 --- !u!114 &1701377886892381676
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,6 +231,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!225 &346889802008706922
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3856945214929679831}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &5215121392960247123
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,7 +297,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5215121392960247123}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -316,7 +328,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5215121392960247123}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0

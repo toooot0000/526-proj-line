@@ -7,30 +7,47 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI{
-    public delegate void ClickEvent(Game game,int id);
+    public delegate void ClickEvent(UIGearPanel panel);
 
     public class UIGearPanel : MonoBehaviour
     {
-        public ClickEvent OnClick;
-        // Start is called before the first frame update
+        public event ClickEvent OnClick;
+        
         public TextMeshProUGUI text;
         public Image image;
-        public int id;
-        public GameObject highLight;
-        void Start()
-        {
-                            
-        }
+        public Image highLight;
+        private CanvasGroup _group;
 
-        // Update is called once per frame
-        void Update()
-        {
+        private Gear _model;
+        private Transform _parent;
+        public Gear Model {
+            set{
+                _model = value;
+                image.sprite = Resources.Load<Sprite>(value.imgPath);
+                text.text = value.desc;
+            }
+            get => _model;
+        }
         
+        public bool Show{
+            set{
+                gameObject.SetActive(value);
+                if (value){
+                    transform.SetParent(_parent);
+                } else{
+                    _parent = transform.parent;
+                    transform.SetParent(null);
+                }
+            }
         }
 
-        public void Click()
-        {
-            this.OnClick?.Invoke(GameManager.shared.game,this.id);
+        void Start(){
+            _group = GetComponent<CanvasGroup>();
+            _parent = transform.parent;
+        }
+
+        public void Click(){
+            OnClick?.Invoke(this);
         }
     }
 

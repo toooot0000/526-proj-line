@@ -1,3 +1,4 @@
+using System;
 using BackendApi;
 using Model;
 using TMPro;
@@ -12,17 +13,18 @@ namespace UI{
     public class UISelectGear: UIBase{
         private bool _inAnimation = false;
         private CanvasGroup _canvasGroup;
-        public UIContainerFlexBox panel;
-        public GameObject gearPanelPrefab;
-        public int selectedId = -1;
-        public GameObject[] itemPanels = new GameObject[3];
-        public Gear[] items = new Gear[3];
+        public UIContainerFlexBox container;
+        public Gear[] items;
+        private UIGearPanel[] _panels;
+        private UIGearPanel _selected = null;
+        
         private void Start(){
             _canvasGroup = GetComponent<CanvasGroup>();
             _canvasGroup.alpha = 0;
+            _panels = transform.GetComponentsInChildren<UIGearPanel>();
         }
 
-        public override void Open(){
+        public override void Open(object gears){
             
             base.Open();
             _inAnimation = true;
@@ -31,7 +33,8 @@ namespace UI{
             i => _canvasGroup.alpha = i, 
             () => _inAnimation = false
             );
-            LoadGearPanel(GameManager.shared.game.currentStage.bonusGears);
+            items = gears as Gear[];
+            LoadGearPanel();
             StartCoroutine(coroutine());
         }
 
@@ -46,64 +49,45 @@ namespace UI{
                     Destroy(gameObject);
                 });
             StartCoroutine(coroutine());
-
-            // GameManager.shared.game.LoadNewStage();
         }
 
-        public void LoadGearPanel(Gear[] gears)
-        {
-            int cnt = 0;
-            foreach (var gear in gears)
-            {
-                print(cnt + " : " + gear.name);
-                // Instance GearPanel
-                var gearPanel = Instantiate(gearPanelPrefab, panel.transform);
-                gearPanel.GetComponent<UIGearPanel>().image.sprite = Resources.Load<Sprite>(gear.imgPath);
-                // gearPanel.GetComponent<UIGearPanel>().highLight.GetComponent<CanvasGroup>().cp = Color.green;
-                gearPanel.GetComponentInChildren<TextMeshProUGUI>().text = gear.desc;
-                print("desc:"+gear.desc);
-                gearPanel.GetComponent<UIGearPanel>().id = cnt++;
-                gearPanel.GetComponent<UIGearPanel>().OnClick += (game,id) =>
-                {
-                    print("click : " + id);
-                    ChangeSelectedItemTo(id);
-                };
-                itemPanels[cnt - 1] = gearPanel;
-                items[cnt - 1] = gear;
+        // ReSharper disable Unity.PerformanceAnalysis
+        public void LoadGearPanel(){
+            int curPanelInd = 0;
+            if (items.Length > 3){
+                Debug.LogError("Gears more than 3!");
+                return;
             }
-            panel.UpdateLayout();
+            foreach (var gear in items){
+                var gearPanel = _panels[curPanelInd];
+                gearPanel.OnClick += ChangeSelectedItemTo;
+                gearPanel.Show = true;
+                gearPanel.Model = gear;
+                curPanelInd++;
+            }
+
+            for (; curPanelInd < _panels.Length; curPanelInd++){
+                _panels[curPanelInd].Show = false;
+            }
+            container.UpdateLayout();
         }
 
         public void ConfirmButtonEvent() {
             StartCoroutine(CoroutineUtility.Delayed(GameManager.shared.game.GoToNextStage));
-            GameManager.shared.game.player.AddGear(items[selectedId]);
-            EventLogger.Shared.Log(new EventItemInteract()
-            {
-                itemId = items[selectedId].id,
+            GameManager.shared.game.player.AddGear(_selected.Model);
+            EventLogger.Shared.Log(new EventItemInteract(){
+                itemId = _selected.Model.id,
                 status = "obtained",
                 count  = 1
             });
             Close();
         }
 
-        public void ChangeSelectedItemTo(int id)
-        {
-            if (selectedId == id)
-                return;
-            if (selectedId == -1)
-            {
-                selectedId = id;
-                //do the highlight
-                itemPanels[id].GetComponent<UIGearPanel>().highLight.GetComponent<CanvasGroup>().alpha = 1;
-            }
-            else
-            {
-                //undo the last highlight
-                itemPanels[selectedId].GetComponent<UIGearPanel>().highLight.GetComponent<CanvasGroup>().alpha = 0;
-                selectedId = id;
-                //do the highlight
-                itemPanels[id].GetComponent<UIGearPanel>().highLight.GetComponent<CanvasGroup>().alpha = 1;
-            }
+        private void ChangeSelectedItemTo(UIGearPanel clickedPanel){
+            if (_selected == clickedPanel) return;
+            if(_selected != null) _selected.highLight.enabled = false;
+            clickedPanel.highLight.enabled = true;
+            _selected = clickedPanel;
         }
     }
 }

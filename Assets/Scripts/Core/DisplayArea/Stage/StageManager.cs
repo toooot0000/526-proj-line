@@ -65,8 +65,8 @@ namespace Core.DisplayArea.Stage{
                         level = _currentLevel
                     };
                     EventLogger.Shared.Log(loggableEvent: clearEvent);
-                    if (dmg.raw.currentGame.HasNextStage){
-                        UIManager.shared.OpenUI("UISelectGear");
+                    if (_modelStage.nextStage != -1){
+                        UIManager.shared.OpenUI("UISelectGear", (object)_modelStage.bonusGears);
                     } else{
                         UIManager.shared.OpenUI("UIGameComplete");
                     }

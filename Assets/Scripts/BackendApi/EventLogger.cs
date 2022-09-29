@@ -48,8 +48,8 @@ namespace BackendApi{
         private static EventLogger _shared;
         public static EventLogger Shared => _shared ?? new EventLogger();
         
-        public async void Log(ILoggableEvent loggableEvent){
-            var stringContent = new StringContent(JsonConvert.SerializeObject((object)loggableEvent), Encoding.UTF8,
+        public async void Log<T>(T loggableEvent)where T: ILoggableEvent{
+            var stringContent = new StringContent(JsonConvert.SerializeObject(loggableEvent), Encoding.UTF8,
                 "application/json");
             var response = await Client.PostAsync($"{serverURL}{loggableEvent.URLPath}", stringContent);
             if (response.StatusCode == HttpStatusCode.OK){
