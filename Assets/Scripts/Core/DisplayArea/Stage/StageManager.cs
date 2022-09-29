@@ -1,4 +1,5 @@
 using System;
+using BackendApi;
 using Model;
 using UI;
 using UnityEngine;
@@ -18,6 +19,9 @@ namespace Core.DisplayArea.Stage{
         public Player player;
         public Enemy enemy;
 
+        private DateTime _stageStart;
+        private int _currentLevel = -1;
+
         private void Start(){
             GameManager.shared.game.OnStageLoaded += OnStageLoaded;
             OnStageLoaded(GameManager.shared.game);
@@ -28,6 +32,8 @@ namespace Core.DisplayArea.Stage{
             _modelStage = game.currentStage;
             _modelStage.OnProcessDamage += OnProcessDamage;
             enemy.Model = _modelStage.CurrentEnemy;
+            _stageStart = DateTime.Now;
+            _currentLevel = _modelStage.id;
         }
 
         private void OnProcessDamage(Game game, GameModel model){
@@ -51,7 +57,14 @@ namespace Core.DisplayArea.Stage{
                         () => StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn))
                     );
                 }
-                else {
+                else{
+                    var currentTime = DateTime.Now;
+                    var clearEvent = new EventClearanceRecord(){
+                        time = (int)((DateTime.Now - _stageStart).TotalMilliseconds),
+                        status = "success",
+                        level = _currentLevel
+                    };
+                    EventLogger.Shared.Log(loggableEvent: clearEvent);
                     if (dmg.raw.currentGame.HasNextStage){
                         UIManager.shared.OpenUI("UISelectGear");
                     } else{
@@ -64,3 +77,5 @@ namespace Core.DisplayArea.Stage{
         
     }
 }
+
+

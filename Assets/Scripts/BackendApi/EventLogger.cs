@@ -9,21 +9,21 @@ using UnityEngine.InputSystem.Controls;
 namespace BackendApi{
 
     public interface ILoggableEvent {
-        public string URLPath{ get; }
+        public string URLPath => throw new NotImplementedException();
     }
-    public struct ClearanceRecord: ILoggableEvent{
+    public struct EventClearanceRecord: ILoggableEvent{
         public int level;
-        public string status;
+        public string status; // "success" || "fail"
         public int time;
         public string URLPath => "logClearanceRecord";
     }
-    public struct SkillUses: ILoggableEvent{
+    public struct EventSkillUses: ILoggableEvent{
         public int skillId;
         public int uses;
         public string URLPath => "logSkillUses";
     }
 
-    public struct ItemInteract : ILoggableEvent{
+    public struct EventItemInteract : ILoggableEvent{
         public int itemId;
         public string status;
         public int count;
@@ -39,20 +39,18 @@ namespace BackendApi{
 //     elogger.logClearanceRecord(c);
 //     elogger.logSkillUses(s);
      */
-    public class EventLogger : MonoBehaviour
+    public class EventLogger
     {
-        private readonly string _server;
         private static readonly HttpClient Client = new();
         public static string serverURL = "http://localhost:8080";
+
+        private static EventLogger _shared;
+        public static EventLogger Shared => _shared ?? new EventLogger();
         
-        public EventLogger(){
-            _server = EventLogger.serverURL;
-        }
-        
-        public async void Log(ILoggableEvent logLoggableEvent){
-            var stringContent = new StringContent(JsonConvert.SerializeObject((object)logLoggableEvent), Encoding.UTF8,
+        public async void Log(ILoggableEvent loggableEvent){
+            var stringContent = new StringContent(JsonConvert.SerializeObject((object)loggableEvent), Encoding.UTF8,
                 "application/json");
-            var response = await Client.PostAsync($"{_server}{logLoggableEvent.URLPath}", stringContent);
+            var response = await Client.PostAsync($"{serverURL}{loggableEvent.URLPath}", stringContent);
             if (response.StatusCode == HttpStatusCode.OK){
                 Debug.Log("Logging event succeed!");
             }

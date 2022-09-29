@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using BackendApi;
 using JetBrains.Annotations;
+using UnityEngine;
 
 namespace Model{
     public delegate void ModelEvent(Game game, GameModel model);

@@ -6,6 +6,10 @@ namespace UI{
             OnOpen?.Invoke(this);
         }
 
+        public virtual void Open(object arg){
+            OnOpen?.Invoke(this);
+        }
+
         public virtual void Close(){
             OnClose?.Invoke(this);
         }

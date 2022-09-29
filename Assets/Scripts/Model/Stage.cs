@@ -4,6 +4,8 @@ using Utility.Loader;
 namespace Model{
     public class Stage: GameModel{
 
+        public int id;
+
         public readonly Enemy[] enemies;
 
         public readonly Gear[] bonusGears;
@@ -29,6 +31,7 @@ namespace Model{
         public Stage(GameModel parent, int id) : base(parent) {
             var info = CsvLoader.TryToLoad("Configs/stages", id);
             if (info == null) return;
+            id = (int)info["id"];
             nextStage = (int)info["next_stage"];
             enemies = (info["enemies"] as string)!.Split(";").Select((s => new Enemy(parent, int.Parse(s)) )).ToArray();
             bonusGears = (info["bonus_gears"] as string)!.Split(";").Select((s => new Gear(parent, int.Parse(s)) )).ToArray();
