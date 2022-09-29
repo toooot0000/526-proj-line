@@ -58,8 +58,8 @@ namespace UI{
                 print(cnt + " : " + gear.name);
                 // Instance GearPanel
                 var gearPanel = Instantiate(gearPanelPrefab, panel.transform);
-                gearPanel.GetComponentInChildren<Image>().sprite = Resources.Load<Sprite>(gear.imgPath);
-                gearPanel.GetComponentInChildren<Image>().color = Color.green;
+                gearPanel.GetComponent<UIGearPanel>().image.sprite = Resources.Load<Sprite>(gear.imgPath);
+                // gearPanel.GetComponent<UIGearPanel>().highLight.GetComponent<CanvasGroup>().cp = Color.green;
                 gearPanel.GetComponentInChildren<TextMeshProUGUI>().text = gear.desc;
                 print("desc:"+gear.desc);
                 gearPanel.GetComponent<UIGearPanel>().id = cnt++;
@@ -77,7 +77,6 @@ namespace UI{
         public void ConfirmButtonEvent() {
             StartCoroutine(CoroutineUtility.Delayed(GameManager.shared.game.GoToNextStage));
             GameManager.shared.game.player.AddGear(items[selectedId]);
-            EventLogger.serverURL = "http://localhost:8080/";
             EventLogger.Shared.Log(new EventItemInteract()
             {
                 itemId = items[selectedId].id,
