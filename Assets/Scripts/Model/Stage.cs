@@ -1,4 +1,5 @@
 using System.Linq;
+using Utility;
 using Utility.Loader;
 
 namespace Model{
@@ -33,8 +34,8 @@ namespace Model{
             if (info == null) return;
             id = (int)info["id"];
             nextStage = (int)info["next_stage"];
-            enemies = (info["enemies"] as string)!.Split(";").Select((s => new Enemy(parent, int.Parse(s)) )).ToArray();
-            bonusGears = (info["bonus_gears"] as string)!.Split(";").Select((s => new Gear(parent, int.Parse(s)) )).ToArray();
+            enemies = (info["enemies"] as string)!.Split(";").Select((s => new Enemy(parent, IntUtility.ParseString(s)) )).ToArray();
+            bonusGears = (info["bonus_gears"] as string)!.Split(";").Select((s => new Gear(parent, IntUtility.ParseString(s)) )).ToArray();
             BindEvents();
         }
 
