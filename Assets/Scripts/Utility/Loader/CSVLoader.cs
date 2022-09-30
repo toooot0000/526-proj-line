@@ -11,6 +11,7 @@ namespace Utility.Loader{
     public static class CsvLoader{
         private static readonly Dictionary<string, Table> PrevLoaded = new();
         public const string EmptyString = "__empty";
+        private static Dictionary<string, object> configTable = new();
         public static Table Load(string filename) {
             if (PrevLoaded.ContainsKey(filename)) return PrevLoaded[filename];
             var file = Resources.Load<TextAsset>(filename);
@@ -85,6 +86,37 @@ namespace Utility.Loader{
                 return null;
             }
             return table[id];
+        }
+
+        public static object GetConfig(string configKey) {
+            if (configTable.Count != 0) {
+                if (configTable.Keys.Contains(configKey)) {
+                    return configTable[configKey];
+                }
+                else {
+                    Debug.LogError($"No config key: {configKey}!");
+                    return null;
+                }
+            }
+            var config = Load("Configs/configs");
+            if (config == null) {
+                Debug.LogError("No configs.csv! Did you forget to download config tables?");
+                return null;
+            }
+
+            foreach (var pair in config) {
+                var key = pair.Value["key"] as string;
+                var type = pair.Value["type"] as string;
+                var val = ParseValue(type, pair.Value["value"] as string);
+                configTable[key!] = val!;
+            }
+            if (configTable.Keys.Contains(configKey)) {
+                return configTable[configKey];
+            }
+            else {
+                Debug.LogError($"No config key: {configKey}!");
+                return null;
+            }
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Core.PlayArea{
         public LineColliderGenerator lineColliderGenerator;
         public TouchCollider touchCollider;
         public CircleCollider polygonCollider;
-        public float totalLineLength;
+        public float totalLineLength = 5f;
         public ProgressBar progressBar;
 
 
