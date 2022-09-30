@@ -1,4 +1,5 @@
 using System.Linq;
+using UnityEngine;
 using Utility.Loader;
 
 namespace Model{
@@ -22,6 +23,8 @@ namespace Model{
 
         public int nextStage = 0;
 
+        public int bonusCoins = -1;
+
         public Stage(GameModel parent, Enemy[] enemies) : base(parent)
         {
             this.enemies = enemies;
@@ -34,7 +37,10 @@ namespace Model{
             id = (int)info["id"];
             nextStage = (int)info["next_stage"];
             enemies = (info["enemies"] as string)!.Split(";").Select((s => new Enemy(parent, int.Parse(s)) )).ToArray();
-            bonusGears = (info["bonus_gears"] as string)!.Split(";").Select((s => new Gear(parent, int.Parse(s)) )).ToArray();
+            if (((string)info["bonus_gears"]).Length != 0){
+                bonusGears = ((string)info["bonus_gears"])!.Split(";").Select((s => new Gear(parent, int.Parse(s)) )).ToArray();
+            }
+            bonusCoins = (int)info["bonus_coins"];
             BindEvents();
         }
 

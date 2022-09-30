@@ -17,14 +17,6 @@ namespace Core.DisplayArea.Stage{
                 remaining.Number = GameManager.shared.game.currentStage.RemainingEnemyNumber;
             }
         }
-
-        public void BindToCurrentEnemy(){
-            if (GameManager.shared.game.CurrentEnemy != null){
-                Model = GameManager.shared.game.CurrentEnemy;
-                animationController.Play(PlayerAnimation.Appear);
-            }
-        }
-        
         public void BindToCurrentEnemy(Action callback){
             isDead = false;
             Model = GameManager.shared.game.CurrentEnemy;

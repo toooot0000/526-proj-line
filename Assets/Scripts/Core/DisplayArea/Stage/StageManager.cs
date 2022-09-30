@@ -66,7 +66,11 @@ namespace Core.DisplayArea.Stage{
                     };
                     EventLogger.Shared.Log(loggableEvent: clearEvent);
                     if (_modelStage.nextStage != -1){
-                        UIManager.shared.OpenUI("UISelectGear", (object)_modelStage.bonusGears);
+                        if (_modelStage.bonusCoins == -1){
+                            UIManager.shared.OpenUI("UISelectGear", (object)_modelStage.bonusGears);
+                        } else{
+                            UIManager.shared.OpenUI("UIGetCoins", _modelStage.bonusCoins);
+                        }
                     } else{
                         UIManager.shared.OpenUI("UIGameComplete");
                     }
