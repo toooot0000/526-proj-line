@@ -51,9 +51,9 @@ namespace Core.PlayArea{
 
         public void StopTracking(){
             if (!_isTracing) return;
-            if (_game.player.GetTotalPoint() == 0) return;
             _isTracing = false;
             touchCollider.SetEnabled(false);
+            if (_game.player.GetTotalPoint() == 0) return;
             StartCoroutine(CoroutineUtility.Delayed(() => _game.player.Attack()));
             GameManager.shared.isAcceptingInput = false;
         }

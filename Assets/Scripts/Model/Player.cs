@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Utility.Loader;
 
 namespace Model{
     [Serializable]
@@ -23,6 +24,16 @@ namespace Model{
         public int energy;
         public float armor;
 
+        private int _coin = 0;
+
+        public int Coin{
+            set{
+                _coin = value;
+                OnCoinChanged?.Invoke(currentGame, this);
+            }
+            get => _coin;
+        }
+
         public List<Ball> hitBalls = new();
         public List<Ball> circledBalls = new();
 
@@ -38,14 +49,17 @@ namespace Model{
         public event ModelEvent OnDie;
         public event ModelEvent OnGearChanged;
         public event ModelEvent OnInit;
-        
+        public event ModelEvent OnCoinChanged;
 
         public Player(GameModel parent) : base(parent){
             Init();
         }
 
         public void Init(){
-            HpUpLimit = 100;        // TODO
+            // HpUpLimit = 100;        // TODO
+
+            HpUpLimit = (int)CsvLoader.GetConfig("player_init_hp");
+            Coin = (int)CsvLoader.GetConfig("player_init_coin");
             CurrentHp = HpUpLimit;
             gears = new List<Gear>(){
                 new Gear(this, id: -1)

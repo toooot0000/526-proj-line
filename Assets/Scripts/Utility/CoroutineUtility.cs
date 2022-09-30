@@ -6,7 +6,7 @@ namespace Utility{
     public class CoroutineUtility{
         public static IEnumerator Delayed(Action action){
             yield return null;
-            action();
+            action?.Invoke();
         }
         
         public static IEnumerator Delayed(int frames, Action action){
@@ -14,12 +14,12 @@ namespace Utility{
                 frames--;
                 yield return null;
             }
-            action();
+            action?.Invoke();
         }
 
-        public static IEnumerator Delayed(float seconds, Action action) {
+        public static IEnumerator Delayed(float seconds, Action action){
             yield return new WaitForSeconds(seconds);
-            action();
+            action?.Invoke();
         }
         
         [Obsolete("Please Use TweenUtility!")]
