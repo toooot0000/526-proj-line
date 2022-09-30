@@ -2,12 +2,7 @@ using System;
 using UnityEngine;
 
 namespace UI.Container{
-    public class UIContainerFlexBox: MonoBehaviour{
-        public enum Direction{
-            Vertical,
-            Horizontal
-        }
-
+    public class UIContainerFlexBox: UIContainerBase{
         public Vector2 padding = new(0, 0);
         public float gap = 10;
         public Direction direction = Direction.Horizontal;
@@ -16,7 +11,7 @@ namespace UI.Container{
             UpdateLayout();
         }
 
-        public void UpdateLayout(){
+        public override void UpdateLayout(){
             var t = (RectTransform)transform;
             var rect = t.rect;
             var cur = padding;
@@ -41,5 +36,10 @@ namespace UI.Container{
                 }
             }
         }
+    }
+
+    public enum Direction{
+        Vertical,
+        Horizontal
     }
 }

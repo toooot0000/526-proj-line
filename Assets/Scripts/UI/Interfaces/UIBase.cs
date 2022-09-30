@@ -1,20 +1,21 @@
 using UnityEngine;
 
-namespace UI{
-    public abstract class UIBase: MonoBehaviour{
-        public virtual void Open(){
+namespace UI.Interfaces {
+    public abstract class UIBase : MonoBehaviour {
+        public string Name => "Base";
+
+        public virtual void Open() {
             OnOpen?.Invoke(this);
         }
 
-        public virtual void Open(object arg){
+        public virtual void Open(object arg) {
             OnOpen?.Invoke(this);
         }
 
-        public virtual void Close(){
+        public virtual void Close() {
             OnClose?.Invoke(this);
         }
 
-        public string Name => "Base";
         public event UINormalEvent OnOpen;
         public event UINormalEvent OnClose;
     }

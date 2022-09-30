@@ -26,7 +26,10 @@ namespace Model{
         public List<Ball> hitBalls = new();
         public List<Ball> circledBalls = new();
 
+        [Obsolete("Use CurrentGears!")]
         public Gear CurrentGear => gears.Count > 0? gears[^1] : null;
+
+        public Gear[] CurrentGears => gears.ToArray();
 
         public event ModelEvent OnHitBall;
         public event ModelEvent OnCircledBall;

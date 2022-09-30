@@ -45,11 +45,11 @@ namespace Model{
 
         public List<Ball> GetAllSkillBalls(){
             var ret = new List<Ball>();
-            // foreach (var item in player.gears){
-                for (var i = 0; i < player.CurrentGear.ballNum; i++){
-                    ret.Add(player.CurrentGear.ball);
+            foreach (var item in player.CurrentGears){
+                for (var i = 0; i < item.ballNum; i++){
+                    ret.Add(item.ball);
                 }
-            // }
+            }
             return ret;
         }
 
