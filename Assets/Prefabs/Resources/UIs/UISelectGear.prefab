@@ -95,7 +95,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   container: {fileID: 760213856501728159}
-  gearPanelPrefab: {fileID: 3856945214929679831, guid: e49463b210fa9114abf0a1316c7cbf86, type: 3}
   items:
   - gameObject: {fileID: 0}
     id: 0
@@ -221,10 +220,10 @@ RectTransform:
   m_Father: {fileID: 2167183315208416740}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.41266662, y: 0.8401482}
-  m_AnchorMax: {x: 0.5884585, y: 0.9306297}
-  m_AnchoredPosition: {x: -1, y: -1}
-  m_SizeDelta: {x: -5.5131836, y: -5.1365967}
+  m_AnchorMin: {x: 0.34, y: 0.84200007}
+  m_AnchorMax: {x: 0.65968746, y: 0.9306297}
+  m_AnchoredPosition: {x: 0.35998535, y: -2.7840881}
+  m_SizeDelta: {x: 0.6712036, y: -1.5682001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4996873312572249143
 CanvasRenderer:
@@ -254,7 +253,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Select Gear
+  m_text: 'Level Clear!
+
+    Choose your bonus!'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
