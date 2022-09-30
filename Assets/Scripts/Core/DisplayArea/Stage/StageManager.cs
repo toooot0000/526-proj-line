@@ -31,7 +31,7 @@ namespace Core.DisplayArea.Stage{
         private void OnStageLoaded(Game game){
             _modelStage = game.currentStage;
             _modelStage.OnProcessDamage += OnProcessDamage;
-            enemy.Model = _modelStage.CurrentEnemy;
+            enemy.BindToCurrentEnemy(null);
             _stageStart = DateTime.Now;
             _currentLevel = _modelStage.id;
         }
