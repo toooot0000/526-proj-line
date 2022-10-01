@@ -1,4 +1,5 @@
 using System.Linq;
+using Utility;
 using UnityEngine;
 using Utility.Loader;
 
@@ -36,9 +37,9 @@ namespace Model{
             if (info == null) return;
             id = (int)info["id"];
             nextStage = (int)info["next_stage"];
-            enemies = (info["enemies"] as string)!.Split(";").Select((s => new Enemy(parent, int.Parse(s)) )).ToArray();
+            enemies = (info["enemies"] as string)!.Split(";").Select((s => new Enemy(parent, IntUtility.ParseString(s)) )).ToArray();
             if (((string)info["bonus_gears"]).Length != 0){
-                bonusGears = ((string)info["bonus_gears"])!.Split(";").Select((s => new Gear(parent, int.Parse(s)) )).ToArray();
+                bonusGears = ((string)info["bonus_gears"])!.Split(";").Select((s => new Gear(parent, IntUtility.ParseString(s)) )).ToArray();
             }
             bonusCoins = (int)info["bonus_coins"];
             BindEvents();
