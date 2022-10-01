@@ -13,8 +13,13 @@ namespace Core.PlayArea.Balls{
         };
         public global::Model.Ball modelBall;
 
+        public SpriteRenderer icon;
+        private Vector2 _originIconSize;
+        
+        
         private void Start(){
             UpdateConfig();
+            _originIconSize = icon.size;
         }
         
         public void UpdateConfig(){
@@ -24,6 +29,7 @@ namespace Core.PlayArea.Balls{
             ball.velocity = Vector2.one.Rotate(Random.Range(0, 360)).normalized * modelBall.speed;
             var sprite = GetComponent<SpriteRenderer>();
             sprite.color = colors[modelBall.type];
+            icon.size = modelBall.size * _originIconSize;
         }
     }
 }
