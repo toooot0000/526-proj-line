@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BackendApi;
 using Utility.Loader;
 
 namespace Model{
@@ -78,11 +79,23 @@ namespace Model{
         public void AddHitBall(Ball ball){
             hitBalls.Add(ball);
             OnHitBall?.Invoke(currentGame, ball);
+            // Send Event
+            var skillEvent = new EventSkillUses(){
+                skillId = ball.id,
+                uses = 1
+            };
+            EventLogger.Shared.Log(skillEvent);
         }
 
         public void AddCircledBall(Ball ball){
             circledBalls.Add(ball);
             OnCircledBall?.Invoke(currentGame, ball);
+            // Send Event
+            var skillEvent = new EventSkillUses(){
+                skillId = ball.id,
+                uses = 1
+            };
+            EventLogger.Shared.Log(skillEvent);
         }
 
         public int GetTotalPoint(){

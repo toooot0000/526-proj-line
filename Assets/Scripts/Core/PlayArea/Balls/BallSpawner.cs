@@ -59,7 +59,11 @@ namespace Core.PlayArea.Balls{
 
         private Vector3 GenerateRandomLocalPosition(){
             
-            return Vector3.zero; // TODO
+            return new Vector3(){
+                x = Random.Range(-1, 1),
+                y = Random.Range(-1, 1),
+                z = transform.position.z
+            }; // TODO
         }
 
         public void SpawnBalls(){
