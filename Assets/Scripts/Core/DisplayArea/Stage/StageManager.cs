@@ -15,11 +15,11 @@ namespace Core.DisplayArea.Stage{
             public Action<DamageWrapper> resolvedCallback;
         }
 
-        public class StageActionWrapper{
+        public class StageActionInfoWrapper{
             public DamageableView source;
             public DamageableView target;
             public StageActionInfoBase actionInfo;
-            public Action<StageActionWrapper> resolvedCallback;
+            public Action<StageActionInfoWrapper> resolvedCallback;
         }
 
         private Model.Stage _modelStage;
@@ -62,16 +62,16 @@ namespace Core.DisplayArea.Stage{
         private void OnProcessStageAction(Game game, GameModel model){
             switch (model){
                 case StageActionInfoPlayerAttack attack:
-                    ProcessDamage(attack.damage);
+                    ProcessPlayerAttack(attack);
                     break;
                 case StageActionInfoEnemyAttack attack :
-                    ProcessDamage(attack.damage);
+                    ProcessEnemyAttack(attack);
                     break;
                 case StageActionInfoEnemyDefend defend:
-                    // TODO Add "Enemy Defend" process
+                    ProcessEnemyDefend(defend);
                     break;
                 case StageActionInfoEnemySpecial special:
-                    // TODO Add "EnemySpecial" process
+                    ProcessEnemySpecialAttack(special);
                     break;
             }
         }
@@ -88,6 +88,88 @@ namespace Core.DisplayArea.Stage{
             enemy.damage = dmgWrp;
             dmgWrp.source.Attack();
         }
+
+        private void ProcessPlayerAttack(StageActionInfoPlayerAttack info){
+            var dmgWrp = new StageActionInfoWrapper(){
+                source = player,
+                target = enemy,
+                actionInfo = info,
+                resolvedCallback = OnPlayerAttackResolved
+            };
+            player.wrappedActionInfo = dmgWrp;
+            enemy.wrappedActionInfo = dmgWrp;
+            player.Attack();
+        }
+
+        private void ProcessEnemyAttack(StageActionInfoEnemyAttack info){
+            var infoWrp = new StageActionInfoWrapper(){
+                source = enemy,
+                target = player,
+                actionInfo = info,
+                resolvedCallback = wrapper => StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn))
+            };
+            player.wrappedActionInfo = infoWrp;
+            enemy.wrappedActionInfo = infoWrp;
+            enemy.Attack();
+        }
+
+        private void ProcessEnemySpecialAttack(StageActionInfoEnemySpecial info){
+            var infoWrp = new StageActionInfoWrapper(){
+                source = enemy,
+                target = player,
+                actionInfo = info,
+                resolvedCallback = wrapper => StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn))
+            };
+            player.wrappedActionInfo = infoWrp;
+            enemy.wrappedActionInfo = infoWrp;
+            enemy.SpecialAttack();
+        }
+
+        private void ProcessEnemyDefend(StageActionInfoEnemyDefend info){
+            var infoWrp = new StageActionInfoWrapper(){
+                source = enemy,
+                target = null,
+                actionInfo = info,
+                resolvedCallback = wrapper =>
+                    StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn))
+            };
+            player.wrappedActionInfo = infoWrp;
+            enemy.wrappedActionInfo = infoWrp;
+            enemy.Defend();
+        }
+
+
+        private void OnPlayerAttackResolved(StageActionInfoWrapper wrapped){
+            var dmg = (wrapped.actionInfo as StageActionInfoPlayerAttack)!.damage;
+            if(enemy.isDead) {
+                if(dmg.currentGame.currentStage.NextEnemy != null){
+                    dmg.currentGame.currentStage.ForwardCurrentEnemy();
+                    enemy.BindToCurrentEnemy(
+                        () => StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn))
+                    );
+                }
+                else{
+                    var currentTime = DateTime.Now;
+                    var clearEvent = new EventClearanceRecord(){
+                        time = (int)((DateTime.Now - _stageStart).TotalMilliseconds),
+                        status = "success",
+                        level = _currentLevel
+                    };
+                    EventLogger.Shared.Log(loggableEvent: clearEvent);
+                    if (_modelStage.nextStage != -1){
+                        if (_modelStage.bonusCoins == -1){
+                            UIManager.shared.OpenUI("UISelectGear", (object)_modelStage.bonusGears);
+                        } else{
+                            UIManager.shared.OpenUI("UIGetCoins", _modelStage.bonusCoins);
+                        }
+                    } else{
+                        UIManager.shared.OpenUI("UIGameComplete");
+                    }
+                }
+            }
+            else StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn));
+        }
+        
 
         private void OnDamageResolved(DamageWrapper dmg){
             if(dmg.target.isDead && dmg.target is Enemy.Enemy enemy1) {

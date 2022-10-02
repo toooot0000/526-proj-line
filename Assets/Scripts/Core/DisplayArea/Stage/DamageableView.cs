@@ -7,9 +7,7 @@ using Utility;
 
 namespace Core.DisplayArea.Stage{
     public class DamageableView: MonoBehaviour{
-
         public delegate void DamageableDelegate();
-
         public event DamageableDelegate OnDie;
         
         public bool isDead = false;
@@ -39,20 +37,20 @@ namespace Core.DisplayArea.Stage{
         public PlayerAnimationController animationController;
         public DamageNumberDisplay damageNumberDisplay;
         public StageManager.DamageWrapper damage;
-        public StageManager.StageActionWrapper wrappedAction;
+        public StageManager.StageActionInfoWrapper wrappedActionInfo;
 
 
         public virtual void Attack(){
-            animationController.Play(PlayerAnimation.Attack, 0.07f, damage.target.ProcessDamage); // AnimationEvent => ProcessDamage
+            animationController.Play(PlayerAnimation.Attack, 0.07f, wrappedActionInfo.target.ProcessDamage); // AnimationEvent => ProcessDamage
         }
 
-        private void ProcessDamage(){
+        public virtual void ProcessDamage(){
             damageNumberDisplay.Number = damage.raw.point;
             CurrentHp -= damage.raw.point;
             if (isDead){
-                damage.target.animationController.Play(PlayerAnimation.Die, () => damage.resolvedCallback(damage));
+                damage.target.animationController.Play(PlayerAnimation.Die, () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
             } else{
-                damage.target.animationController.Play(PlayerAnimation.BeingAttacked, () => damage.resolvedCallback(damage));
+                damage.target.animationController.Play(PlayerAnimation.BeingAttacked, () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
             }
         }
 

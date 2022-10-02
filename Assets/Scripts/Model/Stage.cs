@@ -19,6 +19,10 @@ namespace Model{
         private int _enemyIndex = 0;
 
         public Enemy CurrentEnemy => _enemyIndex < enemies.Length ? enemies[_enemyIndex] : null;
+        
+        public Enemy NextEnemy => _enemyIndex >= enemies.Length - 1 ? null : enemies[_enemyIndex + 1];
+
+        public bool IsBeaten => _enemyIndex == enemies.Length;
 
         public int RemainingEnemyNumber => enemies.Length - _enemyIndex;
 
@@ -39,7 +43,7 @@ namespace Model{
         public Stage(GameModel parent, Enemy[] enemies) : base(parent)
         {
             this.enemies = enemies;
-            BindEvents();
+            // BindEvents();
         }
 
         public Stage(GameModel parent, int id) : base(parent) {
@@ -52,7 +56,7 @@ namespace Model{
                 bonusGears = ((string)info["bonus_gears"])!.Split(";").Select((s => new Gear(parent, IntUtility.ParseString(s)) )).ToArray();
             }
             bonusCoins = (int)info["bonus_coins"];
-            BindEvents();
+            CurrentEnemy.BecomeCurrent();
         }
 
         private void ForwardCurrentEnemy(Game game, GameModel deadEnemy) {
@@ -68,13 +72,19 @@ namespace Model{
             }
         }
 
-        private void BindEvents(){
-            foreach (var enemy in enemies) {
-                enemy.OnDie += ForwardCurrentEnemy;
+        public void ForwardCurrentEnemy(){
+            _enemyIndex++;
+            if (_enemyIndex == enemies.Length) {
+                GameManager.shared.Delayed(1, () => {
+                    OnStageBeaten?.Invoke(currentGame, this);
+                });
             }
-            CurrentEnemy.BecomeCurrent();
+            else {
+                CurrentEnemy.BecomeCurrent();
+                OnEnemyChanged?.Invoke(currentGame, this);
+            }
         }
-        
+
         [Obsolete("Use the generic one")]
         public void ProcessDamage(Damage dmg){
             dmg.target.TakeDamage(dmg);

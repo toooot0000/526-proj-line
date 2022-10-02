@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using BackendApi;
 using Model;
+using Tutorials;
 using UnityEngine;
 using Utility;
 using Utility.Loader;
@@ -12,6 +13,8 @@ public class GameManager : MonoBehaviour{
     public Game game;
     public bool isAcceptingInput = true;
 
+    public TutorialBase currentTutorial;
+    
     private void Awake()
     {
         if (shared != null){

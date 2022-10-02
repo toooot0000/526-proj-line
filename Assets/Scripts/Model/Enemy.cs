@@ -43,6 +43,7 @@ namespace Model{
 
         private int _nextActionInd = 0;
         public EnemyIntention[] intentions;
+        public EnemyIntention CurrentIntention => intentions[_nextActionInd];
 
         private int _armor;
 
@@ -57,6 +58,8 @@ namespace Model{
         public int defend;
         
         public event ModelEvent OnAttack;
+        public event ModelEvent OnDefend;
+        public event ModelEvent OnSpecial;
         public event ModelEvent OnBeingAttacked;
         public event ModelEvent OnDie;
         public event ModelEvent OnArmorChanged;
@@ -89,7 +92,8 @@ namespace Model{
             CurrentHp -= damage.point;
             OnBeingAttacked?.Invoke(currentGame, this);
         }
-
+        
+        [Obsolete("Use *WithInfo")]
         public void Attack(){
             var dmg = new Damage(currentGame){
                 point = attack,
@@ -101,21 +105,53 @@ namespace Model{
             currentGame.currentStage.ProcessDamage(dmg);
         }
 
+        public void AttackWithInfo(){
+            var dmg = new Damage(currentGame){
+                point = attack,
+                type = Damage.Type.Physics,
+                target = currentGame.player,
+                source = this
+            };
+            var stageInfo = new StageActionInfoEnemyAttack(this){
+                damage = dmg
+            };
+            OnAttack?.Invoke(currentGame, this);
+            currentGame.currentStage.ProcessStageAction(stageInfo);
+        }
+
         public void SpecialAttack(){
-            
+            var info = new StageActionInfoEnemySpecial(this){
+                special = special
+            };
+            OnSpecial?.Invoke(currentGame, this);
+            currentGame.currentStage.ProcessStageAction(info);
         }
 
         public void Defend(){
             Armor += defend;
-            
+            var info = new StageActionInfoEnemyDefend(this){
+                defend = defend
+            };
+            OnDefend?.Invoke(currentGame, this);
+            currentGame.currentStage.ProcessStageAction(info);
         }
 
         private void DoAction(Game game) {
             if (game.turn != Game.Turn.Enemy) return;
+            GameManager.shared.Delayed(0.1f, IntentionToAction());
+            ForwardIntention();
+        }
+
+        private void ForwardIntention(){
+            _nextActionInd = (_nextActionInd + 1) % intentions.Length;
+            OnIntentionChanged?.Invoke(currentGame, this);
+        }
+
+        private Action IntentionToAction(){
             Action nextAction = null;
             switch (intentions[_nextActionInd]){
                 case EnemyIntention.Attack:
-                    nextAction = Attack;
+                    nextAction = AttackWithInfo;
                     break;
                 case EnemyIntention.Defend:
                     nextAction = Defend;
@@ -124,9 +160,7 @@ namespace Model{
                     nextAction = SpecialAttack;
                     break;
             }
-            _nextActionInd = (_nextActionInd + 1) % intentions.Length;
-            OnIntentionChanged?.Invoke(currentGame, this);
-            GameManager.shared.Delayed(0.1f, nextAction);
+            return nextAction;
         }
 
         public void Die() {

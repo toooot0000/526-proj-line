@@ -1,4 +1,5 @@
-﻿using UI;
+﻿using Model;
+using UI;
 using UnityEngine;
 using Utility;
 
@@ -18,7 +19,19 @@ namespace Core.DisplayArea.Stage.Player{
         }
 
         public override void Attack(){
-            // Play Attack Animation/defends animation/special attack animation;
+            // TODO Play Attack Animation/defends animation/special attack animation;
+            animationController.Play(PlayerAnimation.Attack, 0.07f, wrappedActionInfo.target.ProcessDamage);
+        }
+
+        public override void ProcessDamage(){
+            var point = ((StageActionInfoEnemyAttack)wrappedActionInfo.actionInfo).damage.point;
+            damageNumberDisplay.Number = point;
+            CurrentHp -= point;
+            if (isDead){
+                animationController.Play(PlayerAnimation.Die, () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
+            } else{
+                animationController.Play(PlayerAnimation.BeingAttacked, () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
+            }
         }
     }
 }
