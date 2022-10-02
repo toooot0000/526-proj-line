@@ -14,8 +14,10 @@ namespace Core.DisplayArea.Stage.Enemy{
             set{
                 base.Model = value;
                 remaining.Number = GameManager.shared.game.currentStage.RemainingEnemyNumber;
+                armorDisplayer.Number = value.Armor;
             }
         }
+
         public void BindToCurrentEnemy(Action callback){
             isDead = false;
             Model = GameManager.shared.game.CurrentEnemy;
