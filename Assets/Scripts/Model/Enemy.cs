@@ -1,7 +1,24 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
+using Model.EnemySpecialAttacks;
+using UnityEngine;
+using Utility;
 using Utility.Loader;
+using Object = UnityEngine.Object;
 
 namespace Model{
+
+    public enum EnemyIntention{
+        [Description("att")]
+        Attack,
+        [Description("def")]
+        Defend,
+        [Description("sp")]
+        SpecialAttack
+    }
+    
     [Serializable]
     public class Enemy: GameModel, IDamageable{
         public int HpUpLimit{ set; get; }
@@ -20,14 +37,30 @@ namespace Model{
 
         public String desc;
 
-        public String special;
+        public SpecialAttackBase special;
 
         public int cooldown;
 
+        private int _nextActionInd = 0;
+        public EnemyIntention[] intentions;
 
+        private int _armor;
+
+        public int Armor{
+            set{
+                _armor = value;
+                OnArmorChanged?.Invoke(currentGame, this);
+            }
+            get => _armor;
+        }
+
+        public int defend;
+        
         public event ModelEvent OnAttack;
         public event ModelEvent OnBeingAttacked;
         public event ModelEvent OnDie;
+        public event ModelEvent OnArmorChanged;
+        public event ModelEvent OnIntentionChanged;
 
         public Enemy(GameModel parent) : base(parent){
             CurrentHp = HpUpLimit;
@@ -38,10 +71,17 @@ namespace Model{
             var enemy = CsvLoader.TryToLoad("Configs/enemies", id);
             if (enemy == null) return;
             desc = enemy["desc"] as string;
-            special = enemy["special"] as string;
             cooldown = (int)enemy["cooldown"];
             HpUpLimit = (int)enemy["hp"];
             attack = (int)enemy["attack"];
+            intentions = (enemy["action_pattern"] as string)!.Split(";").Select(s => EnumUtility.GetValue<EnemyIntention>(s)).ToArray();
+            Debug.Log(intentions.Length.ToString());
+            
+            var spStr = (enemy["special"] as string)!.Split(";");
+            var className = spStr.First();
+            special = Activator.CreateInstance(Type.GetType($"Model.EnemySpecialAttacks.{className}", true), new object[]{spStr[1..]}) as
+                    SpecialAttackBase;
+            defend = (int)enemy["defend"];
             CurrentHp = HpUpLimit;
         }
         
@@ -61,18 +101,41 @@ namespace Model{
             currentGame.currentStage.ProcessDamage(dmg);
         }
 
-        private void DelayedAttack(Game game) {
+        public void SpecialAttack(){
+            
+        }
+
+        public void Defend(){
+            Armor += defend;
+            
+        }
+
+        private void DoAction(Game game) {
             if (game.turn != Game.Turn.Enemy) return;
-            GameManager.shared.Delayed(0.1f, Attack);
+            Action nextAction = null;
+            switch (intentions[_nextActionInd]){
+                case EnemyIntention.Attack:
+                    nextAction = Attack;
+                    break;
+                case EnemyIntention.Defend:
+                    nextAction = Defend;
+                    break;
+                case EnemyIntention.SpecialAttack:
+                    nextAction = SpecialAttack;
+                    break;
+            }
+            _nextActionInd = (_nextActionInd + 1) % intentions.Length;
+            OnIntentionChanged?.Invoke(currentGame, this);
+            GameManager.shared.Delayed(0.1f, nextAction);
         }
 
         public void Die() {
-            currentGame.OnTurnChanged -= DelayedAttack;
+            currentGame.OnTurnChanged -= DoAction;
             OnDie?.Invoke(currentGame, this);
         }
 
         public void BecomeCurrent() {
-            currentGame.OnTurnChanged += DelayedAttack;
+            currentGame.OnTurnChanged += DoAction;
         }
     }
 }

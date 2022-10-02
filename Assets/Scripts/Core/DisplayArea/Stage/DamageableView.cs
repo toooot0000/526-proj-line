@@ -39,13 +39,14 @@ namespace Core.DisplayArea.Stage{
         public PlayerAnimationController animationController;
         public DamageNumberDisplay damageNumberDisplay;
         public StageManager.DamageWrapper damage;
+        public StageManager.StageActionWrapper wrappedAction;
 
 
-        public void Attack(){
-            animationController.Play(PlayerAnimation.Attack);
+        public virtual void Attack(){
+            animationController.Play(PlayerAnimation.Attack, 0.07f, damage.target.ProcessDamage); // AnimationEvent => ProcessDamage
         }
 
-        public void ProcessDamage(){
+        private void ProcessDamage(){
             damageNumberDisplay.Number = damage.raw.point;
             CurrentHp -= damage.raw.point;
             if (isDead){
@@ -54,10 +55,7 @@ namespace Core.DisplayArea.Stage{
                 damage.target.animationController.Play(PlayerAnimation.BeingAttacked, () => damage.resolvedCallback(damage));
             }
         }
-        
-        public void SendDamage(){
-            damage.target.ProcessDamage();
-        }
+
 
         public virtual void Die(){
             isDead = true;

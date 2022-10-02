@@ -1,11 +1,8 @@
 using System;
-using Core.Common;
 using Model;
-using TMPro;
 using UnityEngine;
-using Utility;
 
-namespace Core.DisplayArea.Stage{
+namespace Core.DisplayArea.Stage.Enemy{
 
     [RequireComponent(typeof(PlayerAnimationController))]
     public class Enemy : DamageableView{

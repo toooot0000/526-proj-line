@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BackendApi;
+using Unity.Burst.Intrinsics;
 using Utility.Loader;
 
 namespace Model{
@@ -23,7 +24,15 @@ namespace Model{
         public List<Gear> gears;
         public int gearUpLimit;
         public int energy;
-        public float armor;
+        private int _armor = 0;
+
+        public int Armor{
+            set{
+                _armor = value;
+                OnArmorChanged?.Invoke(currentGame, this);
+            }
+            get => _armor;
+        }
 
         private int _coin = 0;
 
@@ -51,6 +60,7 @@ namespace Model{
         public event ModelEvent OnGearChanged;
         public event ModelEvent OnInit;
         public event ModelEvent OnCoinChanged;
+        public event ModelEvent OnArmorChanged;
 
         public Player(GameModel parent) : base(parent){
             Init();
@@ -71,7 +81,8 @@ namespace Model{
 
         
         public void TakeDamage(Damage damage){
-            CurrentHp -= damage.point;
+            CurrentHp -= Math.Max(damage.point - Armor, 0);
+            Armor -= damage.point;
             OnBeingAttacked?.Invoke(currentGame, this);
         }
 
@@ -101,6 +112,12 @@ namespace Model{
         public int GetTotalPoint(){
             return hitBalls.Sum(ball => ball.point) + circledBalls.Sum(ball => ball.point * 2);
         }
+
+        public int GetTotalDefend(){
+            return hitBalls.Sum(ball => ball.type == Ball.Type.Defend ? ball.point : 0) +
+                   circledBalls.Sum(ball => ball.type == Ball.Type.Defend ? ball.point * 2 : 0);
+        }
+        
         public void Attack() {
             if (currentGame.turn != Game.Turn.Player) return;
             var dmg = new Damage(currentGame){
@@ -112,66 +129,16 @@ namespace Model{
             OnAttack?.Invoke(currentGame, this);
             hitBalls.Clear();
             circledBalls.Clear();
-            currentGame.currentStage.ProcessDamage(dmg);
+            var playerAttackAction = new StageActionInfoPlayerAttack(this){
+                damage = dmg,
+                defend = GetTotalDefend()
+            };
+            currentGame.currentStage.ProcessStageAction(playerAttackAction);
         }
         
         private void Die() {
             OnDie?.Invoke(currentGame, this);
             currentGame.End();
-        }
-
-        public float ChargeEffect()
-        {
-            float points = 0;
-            if (circledBalls.Count == 0) {
-                return points;
-            }
-            else {
-                Dictionary<Ball, int> res = new Dictionary<Ball, int>();
-                for (int i = 0; i < circledBalls.Count; i++) {
-                    if (res.ContainsKey(circledBalls[i])) {
-                        res[circledBalls[i]] += 1;
-                    }
-                    else {
-                        res.Add(circledBalls[i],1);
-                    }
-                }
-
-                foreach (Ball circled in res.Keys) {
-                    points += circled.charge * circled.point * res[circled];
-                }
-            }
-            return points;
-        }
-        
-        public float ComboEffect(){
-            float points = 0;
-            if(hitBalls.Count == 0) {
-                return points;
-            }
-            else {
-                Dictionary<Ball, int> record = new Dictionary<Ball, int>();
-                for( int j = 0; j < hitBalls.Count; j++) {
-                    if(record.ContainsKey(hitBalls[j])){
-                        record[hitBalls[j]] += 1;
-                    }else{
-                        record.Add(hitBalls[j], 1);
-                    }
-                }
-                foreach(Ball hitBall in record.Keys){
-                    if(record[hitBall] >= 2){
-                        if (hitBall.type != Ball.Type.Defend) {
-                            points += hitBall.combo * hitBall.point * record[hitBall];
-                        }
-                        else {
-                            points += hitBall.combo * hitBall.point * record[hitBall];
-                            armor += points;
-                        }
-                    }
-                }
-                return points;
-            }
-
         }
 
         public void AddGear(Gear gear){

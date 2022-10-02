@@ -1,11 +1,8 @@
-﻿using System;
-using TMPro;
-using UI;
+﻿using UI;
 using UnityEngine;
 using Utility;
-using ProgressBar = Core.Common.ProgressBar;
 
-namespace Core.DisplayArea.Stage{
+namespace Core.DisplayArea.Stage.Player{
     [RequireComponent(typeof(PlayerAnimationController))]
     public class Player: DamageableView{
 
@@ -20,5 +17,8 @@ namespace Core.DisplayArea.Stage{
             }));
         }
 
+        public override void Attack(){
+            // Play Attack Animation/defends animation/special attack animation;
+        }
     }
 }

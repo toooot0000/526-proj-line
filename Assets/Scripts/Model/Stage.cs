@@ -1,9 +1,13 @@
+using System;
 using System.Linq;
+using Model.EnemySpecialAttacks;
 using Utility;
 using UnityEngine;
 using Utility.Loader;
 
 namespace Model{
+
+
     public class Stage: GameModel{
 
         public int id;
@@ -20,7 +24,13 @@ namespace Model{
 
         public event ModelEvent OnStageBeaten;
         public event ModelEvent OnEnemyChanged;
+        [Obsolete("Use OnProcessStageAction")]
         public event ModelEvent OnProcessDamage;
+        /// <summary>
+        /// model = StageActionInfo
+        /// </summary>
+        public event ModelEvent OnProcessStageAction;
+        
 
         public int nextStage = 0;
 
@@ -64,10 +74,16 @@ namespace Model{
             }
             CurrentEnemy.BecomeCurrent();
         }
-
+        
+        [Obsolete("Use the generic one")]
         public void ProcessDamage(Damage dmg){
             dmg.target.TakeDamage(dmg);
             OnProcessDamage?.Invoke(currentGame, dmg);
+        }
+        
+        public void ProcessStageAction(StageActionInfoBase info){
+            info.Execute();
+            OnProcessStageAction?.Invoke(currentGame, info);
         }
     }
 }

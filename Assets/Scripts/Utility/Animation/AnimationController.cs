@@ -35,6 +35,11 @@ namespace Utility.Animation{
             Play(anim);
             StartCoroutine(CoroutineUtility.Delayed(_times[anim], completeCallback));
         }
+
+        public void Play(T anim, float seconds, Action callback){
+            Play(anim);
+            StartCoroutine(CoroutineUtility.Delayed(seconds, callback));
+        }
         
 
         
