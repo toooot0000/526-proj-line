@@ -1,5 +1,6 @@
 using System;
 using Core.Common;
+using Core.DisplayArea.Stage.Player;
 using Model;
 using TMPro;
 using UnityEngine;
@@ -38,6 +39,7 @@ namespace Core.DisplayArea.Stage{
         public DamageNumberDisplay damageNumberDisplay;
         public StageManager.DamageWrapper damage;
         public StageManager.StageActionInfoWrapper wrappedActionInfo;
+        public ArmorDisplayer armorDisplayer;
 
 
         public virtual void Attack(){

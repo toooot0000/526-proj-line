@@ -6,6 +6,10 @@ using UnityEngine;
 using Utility;
 
 namespace Core.DisplayArea.Stage{
+    
+    /// <summary>
+    /// Be responsible for the stage process
+    /// </summary>
     public class StageManager: MonoBehaviour{
 
         public class DamageWrapper{

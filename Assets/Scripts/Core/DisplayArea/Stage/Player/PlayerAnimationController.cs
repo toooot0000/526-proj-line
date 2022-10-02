@@ -17,5 +17,9 @@ namespace Core.DisplayArea.Stage{
         Die,
         [Description("Appear")]
         Appear,
+        [Description("Special")]
+        Special,
+        [Description("Defend")]
+        Defend
     }
 }

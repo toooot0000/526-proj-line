@@ -6,6 +6,7 @@ namespace Model{
         public void TakeDamage(Damage damage);
         public int CurrentHp{ get; set; }
         public int HpUpLimit{ get; set; }
+        public int Armor{ get; set; }
     }
     
     [Serializable]
