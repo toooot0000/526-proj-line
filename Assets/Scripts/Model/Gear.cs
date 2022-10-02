@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using Utility;
 using Utility.Loader;
 
@@ -46,6 +47,31 @@ namespace Model{
             cooldown = (int)gear["cooldown"];
             imgPath = gear["img_path"] as string;
         }
+
+        public bool isCharge()
+        {
+            Player player = (Player)base.parent;
+            int n = player.circledBalls.Count;
+            for (int i = 0; i < n; i++)
+            {
+                Ball curBall = player.circledBalls.ElementAt(i);
+                if (((Gear)curBall.parent).id == id)
+                    return true;
+            }
+            return false;
+        }
         
+        public bool isCombo()
+        {
+            Player player = (Player)base.parent;
+            int n = player.hitBalls.Count;
+            for (int i = 0; i < n; i++)
+            {
+                Ball curBall = player.circledBalls.ElementAt(i);
+                if (((Gear)curBall.parent).id == id)
+                    return true;
+            }
+            return false;
+        }
     }
 }
