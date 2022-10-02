@@ -2,7 +2,7 @@
 using Core.PlayArea.Balls;
 using UnityEngine;
 
-namespace Core.PlayArea{
+namespace Core.PlayArea.TouchTracking{
     public class CircleCollider: MonoBehaviour{
 
         private PolygonCollider2D _collider2D;

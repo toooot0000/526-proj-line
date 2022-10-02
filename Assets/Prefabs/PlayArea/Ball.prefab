@@ -168,6 +168,8 @@ MonoBehaviour:
     charge: 0
     combo: 0
   icon: {fileID: 1621735645257668365}
+  sprite: {fileID: 3584327994911392432}
+  ball: {fileID: 3584327994911392446}
 --- !u!1 &6802092487487841929
 GameObject:
   m_ObjectHideFlags: 0

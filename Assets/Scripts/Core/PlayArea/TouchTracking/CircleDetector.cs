@@ -2,7 +2,7 @@
 using UnityEngine;
 using LineUtility = Utility.LineUtility;
 
-namespace Core.PlayArea{
+namespace Core.PlayArea.TouchTracking{
     public class CircleDetector{
 
         public List<Vector2> points;

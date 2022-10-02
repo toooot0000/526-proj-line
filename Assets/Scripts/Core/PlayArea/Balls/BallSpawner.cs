@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Model;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -7,30 +8,15 @@ namespace Core.PlayArea.Balls{
     public class BallSpawner: MonoBehaviour{
         public GameObject ballPrefab;
         public int randomSpawnNumber = 5;
-        private readonly List<global::Model.Ball> _ballModels = new();
+        public readonly List<BallConfig> ballConfigs = new();
 
 
-        private void Start()
-        {
-            GameManager.shared.game.player.OnHitBall += (game, model) =>
-            {
-                _ballModels.Remove((global::Model.Ball)model);
-                if (_ballModels.Count == 0)
-                {
-                    // SpawnRandom();
+        private void Start(){
+            GameManager.shared.game.OnTurnChanged += game => {
+                if (game.turn == Game.Turn.Player){
                     SpawnBalls();
                 }
             };
-            GameManager.shared.game.player.OnCircledBall += (game, model) =>
-            {
-                _ballModels.Remove((global::Model.Ball)model);
-                if (_ballModels.Count == 0)
-                {
-                    // SpawnRandom();
-                    SpawnBalls();
-                }
-            };
-            // SpawnRandom();
             SpawnBalls();
         }
 
@@ -40,7 +26,6 @@ namespace Core.PlayArea.Balls{
             newBallConfig.modelBall = ball;
             newBallObject.transform.localPosition = GenerateRandomLocalPosition();
             newBallConfig.UpdateConfig();
-            _ballModels.Add(ball);
         }
         
         public void SpawnRandom()       // Temp
@@ -67,9 +52,25 @@ namespace Core.PlayArea.Balls{
         }
 
         public void SpawnBalls(){
-            var balls = GameManager.shared.game.GetAllSkillBalls();
-            foreach (var ball in balls){
-                Spawn(ball);
+            var skillBalls = GameManager.shared.game.GetAllSkillBalls();
+            int i = 0;
+            for (; i < skillBalls.Count; i++){
+                BallConfig config = null;
+                if (i < ballConfigs.Count){
+                    config = ballConfigs[i];
+                } else{
+                    var newBallObject = Instantiate(ballPrefab, transform, false);
+                    config = newBallObject.GetComponent<BallConfig>();
+                }
+                config.gameObject.SetActive(true);
+                config.modelBall = skillBalls[i];
+                config.transform.localPosition = GenerateRandomLocalPosition();
+                config.UpdateConfig();
+                ballConfigs.Add(config);
+            }
+
+            for (; i < ballConfigs.Count; i++){
+                ballConfigs[i].gameObject.SetActive(false);
             }
         }
     }

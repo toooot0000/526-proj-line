@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using Utility.Extensions;
 
-namespace Core.PlayArea{
+namespace Core.PlayArea.TouchTracking{
     [RequireComponent(typeof(LineRenderer))]
     public class LineColliderGenerator: MonoBehaviour{
         public float widthFactor = 1;

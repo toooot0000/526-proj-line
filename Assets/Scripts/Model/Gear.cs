@@ -39,7 +39,7 @@ namespace Model{
             catch (Exception e) {
                 type = Type.Weapon;
             }
-            ball = new Ball(parent, (int)gear["ball_id"]);
+            ball = new Ball(this, (int)gear["ball_id"]);
             ballNum = (int)gear["ball_num"];
             chargeEffect = gear["charge_effect"] as string;
             comboEffect = gear["combo_effect"] as string;

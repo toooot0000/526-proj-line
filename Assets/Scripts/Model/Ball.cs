@@ -26,7 +26,7 @@ namespace Model{
         
         public Ball(GameModel parent) : base(parent){ }
 
-        public Ball(GameModel parent, int id) : base(parent) {
+        public Ball(Gear parent, int id) : base(parent) {
             this.id = id;
             var ball = CsvLoader.TryToLoad("Configs/balls", id);
             if (ball == null) return;

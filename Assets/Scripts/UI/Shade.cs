@@ -1,8 +1,7 @@
-using System;
 using UnityEngine;
 using Utility;
 
-namespace Core.PlayArea {
+namespace UI {
     public class Shade: MonoBehaviour {
         private SpriteRenderer _renderer;
 
