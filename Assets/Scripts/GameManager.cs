@@ -4,6 +4,7 @@ using BackendApi;
 using Model;
 using Tutorials;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Utility;
 using Utility.Loader;
 
@@ -30,7 +31,14 @@ public class GameManager : MonoBehaviour{
         Application.targetFrameRate = 120;
     }
 
-    private void Update(){ }
+    private void Update()
+    {
+        if(Input.GetKeyUp("k"))
+        {
+            print("kill the current enemy!\n"); 
+            
+        }    
+    }
 
 
     private void InitGame() {
