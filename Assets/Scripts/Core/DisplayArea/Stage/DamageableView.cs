@@ -43,12 +43,12 @@ namespace Core.DisplayArea.Stage{
 
 
         public virtual void Attack(){
-            animationController.Play(PlayerAnimation.Attack, 0.07f, wrappedActionInfo.target.ProcessDamage); // AnimationEvent => ProcessDamage
+            animationController.Play(PlayerAnimation.Attack, 0.07f, wrappedActionInfo.target.TakeDamage); // AnimationEvent => ProcessDamage
         }
 
-        public virtual void ProcessDamage(){
-            damageNumberDisplay.Number = damage.raw.point;
-            CurrentHp -= damage.raw.point;
+        public virtual void TakeDamage(){
+            damageNumberDisplay.Number = damage.raw.totalPoint;
+            CurrentHp -= damage.raw.totalPoint;
             if (isDead){
                 damage.target.animationController.Play(PlayerAnimation.Die, () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
             } else{

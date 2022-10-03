@@ -17,7 +17,9 @@ namespace Model{
             Magic,
         }
         
-        public int point;
+        public int totalPoint;
+        // public int hpDeduction;
+        // public int armorDeduction;
         public Type type;
         public IDamageable target;
         public IDamageable source;

@@ -13,6 +13,8 @@ namespace Model{
             Magic,
             [Description("defend")]
             Defend,
+            [Description("debuff")]
+            Debuff,
         }
         
         public int id;

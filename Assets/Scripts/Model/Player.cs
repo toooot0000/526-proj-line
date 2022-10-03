@@ -28,7 +28,7 @@ namespace Model{
 
         public int Armor{
             set{
-                _armor = value;
+                _armor = Math.Max(value, 0);
                 OnArmorChanged?.Invoke(currentGame, this);
             }
             get => _armor;
@@ -38,7 +38,7 @@ namespace Model{
 
         public int Coin{
             set{
-                _coin = value;
+                _coin = Math.Max(value, 0);
                 OnCoinChanged?.Invoke(currentGame, this);
             }
             get => _coin;
@@ -81,8 +81,8 @@ namespace Model{
 
         
         public void TakeDamage(Damage damage){
-            CurrentHp -= Math.Max(damage.point - Armor, 0);
-            Armor -= damage.point;
+            CurrentHp -= Math.Max(damage.totalPoint - Armor, 0);
+            Armor -= damage.totalPoint;
             OnBeingAttacked?.Invoke(currentGame, this);
         }
 
@@ -121,8 +121,9 @@ namespace Model{
         
         public void Attack() {
             if (currentGame.turn != Game.Turn.Player) return;
+            var totalPoint = GetTotalPoint();
             var dmg = new Damage(currentGame){
-                point = GetTotalPoint(),
+                totalPoint = totalPoint,
                 type = Damage.Type.Physics,
                 target = currentGame.CurrentEnemy,
                 source = this

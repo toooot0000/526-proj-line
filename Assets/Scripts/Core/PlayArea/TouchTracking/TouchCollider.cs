@@ -15,8 +15,8 @@ namespace Core.PlayArea.TouchTracking{
         }
 
         private void OnTriggerEnter2D(Collider2D col){
-            var ball = col.GetComponent<Ball>();
-            if (ball == null || ball.currentState != Ball.State.Free) return;
+            var ball = col.GetComponent<BallView>();
+            if (ball == null || ball.currentState != BallView.State.Free) return;
             ball.OnBeingTouched();
         }
 

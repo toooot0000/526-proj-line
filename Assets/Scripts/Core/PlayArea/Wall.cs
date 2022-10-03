@@ -7,7 +7,7 @@ namespace Core.PlayArea{
 
 
         private void OnTriggerEnter2D(Collider2D col){
-            var ball = col.GetComponent<Ball>();
+            var ball = col.GetComponent<BallView>();
             if (ball == null) return;
             ball.OnHittingWall(this);
         }

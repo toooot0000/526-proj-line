@@ -2097,8 +2097,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20583f68c81c49ff9e0a41b9ed7b507f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 946138703}
-  enemy: {fileID: 1524296162}
+  playerView: {fileID: 946138703}
+  enemyView: {fileID: 1524296162}
+  ballManager: {fileID: 4328751458895938648}
 --- !u!1001 &2834634534027371978
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3319,6 +3320,7 @@ MonoBehaviour:
   polygonCollider: {fileID: 4328751458190542158}
   totalLineLength: 5
   progressBar: {fileID: 4328751458076031958}
+  pointDisplayer: {fileID: 0}
 --- !u!114 &4328751458456131981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3409,7 +3411,7 @@ GameObject:
   - component: {fileID: 4328751458895938647}
   - component: {fileID: 4328751458895938648}
   m_Layer: 0
-  m_Name: BallsController
+  m_Name: BallManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1,5 +1,6 @@
 using System;
 using BackendApi;
+using Core.PlayArea.Balls;
 using Model;
 using UI;
 using UnityEngine;
@@ -11,7 +12,8 @@ namespace Core.DisplayArea.Stage{
     /// Be responsible for the stage process
     /// </summary>
     public class StageManager: MonoBehaviour{
-
+        
+        [Obsolete("Use StageActionInfoWrapper")]
         public class DamageWrapper{
             public DamageableView source;
             public DamageableView target;
@@ -27,8 +29,9 @@ namespace Core.DisplayArea.Stage{
         }
 
         private Model.Stage _modelStage;
-        public Player.Player player;
-        public Enemy.Enemy enemy;
+        public Player.PlayerView playerView;
+        public Enemy.EnemyView enemyView;
+        public BallManager ballManager;
 
         private DateTime _stageStart;
         private int _currentLevel = -1;
@@ -43,7 +46,7 @@ namespace Core.DisplayArea.Stage{
             _modelStage = game.currentStage;
             // _modelStage.OnProcessDamage += OnProcessDamage;
             _modelStage.OnProcessStageAction += OnProcessStageAction;
-            enemy.BindToCurrentEnemy(null);
+            enemyView.BindToCurrentEnemy(null);
             _stageStart = DateTime.Now;
             _currentLevel = _modelStage.id;
         }
@@ -51,15 +54,15 @@ namespace Core.DisplayArea.Stage{
         [Obsolete("Use OnProcessStageAction")]
         private void OnProcessDamage(Game game, GameModel model){
             var dmg = (model as Damage)!;
-            DamageableView target = player.Model == dmg.target ? player : enemy;
+            DamageableView target = playerView.Model == dmg.target ? playerView : enemyView;
             var dmgWrp = new DamageWrapper(){
-                source = player.Model == dmg.source ? player : enemy,
+                source = playerView.Model == dmg.source ? playerView : enemyView,
                 target = target,
                 raw = dmg,
                 resolvedCallback = OnDamageResolved
             };
-            player.damage = dmgWrp;
-            enemy.damage = dmgWrp;
+            playerView.damage = dmgWrp;
+            enemyView.damage = dmgWrp;
             dmgWrp.source.Attack();
         }
 
@@ -79,76 +82,79 @@ namespace Core.DisplayArea.Stage{
                     break;
             }
         }
-
+        
+        [Obsolete("Use Process(StageAction)")]
         private void ProcessDamage(Damage damage){
-            DamageableView target = player.Model == damage.target ? player : enemy;
+            DamageableView target = playerView.Model == damage.target ? playerView : enemyView;
             var dmgWrp = new DamageWrapper(){
-                source = player.Model == damage.source ? player : enemy,
+                source = playerView.Model == damage.source ? playerView : enemyView,
                 target = target,
                 raw = damage,
                 resolvedCallback = OnDamageResolved
             };
-            player.damage = dmgWrp;
-            enemy.damage = dmgWrp;
+            playerView.damage = dmgWrp;
+            enemyView.damage = dmgWrp;
             dmgWrp.source.Attack();
         }
 
         private void ProcessPlayerAttack(StageActionInfoPlayerAttack info){
             var dmgWrp = new StageActionInfoWrapper(){
-                source = player,
-                target = enemy,
+                source = playerView,
+                target = enemyView,
                 actionInfo = info,
                 resolvedCallback = OnPlayerAttackResolved
             };
-            player.wrappedActionInfo = dmgWrp;
-            enemy.wrappedActionInfo = dmgWrp;
-            player.Attack();
+            playerView.wrappedActionInfo = dmgWrp;
+            enemyView.wrappedActionInfo = dmgWrp;
+            ballManager.FlyAllBalls(this, 0.5f);
+            StartCoroutine(CoroutineUtility.Delayed(0.4f, playerView.Attack));
+            // playerView.Attack();
         }
 
         private void ProcessEnemyAttack(StageActionInfoEnemyAttack info){
             var infoWrp = new StageActionInfoWrapper(){
-                source = enemy,
-                target = player,
+                source = enemyView,
+                target = playerView,
                 actionInfo = info,
                 resolvedCallback = wrapper => StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn))
             };
-            player.wrappedActionInfo = infoWrp;
-            enemy.wrappedActionInfo = infoWrp;
-            enemy.Attack();
+            playerView.wrappedActionInfo = infoWrp;
+            enemyView.wrappedActionInfo = infoWrp;
+            enemyView.Attack();
         }
 
         private void ProcessEnemySpecialAttack(StageActionInfoEnemySpecial info){
             var infoWrp = new StageActionInfoWrapper(){
-                source = enemy,
-                target = player,
+                source = enemyView,
+                target = playerView,
                 actionInfo = info,
                 resolvedCallback = wrapper => StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn))
             };
-            player.wrappedActionInfo = infoWrp;
-            enemy.wrappedActionInfo = infoWrp;
-            enemy.SpecialAttack();
+            playerView.wrappedActionInfo = infoWrp;
+            enemyView.wrappedActionInfo = infoWrp;
+            enemyView.SpecialAttack();
         }
 
         private void ProcessEnemyDefend(StageActionInfoEnemyDefend info){
             var infoWrp = new StageActionInfoWrapper(){
-                source = enemy,
+                source = enemyView,
                 target = null,
                 actionInfo = info,
                 resolvedCallback = wrapper =>
                     StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn))
             };
-            player.wrappedActionInfo = infoWrp;
-            enemy.wrappedActionInfo = infoWrp;
-            enemy.Defend();
+            playerView.wrappedActionInfo = infoWrp;
+            enemyView.wrappedActionInfo = infoWrp;
+            enemyView.Defend();
         }
 
 
         private void OnPlayerAttackResolved(StageActionInfoWrapper wrapped){
             var dmg = (wrapped.actionInfo as StageActionInfoPlayerAttack)!.damage;
-            if(enemy.isDead) {
+            if(enemyView.isDead) {
                 if(dmg.currentGame.currentStage.NextEnemy != null){
                     dmg.currentGame.currentStage.ForwardCurrentEnemy();
-                    enemy.BindToCurrentEnemy(
+                    enemyView.BindToCurrentEnemy(
                         () => StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn))
                     );
                 }
@@ -174,9 +180,10 @@ namespace Core.DisplayArea.Stage{
             else StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn));
         }
         
-
+        
+        [Obsolete("Use On(StageAction)Resolved instead!")]
         private void OnDamageResolved(DamageWrapper dmg){
-            if(dmg.target.isDead && dmg.target is Enemy.Enemy enemy1) {
+            if(dmg.target.isDead && dmg.target is Enemy.EnemyView enemy1) {
                 if(dmg.raw.currentGame.CurrentEnemy != null){
                     enemy1.BindToCurrentEnemy(
                         () => StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn))

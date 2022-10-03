@@ -152,24 +152,35 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0
-      outSlope: 0
+      inSlope: -0
+      outSlope: -0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.118990384
+    - serializedVersion: 3
+      time: 0.6766398
+      value: 0.14418942
+      inSlope: 0.64115036
+      outSlope: 0.64115036
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.24839056
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 2
-      outSlope: 2
+      inSlope: 3.5157244
+      outSlope: 3.5157244
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.028846145
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  weaponIcon: {fileID: 1621735645257668365}
+  config: {fileID: 3584327994911392439}
 --- !u!114 &3584327994911392439
 MonoBehaviour:
   m_ObjectHideFlags: 0

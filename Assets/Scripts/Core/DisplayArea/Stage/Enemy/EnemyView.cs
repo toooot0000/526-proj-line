@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Core.DisplayArea.Stage.Enemy{
 
     [RequireComponent(typeof(PlayerAnimationController))]
-    public class Enemy : DamageableView{
+    public class EnemyView : DamageableView{
         public RemainingEnemy remaining;
         public IntentionDisplayer intentionDisplayer;
 
@@ -43,7 +43,7 @@ namespace Core.DisplayArea.Stage.Enemy{
             animationController.Play(PlayerAnimation.Attack, 0.07f, 
             ()=> {
                 UpdateIntention();
-                wrappedActionInfo.target.ProcessDamage();
+                wrappedActionInfo.target.TakeDamage();
             });
         }
 
@@ -62,10 +62,11 @@ namespace Core.DisplayArea.Stage.Enemy{
             });
         }
 
-        public override void ProcessDamage(){
-            var point = ((StageActionInfoPlayerAttack)wrappedActionInfo.actionInfo).damage.point;
-            damageNumberDisplay.Number = point;
-            CurrentHp -= point;
+        public override void TakeDamage(){
+            var point = ((StageActionInfoPlayerAttack)wrappedActionInfo.actionInfo).damage.totalPoint;
+            damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
+            CurrentHp = Model.CurrentHp;
+            armorDisplayer.Number = Model.Armor;
             if (isDead){
                 animationController.Play(PlayerAnimation.Die, () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
             } else{

@@ -5,7 +5,7 @@ using Utility;
 
 namespace Core.DisplayArea.Stage.Player{
     [RequireComponent(typeof(PlayerAnimationController))]
-    public class Player: DamageableView{
+    public class PlayerView: DamageableView{
         public override IDamageable Model {
             set {
                 base.Model = value;
@@ -27,13 +27,14 @@ namespace Core.DisplayArea.Stage.Player{
 
         public override void Attack(){
             // TODO Play Attack Animation/defends animation/special attack animation;
-            animationController.Play(PlayerAnimation.Attack, 0.07f, wrappedActionInfo.target.ProcessDamage);
+            animationController.Play(PlayerAnimation.Attack, 0.07f, wrappedActionInfo.target.TakeDamage);
         }
 
-        public override void ProcessDamage(){
-            var point = ((StageActionInfoEnemyAttack)wrappedActionInfo.actionInfo).damage.point;
-            damageNumberDisplay.Number = point;
-            CurrentHp -= point;
+        public override void TakeDamage(){
+            var point = ((StageActionInfoEnemyAttack)wrappedActionInfo.actionInfo).damage.totalPoint;
+            damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
+            CurrentHp = Model.CurrentHp;
+            armorDisplayer.Number = Model.Armor;
             if (isDead){
                 animationController.Play(PlayerAnimation.Die, () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
             } else{

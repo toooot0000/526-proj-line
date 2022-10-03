@@ -18,7 +18,7 @@ namespace Core.PlayArea.Balls{
         private Vector2 _originIconSize;
 
         public SpriteRenderer sprite;
-        public Ball ball;
+        public BallView ballView;
         
         
         private void Start(){
@@ -28,10 +28,11 @@ namespace Core.PlayArea.Balls{
         public void UpdateConfig(){
             var rectTransform = transform as RectTransform;
             rectTransform!.localScale = new Vector3(modelBall.size / 2, modelBall.size/2, modelBall.size/2);
-            ball.velocity = Vector2.one.Rotate(Random.Range(0, 360)).normalized * modelBall.speed;
+            ballView.velocity = Vector2.one.Rotate(Random.Range(0, 360)).normalized * modelBall.speed;
             sprite.color = colors[modelBall.type];
             icon.size *= modelBall.size;
             icon.sprite = Resources.Load<Sprite>((modelBall.parent as Gear)!.imgPath);
+            icon.color = Color.white;
         }
     }
 }

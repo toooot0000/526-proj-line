@@ -49,7 +49,7 @@ namespace Model{
 
         public int Armor{
             set{
-                _armor = value;
+                _armor = Math.Max(value, 0);
                 OnArmorChanged?.Invoke(currentGame, this);
             }
             get => _armor;
@@ -89,14 +89,15 @@ namespace Model{
         }
         
         public void TakeDamage(Damage damage){
-            CurrentHp -= damage.point;
+            CurrentHp -= Math.Max(damage.totalPoint - Armor, 0);
+            Armor = Math.Max(Armor - damage.totalPoint, 0);
             OnBeingAttacked?.Invoke(currentGame, this);
         }
         
         [Obsolete("Use *WithInfo")]
         public void Attack(){
             var dmg = new Damage(currentGame){
-                point = attack,
+                totalPoint = attack,
                 type = Damage.Type.Physics,
                 target = currentGame.player,
                 source = this
@@ -107,7 +108,7 @@ namespace Model{
 
         public void AttackWithInfo(){
             var dmg = new Damage(currentGame){
-                point = attack,
+                totalPoint = attack,
                 type = Damage.Type.Physics,
                 target = currentGame.player,
                 source = this
@@ -128,7 +129,6 @@ namespace Model{
         }
 
         public void Defend(){
-            Armor += defend;
             var info = new StageActionInfoEnemyDefend(this){
                 defend = defend
             };
