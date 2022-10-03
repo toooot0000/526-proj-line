@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour{
 
     public TutorialBase currentTutorial;
     
+    public Guid uuid = Guid.NewGuid();
+    
     private void Awake()
     {
         if (shared != null){

@@ -8,27 +8,28 @@ using UnityEngine;
 using UnityEngine.InputSystem.Controls;
 
 namespace BackendApi{
-
-    public interface ILoggableEvent {
-        public string URLPath => throw new NotImplementedException();
+    public abstract class LoggableEvent {
+        public virtual string URLPath => throw new NotImplementedException();
+        public string uuid = GameManager.shared.uuid.ToString();
     }
-    public struct EventClearanceRecord: ILoggableEvent{
+
+    public class EventClearanceRecord: LoggableEvent{
         public int level;
         public string status; // "success" || "fail"
         public int time;
-        public string URLPath => "logClearanceRecord";
+        public override string URLPath => "logClearanceRecord";
     }
-    public struct EventSkillUses: ILoggableEvent{
+    public class EventSkillUses: LoggableEvent{
         public int skillId;
         public int uses;
-        public string URLPath => "logSkillUses";
+        public override string URLPath => "logSkillUses";
     }
 
-    public struct EventItemInteract : ILoggableEvent{
+    public class EventItemInteract : LoggableEvent{
         public int itemId;
         public string status;
         public int count;
-        public string URLPath => "logItemsInteract";
+        public override string URLPath => "logItemsInteract";
     }
     
     /**
@@ -48,7 +49,7 @@ namespace BackendApi{
         private static EventLogger _shared;
         public static EventLogger Shared => _shared ?? new EventLogger();
         
-        public async void Log<T>(T loggableEvent)where T: ILoggableEvent{
+        public async void Log<T>(T loggableEvent)where T: LoggableEvent{
             var stringContent = new StringContent(JsonConvert.SerializeObject(loggableEvent), Encoding.UTF8,
                 "application/json");
             var response = await Client.PostAsync($"{serverURL}{loggableEvent.URLPath}", stringContent);
