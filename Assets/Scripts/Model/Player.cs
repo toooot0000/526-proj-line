@@ -113,12 +113,12 @@ namespace Model{
         }
 
         public int GetTotalAttackPoint(){
-            return hitBalls.Sum(ball => ball.type != Ball.Type.Defend ? ball.point : 0) + circledBalls.Sum(ball => ball.type != Ball.Type.Defend ? ball.point : 0);
+            return hitBalls.Sum(ball => ball.type != BallType.Defend ? ball.point : 0) + circledBalls.Sum(ball => ball.type != BallType.Defend ? ball.point : 0);
         }
 
         public int GetTotalDefendPoint(){
-            return hitBalls.Sum(ball => ball.type == Ball.Type.Defend ? ball.point : 0) +
-                   circledBalls.Sum(ball => ball.type == Ball.Type.Defend ? ball.point : 0);
+            return hitBalls.Sum(ball => ball.type == BallType.Defend ? ball.point : 0) +
+                   circledBalls.Sum(ball => ball.type == BallType.Defend ? ball.point : 0);
         }
 
         public GearEffectBase[] GetTriggeredEffects(){
@@ -145,12 +145,14 @@ namespace Model{
                 source = this
             };
             OnAttack?.Invoke(currentGame, this);
-            hitBalls.Clear();
-            circledBalls.Clear();
             var playerAttackAction = new StageActionInfoPlayerAttack(this, GetTriggeredEffects()){
                 damage = dmg,
-                defend = GetTotalDefendPoint()
+                defend = GetTotalDefendPoint(),
+                hitBalls = hitBalls.ToArray(),
+                circledBalls = circledBalls.ToArray()
             };
+            hitBalls.Clear();
+            circledBalls.Clear();
             currentGame.currentStage.ProcessStageAction(playerAttackAction);
         }
         

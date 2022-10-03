@@ -7,10 +7,10 @@ using Random = UnityEngine.Random;
 namespace Core.PlayArea.Balls{
     public class BallConfig: MonoBehaviour{
 
-        public static Dictionary<global::Model.Ball.Type, Color> colors = new(){
-            {global::Model.Ball.Type.Physics, Color.white},
-            {global::Model.Ball.Type.Magic, Color.blue},
-            {global::Model.Ball.Type.Defend, Color.yellow}
+        public static Dictionary<global::Model.BallType, Color> colors = new(){
+            {global::Model.BallType.Physics, Color.white},
+            {global::Model.BallType.Magic, Color.blue},
+            {global::Model.BallType.Defend, Color.yellow}
         };
         public global::Model.Ball modelBall;
 

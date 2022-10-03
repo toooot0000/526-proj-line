@@ -26,8 +26,10 @@ namespace Core.DisplayArea.Stage.Player{
         }
 
         public override void Attack(){
-            // TODO Play Attack Animation/defends animation/special attack animation;
-            animationController.Play(PlayerAnimation.Attack, 0.07f, wrappedActionInfo.target.TakeDamage);
+            animationController.Play(PlayerAnimation.Attack, 0.07f, ()=> {
+                wrappedActionInfo.target.TakeDamage();
+                armorDisplayer.Number = Model.Armor;
+            });
         }
 
         public override void TakeDamage(){

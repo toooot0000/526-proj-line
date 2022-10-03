@@ -21,6 +21,8 @@ namespace Model{
         public Damage damage;
         public int defend;
         public readonly GearEffectBase[] effects;
+        public Ball[] hitBalls;
+        public Ball[] circledBalls;
         public StageActionInfoPlayerAttack(GameModel parent, GearEffectBase[] effects) : base(parent){
             this.effects = effects;
         }
