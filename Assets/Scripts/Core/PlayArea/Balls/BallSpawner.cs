@@ -61,12 +61,13 @@ namespace Core.PlayArea.Balls{
                 } else{
                     var newBallObject = Instantiate(ballPrefab, transform, false);
                     config = newBallObject.GetComponent<BallConfig>();
+                    ballConfigs.Add(config);
                 }
                 config.gameObject.SetActive(true);
                 config.modelBall = skillBalls[i];
                 config.transform.localPosition = GenerateRandomLocalPosition();
                 config.UpdateConfig();
-                ballConfigs.Add(config);
+                config.ball.Reset();
             }
 
             for (; i < ballConfigs.Count; i++){

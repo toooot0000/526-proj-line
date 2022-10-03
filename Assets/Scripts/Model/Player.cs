@@ -89,6 +89,7 @@ namespace Model{
         
         public void AddHitBall(Ball ball){
             hitBalls.Add(ball);
+            
             OnHitBall?.Invoke(currentGame, ball);
             // Send Event
             var skillEvent = new EventSkillUses(){

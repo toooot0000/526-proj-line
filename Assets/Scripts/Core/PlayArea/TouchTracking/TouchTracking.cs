@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Core.Common;
+using Core.DisplayArea;
 using Model;
 using UnityEngine;
 using Utility;
@@ -18,6 +19,7 @@ namespace Core.PlayArea.TouchTracking{
         public CircleCollider polygonCollider;
         public float totalLineLength = 5f;
         public ProgressBar progressBar;
+        public PointDisplayer pointDisplayer;
 
 
         private Boolean _isTracing = false;
@@ -91,6 +93,8 @@ namespace Core.PlayArea.TouchTracking{
             
             var positionCount = lineRenderer.positionCount;
             touchCollider.transform.SetPositionAndRotation(worldPosition, Quaternion.Euler(0, 0, 0));
+            
+            // TODO change point displayer position
             
             // Length validate
             var curSegLength = 0.0f;

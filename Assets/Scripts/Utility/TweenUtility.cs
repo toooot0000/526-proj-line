@@ -43,14 +43,14 @@ namespace Utility{
         
         public static Func<IEnumerator> Lerp(float seconds, Action before, Action<float> update, Action finish){
             IEnumerator Inner(){
-                before();
+                before?.Invoke();
                 float curTime = 0;
                 while (curTime < seconds) {
                     curTime += Time.deltaTime;
-                    update(curTime / seconds);
+                    update?.Invoke(curTime / seconds);
                     yield return null;
                 }
-                finish();
+                finish?.Invoke();
             }
             return Inner;
         }

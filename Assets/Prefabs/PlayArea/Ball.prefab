@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 3584327994911392433}
   - component: {fileID: 3584327994911392432}
   - component: {fileID: 3584327994911392447}
-  - component: {fileID: 3584327994911392446}
   - component: {fileID: 3584327994911392445}
+  - component: {fileID: 3584327994911392446}
   - component: {fileID: 3584327994911392439}
+  - component: {fileID: 8155498347057018365}
   m_Layer: 7
   m_Name: Ball
   m_TagString: Untagged
@@ -110,20 +111,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &3584327994911392446
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3584327994911392434}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13f5806861961064db0e789526ebdbe3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  velocity: {x: 0.1, y: 0.1}
-  currentState: 0
 --- !u!50 &3584327994911392445
 Rigidbody2D:
   serializedVersion: 4
@@ -145,6 +132,44 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &3584327994911392446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3584327994911392434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13f5806861961064db0e789526ebdbe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocity: {x: 0.1, y: 0.1}
+  currentState: 0
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &3584327994911392439
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,6 +195,19 @@ MonoBehaviour:
   icon: {fileID: 1621735645257668365}
   sprite: {fileID: 3584327994911392432}
   ball: {fileID: 3584327994911392446}
+--- !u!114 &8155498347057018365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3584327994911392434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0322960e692fc4a7391ed4cb56ffbe94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  points: []
 --- !u!1 &6802092487487841929
 GameObject:
   m_ObjectHideFlags: 0

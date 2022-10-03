@@ -48,8 +48,9 @@ namespace Model{
             imgPath = gear["img_path"] as string;
         }
 
-        public bool isCharge()
+        public bool IsCharged()
         {
+            // TODO clean up
             Player player = (Player)base.parent;
             int n = player.circledBalls.Count;
             for (int i = 0; i < n; i++)
@@ -61,8 +62,9 @@ namespace Model{
             return false;
         }
         
-        public bool isCombo()
+        public bool IsComboIng()
         {
+            // TODO clean up
             Player player = (Player)base.parent;
             int n = player.hitBalls.Count;
             for (int i = 0; i < n; i++)
