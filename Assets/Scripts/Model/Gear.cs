@@ -1,30 +1,30 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using Model.GearEffects;
 using Utility;
 using Utility.Loader;
 
 namespace Model{
     [Serializable]
     public class Gear: GameModel{
-        public enum Type{
-            [Description("weapon")]
-            Weapon,
-            [Description("shield")]
-            Shield,
-        }
         public int id;
         public string name;
         public string desc;
         public int rarity;
-        public Type type;
+        public GearType type;
         public int ballId;
         public Ball ball;
         public int ballNum;
-        public string chargeEffect;
-        public string comboEffect;
+        // public string chargeEffect;
+        // public string comboEffect;
         public int cooldown;
         public string imgPath;
+
+        public int chargeNum;
+        public int comboNum;
+        public GearEffectBase chargeEffect;
+        public GearEffectBase comboEffect;
         public Gear(GameModel parent) : base(parent){ }
 
         public Gear(GameModel parent, int id) : base(parent) {
@@ -35,45 +35,51 @@ namespace Model{
             desc = gear["desc"] as string;
             rarity = (int)gear["rarity"];
             try {
-                type = EnumUtility.GetValue<Type>(gear["type"] as string);
+                type = EnumUtility.GetValue<GearType>(gear["type"] as string);
             }
             catch (Exception e) {
-                type = Type.Weapon;
+                type = GearType.Weapon;
             }
             ball = new Ball(this, (int)gear["ball_id"]);
             ballNum = (int)gear["ball_num"];
-            chargeEffect = gear["charge_effect"] as string;
-            comboEffect = gear["combo_effect"] as string;
             cooldown = (int)gear["cooldown"];
             imgPath = gear["img_path"] as string;
+
+            chargeNum = (int)gear["charge_num"];
+            comboNum = (int)gear["combo_num"];
+            
+            var spStr = (gear["charge_effect"] as string)!.Split(";");
+            var className = spStr.First();
+            if (className != null && !className.Equals("")){
+                chargeEffect = Activator.CreateInstance(Type.GetType($"Model.GearEffects.{className}", true), new object[]{spStr[1..]}) as
+                    GearEffectBase;
+            }
+            
+            spStr = (gear["combo_effect"] as string)!.Split(";");
+            className = spStr.First();
+            if (className != null && !className.Equals("")){
+                comboEffect = Activator.CreateInstance(Type.GetType($"Model.GearEffects.{className}", true), new object[]{spStr[1..]}) as
+                    GearEffectBase;
+            }
         }
 
-        public bool IsCharged()
-        {
-            // TODO clean up
-            Player player = (Player)base.parent;
-            int n = player.circledBalls.Count;
-            for (int i = 0; i < n; i++)
-            {
-                Ball curBall = player.circledBalls.ElementAt(i);
-                if (((Gear)curBall.parent).id == id)
-                    return true;
-            }
-            return false;
+        public bool IsCharged(){
+            if (chargeNum == -1) return false;
+            if (chargeEffect == null) return false;
+            return (parent as Player)!.circledBalls.Count >= chargeNum;
         }
         
-        public bool IsComboIng()
-        {
-            // TODO clean up
-            Player player = (Player)base.parent;
-            int n = player.hitBalls.Count;
-            for (int i = 0; i < n; i++)
-            {
-                Ball curBall = player.circledBalls.ElementAt(i);
-                if (((Gear)curBall.parent).id == id)
-                    return true;
-            }
-            return false;
+        public bool IsComboIng(){
+            if (comboNum == -1) return false;
+            if (comboEffect == null) return false;
+            return (parent as Player)!.hitBalls.Count >= comboNum;
         }
+    }
+
+    public enum GearType{
+        [Description("weapon")]
+        Weapon,
+        [Description("shield")]
+        Shield,
     }
 }

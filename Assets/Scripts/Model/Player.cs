@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BackendApi;
+using Model.GearEffects;
 using Unity.Burst.Intrinsics;
 using Utility.Loader;
 
@@ -73,7 +74,8 @@ namespace Model{
             Coin = (int)CsvLoader.GetConfig("player_init_coin");
             CurrentHp = HpUpLimit;
             gears = new List<Gear>(){
-                new Gear(this, id: -1)
+                new Gear(this, id: -1),
+                new Gear(this, id: -2)
             };
             OnGearChanged?.Invoke(currentGame, this);
             OnInit?.Invoke(currentGame, this);
@@ -110,18 +112,32 @@ namespace Model{
             EventLogger.Shared.Log(skillEvent);
         }
 
-        public int GetTotalPoint(){
-            return hitBalls.Sum(ball => ball.point) + circledBalls.Sum(ball => ball.point * 2);
+        public int GetTotalAttackPoint(){
+            return hitBalls.Sum(ball => ball.type != Ball.Type.Defend ? ball.point : 0) + circledBalls.Sum(ball => ball.type != Ball.Type.Defend ? ball.point : 0);
         }
 
-        public int GetTotalDefend(){
+        public int GetTotalDefendPoint(){
             return hitBalls.Sum(ball => ball.type == Ball.Type.Defend ? ball.point : 0) +
-                   circledBalls.Sum(ball => ball.type == Ball.Type.Defend ? ball.point * 2 : 0);
+                   circledBalls.Sum(ball => ball.type == Ball.Type.Defend ? ball.point : 0);
+        }
+
+        public GearEffectBase[] GetTriggeredEffects(){
+            var ret = new List<GearEffectBase>();
+            foreach (var gear in gears){
+                if (gear.IsCharged()){
+                    ret.Add(gear.chargeEffect);
+                }
+
+                if (gear.IsComboIng()){
+                    ret.Add(gear.comboEffect);
+                }
+            }
+            return ret.ToArray();
         }
         
         public void Attack() {
             if (currentGame.turn != Game.Turn.Player) return;
-            var totalPoint = GetTotalPoint();
+            var totalPoint = GetTotalAttackPoint();
             var dmg = new Damage(currentGame){
                 totalPoint = totalPoint,
                 type = Damage.Type.Physics,
@@ -131,9 +147,9 @@ namespace Model{
             OnAttack?.Invoke(currentGame, this);
             hitBalls.Clear();
             circledBalls.Clear();
-            var playerAttackAction = new StageActionInfoPlayerAttack(this){
+            var playerAttackAction = new StageActionInfoPlayerAttack(this, GetTriggeredEffects()){
                 damage = dmg,
-                defend = GetTotalDefend()
+                defend = GetTotalDefendPoint()
             };
             currentGame.currentStage.ProcessStageAction(playerAttackAction);
         }

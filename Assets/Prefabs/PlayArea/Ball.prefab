@@ -205,7 +205,7 @@ MonoBehaviour:
     combo: 0
   icon: {fileID: 1621735645257668365}
   sprite: {fileID: 3584327994911392432}
-  ball: {fileID: 3584327994911392446}
+  ballView: {fileID: 3584327994911392446}
 --- !u!114 &8155498347057018365
 MonoBehaviour:
   m_ObjectHideFlags: 0

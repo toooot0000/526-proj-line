@@ -1,8 +1,12 @@
 namespace Model.GearEffects{
-    public abstract class GearEffectBase: GameModel{
-        protected GearEffectBase(GameModel parent) : base(parent){ }
+    public abstract class GearEffectBase{
+        protected string[] args;
 
-        public GearEffectBase(Gear parent) : base(parent){ }
-        public abstract void Execute();
+        public GearEffectBase(string[] args) {
+            this.args = args;
+        }
+
+        public abstract void Execute(StageActionInfoPlayerAttack attackInfo);
+
     }
 }

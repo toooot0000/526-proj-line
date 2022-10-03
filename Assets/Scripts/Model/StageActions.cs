@@ -1,4 +1,5 @@
 using Model.EnemySpecialAttacks;
+using Model.GearEffects;
 
 namespace Model{
     
@@ -19,9 +20,14 @@ namespace Model{
     public class StageActionInfoPlayerAttack : StageActionInfoBase{
         public Damage damage;
         public int defend;
-        public int special;  // TODO
-        public StageActionInfoPlayerAttack(GameModel parent) : base(parent){ }
+        public readonly GearEffectBase[] effects;
+        public StageActionInfoPlayerAttack(GameModel parent, GearEffectBase[] effects) : base(parent){
+            this.effects = effects;
+        }
         public override void Execute(){
+            foreach (var effect in effects){
+                effect.Execute(this);
+            }
             damage.target.TakeDamage(damage);
             currentGame.player.Armor += defend;
         }

@@ -53,7 +53,7 @@ namespace Core.PlayArea.TouchTracking{
             if (!_isTracing) return;
             _isTracing = false;
             touchCollider.SetEnabled(false);
-            if (_game.player.GetTotalPoint() == 0) return;
+            if (_game.player.GetTotalAttackPoint() == 0) return;
             StartCoroutine(CoroutineUtility.Delayed(() => _game.player.Attack()));
             GameManager.shared.isAcceptingInput = false;
         }

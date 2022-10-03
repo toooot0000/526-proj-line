@@ -108,7 +108,6 @@ namespace Core.DisplayArea.Stage{
             enemyView.wrappedActionInfo = dmgWrp;
             ballManager.FlyAllBalls(this, 0.5f);
             StartCoroutine(CoroutineUtility.Delayed(0.4f, playerView.Attack));
-            // playerView.Attack();
         }
 
         private void ProcessEnemyAttack(StageActionInfoEnemyAttack info){
