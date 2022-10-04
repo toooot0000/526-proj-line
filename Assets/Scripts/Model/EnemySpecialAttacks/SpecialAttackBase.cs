@@ -1,10 +1,10 @@
 namespace Model.EnemySpecialAttacks{
     public abstract class SpecialAttackBase{
-        public string[] args;
+        protected readonly string[] args;
 
         public SpecialAttackBase(string[] args){
             this.args = args;
         }
-        public abstract void Execute(Game game);
+        public abstract void Execute(StageActionInfoEnemySpecial info);
     }
 }

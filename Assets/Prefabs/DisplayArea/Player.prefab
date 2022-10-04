@@ -1091,7 +1091,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 3
-  totalTime: 0.4
+  totalTime: 0.8
   curve:
     serializedVersion: 2
     m_Curve:

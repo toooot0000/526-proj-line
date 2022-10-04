@@ -33,7 +33,7 @@ namespace Core.DisplayArea.Stage.Player{
         }
 
         public override void TakeDamage(){
-            var point = ((StageActionInfoEnemyAttack)wrappedActionInfo.actionInfo).damage.totalPoint;
+            var point = wrappedActionInfo.actionInfo.damage.totalPoint;
             damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
             CurrentHp = Model.CurrentHp;
             armorDisplayer.Number = Model.Armor;

@@ -4,12 +4,12 @@ using Model.GearEffects;
 namespace Model{
     
     public abstract class StageActionInfoBase: GameModel{
+        public Damage damage = null;
         protected StageActionInfoBase(GameModel parent) : base(parent){ }
         public abstract void Execute();
     }
 
     public class StageActionInfoEnemyAttack : StageActionInfoBase{
-        public Damage damage;
         public StageActionInfoEnemyAttack(GameModel parent) : base(parent){ }
 
         public override void Execute(){
@@ -18,7 +18,6 @@ namespace Model{
     }
     
     public class StageActionInfoPlayerAttack : StageActionInfoBase{
-        public Damage damage;
         public int defend;
         public readonly GearEffectBase[] effects;
         public Ball[] hitBalls;
@@ -30,7 +29,7 @@ namespace Model{
             foreach (var effect in effects){
                 effect.Execute(this);
             }
-            damage.target.TakeDamage(damage);
+            damage?.target.TakeDamage(damage);
             currentGame.player.Armor += defend;
         }
     }
@@ -45,10 +44,13 @@ namespace Model{
 
     public class StageActionInfoEnemySpecial : StageActionInfoBase{
         public SpecialAttackBase special;
+        public int defend = 0;
         public StageActionInfoEnemySpecial(GameModel parent) : base(parent){ }
 
         public override void Execute(){
-            special.Execute(currentGame);
+            special.Execute(this);
+            damage?.target.TakeDamage(damage);
+            currentGame.CurrentEnemy.Armor += defend;
         }
     }
 }

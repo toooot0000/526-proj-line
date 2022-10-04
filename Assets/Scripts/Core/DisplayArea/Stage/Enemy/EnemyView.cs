@@ -2,6 +2,7 @@ using System;
 using Core.DisplayArea.Stage.Player;
 using Model;
 using UnityEngine;
+using Utility;
 
 namespace Core.DisplayArea.Stage.Enemy{
 
@@ -56,14 +57,17 @@ namespace Core.DisplayArea.Stage.Enemy{
         }
 
         public void SpecialAttack(){
-            animationController.Play(PlayerAnimation.Defend, ()=> {
-                UpdateIntention();
-                wrappedActionInfo.resolvedCallback(wrappedActionInfo);
-            });
+            var info = (wrappedActionInfo.actionInfo as StageActionInfoEnemySpecial)!;
+            if (info.damage != null){
+                Attack();
+                armorDisplayer.Number = Model.Armor;
+            } else{
+                Defend();
+            }
         }
 
         public override void TakeDamage(){
-            var point = ((StageActionInfoPlayerAttack)wrappedActionInfo.actionInfo).damage.totalPoint;
+            var point = wrappedActionInfo.actionInfo.damage.totalPoint;
             damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
             CurrentHp = Model.CurrentHp;
             armorDisplayer.Number = Model.Armor;
