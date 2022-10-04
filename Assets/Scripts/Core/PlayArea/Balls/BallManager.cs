@@ -12,6 +12,7 @@ namespace Core.PlayArea.Balls{
         public GameObject ballPrefab;
         public int randomSpawnNumber = 5;
         public readonly List<BallView> balls = new();
+        public ComboDisplayer comboDisplayer;
 
 
         private void Start(){
@@ -23,7 +24,7 @@ namespace Core.PlayArea.Balls{
             SpawnBalls();
         }
 
-        public void Spawn(global::Model.Ball ball){
+        public void SpawnNewBallView(global::Model.Ball ball){
             var newBallObject = Instantiate(ballPrefab, transform, false);
             var newBallConfig = newBallObject.GetComponent<BallConfig>();
             newBallConfig.modelBall = ball;
@@ -41,7 +42,7 @@ namespace Core.PlayArea.Balls{
                     size = Random.Range(1, 3) / 2.0f,
                     speed = Random.Range(1, 10) / 2.0f
                 };
-                Spawn(model);
+                SpawnNewBallView(model);
             }
         }
 
@@ -65,6 +66,9 @@ namespace Core.PlayArea.Balls{
                 } else{
                     var newBallObject = Instantiate(ballPrefab, transform, false);
                     curBallView = newBallObject.GetComponent<BallView>();
+                    curBallView.OnHitted += view => {
+                        comboDisplayer.Show(view.Model.currentGame.player.hitBalls.Count, view.transform.position);
+                    };
                     balls.Add(curBallView);
                 }
                 curBallView.gameObject.SetActive(true);

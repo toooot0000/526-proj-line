@@ -15,14 +15,14 @@ namespace Core.PlayArea.Balls{
         public global::Model.Ball modelBall;
 
         public SpriteRenderer icon;
-        private Vector2 _originIconSize = new Vector2(1.5f, 1.5f);
+        private Vector2 _originIconSize = new Vector2(1f, 1f);
 
         public SpriteRenderer sprite;
         public BallView ballView;
         
         
         private void Start(){
-            _originIconSize = new Vector2(1.5f, 1.5f);
+            _originIconSize = new Vector2(1f, 1f);
         }
         
         public void UpdateConfig(){
@@ -30,7 +30,6 @@ namespace Core.PlayArea.Balls{
             rectTransform!.localScale = new Vector3(modelBall.size, modelBall.size, 1);
             ballView.velocity = Vector2.one.Rotate(Random.Range(0, 360)).normalized * modelBall.speed;
             sprite.color = colors[modelBall.type];
-            icon.size = _originIconSize * modelBall.size;
             icon.sprite = Resources.Load<Sprite>((modelBall.parent as Gear)!.imgPath);
             icon.color = Color.white;
         }

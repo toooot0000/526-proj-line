@@ -6,6 +6,9 @@ using Utility;
 using Utility.Bezier;
 
 namespace Core.PlayArea.Balls{
+
+    public delegate void BallViewEvent(BallView view);
+    
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(BallConfig))]
     public class BallView : MonoBehaviour{
@@ -27,6 +30,9 @@ namespace Core.PlayArea.Balls{
         private RectTransform _rectTransform;
         private SpriteRenderer _ballBg;
 
+        public event BallViewEvent OnHitted;
+        public event BallViewEvent OnCharged;
+
         public global::Model.Ball Model{
             get => config.modelBall;
             set => config.modelBall = value;
@@ -46,9 +52,6 @@ namespace Core.PlayArea.Balls{
         }
 
         private void Update(){
-            // if (Input.GetKeyDown(KeyCode.A)) {
-            //     FlyToLocation(0.2f, Vector3.zero);
-            // }
             if (currentState != State.Free) return;
             _rectTransform.position += (Vector3)velocity * Time.deltaTime;
         }
@@ -68,7 +71,7 @@ namespace Core.PlayArea.Balls{
                 _ballBg.color = Color.yellow;
             }
             _game.player.AddHitBall(config.modelBall);
-            
+            OnHitted?.Invoke(this);
         }
 
         public void OnBeingCircled(){
@@ -82,7 +85,7 @@ namespace Core.PlayArea.Balls{
                 _ballBg.color = Color.blue;
             }
             _game.player.AddCircledBall(config.modelBall);
-            
+            OnCharged?.Invoke(this);
         }
 
         public void ResetView(){
