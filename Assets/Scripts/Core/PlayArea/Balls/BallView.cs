@@ -19,6 +19,7 @@ namespace Core.PlayArea.Balls{
             Circled,
             Charged,
             Flying,
+            Fading,
             Hide,
         }
 
@@ -129,6 +130,7 @@ namespace Core.PlayArea.Balls{
         }
 
         public void FadeOut(float seconds){
+            currentState = State.Fading;
             var bgStartColor = _ballBg.color;
             var bgEndColor = new Color(bgStartColor.r, bgStartColor.g, bgStartColor.b, 0);
             var iconStartColor = weaponIcon.color;

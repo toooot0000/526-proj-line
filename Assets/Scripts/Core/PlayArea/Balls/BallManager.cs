@@ -84,8 +84,12 @@ namespace Core.PlayArea.Balls{
 
         public void FlyAllBalls(StageManager stageManager, float seconds){
             foreach (var ball in balls){
-                if (ball.currentState == BallView.State.Free) continue;
+                if (ball.currentState == BallView.State.Free){
+                    ball.FadeOut(seconds);
+                    continue;
+                };
                 if (ball.Model.type == BallType.Debuff) continue;
+                
                 var target = stageManager.enemyView.transform.position;
                 if (ball.Model.type == BallType.Defend){
                     target = stageManager.playerView.transform.position;
