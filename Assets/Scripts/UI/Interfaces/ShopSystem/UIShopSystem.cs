@@ -20,7 +20,7 @@ namespace UI.Interfaces.ShopSystem {
         }
 
         public override void Open(object gears) {
-            base.Open(gears);
+            base.Open();
             _inAnimation = true;
             var coroutine = TweenUtility.Lerp(0.2f,
                 () => _canvasGroup.alpha = 0,
@@ -28,7 +28,7 @@ namespace UI.Interfaces.ShopSystem {
                 () => _inAnimation = false
             );
             items = gears as Gear[];
-            UpdateGearPanel();
+            LoadGearPanel();
             StartCoroutine(coroutine());
         }
 
@@ -44,7 +44,7 @@ namespace UI.Interfaces.ShopSystem {
                 });
             StartCoroutine(coroutine());
         } // ReSharper disable Unity.PerformanceAnalysis
-        public void UpdateGearPanel() {
+        public void LoadGearPanel() {
             var curPanelInd = 0;
             if (items.Length > 6) {
                 Debug.LogError("Gears in Shop more than 6!");
@@ -58,24 +58,36 @@ namespace UI.Interfaces.ShopSystem {
                 gearPanel.Model = gear;
                 curPanelInd++;
                 if (gear.rarity > GameManager.shared.game.player.Coin) gearPanel.highLight.enabled = false;
-            } // change gear.rarity to gear.price later
+            }
 
             for (; curPanelInd < _panels.Length; curPanelInd++) _panels[curPanelInd].Show = false;
             container.UpdateLayout();
         }
 
         public void ConfirmButtonEvent() {
-            // StartCoroutine(CoroutineUtility.Delayed(GameManager.shared.game.GoToNextStage));
+            StartCoroutine(CoroutineUtility.Delayed(GameManager.shared.game.GoToNextStage));
+            // GameManager.shared.game.player.AddGear(_selected.Model);
+            // EventLogger.Shared.Log(new EventItemInteract {
+            //     itemId = _selected.Model.id,
+            //     status = "obtained",
+            //     count = 1
+            // });
             Close();
         }
-        
+
+        // private void ChangeSelectedItemTo(UIShopPanel clickedPanel) {
+        //     if (_selected == clickedPanel) return;
+        //     if (_selected != null) _selected.highLight.enabled = false;
+        //     clickedPanel.highLight.enabled = true;
+        //     _selected = clickedPanel;
+        // }
 
         private void PurchaseSelectedGear(UIShopPanel clickedPanel)
         {
-            if (GameManager.shared.game.player.Coin < clickedPanel.Model.rarity) return; // change gear.rarity to gear.price later
-            GameManager.shared.game.player.Coin -= clickedPanel.Model.rarity; // change gear.rarity to gear.price later
+            if (GameManager.shared.game.player.Coin < clickedPanel.Model.rarity) return;
+            GameManager.shared.game.player.Coin -= clickedPanel.Model.rarity;
             GameManager.shared.game.player.AddGear(clickedPanel.Model);
-            UpdateGearPanel();
+            LoadGearPanel();
         }
     }
 }
