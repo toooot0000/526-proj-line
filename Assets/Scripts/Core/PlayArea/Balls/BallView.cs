@@ -1,6 +1,7 @@
 using Core.DisplayArea.Stage.Enemy;
 using Core.DisplayArea.Stage.Player;
 using Model;
+using Tutorials;
 using UnityEngine;
 using Utility;
 using Utility.Bezier;
@@ -11,7 +12,7 @@ namespace Core.PlayArea.Balls{
     
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(BallConfig))]
-    public class BallView : MonoBehaviour{
+    public class BallView : MonoBehaviour, ITutorialControllable{
         public enum State{
             Free,
             Touched,
@@ -21,6 +22,7 @@ namespace Core.PlayArea.Balls{
             Flying,
             Fading,
             Hide,
+            Controlled,
         }
 
         public Vector2 velocity;
@@ -33,6 +35,10 @@ namespace Core.PlayArea.Balls{
 
         public event BallViewEvent OnHitted;
         public event BallViewEvent OnCharged;
+
+        public bool tutorCanBeHit = true;
+        
+        public bool tutorCanBeCircled = true;
 
         public global::Model.Ball Model{
             get => config.modelBall;
@@ -64,6 +70,8 @@ namespace Core.PlayArea.Balls{
 
         public void OnBeingTouched(){
             Debug.Log("Hit Touch!");
+            if (currentState != State.Free && (currentState == State.Controlled && !tutorCanBeHit)) return;
+            _game.player.AddHitBall(config.modelBall);
             if (((Gear)Model.parent).IsComboIng()) {
                 currentState = State.Touched;
             }
@@ -71,12 +79,13 @@ namespace Core.PlayArea.Balls{
                 currentState = State.Combo;
                 _ballBg.color = Color.yellow;
             }
-            _game.player.AddHitBall(config.modelBall);
             OnHitted?.Invoke(this);
         }
 
         public void OnBeingCircled(){
             Debug.Log("Circled!");
+            if (currentState != State.Free || (currentState == State.Controlled && !tutorCanBeCircled)) return;
+            _game.player.AddCircledBall(config.modelBall);
             currentState = State.Circled;
             if (((Gear)Model.parent).IsCharged()) {
                 currentState = State.Touched;
@@ -85,7 +94,6 @@ namespace Core.PlayArea.Balls{
                 currentState = State.Charged;
                 _ballBg.color = Color.blue;
             }
-            _game.player.AddCircledBall(config.modelBall);
             OnCharged?.Invoke(this);
         }
 
@@ -114,12 +122,12 @@ namespace Core.PlayArea.Balls{
             
             var lerp = TweenUtility.Lerp(
                 seconds: seconds,
-                before: null,
+                begin: null,
                 update: i => {
                     i = curve.Evaluate(i);
                     transform.position = BezierLerp.GetPoint(startWorldLocation, p1, p2, targetWorldLocation, i);
                 },
-                finish: () => {
+                complete: () => {
                     currentState = State.Hide;
                     // _ballBg.color = Color.Lerp(bgStartColor, bgEndColor, i);
                     _ballBg.color = bgEndColor;
@@ -138,16 +146,28 @@ namespace Core.PlayArea.Balls{
             
             var lerp = TweenUtility.Lerp(
                 seconds: seconds,
-                before: null,
+                begin: null,
                 update: i => {
                     i = curve.Evaluate(i);
                     _ballBg.color = Color.Lerp(bgStartColor, bgEndColor, i);
                     weaponIcon.color = Color.Lerp(iconStartColor, iconEndColor, i);
                 },
-                finish: () => currentState = State.Hide
+                complete: () => currentState = State.Hide
             );
             StartCoroutine(lerp());
         }
-        
+
+        public void ControlledByTutorial(TutorialBase tutorial){
+            currentState = State.Controlled;
+        }
+
+        public void GainBackControl(TutorialBase tutorial){
+            currentState = State.Hide;
+        }
+
+        public void TutorialSetPosition(Vector3 worldPosition){
+            if (currentState != State.Controlled) return;
+            transform.position = worldPosition;
+        }
     }
 }

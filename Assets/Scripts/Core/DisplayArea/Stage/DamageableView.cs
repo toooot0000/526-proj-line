@@ -7,7 +7,7 @@ using UnityEngine;
 using Utility;
 
 namespace Core.DisplayArea.Stage{
-    public class DamageableView: MonoBehaviour{
+    public abstract class DamageableView: MonoBehaviour{
         public delegate void DamageableDelegate();
         public event DamageableDelegate OnDie;
         
@@ -37,26 +37,14 @@ namespace Core.DisplayArea.Stage{
         public ProgressBar progressBar;
         public PlayerAnimationController animationController;
         public DamageNumberDisplay damageNumberDisplay;
-        public StageManager.DamageWrapper damage;
         public StageManager.StageActionInfoWrapper wrappedActionInfo;
         public ArmorDisplayer armorDisplayer;
 
 
-        public virtual void Attack(){
-            animationController.Play(PlayerAnimation.Attack, 0.07f, wrappedActionInfo.target.TakeDamage); // AnimationEvent => ProcessDamage
-        }
+        public abstract void Attack();
 
-        public virtual void TakeDamage(){
-            damageNumberDisplay.Number = damage.raw.totalPoint;
-            CurrentHp -= damage.raw.totalPoint;
-            if (isDead){
-                damage.target.animationController.Play(PlayerAnimation.Die, () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
-            } else{
-                damage.target.animationController.Play(PlayerAnimation.BeingAttacked, () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
-            }
-        }
-
-
+        public abstract void TakeDamage();
+        
         public virtual void Die(){
             isDead = true;
             OnDie?.Invoke();

@@ -3,6 +3,7 @@ using System.Linq;
 using Core.Common;
 using Core.DisplayArea;
 using Model;
+using Tutorials;
 using UnityEngine;
 using Utility;
 
@@ -10,7 +11,7 @@ using Utility;
  * TODO need to be refactored!
  */
 namespace Core.PlayArea.TouchTracking{
-    public class TouchTracking : MonoBehaviour{
+    public class TouchTracker : MonoBehaviour, ITutorialControllable{
         public float minDistance = 5f;
         public LineRenderer lineRenderer;
         public new Camera camera;
@@ -27,6 +28,10 @@ namespace Core.PlayArea.TouchTracking{
         private CircleDetector _circleDetector;
         private float _currentLineLength = 0;
         private Game _game;
+        private bool _isInTutorial = false;
+
+        public event TutorialControllableEvent OnTouchEnd;
+        public event TutorialControllableEvent OnTouchStart;
         
 
         private void Start(){
@@ -47,6 +52,7 @@ namespace Core.PlayArea.TouchTracking{
             lineRenderer.positionCount = 0;
             _circleDetector.points.Clear();
             _currentLineLength = 0;
+            OnTouchStart?.Invoke(this);
         }
 
         public void StopTracking(){
@@ -54,6 +60,7 @@ namespace Core.PlayArea.TouchTracking{
             _isTracing = false;
             touchCollider.SetEnabled(false);
             if (_game.player.hitBalls.Count == 0 && _game.player.circledBalls.Count == 0) return;
+            if(_isInTutorial) OnTouchEnd?.Invoke(this);
             StartCoroutine(CoroutineUtility.Delayed(() => _game.player.Attack()));
             GameManager.shared.isAcceptingInput = false;
         }
@@ -89,7 +96,7 @@ namespace Core.PlayArea.TouchTracking{
             var worldPosition = camera.ScreenToWorldPoint(new Vector3(inputPosition.x,
                 inputPosition.y,
                 camera.nearClipPlane));
-            worldPosition.z = -.1f;
+            if(!_isInTutorial) worldPosition.z = -0.1f;
             
             var positionCount = lineRenderer.positionCount;
             touchCollider.transform.SetPositionAndRotation(worldPosition, Quaternion.Euler(0, 0, 0));
@@ -120,6 +127,14 @@ namespace Core.PlayArea.TouchTracking{
             // Add length
             _currentLineLength += curSegLength;
             progressBar.Percentage = 100 - _currentLineLength / totalLineLength * 100;
+        }
+
+        public void ControlledByTutorial(TutorialBase tutorial){
+            _isInTutorial = true;
+        }
+
+        public void GainBackControl(TutorialBase tutorial){
+            _isInTutorial = false;
         }
     }
 }

@@ -31,13 +31,13 @@ namespace Core.PlayArea{
         private void PlayAnimation(){
             StartCoroutine(TweenUtility.Lerp(
                 seconds: time,
-                before: null,
+                begin: null,
                 update: i => {
                     var color = Color.Lerp(_startColor, _endColor, curve.Evaluate(i));
                     bg.color = color;
                     textMesh.color = color;
                 },
-                finish: null
+                complete: null
             )());
         }
 

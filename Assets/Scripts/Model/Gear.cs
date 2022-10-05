@@ -66,13 +66,15 @@ namespace Model{
         public bool IsCharged(){
             if (chargeNum == -1) return false;
             if (chargeEffect == null) return false;
-            return (parent as Player)!.circledBalls.Count >= chargeNum;
+            var player = (parent as Player)!;
+            return player.circledBalls.Count >= chargeNum && player.circledBalls.Any(b => b.parent == this);
         }
         
         public bool IsComboIng(){
             if (comboNum == -1) return false;
             if (comboEffect == null) return false;
-            return (parent as Player)!.hitBalls.Count >= comboNum;
+            var player = (parent as Player)!;
+            return player.hitBalls.Count >= comboNum && player.hitBalls.Any(b => b.parent == this) ;
         }
     }
 

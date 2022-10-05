@@ -41,16 +41,16 @@ namespace Utility{
             }
         }
         
-        public static Func<IEnumerator> Lerp(float seconds, Action before, Action<float> update, Action finish){
+        public static Func<IEnumerator> Lerp(float seconds, Action begin, Action<float> update, Action complete){
             IEnumerator Inner(){
-                before?.Invoke();
+                begin?.Invoke();
                 float curTime = 0;
                 while (curTime < seconds) {
                     curTime += Time.deltaTime;
                     update?.Invoke(curTime / seconds);
                     yield return null;
                 }
-                finish?.Invoke();
+                complete?.Invoke();
             }
             return Inner;
         }

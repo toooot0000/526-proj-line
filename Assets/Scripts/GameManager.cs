@@ -13,11 +13,13 @@ public class GameManager : MonoBehaviour{
     public static GameManager shared;
 
     public Game game;
-    public bool isAcceptingInput = true;
-
-    public TutorialBase currentTutorial;
-    
     public Guid uuid = Guid.NewGuid();
+
+    public TutorialManager tutorialManager;
+        
+        
+    public bool isAcceptingInput = true;
+        
     
     private void Awake()
     {

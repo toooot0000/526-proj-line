@@ -19,7 +19,7 @@ namespace Core.DisplayArea.Stage.Enemy{
             }
         }
 
-        public void BindToCurrentEnemy(Action callback){
+        public void BindToCurrentEnemy(Action callback = null){
             isDead = false;
             Model = GameManager.shared.game.CurrentEnemy;
             var model = ((Model.Enemy)Model);
