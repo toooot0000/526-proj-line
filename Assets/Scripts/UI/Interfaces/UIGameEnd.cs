@@ -12,8 +12,8 @@ namespace UI.Interfaces {
             _canvasGroup.alpha = 1;
         }
 
-        public override void Open() {
-            base.Open();
+        public override void Open(object args) {
+            base.Open(args);
             _inAnimation = true;
             var coroutine = TweenUtility.Lerp(0.2f,
                 () => _canvasGroup.alpha = 0,

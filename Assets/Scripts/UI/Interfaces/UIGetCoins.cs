@@ -20,7 +20,7 @@ namespace UI.Interfaces{
         }
 
         public override void Open(object coins) {
-            base.Open();
+            base.Open(coins);
             _inAnimation = true;
             var coroutine = TweenUtility.Lerp(0.2f,
                 () => _canvasGroup.alpha = 0,

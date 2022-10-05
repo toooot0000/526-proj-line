@@ -11,7 +11,7 @@ namespace UI{
 
          public Shade shade;
 
-         public const string ResourcesFolder = "UIs/";
+         public const string ResourcesFolder = "Prefabs/UIs/";
          public static UIManager shared;
 
          private readonly List<UIBase> _uiList = new();
@@ -26,36 +26,10 @@ namespace UI{
          
 
          private void Start() {
-             OpenUI("UIGameStart");
+             // OpenUI("UIGameStart");
          }
 
-         // ReSharper disable Unity.PerformanceAnalysis
-         public UIBase OpenUI(string uiPrefabName){
-             var cur = _uiList.Find(uiBase => uiBase.name == uiPrefabName);
-             if( cur != null){
-                 _uiList.Remove(cur);
-                 _uiList.Add(cur);
-                 return cur;
-             }
-             var ui = Resources.Load<GameObject>($"{ResourcesFolder}{uiPrefabName}");
-             if (ui == null){
-                 Debug.LogError($"Unable to find UI resource: {uiPrefabName}");
-                 return null;
-             }
-             ui = Instantiate(ui, transform);
-             cur = ui.GetComponent<UIBase>();
-             if (cur == null){
-                 Debug.LogError($"UI prefab doesn't have UIBase component! PrefabName = {uiPrefabName}");
-                 return null;
-             }
-             _uiList.Add(cur);
-             shade.SetActive(true);
-             cur.OnClose += RemoveUI;
-             StartCoroutine(CoroutineUtility.Delayed(() => cur.Open()));
-             return cur;
-         }
-         
-         public UIBase OpenUI(string uiPrefabName, object arg1){
+         public UIBase OpenUI(string uiPrefabName, object arg1 = null){
              var cur = _uiList.Find(uiBase => uiBase.name == uiPrefabName);
              if( cur != null){
                  _uiList.Remove(cur);

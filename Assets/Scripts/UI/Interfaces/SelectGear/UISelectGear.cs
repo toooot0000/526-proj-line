@@ -20,7 +20,7 @@ namespace UI.Interfaces.SelectGear {
         }
 
         public override void Open(object gears) {
-            base.Open();
+            base.Open(gears);
             _inAnimation = true;
             var coroutine = TweenUtility.Lerp(0.2f,
                 () => _canvasGroup.alpha = 0,
