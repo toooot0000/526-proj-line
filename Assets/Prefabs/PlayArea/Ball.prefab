@@ -89,7 +89,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 0.7, y: 0.7}
+  m_Size: {x: 0.5, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -110,7 +110,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.25
 --- !u!50 &3584327994911392445
 Rigidbody2D:
   serializedVersion: 4
@@ -145,7 +145,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocity: {x: 0.1, y: 0.1}
-  currentState: 0
   curve:
     serializedVersion: 2
     m_Curve:
@@ -180,6 +179,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   weaponIcon: {fileID: 1621735645257668365}
+  tutorCanBeHit: 1
+  tutorCanBeCircled: 1
   config: {fileID: 3584327994911392439}
 --- !u!114 &3584327994911392439
 MonoBehaviour:

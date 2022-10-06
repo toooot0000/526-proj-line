@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Core.DisplayArea.Stage;
 using Model;
 using UnityEngine;
@@ -83,6 +84,11 @@ namespace Core.PlayArea.Balls{
                 if (ball.Model.type == BallType.Defend) target = stageManager.playerView.transform.position;
                 ball.FlyToLocation(seconds, target);
             }
+        }
+
+        public IEnumerator FlyAllBallsCoroutine(StageManager stageManager, float seconds){
+            FlyAllBalls(stageManager, seconds);
+            yield return new WaitForSeconds(seconds);
         }
 
         private void OnBallHit(BallView view){

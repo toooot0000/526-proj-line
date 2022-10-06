@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Core.DisplayArea.Stage.Enemy;
 using Core.DisplayArea.Stage.Player;
 using Core.PlayArea.Balls;
@@ -17,6 +18,7 @@ namespace Core.DisplayArea.Stage{
         public EnemyView enemyView;
         public BallManager ballManager;
         private bool _isInTutorial;
+        public bool _pause = false;
 
         private Model.Stage _modelStage;
 
@@ -35,83 +37,67 @@ namespace Core.DisplayArea.Stage{
 
         public void ProcessStageActionInfo(StageActionInfoBase info){
             info.Execute();
-            switch (info){
-                case StageActionInfoPlayerAttack attack:
-                    ProcessPlayerAttack(attack);
-                    break;
-                case StageActionInfoEnemyAttack attack:
-                    ProcessEnemyAttack(attack);
-                    break;
-                case StageActionInfoEnemyDefend defend:
-                    ProcessEnemyDefend(defend);
-                    break;
-                case StageActionInfoEnemySpecial special:
-                    ProcessEnemySpecialAttack(special);
-                    break;
-            }
+            playerView.stageActionInfo = info;
+            enemyView.stageActionInfo = info;
+            
+            var procedure = info switch{
+                StageActionInfoPlayerAttack attack => ProcessPlayerAttack(attack),
+                StageActionInfoEnemyAttack attack => ProcessEnemyAttack(attack),
+                StageActionInfoEnemyDefend defend => ProcessEnemyDefend(defend),
+                StageActionInfoEnemySpecial special => ProcessEnemySpecialAttack(special),
+                _ => throw new ArgumentOutOfRangeException(nameof(info), info, null)
+            };
+            StartCoroutine(procedure);
         }
 
-        private void ProcessPlayerAttack(StageActionInfoPlayerAttack info){
-            var dmgWrp = new StageActionInfoWrapper{
-                source = playerView,
-                target = enemyView,
-                actionInfo = info,
-                resolvedCallback = OnPlayerAttackResolved
-            };
-            playerView.wrappedActionInfo = dmgWrp;
-            enemyView.wrappedActionInfo = dmgWrp;
+        private IEnumerator ProcessPlayerAttack(StageActionInfoPlayerAttack info){
+            yield return new WaitWhile(() => _pause);
             ballManager.FlyAllBalls(this, 0.5f);
-            StartCoroutine(CoroutineUtility.Delayed(0.4f, playerView.Attack));
+            yield return new WaitForSeconds(0.4f);
+            yield return new WaitWhile(() => _pause);
+            playerView.Attack(null);
+            yield return CoroutineUtility.Delayed(0.07f, () => enemyView.TakeDamage(null));
+            yield return new WaitWhile(() => _pause);
+            yield return OnPlayerAttackResolved(info);
         }
 
-        private void ProcessEnemyAttack(StageActionInfoEnemyAttack info){
-            var infoWrp = new StageActionInfoWrapper{
-                source = enemyView,
-                target = playerView,
-                actionInfo = info,
-                resolvedCallback = wrapper =>
-                    StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.SwitchTurn))
-            };
-            playerView.wrappedActionInfo = infoWrp;
-            enemyView.wrappedActionInfo = infoWrp;
-            enemyView.Attack();
+        private IEnumerator ProcessEnemyAttack(StageActionInfoEnemyAttack info){
+            yield return new WaitWhile(() => _pause);
+            enemyView.Attack(null);
+            yield return new WaitForSeconds(0.1f);
+            yield return playerView.TakeDamage();
+            yield return new WaitWhile(() => _pause);
+            GameManager.shared.SwitchTurn();
+            yield return new WaitWhile(() => _pause);
         }
 
-        private void ProcessEnemySpecialAttack(StageActionInfoEnemySpecial info){
-            var infoWrp = new StageActionInfoWrapper{
-                source = enemyView,
-                target = playerView,
-                actionInfo = info,
-                resolvedCallback = wrapper =>
-                    StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.SwitchTurn))
-            };
-            playerView.wrappedActionInfo = infoWrp;
-            enemyView.wrappedActionInfo = infoWrp;
-            enemyView.SpecialAttack();
+        private IEnumerator ProcessEnemySpecialAttack(StageActionInfoEnemySpecial info){
+            yield return new WaitWhile(() => _pause);
+            enemyView.SpecialAttack(null);
+            yield return new WaitForSeconds(0.1f);
+            yield return playerView.TakeDamage();
+            yield return new WaitWhile(() => _pause);
+            GameManager.shared.SwitchTurn();
+            yield return new WaitWhile(() => _pause);
         }
 
-        private void ProcessEnemyDefend(StageActionInfoEnemyDefend info){
-            var infoWrp = new StageActionInfoWrapper{
-                source = enemyView,
-                target = null,
-                actionInfo = info,
-                resolvedCallback = wrapper =>
-                    StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.SwitchTurn))
-            };
-            playerView.wrappedActionInfo = infoWrp;
-            enemyView.wrappedActionInfo = infoWrp;
-            enemyView.Defend();
+        private IEnumerator ProcessEnemyDefend(StageActionInfoEnemyDefend info){
+            yield return new WaitWhile(() => _pause);
+            yield return enemyView.Defend();
+            yield return new WaitWhile(() => _pause);
+            GameManager.shared.SwitchTurn();
+            yield return new WaitWhile(() => _pause);
         }
 
-        private void OnPlayerAttackResolved(StageActionInfoWrapper wrapped){
-            var dmg = (wrapped.actionInfo as StageActionInfoPlayerAttack)!.damage;
+        private IEnumerator OnPlayerAttackResolved(StageActionInfoBase info){
+            var dmg = info.damage;
             if (enemyView.isDead){
                 if (dmg.currentGame.currentStage.NextEnemy != null){
                     dmg.currentGame.currentStage.ForwardCurrentEnemy();
                     enemyView.BindToCurrentEnemy();
-                    enemyView.Appear(
-                        () => StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.SwitchTurn))
-                    );
+                    yield return enemyView.Appear();
+                    yield return new WaitWhile(() => _pause);
+                    yield return CoroutineUtility.Delayed(1f, GameManager.shared.SwitchTurn);
                 } else{
                     if (_modelStage.nextStage != -1){
                         if (_modelStage.bonusCoins == -1)
@@ -123,15 +109,13 @@ namespace Core.DisplayArea.Stage{
                     }
                 }
             } else{
-                StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.SwitchTurn));
+                yield return CoroutineUtility.Delayed(1f, GameManager.shared.SwitchTurn);
             }
         }
 
-        public class StageActionInfoWrapper{
-            public StageActionInfoBase actionInfo;
-            public Action<StageActionInfoWrapper> resolvedCallback;
-            public DamageableView source;
-            public DamageableView target;
+        public void TutorSetPause(bool value){
+            if (!_isInTutorial) return;
+            _pause = value;
         }
     }
 }

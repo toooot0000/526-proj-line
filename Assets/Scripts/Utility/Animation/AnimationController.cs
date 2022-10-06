@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
@@ -30,6 +31,11 @@ namespace Utility.Animation{
         public void Play(T anim, Action completeCallback){
             Play(anim);
             StartCoroutine(CoroutineUtility.Delayed(_times[anim], completeCallback));
+        }
+
+        public IEnumerator PlayUntilComplete(T anim){
+            Play(anim);
+            yield return new WaitForSeconds(_times[anim]);
         }
 
         public void Play(T anim, float seconds, Action callback){

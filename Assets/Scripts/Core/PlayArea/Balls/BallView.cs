@@ -1,3 +1,4 @@
+using System.Collections;
 using Model;
 using Tutorials;
 using UnityEngine;
@@ -92,12 +93,14 @@ namespace Core.PlayArea.Balls{
 
         public void OnBeingTouched(){
             if (CurrentState != State.Free && CurrentState == State.Controlled && !tutorCanBeHit) return;
+            if (CurrentState is State.Combo or State.Touched) return;
             _game.player.AddHitBall(config.modelBall);
             OnHitted?.Invoke(this);
         }
 
         public void OnBeingCircled(){
             if (CurrentState != State.Free || (CurrentState == State.Controlled && !tutorCanBeCircled)) return;
+            if (CurrentState is State.Circled or State.Charged) return;
             _game.player.AddCircledBall(config.modelBall);
             OnCharged?.Invoke(this);
         }

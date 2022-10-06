@@ -2,7 +2,7 @@ using System.ComponentModel;
 using UnityEngine;
 using Utility.Animation;
 
-namespace Core.DisplayArea.Stage{
+namespace Core.DisplayArea.Stage.Player{
     [RequireComponent(typeof(Animator))]
     public class PlayerAnimationController : AnimationController<PlayerAnimation>{ }
 

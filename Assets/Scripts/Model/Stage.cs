@@ -11,12 +11,12 @@ namespace Model{
 
         private int _enemyIndex;
 
-        public int bonusCoins = -1;
+        public readonly int bonusCoins = -1;
 
         public int id;
 
 
-        public int nextStage;
+        public readonly int nextStage;
 
         public Stage(GameModel parent, Enemy[] enemies) : base(parent){
             this.enemies = enemies;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Core.DisplayArea.Stage;
 using Core.PlayArea.Balls;
 using Core.PlayArea.TouchTracking;
+using Tutorials.SliceBall;
 using UI;
 using UnityEngine;
 using Utility;

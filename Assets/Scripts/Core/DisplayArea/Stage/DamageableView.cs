@@ -20,7 +20,8 @@ namespace Core.DisplayArea.Stage{
         private int _currentHp;
 
         private IDamageable _model;
-        public StageManager.StageActionInfoWrapper wrappedActionInfo;
+        // public StageManager.StageActionInfoWrapper wrappedActionInfo;
+        public StageActionInfoBase stageActionInfo;
 
         public virtual IDamageable Model{
             set{
@@ -35,21 +36,8 @@ namespace Core.DisplayArea.Stage{
                 _currentHp = value;
                 tmp.text = $"{Math.Max(value, 0).ToString()}/{Model.HpUpLimit.ToString()}";
                 progressBar.Percentage = (float)value / Model.HpUpLimit * 100f;
-                if (_currentHp <= 0) Die();
             }
             get => _currentHp;
-        }
-
-        public event DamageableDelegate OnDie;
-
-
-        public abstract void Attack();
-
-        public abstract void TakeDamage();
-
-        public virtual void Die(){
-            isDead = true;
-            OnDie?.Invoke();
         }
     }
 }

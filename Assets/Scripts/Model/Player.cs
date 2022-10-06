@@ -151,8 +151,8 @@ namespace Model{
             OnDie?.Invoke(currentGame, this);
             currentGame.End();
         }
-
         public void AddGear(Gear gear){
+            gear.parent = this;
             gears.Add(gear);
             OnGearChanged?.Invoke(currentGame, this);
         }

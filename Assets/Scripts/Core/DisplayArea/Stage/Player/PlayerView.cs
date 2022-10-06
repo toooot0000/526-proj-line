@@ -1,4 +1,6 @@
-﻿using Model;
+﻿using System;
+using System.Collections;
+using Model;
 using UI;
 using UnityEngine;
 using Utility;
@@ -18,29 +20,41 @@ namespace Core.DisplayArea.Stage.Player{
             Model = GameManager.shared.game.player;
         }
 
-        public override void Die(){
-            base.Die();
-            StartCoroutine(CoroutineUtility.Delayed(0.5f, () => { UIManager.shared.OpenUI("UIGameEnd"); }));
+        public void Die(Action callback = null){
+            StartCoroutine(CoroutineUtility.Delayed(0.5f, callback));
         }
 
-        public override void Attack(){
+        public void Attack(Action callback){
             animationController.Play(PlayerAnimation.Attack, 0.07f, () => {
-                wrappedActionInfo.target.TakeDamage();
                 armorDisplayer.Number = Model.Armor;
+                callback?.Invoke();
             });
         }
 
-        public override void TakeDamage(){
-            var point = wrappedActionInfo.actionInfo.damage.totalPoint;
+        public IEnumerator Attack(){
+            yield return animationController.PlayUntilComplete(PlayerAnimation.Attack);
+        }
+
+        public void TakeDamage(Action callback){
+            var point = stageActionInfo.damage.totalPoint;
             damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
             CurrentHp = Model.CurrentHp;
             armorDisplayer.Number = Model.Armor;
             if (isDead)
-                animationController.Play(PlayerAnimation.Die,
-                    () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
+                animationController.Play(PlayerAnimation.Die, callback);
             else
-                animationController.Play(PlayerAnimation.BeingAttacked,
-                    () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
+                animationController.Play(PlayerAnimation.BeingAttacked, callback);
+        }
+
+        public IEnumerator TakeDamage(){
+            var point = stageActionInfo.damage.totalPoint;
+            damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
+            CurrentHp = Model.CurrentHp;
+            armorDisplayer.Number = Model.Armor;
+            if (isDead)
+                yield return animationController.PlayUntilComplete(PlayerAnimation.Die);
+            else
+                yield return animationController.PlayUntilComplete(PlayerAnimation.BeingAttacked);
         }
     }
 }

@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using Core.DisplayArea.Stage.Player;
 using Model;
 using UnityEngine;
 
@@ -22,8 +24,12 @@ namespace Core.DisplayArea.Stage.Enemy{
             UpdateIntention();
         }
 
-        public void Appear(Action callback = null){
+        public void Appear(Action callback){
             animationController.Play(PlayerAnimation.Appear, callback);
+        }
+
+        public IEnumerator Appear(){
+            yield return animationController.PlayUntilComplete(PlayerAnimation.Appear);
         }
 
         private void UpdateIntention(){
@@ -38,44 +44,67 @@ namespace Core.DisplayArea.Stage.Enemy{
                 }
             });
         }
-
-        public override void Attack(){
-            animationController.Play(PlayerAnimation.Attack, 0.07f,
-                () => {
-                    UpdateIntention();
-                    wrappedActionInfo.target.TakeDamage();
-                });
+        public void Attack(Action callback){
+            animationController.Play(PlayerAnimation.Attack, 0.07f, ()=> {
+                UpdateIntention();
+                callback?.Invoke();
+            });
         }
-
-        public void Defend(){
+        public IEnumerator Attack(){
+            yield return animationController.PlayUntilComplete(PlayerAnimation.Attack);
+        }
+        public void Defend(Action callback){
             animationController.Play(PlayerAnimation.Defend, () => {
                 armorDisplayer.Number = Model.Armor;
                 UpdateIntention();
-                wrappedActionInfo.resolvedCallback(wrappedActionInfo);
+                callback?.Invoke();
             });
         }
-
-        public void SpecialAttack(){
-            var info = (wrappedActionInfo.actionInfo as StageActionInfoEnemySpecial)!;
-            if (info.damage != null){
-                Attack();
-                armorDisplayer.Number = Model.Armor;
-            } else{
-                Defend();
-            }
+        public IEnumerator Defend(){
+            animationController.Play(PlayerAnimation.Defend);
+            yield return new WaitForSeconds(0.4f);
+            armorDisplayer.Number = Model.Armor;
+            UpdateIntention();
         }
 
-        public override void TakeDamage(){
-            var point = wrappedActionInfo.actionInfo.damage.totalPoint;
+        public void SpecialAttack(Action callback){
+            var info = (stageActionInfo as StageActionInfoEnemySpecial)!;
+            if (info.damage != null){
+                Attack(null);
+                armorDisplayer.Number = Model.Armor;
+            } else{
+                Defend(null);
+            }
+        }
+        public IEnumerator SpecialAttack(){
+            var info = (stageActionInfo as StageActionInfoEnemySpecial)!;
+            if (info.damage != null){
+                yield return Attack();
+            } else{
+                yield return Defend();
+            }
+        }
+        
+        public void TakeDamage(Action callback){
+            var point = stageActionInfo.damage.totalPoint;
             damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
             CurrentHp = Model.CurrentHp;
             armorDisplayer.Number = Model.Armor;
             if (isDead)
-                animationController.Play(PlayerAnimation.Die,
-                    () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
+                animationController.Play(PlayerAnimation.Die, callback);
             else
-                animationController.Play(PlayerAnimation.BeingAttacked,
-                    () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
+                animationController.Play(PlayerAnimation.BeingAttacked, callback);
+        }
+
+        public IEnumerator TakeDamage(){
+            var point = stageActionInfo.damage.totalPoint;
+            damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
+            CurrentHp = Model.CurrentHp;
+            armorDisplayer.Number = Model.Armor;
+            if (isDead)
+                yield return animationController.PlayUntilComplete(PlayerAnimation.Die);
+            else
+                yield return animationController.PlayUntilComplete(PlayerAnimation.BeingAttacked);
         }
     }
 }
