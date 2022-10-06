@@ -22,11 +22,11 @@ namespace Core.DisplayArea.Stage{
 
         private Model.Stage _modelStage;
 
-        public void ControlledByTutorial(TutorialBase tutorial){
+        public void HandOverControlTo(TutorialBase tutorial){
             _isInTutorial = true;
         }
 
-        public void GainBackControl(TutorialBase tutorial){
+        public void GainBackControlFrom(TutorialBase tutorial){
             _isInTutorial = false;
         }
 
@@ -36,10 +36,8 @@ namespace Core.DisplayArea.Stage{
         }
 
         public void ProcessStageActionInfo(StageActionInfoBase info){
-            info.Execute();
             playerView.stageActionInfo = info;
             enemyView.stageActionInfo = info;
-            
             var procedure = info switch{
                 StageActionInfoPlayerAttack attack => ProcessPlayerAttack(attack),
                 StageActionInfoEnemyAttack attack => ProcessEnemyAttack(attack),
@@ -52,17 +50,20 @@ namespace Core.DisplayArea.Stage{
 
         private IEnumerator ProcessPlayerAttack(StageActionInfoPlayerAttack info){
             yield return new WaitWhile(() => _pause);
+            info.Execute();
             ballManager.FlyAllBalls(this, 0.5f);
             yield return new WaitForSeconds(0.4f);
             yield return new WaitWhile(() => _pause);
             playerView.Attack(null);
             yield return CoroutineUtility.Delayed(0.07f, () => enemyView.TakeDamage(null));
+            GameManager.shared.tutorialManager.LoadTutorial("TutorialDisplay");
             yield return new WaitWhile(() => _pause);
             yield return OnPlayerAttackResolved(info);
         }
 
         private IEnumerator ProcessEnemyAttack(StageActionInfoEnemyAttack info){
             yield return new WaitWhile(() => _pause);
+            info.Execute();
             enemyView.Attack(null);
             yield return new WaitForSeconds(0.1f);
             yield return playerView.TakeDamage();
@@ -73,6 +74,7 @@ namespace Core.DisplayArea.Stage{
 
         private IEnumerator ProcessEnemySpecialAttack(StageActionInfoEnemySpecial info){
             yield return new WaitWhile(() => _pause);
+            info.Execute();
             enemyView.SpecialAttack(null);
             yield return new WaitForSeconds(0.1f);
             yield return playerView.TakeDamage();
@@ -83,6 +85,7 @@ namespace Core.DisplayArea.Stage{
 
         private IEnumerator ProcessEnemyDefend(StageActionInfoEnemyDefend info){
             yield return new WaitWhile(() => _pause);
+            info.Execute();
             yield return enemyView.Defend();
             yield return new WaitWhile(() => _pause);
             GameManager.shared.SwitchTurn();

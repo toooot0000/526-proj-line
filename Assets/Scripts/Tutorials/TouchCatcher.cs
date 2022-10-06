@@ -7,8 +7,11 @@ namespace Tutorials{
     public class TouchCatcher : MonoBehaviour{
         public Collider2D col;
         public TextMeshProUGUI mesh;
-
-        public bool Enable{
+        
+        /// <summary>
+        /// Controlling show/hide
+        /// </summary>
+        public bool Enabled{
             set{
                 col.enabled = value;
                 mesh.enabled = value;
@@ -18,10 +21,10 @@ namespace Tutorials{
         }
 
 
-        private void OnMouseDown(){
-            OnTouched?.Invoke();
+        private void OnMouseUp(){
+            OnTouched?.Invoke(null);
         }
 
-        public event Action OnTouched;
-    }
+        public event TutorialControllableEvent OnTouched;
+    } 
 }

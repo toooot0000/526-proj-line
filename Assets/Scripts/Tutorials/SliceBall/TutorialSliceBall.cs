@@ -30,23 +30,19 @@ namespace Tutorials.SliceBall{
         private TouchTracker _tracker;
 
         protected override StepBase[] Steps{ get; } = new StepBase[]{
-            new Step1(),
-            new Step2()
+            new Step1()
         };
-        public override void Load(TutorialContextBase context){
-            // 1. 重置球的位置; attack: local(0, 0); defend: local(1, 1)
-            // 2. 
-            var balls = ((TutorialContextSliceBall)context).ballManager.balls;
+        public override void Load(TutorialManager mng){
+            var balls = mng.ballManager.balls;
             _attackBallView = balls.First(b => b.Model.type == BallType.Physics);
             _defendBallView = balls.First(b => b.Model.type == BallType.Defend);
-            _tracker = ((TutorialContextSliceBall)context).tracker;
-            base.Load(context);
+            _tracker = mng.tracker;
+            base.Load(mng);
         }
 
         /// <summary>
         ///     Show how to slice ball
         /// </summary>
         private partial class Step1 : StepBase{ }
-        private partial class Step2 : StepBase{ }
     }
 }

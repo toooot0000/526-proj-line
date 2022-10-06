@@ -26,6 +26,14 @@ namespace Tutorials{
             get => _positions;
         }
 
+        public bool Enabled{
+            set{
+                pointerSpr.enabled = value;
+                enabled = value;
+            }
+            get => enabled;
+        }
+
         private void Update(){
             if (!_isMoving) return;
             if (Positions.Length <= 1) return;

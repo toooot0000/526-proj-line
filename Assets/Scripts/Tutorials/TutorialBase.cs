@@ -13,6 +13,7 @@ namespace Tutorials{
         private const float HighLightZIndex = -190;
         public string nextTutorialName;
         public float nextDelay = 0.1f;
+        protected TutorialManager tutorialManager;
         
         private readonly Dictionary<GameObject, Vector3> _positions = new();
         protected abstract StepBase[] Steps{ get; }
@@ -21,7 +22,8 @@ namespace Tutorials{
         public event TutorialEvent OnLoad;
         public event TutorialEvent OnComplete;
 
-        public virtual void Load(TutorialContextBase context){
+        public virtual void Load(TutorialManager mng){
+            tutorialManager = mng;
             OnLoad?.Invoke(this);
             _currentStepIndex = 0;
             CurrentStep().SetUp(this);
@@ -42,7 +44,7 @@ namespace Tutorials{
         }
 
         protected void MoveToNextStep(){
-            _currentStepIndex = Math.Min(Steps.Length + 1, _currentStepIndex + 1);
+            _currentStepIndex = Math.Min(Steps.Length, _currentStepIndex + 1);
         }
         protected StepBase CurrentStep() => _currentStepIndex >= Steps.Length ? null : Steps[_currentStepIndex];
 

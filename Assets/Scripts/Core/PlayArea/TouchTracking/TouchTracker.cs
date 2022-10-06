@@ -1,9 +1,11 @@
+using System.Collections;
 using System.Linq;
 using Core.Common;
 using Core.DisplayArea.Stage;
 using Model;
 using Tutorials;
 using UnityEngine;
+using Utility;
 
 /*
  * TODO need to be refactored!
@@ -24,6 +26,7 @@ namespace Core.PlayArea.TouchTracking{
         private float _currentLineLength;
         private Game _game;
         private bool _isInTutorial;
+        public bool tutorKeepLine = false;
 
 
         private bool _isTracing;
@@ -57,11 +60,11 @@ namespace Core.PlayArea.TouchTracking{
             StopTracking();
         }
 
-        public void ControlledByTutorial(TutorialBase tutorial){
+        public void HandOverControlTo(TutorialBase tutorial){
             _isInTutorial = true;
         }
 
-        public void GainBackControl(TutorialBase tutorial){
+        public void GainBackControlFrom(TutorialBase tutorial){
             _isInTutorial = false;
         }
 
@@ -83,8 +86,18 @@ namespace Core.PlayArea.TouchTracking{
             touchCollider.SetEnabled(false);
             if (_game.player.hitBalls.Count == 0 && _game.player.circledBalls.Count == 0) return;
             if (_isInTutorial) OnTouchEnd?.Invoke(this);
+            StartCoroutine(HideLine());
             GameManager.shared.OnPlayerFinishInput();
         }
+
+        private IEnumerator HideLine(){
+            if (_isInTutorial){
+                yield return new WaitWhile(() => tutorKeepLine);
+            }
+            yield return CoroutineUtility.Delayed(0.1f, () => lineRenderer.positionCount = 0);
+        }
+        
+        
 
         private Vector2 GetCurrentTouchPosition(){
             if (Input.touchCount == 0) return Vector2.zero;

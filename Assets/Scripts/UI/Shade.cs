@@ -4,6 +4,10 @@ using Utility;
 namespace UI{
     public class Shade : MonoBehaviour{
         private SpriteRenderer _renderer;
+        private Coroutine _coroutine;
+        public float maxShade = 0.5f;
+        public float transitionTime = 0.2f;
+        public Color shadeColor = Color.black;
 
         private void Start(){
             _renderer = GetComponent<SpriteRenderer>();
@@ -14,23 +18,24 @@ namespace UI{
             if (val){
                 if (gameObject.activeSelf) return;
                 gameObject.SetActive(true);
-                var col = _renderer.color;
-                StartCoroutine(
+                if(_coroutine!=null) StopCoroutine(_coroutine);
+                _coroutine = StartCoroutine(
                     TweenUtility.Lerp(
-                        0.2f,
-                        () => _renderer.color = new Color(col.r, col.g, col.b, 0),
-                        i => _renderer.color = new Color(col.r, col.g, col.b, 0.5f * i),
+                        transitionTime,
+                        () => _renderer.color = new Color(shadeColor.r, shadeColor.g, shadeColor.b, 0),
+                        i => _renderer.color = new Color(shadeColor.r, shadeColor.g, shadeColor.b, maxShade * i),
                         () => { }
                     )()
                 );
             } else{
                 if (!gameObject.activeSelf) return;
-                var col = _renderer.color;
-                StartCoroutine(
+                if(_coroutine!=null) StopCoroutine(_coroutine);
+                StopCoroutine(_coroutine);
+                _coroutine = StartCoroutine(
                     TweenUtility.Lerp(
-                        0.2f,
-                        () => _renderer.color = new Color(col.r, col.g, col.b, 0.5f),
-                        i => _renderer.color = new Color(col.r, col.g, col.b, 0.5f * (1 - i)),
+                        transitionTime,
+                        () => _renderer.color = new Color(shadeColor.r, shadeColor.g, shadeColor.b, maxShade),
+                        i => _renderer.color = new Color(shadeColor.r, shadeColor.g, shadeColor.b, maxShade * (1 - i)),
                         () => gameObject.SetActive(false)
                     )()
                 );

@@ -71,11 +71,11 @@ namespace Core.PlayArea.Balls{
             _rectTransform.position += (Vector3)velocity * Time.deltaTime;
         }
 
-        public void ControlledByTutorial(TutorialBase tutorial){
+        public void HandOverControlTo(TutorialBase tutorial){
             CurrentState = State.Controlled;
         }
 
-        public void GainBackControl(TutorialBase tutorial){
+        public void GainBackControlFrom(TutorialBase tutorial){
             CurrentState = State.Hide;
         }
 

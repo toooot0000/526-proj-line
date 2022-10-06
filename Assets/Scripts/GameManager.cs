@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour{
     public Game game;
     public Guid uuid = Guid.NewGuid();
 
+    private int _currentTurnNum = 0;
+
 
     private void Awake(){
         if (shared != null) Destroy(gameObject);
@@ -35,6 +37,7 @@ public class GameManager : MonoBehaviour{
         PreInit();
         game ??= new Game();
         stageManager.OnStageLoaded(game.currentStage);
+        SwitchToPlayerTurn();
     }
 
     private void PreInit(){
@@ -62,11 +65,13 @@ public class GameManager : MonoBehaviour{
     }
 
     public void GoToNextStage(){
+        _currentTurnNum = 0;
         if (game.currentStage.nextStage == -1)
             Complete();
         else{
             game.LoadStage(game.currentStage.nextStage);
             stageManager.OnStageLoaded(game.currentStage);
+            SwitchToPlayerTurn();
         }
     }
 
@@ -79,7 +84,11 @@ public class GameManager : MonoBehaviour{
     }
 
     private void SwitchToPlayerTurn(){
+        _currentTurnNum++;
         isAcceptingInput = true;
+        if (_currentTurnNum == 2){
+            tutorialManager.LoadTutorial("TutorialTurn2");
+        }
     }
 
     private void SwitchToEnemyTurn(){

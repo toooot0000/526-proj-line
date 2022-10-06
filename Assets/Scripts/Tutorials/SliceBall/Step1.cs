@@ -5,14 +5,14 @@ namespace Tutorials.SliceBall{
         private partial class Step1: StepBase{
             public override void SetUp(TutorialBase tutorial){
                 var ttr = (TutorialSliceBall)tutorial;
-                ttr._attackBallView.ControlledByTutorial(ttr);
+                ttr._attackBallView.HandOverControlTo(ttr);
                 ttr._attackBallView.tutorCanBeCircled = false;
 
-                ttr._defendBallView.ControlledByTutorial(ttr);
+                ttr._defendBallView.HandOverControlTo(ttr);
                 ttr._defendBallView.tutorCanBeHit = false;
                 ttr._defendBallView.tutorCanBeCircled = false;
 
-                ttr._tracker.ControlledByTutorial(ttr);
+                ttr._tracker.HandOverControlTo(ttr);
 
                 ttr.LiftToFront(ttr._attackBallView.gameObject);
                 ttr.LiftToFront(ttr._tracker.gameObject, -1);
@@ -23,21 +23,17 @@ namespace Tutorials.SliceBall{
                 position =
                     new Vector3(ballPosition.x, ballPosition.y, position.z);
                 attackBallTransform.position = position;
-                ttr._defendBallView.transform.position = position + new Vector3(0, -1);
+                ttr._defendBallView.transform.position = position + new Vector3(0, -1.2f);
                 ttr.movingPointer.Positions = new[]{ ttr.start.position, ttr.end.position };
                 ttr.movingPointer.StartMoving();
-                
-                
-                
-                
                 ttr._tracker.OnTouchEnd += ttr.StepComplete;
             }
 
             public override void Complete(TutorialBase tutorial){
                 var ttr = (TutorialSliceBall)tutorial;
-                ttr._attackBallView.GainBackControl(ttr);
-                ttr._defendBallView.GainBackControl(ttr);
-                ttr._tracker.GainBackControl(ttr);
+                ttr._attackBallView.GainBackControlFrom(ttr);
+                ttr._defendBallView.GainBackControlFrom(ttr);
+                ttr._tracker.GainBackControlFrom(ttr);
                 ttr.PutToBack(ttr._attackBallView.gameObject);
                 ttr.PutToBack(ttr._tracker.gameObject);
                 ttr._tracker.OnTouchEnd -= ttr.StepComplete;

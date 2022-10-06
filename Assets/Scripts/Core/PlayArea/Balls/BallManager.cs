@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using Core.DisplayArea.Stage;
 using Model;
+using Tutorials;
 using UnityEngine;
 
 namespace Core.PlayArea.Balls{
-    public class BallManager : MonoBehaviour{
+    public class BallManager : MonoBehaviour, ITutorialControllable{
         public GameObject ballPrefab;
         public int randomSpawnNumber = 5;
         public ComboDisplayer comboDisplayer;
         public readonly List<BallView> balls = new();
+
+        private bool _isInTutorial = false;
 
 
         private void Start(){
@@ -112,6 +115,20 @@ namespace Core.PlayArea.Balls{
         private void OnBallCircled(BallView view){
             view.CurrentState = BallView.State.Circled;
             UpdateBallState();
+        }
+
+        public void HandOverControlTo(TutorialBase tutorial){
+            _isInTutorial = true;
+            foreach (var ball in balls){
+                ball.HandOverControlTo(tutorial);
+            }
+        }
+
+        public void GainBackControlFrom(TutorialBase tutorial){
+            _isInTutorial = false;
+            foreach (var ball in balls){
+                ball.GainBackControlFrom(tutorial);
+            }
         }
     }
 }
