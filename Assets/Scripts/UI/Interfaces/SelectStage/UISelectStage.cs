@@ -10,7 +10,6 @@ namespace UI.Interfaces.SelectStage
     {
         
         public Stage currentStage;
-        public int _selectedStageId;
         public UIContainerFlexBox container;
         private CanvasGroup _canvasGroup;
         private bool _inAnimation;
@@ -64,7 +63,6 @@ namespace UI.Interfaces.SelectStage
                 stagePanel.OnClick += ChangeSelectedItemTo;
                 stagePanel.Show = true; 
                 stagePanel.Model = nextstage;
-                _selectedStageId = nextstage.id;
                 curPanelInd++;
             }
 
@@ -74,14 +72,12 @@ namespace UI.Interfaces.SelectStage
         
         public void ConfirmButtonEvent()
         {
-            GameManager.shared.game.LoadStage(_selectedStageId);
+            GameManager.shared.game.LoadStage(_selected.Model.id);
             Close();
         }
         
         private void ChangeSelectedItemTo(UIStagePanel clickedPanel)
         {
-            //var stage = clickedPanel.Model.nextStageChoice[_selectedStageId];
-            
             if (_selected == clickedPanel) return;
             if (_selected != null) _selected.highLight.enabled = false;
             clickedPanel.highLight.enabled = true;
