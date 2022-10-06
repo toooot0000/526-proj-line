@@ -37,8 +37,9 @@ namespace Model{
         
 
         public int nextStage = 0;
-
+        public String desc;
         public int bonusCoins = -1;
+        public Stage[] nextStageChoice;
 
         public Stage(GameModel parent, Enemy[] enemies) : base(parent)
         {
@@ -50,7 +51,13 @@ namespace Model{
             var info = CsvLoader.TryToLoad("Configs/stages", id);
             if (info == null) return;
             id = (int)info["id"];
+            desc = info["desc"] as string;
             nextStage = (int)info["next_stage"];
+            if (((string)info["next_stage_choices"]).Length != 0)
+            {
+                nextStageChoice = ((string)info["next_stage_choices"])!.Split(";")
+                    .Select((s => new Stage(parent, IntUtility.ParseString(s)))).ToArray();
+            }
             enemies = (info["enemies"] as string)!.Split(";").Select((s => new Enemy(parent, IntUtility.ParseString(s)) )).ToArray();
             if (((string)info["bonus_gears"]).Length != 0){
                 bonusGears = ((string)info["bonus_gears"])!.Split(";").Select((s => new Gear(parent, IntUtility.ParseString(s)) )).ToArray();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BackendApi;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -58,7 +59,7 @@ namespace Model{
             OnTurnChanged?.Invoke(this);
         }
 
-        private void LoadStage(int id) {
+        public void LoadStage(int id) {
             currentStage = new Stage(this, id);
             OnStageLoaded?.Invoke(this);
             turn =  Turn.Player;
@@ -83,6 +84,7 @@ namespace Model{
             OnGameComplete?.Invoke(this);
         }
 
+        [Obsolete("use Load Stage")]
         public void GoToNextStage() {
             if (currentStage.nextStage == -1) {
                 Complete();
