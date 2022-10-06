@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,21 +7,18 @@ namespace Model{
 
     public delegate void SimpleModelEvent(Game game);
 
-    public class Game : GameModel{
-        public enum Turn{
+    public class Game: GameModel{
+
+        public enum Turn {
             Player,
-            Enemy
+            Enemy,
         }
+
+        public Turn turn = Turn.Player;
+        
+        public Player player;
 
         public Stage currentStage;
-        public Player player;
-        public Turn turn = Turn.Player;
-
-        public Game(GameModel parent = null) : base(parent){
-            currentGame = this;
-            InitPlayer();
-            LoadStage(0);
-        }
 
         public bool HasNextStage => currentStage.nextStage != -1;
         public Enemy CurrentEnemy => currentStage.CurrentEnemy;
@@ -30,6 +28,13 @@ namespace Model{
         public event SimpleModelEvent OnStageLoaded;
         public event SimpleModelEvent OnGameRestart;
         public event SimpleModelEvent OnPlayerInit;
+
+
+        public Game(GameModel parent = null) : base(parent){
+            currentGame = this;
+            InitPlayer();
+            LoadStage(0);
+        }
 
         public List<Ball> GetAllSkillBalls(){
             var ret = new List<Ball>();
