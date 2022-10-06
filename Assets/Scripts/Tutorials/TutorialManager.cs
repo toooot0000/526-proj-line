@@ -6,6 +6,7 @@ using Core.PlayArea.TouchTracking;
 using Tutorials.Display;
 using Tutorials.SliceBall;
 using UI;
+using UI.Common;
 using UnityEngine;
 using Utility;
 
@@ -24,7 +25,9 @@ namespace Tutorials{
         private string _curName;
 
         private void Update(){
-            if (Input.GetKeyUp(KeyCode.A)) LoadTutorial("TutorialSliceBall");
+            if (Input.GetKeyUp(KeyCode.A)){
+                LoadTutorial("TutorialSliceBall");
+            }
         }
 
         public TutorialBase LoadTutorial(string tutorialName){

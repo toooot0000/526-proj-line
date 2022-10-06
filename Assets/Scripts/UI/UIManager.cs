@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Tutorials;
 using UI.Interfaces;
 using UnityEngine;
 using Utility;
@@ -6,23 +7,17 @@ using Utility;
 namespace UI{
     public delegate void UINormalEvent(UIBase ui);
 
-    public class UIManager : MonoBehaviour{
-        public const string ResourcesFolder = "Prefabs/UIs/";
+    public class UIManager : MonoBehaviour, ITutorialControllable{
+        private const string ResourcesFolder = "Prefabs/UIs/";
         public static UIManager shared;
-
         public Shade shade;
-
         private readonly List<UIBase> _uiList = new();
-
+        private bool _isInTutorial = false;
+        public readonly List<UIComponent> uiComponents = new();
 
         private void Awake(){
             if (shared) Destroy(this);
             shared = this;
-        }
-
-
-        private void Start(){
-            // OpenUI("UIGameStart");
         }
 
         public UIBase OpenUI(string uiPrefabName, object arg1 = null){
@@ -61,6 +56,28 @@ namespace UI{
 
         public void Open(string interfaceName){
             OpenUI(interfaceName);
+        }
+
+        public void RegisterComponent(UIComponent component){
+            uiComponents.Add(component);
+        }
+
+        public void HandOverControlTo(TutorialBase tutorial){
+            _isInTutorial = true;
+            foreach (var comp in uiComponents){
+                comp.HandOverControlTo(tutorial);
+            }
+        }
+
+        public void GainBackControlFrom(TutorialBase tutorial){
+            _isInTutorial = false;
+            foreach (var comp in uiComponents){
+                comp.GainBackControlFrom(tutorial);
+            }
+        }
+
+        public void SetUIVisibility(bool value){
+            //TODO 
         }
     }
 }
