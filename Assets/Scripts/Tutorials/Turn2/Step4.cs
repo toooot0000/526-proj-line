@@ -11,6 +11,7 @@ namespace Tutorials.Turn2{
             public override void Complete(TutorialBase tutorial){
                 var ttr = (TutorialTurn2)tutorial;
                 ttr.meshes[3].enabled = false;
+                ttr.tutorialManager.tracker.tutorKeepLine = false;
                 ttr.touchCatcher.OnTouched -= ttr.StepComplete;
             }
         }

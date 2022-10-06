@@ -23,7 +23,9 @@ namespace Tutorials.SliceBall{
                 position =
                     new Vector3(ballPosition.x, ballPosition.y, position.z);
                 attackBallTransform.position = position;
-                ttr._defendBallView.transform.position = position + new Vector3(0, -1.2f);
+                var defTransform = ttr._defendBallView.transform;
+                var positionZ = defTransform.position.z;
+                defTransform.position = new Vector3( position.x, position.y -1.2f, positionZ);
                 ttr.movingPointer.Positions = new[]{ ttr.start.position, ttr.end.position };
                 ttr.movingPointer.StartMoving();
                 ttr._tracker.OnTouchEnd += ttr.StepComplete;

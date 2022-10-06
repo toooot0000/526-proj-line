@@ -13,7 +13,6 @@ namespace Tutorials.Turn2{
                 ttr.meshes[2].enabled = false;
                 ttr.touchCatcher.Enabled = false;
                 ttr.touchCatcher.OnTouched -= ttr.StepComplete;
-                ttr.tutorialManager.tracker.tutorKeepLine = false;
                 ttr.PutToBack(ttr._attBallView.gameObject);
                 ttr.PutToBack(ttr._defBallView.gameObject);
             }

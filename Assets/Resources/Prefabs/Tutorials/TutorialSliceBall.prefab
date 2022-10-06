@@ -310,46 +310,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4306267107249729283}
     m_Modifications:
-    - target: {fileID: 2797341066315881125, guid: 823a8fb701d6ff44688723a67d986536, type: 3}
-      propertyPath: repeat
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2797341066315881125, guid: 823a8fb701d6ff44688723a67d986536, type: 3}
-      propertyPath: curve.m_Curve.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2797341066315881125, guid: 823a8fb701d6ff44688723a67d986536, type: 3}
-      propertyPath: curve.m_Curve.Array.data[1].time
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2797341066315881125, guid: 823a8fb701d6ff44688723a67d986536, type: 3}
-      propertyPath: curve.m_Curve.Array.data[1].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2797341066315881125, guid: 823a8fb701d6ff44688723a67d986536, type: 3}
-      propertyPath: curve.m_Curve.Array.data[0].inSlope
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2797341066315881125, guid: 823a8fb701d6ff44688723a67d986536, type: 3}
-      propertyPath: curve.m_Curve.Array.data[1].inSlope
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2797341066315881125, guid: 823a8fb701d6ff44688723a67d986536, type: 3}
-      propertyPath: curve.m_Curve.Array.data[0].outSlope
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2797341066315881125, guid: 823a8fb701d6ff44688723a67d986536, type: 3}
-      propertyPath: curve.m_Curve.Array.data[1].outSlope
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2797341066315881125, guid: 823a8fb701d6ff44688723a67d986536, type: 3}
-      propertyPath: curve.m_Curve.Array.data[0].tangentMode
-      value: 34
-      objectReference: {fileID: 0}
-    - target: {fileID: 2797341066315881125, guid: 823a8fb701d6ff44688723a67d986536, type: 3}
-      propertyPath: curve.m_Curve.Array.data[1].tangentMode
-      value: 34
-      objectReference: {fileID: 0}
     - target: {fileID: 5178673640761828035, guid: 823a8fb701d6ff44688723a67d986536, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -396,7 +356,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5178673640761828035, guid: 823a8fb701d6ff44688723a67d986536, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -45
       objectReference: {fileID: 0}
     - target: {fileID: 5178673640761828035, guid: 823a8fb701d6ff44688723a67d986536, type: 3}
       propertyPath: m_LocalRotation.w
