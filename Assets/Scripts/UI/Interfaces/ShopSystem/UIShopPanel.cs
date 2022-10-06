@@ -7,7 +7,9 @@ namespace UI.Interfaces.ShopSystem {
     public delegate void ClickEvent(UIShopPanel panel);
 
     public class UIShopPanel : MonoBehaviour {
-        public TextMeshProUGUI text;
+        public TextMeshProUGUI name;
+        public TextMeshProUGUI price;
+        public TextMeshProUGUI desc;
         public Image image;
         public Image highLight;
         private CanvasGroup _group;
@@ -19,7 +21,9 @@ namespace UI.Interfaces.ShopSystem {
             set {
                 _model = value;
                 image.sprite = Resources.Load<Sprite>(value.imgPath);
-                text.text = value.desc;
+                name.text = value.name;
+                price.text = value.rarity.ToString(); // change to value.price later
+                desc.text = value.desc;
             }
             get => _model;
         }
