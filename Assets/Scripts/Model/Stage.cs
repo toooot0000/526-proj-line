@@ -40,7 +40,7 @@ namespace Model{
         public String desc;
         public int bonusCoins = -1;
         public Stage[] nextStageChoice;
-
+        //public int[] nextStageChoiceInt;
         public Stage(GameModel parent, Enemy[] enemies) : base(parent)
         {
             this.enemies = enemies;
