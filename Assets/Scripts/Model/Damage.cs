@@ -1,28 +1,27 @@
 ﻿using System;
 
 namespace Model{
-    
     public interface IDamageable{
-        public void TakeDamage(Damage damage);
         public int CurrentHp{ get; set; }
         public int HpUpLimit{ get; set; }
         public int Armor{ get; set; }
+        public void TakeDamage(Damage damage);
     }
-    
-    [Serializable]
-    public class Damage: GameModel{
 
+    [Serializable]
+    public class Damage : GameModel{
         public enum Type{
             Physics,
-            Magic,
+            Magic
         }
-        
+
         public int totalPoint;
+
         // public int hpDeduction;
         // public int armorDeduction;
         public Type type;
-        public IDamageable target;
         public IDamageable source;
+        public IDamageable target;
         public Damage(GameModel parent) : base(parent){ }
     }
 }

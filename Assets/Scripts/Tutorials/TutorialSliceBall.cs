@@ -1,36 +1,40 @@
 using System;
 using System.Linq;
+using Core.DisplayArea.Stage;
+using Core.DisplayArea.Stage.Enemy;
+using Core.DisplayArea.Stage.Player;
 using Core.PlayArea.Balls;
 using Core.PlayArea.TouchTracking;
 using Model;
-using UI;
 using UnityEngine;
 
 namespace Tutorials{
-
     public class TutorialContextSliceBall : TutorialContextBase{
         public BallManager ballManager;
+        public StageManager stageManager;
         public TouchTracker tracker;
     }
 
-    
-    
-    public class TutorialSliceBall: TutorialBase{
+
+    public class TutorialSliceBall : TutorialBase{
         public MovingPointer movingPointer;
-        
-        private BallView _attackBallView;
-        private BallView _defendBallView;
-        private TouchTracker _tracker;
 
         public Transform start;
         public Transform end;
         public Transform ballPoint;
-        
-        private readonly TutorialStepBase[] _steps ={
-            new TutorialSliceBallStep1()
+
+
+        private readonly StepBase<TutorialSliceBall>[] _steps ={
+            new SliceBallStep1()
         };
 
-        private int _currentStepIndex = 0;
+        private BallView _attackBallView;
+
+        private int _currentStepIndex;
+        private BallView _defendBallView;
+        private EnemyView _enemy;
+        private PlayerView _player;
+        private TouchTracker _tracker;
 
         public override void Load(TutorialContextBase context){
             base.Load(context);
@@ -47,27 +51,26 @@ namespace Tutorials{
         private void WrappedComplete(ITutorialControllable controllable){
             _steps[_currentStepIndex].Complete(this);
             _currentStepIndex++;
-            if (_currentStepIndex == _steps.Length){
+            if (_currentStepIndex == _steps.Length)
                 Complete();
-            } else{
+            else
                 _steps[_currentStepIndex].SetUp(this);
-            }
         }
-        
-        
-        private class TutorialSliceBallStep1 : TutorialStepBase{
-            public override void SetUp(TutorialBase tutorial){
-                var ttr = (TutorialSliceBall)tutorial;
-            
+
+        /// <summary>
+        ///     Show how to slice ball
+        /// </summary>
+        private class SliceBallStep1 : StepBase<TutorialSliceBall>{
+            public override void SetUp(TutorialSliceBall ttr){
                 ttr._attackBallView.ControlledByTutorial(ttr);
-                ttr._attackBallView.tutorCanBeCircled = false; 
-            
+                ttr._attackBallView.tutorCanBeCircled = false;
+
                 ttr._defendBallView.ControlledByTutorial(ttr);
                 ttr._defendBallView.tutorCanBeHit = false;
                 ttr._defendBallView.tutorCanBeCircled = false;
-            
+
                 ttr._tracker.ControlledByTutorial(ttr);
-             
+
                 ttr.LiftToFront(ttr._attackBallView.gameObject);
                 ttr.LiftToFront(ttr._tracker.gameObject, -1);
 
@@ -78,7 +81,7 @@ namespace Tutorials{
                     new Vector3(ballPosition.x, ballPosition.y, position.z);
                 attackBallTransform.position = position;
                 ttr._defendBallView.transform.position = position + new Vector3(0, -1);
-                
+
                 // movingPointer.startPosition = start.position;
                 // movingPointer.endPosition = end.position;
                 ttr.movingPointer.Positions = new[]{ ttr.start.position, ttr.end.position };
@@ -86,14 +89,27 @@ namespace Tutorials{
 
                 ttr._tracker.OnTouchEnd += ttr.WrappedComplete;
             }
-            public override void Complete(TutorialBase tutorial){
-                var ttr = (TutorialSliceBall)tutorial;
-                ttr._attackBallView.GainBackControl(tutorial);
-                ttr._defendBallView.GainBackControl(tutorial);
-                ttr._tracker.GainBackControl(tutorial);
+
+            public override void Complete(TutorialSliceBall ttr){
+                ttr._attackBallView.GainBackControl(ttr);
+                ttr._defendBallView.GainBackControl(ttr);
+                ttr._tracker.GainBackControl(ttr);
                 ttr.PutToBack(ttr._attackBallView.gameObject);
                 ttr.PutToBack(ttr._tracker.gameObject);
                 ttr._tracker.OnTouchEnd -= ttr.WrappedComplete;
+            }
+        }
+
+        /// <summary>
+        ///     Show Enemy lose and intention
+        /// </summary>
+        private class SliceBallStep2 : StepBase<TutorialSliceBall>{
+            public override void SetUp(TutorialSliceBall tutorial){
+                throw new NotImplementedException();
+            }
+
+            public override void Complete(TutorialSliceBall tutorial){
+                throw new NotImplementedException();
             }
         }
     }

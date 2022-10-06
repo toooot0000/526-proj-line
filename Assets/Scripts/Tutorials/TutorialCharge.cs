@@ -1,5 +1,3 @@
 namespace Tutorials{
-    public class TutorialCharge{
-        
-    }
+    public class TutorialCharge{ }
 }

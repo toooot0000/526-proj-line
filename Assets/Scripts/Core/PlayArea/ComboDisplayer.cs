@@ -3,15 +3,14 @@ using UnityEngine;
 using Utility;
 
 namespace Core.PlayArea{
-    public class ComboDisplayer: MonoBehaviour{
-
+    public class ComboDisplayer : MonoBehaviour{
         public SpriteRenderer bg;
         public TextMeshProUGUI textMesh;
         public AnimationCurve curve;
         public float time = 0.5f;
+        private Color _endColor;
 
         private Color _startColor;
-        private Color _endColor;
 
         private int ComboNum{
             set{
@@ -30,14 +29,14 @@ namespace Core.PlayArea{
 
         private void PlayAnimation(){
             StartCoroutine(TweenUtility.Lerp(
-                seconds: time,
-                begin: null,
-                update: i => {
+                time,
+                null,
+                i => {
                     var color = Color.Lerp(_startColor, _endColor, curve.Evaluate(i));
                     bg.color = color;
                     textMesh.color = color;
                 },
-                complete: null
+                null
             )());
         }
 

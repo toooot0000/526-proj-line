@@ -2,29 +2,25 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
-using UnityEngine.Events;
-using Utility.Extensions;
 
 namespace Utility.Animation{
     public class AnimationController<T> : MonoBehaviour
-    where T: Enum{
-        private Animator _animator;
-
+        where T : Enum{
         public delegate void AnimationCallback(T currentAnimation);
+
+        private readonly Dictionary<T, float> _times = new();
+        private Animator _animator;
 
         private T _currentAnimation;
 
-        private readonly Dictionary<T, float> _times = new();
-
         private void Awake(){
             _animator = GetComponent<Animator>();
-            foreach (var clip in _animator.runtimeAnimatorController.animationClips){
+            foreach (var clip in _animator.runtimeAnimatorController.animationClips)
                 try{
                     _times[EnumUtility.GetValue<T>(clip.name)] = clip.length + 0.02f;
-                } catch {
+                } catch{
                     Debug.Log($"Enum not has the animation name: {clip.name}");
                 }
-            }
         }
 
         public void Play(T anim){
@@ -40,13 +36,14 @@ namespace Utility.Animation{
             Play(anim);
             StartCoroutine(CoroutineUtility.Delayed(seconds, callback));
         }
-        
 
-        
-        static string GetDescription(T value){
+
+        private static string GetDescription(T value){
             var field = value.GetType().GetField(value.ToString());
-            return Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is not DescriptionAttribute attribute ? value.ToString() : attribute.Description;
+            return Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is not DescriptionAttribute
+                attribute
+                ? value.ToString()
+                : attribute.Description;
         }
-        
     }
 }

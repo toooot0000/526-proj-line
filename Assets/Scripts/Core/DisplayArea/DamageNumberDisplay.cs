@@ -10,12 +10,12 @@ namespace Core.DisplayArea{
 
         public AnimationCurve curve;
 
+        private readonly Vector2 _velocity = Vector2.up;
+
         private float _curSpeed;
         private float _curTime;
 
         private TextMeshProUGUI _textMesh;
-
-        private readonly Vector2 _velocity = Vector2.up;
 
         public int Number{
             set{

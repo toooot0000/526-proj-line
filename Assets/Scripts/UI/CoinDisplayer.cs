@@ -1,10 +1,9 @@
-using System;
 using Model;
 using UI.Common;
 using UnityEngine;
 
 namespace UI{
-    public class CoinDisplayer: MonoBehaviour{
+    public class CoinDisplayer : MonoBehaviour{
         public CoinWithNumber coin;
 
         private void Start(){

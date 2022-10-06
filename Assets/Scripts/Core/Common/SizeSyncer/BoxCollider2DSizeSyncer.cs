@@ -13,7 +13,4 @@ namespace Core.Common.SizeSyncer{
             collider.offset = Vector2.zero;
         }
     }
-
-
-    
 }

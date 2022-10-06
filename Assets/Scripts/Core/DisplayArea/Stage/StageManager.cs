@@ -1,5 +1,4 @@
 using System;
-using BackendApi;
 using Core.DisplayArea.Stage.Enemy;
 using Core.DisplayArea.Stage.Player;
 using Core.PlayArea.Balls;
@@ -17,27 +16,28 @@ namespace Core.DisplayArea.Stage{
         public PlayerView playerView;
         public EnemyView enemyView;
         public BallManager ballManager;
-        private int _currentLevel = -1;
+        private bool _isInTutorial;
 
         private Model.Stage _modelStage;
-        private DateTime _stageStart;
-
-        private bool _isInTutorial = false;
 
         private void Start(){
             GameManager.shared.game.OnStageLoaded += OnStageLoaded;
             OnStageLoaded(GameManager.shared.game);
         }
 
+        public void ControlledByTutorial(TutorialBase tutorial){
+            _isInTutorial = true;
+        }
+
+        public void GainBackControl(TutorialBase tutorial){
+            _isInTutorial = false;
+        }
 
         private void OnStageLoaded(Game game){
             _modelStage = game.currentStage;
             _modelStage.OnProcessStageAction += OnProcessStageAction;
             enemyView.BindToCurrentEnemy();
-            _stageStart = DateTime.Now;
-            _currentLevel = _modelStage.id;
         }
-        
 
         private void OnProcessStageAction(Game game, GameModel model){
             switch (model){
@@ -75,7 +75,7 @@ namespace Core.DisplayArea.Stage{
                 target = playerView,
                 actionInfo = info,
                 resolvedCallback = wrapper =>
-                    StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn))
+                    StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.SwitchTurn))
             };
             playerView.wrappedActionInfo = infoWrp;
             enemyView.wrappedActionInfo = infoWrp;
@@ -88,7 +88,7 @@ namespace Core.DisplayArea.Stage{
                 target = playerView,
                 actionInfo = info,
                 resolvedCallback = wrapper =>
-                    StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn))
+                    StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.SwitchTurn))
             };
             playerView.wrappedActionInfo = infoWrp;
             enemyView.wrappedActionInfo = infoWrp;
@@ -101,13 +101,12 @@ namespace Core.DisplayArea.Stage{
                 target = null,
                 actionInfo = info,
                 resolvedCallback = wrapper =>
-                    StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn))
+                    StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.SwitchTurn))
             };
             playerView.wrappedActionInfo = infoWrp;
             enemyView.wrappedActionInfo = infoWrp;
             enemyView.Defend();
         }
-
 
         private void OnPlayerAttackResolved(StageActionInfoWrapper wrapped){
             var dmg = (wrapped.actionInfo as StageActionInfoPlayerAttack)!.damage;
@@ -115,16 +114,9 @@ namespace Core.DisplayArea.Stage{
                 if (dmg.currentGame.currentStage.NextEnemy != null){
                     dmg.currentGame.currentStage.ForwardCurrentEnemy();
                     enemyView.BindToCurrentEnemy(
-                        () => StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn))
+                        () => StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.SwitchTurn))
                     );
                 } else{
-                    var currentTime = DateTime.Now;
-                    var clearEvent = new EventClearanceRecord{
-                        time = (int)(DateTime.Now - _stageStart).TotalMilliseconds,
-                        status = "success",
-                        level = _currentLevel
-                    };
-                    EventLogger.Shared.Log(clearEvent);
                     if (_modelStage.nextStage != -1){
                         if (_modelStage.bonusCoins == -1)
                             UIManager.shared.OpenUI("UISelectGear", _modelStage.bonusGears);
@@ -135,23 +127,15 @@ namespace Core.DisplayArea.Stage{
                     }
                 }
             } else{
-                StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.game.SwitchTurn));
+                StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.SwitchTurn));
             }
         }
-        
+
         public class StageActionInfoWrapper{
             public StageActionInfoBase actionInfo;
             public Action<StageActionInfoWrapper> resolvedCallback;
             public DamageableView source;
             public DamageableView target;
-        }
-
-        public void ControlledByTutorial(TutorialBase tutorial){
-            _isInTutorial = true;
-        }
-
-        public void GainBackControl(TutorialBase tutorial){
-            _isInTutorial = false;
         }
     }
 }

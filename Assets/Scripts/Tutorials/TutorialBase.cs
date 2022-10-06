@@ -2,23 +2,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Tutorials{
-
     public delegate void TutorialEvent(TutorialBase tutorial);
-    
-    /// <summary>
-    /// 一类特殊的界面，覆盖再所有层级之上。
-    /// </summary>
-    public abstract class TutorialBase: MonoBehaviour{
-        public event TutorialEvent OnLoad;
-        public event TutorialEvent OnComplete;
 
-        public string nextTutorialName = null;
-        
+    /// <summary>
+    ///     一类特殊的界面，覆盖再所有层级之上。
+    /// </summary>
+    public abstract class TutorialBase : MonoBehaviour{
+        private const float HighLightZIndex = -190;
+
+        public string nextTutorialName;
+
         public float nextDelay = 0.1f;
 
         private readonly Dictionary<GameObject, Vector3> _positions = new();
-
-        private const float HighLightZIndex = -190;
+        public event TutorialEvent OnLoad;
+        public event TutorialEvent OnComplete;
 
         public virtual void Load(TutorialContextBase context){
             OnLoad?.Invoke(this);
@@ -39,6 +37,6 @@ namespace Tutorials{
             obj.transform.position = _positions[obj];
         }
     }
-    
-    public class TutorialContextBase {}
+
+    public class TutorialContextBase{ }
 }

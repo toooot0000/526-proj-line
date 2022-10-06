@@ -1,10 +1,9 @@
-using System;
 using Model;
 using TMPro;
 using UnityEngine;
 
 namespace Core.DisplayArea{
-    public class TurnIndicator: MonoBehaviour{
+    public class TurnIndicator : MonoBehaviour{
         private TextMeshProUGUI _textMesh;
 
         private void Start(){
@@ -14,11 +13,10 @@ namespace Core.DisplayArea{
         }
 
         private void UpdateText(Game game){
-            if (game.turn == Game.Turn.Player){
+            if (game.turn == Game.Turn.Player)
                 _textMesh.text = "Your turn!";
-            } else{
+            else
                 _textMesh.text = "Enemy's turn!";
-            }
         }
     }
 }

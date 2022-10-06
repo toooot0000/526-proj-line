@@ -5,15 +5,15 @@ using Utility.Extensions;
 
 namespace Core.PlayArea.TouchTracking{
     [RequireComponent(typeof(LineRenderer))]
-    public class LineColliderGenerator: MonoBehaviour{
+    public class LineColliderGenerator : MonoBehaviour{
         public float widthFactor = 1;
-        
+        private bool _isDirty;
+
         private LineRenderer _lineRenderer;
-        private PolygonCollider2D _polygonCollider;
         private LinkedList<Vector2> _list;
-        private bool _isDirty = false;
+        private PolygonCollider2D _polygonCollider;
         private Transform _transform;
-        
+
 
         private void Start(){
             _lineRenderer = GetComponent<LineRenderer>();
@@ -39,10 +39,11 @@ namespace Core.PlayArea.TouchTracking{
                 AddPoint(worldPosition);
                 return;
             }
+
             var localPosition = (Vector2)_transform.InverseTransformPoint(worldPosition);
             dir = dir.normalized.Rotate(90);
-            var p1 = localPosition + dir * lineWidth/2 * widthFactor;
-            var p2 = localPosition - dir * lineWidth/2 * widthFactor;
+            var p1 = localPosition + dir * lineWidth / 2 * widthFactor;
+            var p2 = localPosition - dir * lineWidth / 2 * widthFactor;
             _list.AddFirst(p1);
             _list.AddLast(p2);
             _isDirty = true;
@@ -52,6 +53,5 @@ namespace Core.PlayArea.TouchTracking{
             _list.Clear();
             _isDirty = true;
         }
-        
     }
 }

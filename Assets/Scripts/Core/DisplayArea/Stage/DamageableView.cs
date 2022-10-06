@@ -4,16 +4,24 @@ using Core.DisplayArea.Stage.Player;
 using Model;
 using TMPro;
 using UnityEngine;
-using Utility;
 
 namespace Core.DisplayArea.Stage{
-    public abstract class DamageableView: MonoBehaviour{
+    public abstract class DamageableView : MonoBehaviour{
         public delegate void DamageableDelegate();
-        public event DamageableDelegate OnDie;
-        
-        public bool isDead = false;
 
-        private IDamageable _model = null;
+        public bool isDead;
+
+        public TextMeshProUGUI tmp;
+        public ProgressBar progressBar;
+        public PlayerAnimationController animationController;
+        public DamageNumberDisplay damageNumberDisplay;
+        public ArmorDisplayer armorDisplayer;
+
+        private int _currentHp;
+
+        private IDamageable _model;
+        public StageManager.StageActionInfoWrapper wrappedActionInfo;
+
         public virtual IDamageable Model{
             set{
                 _model = value;
@@ -22,7 +30,6 @@ namespace Core.DisplayArea.Stage{
             get => _model;
         }
 
-        private int _currentHp = 0;
         public int CurrentHp{
             set{
                 _currentHp = value;
@@ -33,18 +40,13 @@ namespace Core.DisplayArea.Stage{
             get => _currentHp;
         }
 
-        public TextMeshProUGUI tmp;
-        public ProgressBar progressBar;
-        public PlayerAnimationController animationController;
-        public DamageNumberDisplay damageNumberDisplay;
-        public StageManager.StageActionInfoWrapper wrappedActionInfo;
-        public ArmorDisplayer armorDisplayer;
+        public event DamageableDelegate OnDie;
 
 
         public abstract void Attack();
 
         public abstract void TakeDamage();
-        
+
         public virtual void Die(){
             isDead = true;
             OnDie?.Invoke();

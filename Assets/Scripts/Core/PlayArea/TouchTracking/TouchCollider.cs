@@ -2,13 +2,8 @@
 using UnityEngine;
 
 namespace Core.PlayArea.TouchTracking{
-    public class TouchCollider: MonoBehaviour{
+    public class TouchCollider : MonoBehaviour{
         private CircleCollider2D _collider2D;
-
-        public void SetEnabled(bool value){
-            enabled = value;
-            _collider2D.enabled = value;
-        }
 
         private void Start(){
             _collider2D = GetComponent<CircleCollider2D>();
@@ -20,5 +15,9 @@ namespace Core.PlayArea.TouchTracking{
             ball.OnBeingTouched();
         }
 
+        public void SetEnabled(bool value){
+            enabled = value;
+            _collider2D.enabled = value;
+        }
     }
 }

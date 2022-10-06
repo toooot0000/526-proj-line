@@ -1,25 +1,21 @@
-using BackendApi;
-using Model;
 using TMPro;
-using UI.Container;
-using UI.Interfaces.SelectGear;
 using UnityEngine;
 using Utility;
 
 namespace UI.Interfaces{
-    public class UIGetCoins: UIBase{
-        private CanvasGroup _canvasGroup;
-        private bool _inAnimation;
+    public class UIGetCoins : UIBase{
         public TextMeshProUGUI mesh;
+        private CanvasGroup _canvasGroup;
 
         private int _coinNum;
+        private bool _inAnimation;
 
-        private void Start() {
+        private void Start(){
             _canvasGroup = GetComponent<CanvasGroup>();
             _canvasGroup.alpha = 0;
         }
 
-        public override void Open(object coins) {
+        public override void Open(object coins){
             base.Open(coins);
             _inAnimation = true;
             var coroutine = TweenUtility.Lerp(0.2f,
@@ -32,7 +28,7 @@ namespace UI.Interfaces{
             UpdateContent();
         }
 
-        public override void Close() {
+        public override void Close(){
             _inAnimation = true;
             var coroutine = TweenUtility.Lerp(0.2f,
                 () => _canvasGroup.alpha = 1,
@@ -46,7 +42,7 @@ namespace UI.Interfaces{
         }
 
         public void ConfirmButtonClicked(){
-            StartCoroutine(CoroutineUtility.Delayed(GameManager.shared.game.GoToNextStage));
+            StartCoroutine(CoroutineUtility.Delayed(GameManager.shared.GoToNextStage));
             GameManager.shared.game.player.Coin += _coinNum;
             Close();
         }

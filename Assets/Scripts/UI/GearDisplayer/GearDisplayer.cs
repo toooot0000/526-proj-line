@@ -1,10 +1,9 @@
 using Model;
-using TMPro;
 using UI.Container;
 using UnityEngine;
 
 namespace UI.GearDisplayer{
-    public class GearDisplayer: MonoBehaviour{
+    public class GearDisplayer : MonoBehaviour{
         public UIContainerBase container;
         public GameObject gearItemPrefab;
 
@@ -13,27 +12,28 @@ namespace UI.GearDisplayer{
             UpdateGears(GameManager.shared.game, GameManager.shared.game.player);
         }
 
-        private void UpdateGears(Game game, GameModel player) {
+        private void UpdateGears(Game game, GameModel player){
             var gears = (player as Player)!.CurrentGears;
             var i = 0;
-            for(;i< gears.Length; i++) {
+            for (; i < gears.Length; i++){
                 GearItem item;
-                if (i >= container.children.Count) {
+                if (i >= container.children.Count){
                     item = Instantiate(gearItemPrefab, transform).GetComponent<GearItem>();
                     container.AddChild(item);
-                }
-                else {
+                } else{
                     item = (container.children[i] as GearItem)!;
                     item.gameObject.SetActive(true);
                     container.AttachChild(i);
                 }
+
                 item.Model = gears[i];
             }
-            while (i < container.transform.childCount) {
+
+            while (i < container.transform.childCount){
                 container.UntachChild(i);
                 container.children[i].gameObject.SetActive(false);
             }
-            
+
             container.UpdateLayout();
         }
     }

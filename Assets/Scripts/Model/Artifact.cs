@@ -2,9 +2,9 @@
 
 namespace Model{
     [Serializable]
-    public class Artifact: GameModel{
+    public class Artifact : GameModel{
         public int id;
-        public String desc;
+        public string desc;
         public int rarity;
         public Artifact(GameModel parent) : base(parent){ }
     }

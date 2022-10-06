@@ -1,31 +1,24 @@
 using System;
-using System.Linq;
 using BackendApi;
-using Core.DisplayArea.Stage;
 using Model;
 using Tutorials;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Utility;
-using Utility.Loader;
 
 public class GameManager : MonoBehaviour{
     public static GameManager shared;
 
+    public TutorialManager tutorialManager;
+
+
+    public bool isAcceptingInput = true;
+
     public Game game;
     public Guid uuid = Guid.NewGuid();
 
-    public TutorialManager tutorialManager;
-        
-        
-    public bool isAcceptingInput = true;
-        
-    
-    private void Awake()
-    {
-        if (shared != null){
-            Destroy(this.gameObject);
-        }
+
+    private void Awake(){
+        if (shared != null) Destroy(gameObject);
         shared = this;
         InitGame();
     }
@@ -34,43 +27,67 @@ public class GameManager : MonoBehaviour{
         Application.targetFrameRate = 120;
     }
 
-    private void Update()
-    {
-        if(Input.GetKeyUp("k"))
-        {
-            print("kill the current enemy!\n"); 
-            
-        }    
+    private void Update(){
+        if (Input.GetKeyUp("k")) print("kill the current enemy!\n");
     }
 
-
-    private void InitGame() {
+    private void InitGame(){
         PreInit();
-        game ??= new();
+        game ??= new Game();
         game.OnTurnChanged += game1 => {
             if (game1.turn == Game.Turn.Player) isAcceptingInput = true;
         };
     }
 
-    private void PreInit() {
+    private void PreInit(){
         // Backend API url
         EventLogger.serverURL = "https://test526.wn.r.appspot.com/";
     }
 
-    public void LogTable(string tableName){
-        var table = CsvLoader.Load(tableName);
-        foreach (var pair in table){
-            Debug.Log(pair.Key.ToString());
-            var msg = pair.Value.Aggregate("", (current, content) => current + $"{content.Key} = {content.Value}, ");
-            Debug.Log(msg);
-        }
-    }
-
-    public void Delayed(int frames, Action modelAction) {
+    public void Delayed(int frames, Action modelAction){
         StartCoroutine(CoroutineUtility.Delayed(frames, modelAction));
     }
 
-    public void Delayed(float seconds, Action modelAction) {
+    public void Delayed(float seconds, Action modelAction){
         StartCoroutine(CoroutineUtility.Delayed(seconds, modelAction));
+    }
+
+    /// <summary>
+    ///     Kick off the switch turn procedure
+    /// </summary>
+    public void SwitchTurn(){
+        game.SwitchTurn();
+        if (game.turn == Game.Turn.Player)
+            SwitchToPlayerTurn();
+        else
+            SwitchToEnemyTurn();
+    }
+
+    public void GoToNextStage(){
+        if (game.currentStage.nextStage == -1)
+            Complete();
+        else
+            game.LoadStage(game.currentStage.nextStage);
+    }
+
+    public void Complete(){
+        game.Complete();
+    }
+
+    public void Restart(){
+        game.Restart();
+    }
+
+    private void SwitchToPlayerTurn(){
+        isAcceptingInput = true;
+    }
+
+    private void SwitchToEnemyTurn(){
+        isAcceptingInput = false;
+    }
+
+    public void OnPlayerFinishInput(){
+        var currentAction = game.player.GetAttackAction();
+        game.currentStage.ProcessStageAction(currentAction);
     }
 }

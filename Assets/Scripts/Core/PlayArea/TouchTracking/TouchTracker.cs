@@ -1,11 +1,9 @@
-using System;
 using System.Linq;
 using Core.Common;
-using Core.DisplayArea;
+using Core.DisplayArea.Stage;
 using Model;
 using Tutorials;
 using UnityEngine;
-using Utility;
 
 /*
  * TODO need to be refactored!
@@ -21,18 +19,16 @@ namespace Core.PlayArea.TouchTracking{
         public float totalLineLength = 5f;
         public ProgressBar progressBar;
         public PointDisplayer pointDisplayer;
-
-
-        private Boolean _isTracing = false;
-        private RectTransform _rect;
+        public StageManager stageManager;
         private CircleDetector _circleDetector;
-        private float _currentLineLength = 0;
+        private float _currentLineLength;
         private Game _game;
-        private bool _isInTutorial = false;
+        private bool _isInTutorial;
 
-        public event TutorialControllableEvent OnTouchEnd;
-        public event TutorialControllableEvent OnTouchStart;
-        
+
+        private bool _isTracing;
+        private RectTransform _rect;
+
 
         private void Start(){
             _rect = GetComponent<RectTransform>();
@@ -44,30 +40,6 @@ namespace Core.PlayArea.TouchTracking{
         private void Update(){
             if (!GameManager.shared.isAcceptingInput) return;
             TraceTouchPosition();
-        }
-
-        public void StartTracking(){
-            _isTracing = true;
-            touchCollider.SetEnabled(true);
-            lineRenderer.positionCount = 0;
-            _circleDetector.points.Clear();
-            _currentLineLength = 0;
-            OnTouchStart?.Invoke(this);
-        }
-
-        public void StopTracking(){
-            if (!_isTracing) return;
-            _isTracing = false;
-            touchCollider.SetEnabled(false);
-            if (_game.player.hitBalls.Count == 0 && _game.player.circledBalls.Count == 0) return;
-            if(_isInTutorial) OnTouchEnd?.Invoke(this);
-            StartCoroutine(CoroutineUtility.Delayed(() => _game.player.Attack()));
-            GameManager.shared.isAcceptingInput = false;
-        }
-
-        private Vector2 GetCurrentTouchPosition(){
-            if(Input.touchCount == 0) return Vector2.zero;
-            return Input.touches[0].position;
         }
 
         private void OnMouseDown(){
@@ -85,6 +57,40 @@ namespace Core.PlayArea.TouchTracking{
             StopTracking();
         }
 
+        public void ControlledByTutorial(TutorialBase tutorial){
+            _isInTutorial = true;
+        }
+
+        public void GainBackControl(TutorialBase tutorial){
+            _isInTutorial = false;
+        }
+
+        public event TutorialControllableEvent OnTouchEnd;
+        public event TutorialControllableEvent OnTouchStart;
+
+        public void StartTracking(){
+            _isTracing = true;
+            touchCollider.SetEnabled(true);
+            lineRenderer.positionCount = 0;
+            _circleDetector.points.Clear();
+            _currentLineLength = 0;
+            OnTouchStart?.Invoke(this);
+        }
+
+        public void StopTracking(){
+            if (!_isTracing) return;
+            _isTracing = false;
+            touchCollider.SetEnabled(false);
+            if (_game.player.hitBalls.Count == 0 && _game.player.circledBalls.Count == 0) return;
+            if (_isInTutorial) OnTouchEnd?.Invoke(this);
+            GameManager.shared.OnPlayerFinishInput();
+        }
+
+        private Vector2 GetCurrentTouchPosition(){
+            if (Input.touchCount == 0) return Vector2.zero;
+            return Input.touches[0].position;
+        }
+
         private void TraceTouchPosition(){
             if (!_isTracing) return;
             if (_currentLineLength >= totalLineLength) return;
@@ -96,13 +102,13 @@ namespace Core.PlayArea.TouchTracking{
             var worldPosition = camera.ScreenToWorldPoint(new Vector3(inputPosition.x,
                 inputPosition.y,
                 camera.nearClipPlane));
-            if(!_isInTutorial) worldPosition.z = -0.1f;
-            
+            if (!_isInTutorial) worldPosition.z = -0.1f;
+
             var positionCount = lineRenderer.positionCount;
             touchCollider.transform.SetPositionAndRotation(worldPosition, Quaternion.Euler(0, 0, 0));
-            
+
             // TODO change point displayer position
-            
+
             // Length validate
             var curSegLength = 0.0f;
             if (positionCount > 0){
@@ -111,30 +117,21 @@ namespace Core.PlayArea.TouchTracking{
                 if (curSegLength < minDistance) return;
                 curSegLength = Mathf.Min(curSegLength, remain);
             }
-            
+
             // Circle handling 
             _circleDetector.AddPoint(worldPosition);
             var circle = _circleDetector.DetectCircle();
-            if (circle != null){
+            if (circle != null)
                 polygonCollider.SetCircle(circle
                     .Select(v => (Vector2)polygonCollider.transform.InverseTransformPoint(v)).ToArray());
-            }
-            
+
             // Add point to lineRenderer
             lineRenderer.positionCount = positionCount + 1;
             lineRenderer.SetPosition(positionCount, worldPosition);
-            
+
             // Add length
             _currentLineLength += curSegLength;
             progressBar.Percentage = 100 - _currentLineLength / totalLineLength * 100;
-        }
-
-        public void ControlledByTutorial(TutorialBase tutorial){
-            _isInTutorial = true;
-        }
-
-        public void GainBackControl(TutorialBase tutorial){
-            _isInTutorial = false;
         }
     }
 }

@@ -2,7 +2,7 @@
 using UnityEngine;
 
 namespace Core.PlayArea{
-    public class Wall: MonoBehaviour{
+    public class Wall : MonoBehaviour{
         public Vector2 velocityChangeRate = Vector2.one;
 
 

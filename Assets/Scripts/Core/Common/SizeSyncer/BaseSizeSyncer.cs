@@ -3,7 +3,7 @@
 namespace Core.Common.SizeSyncer{
     [RequireComponent(typeof(RectTransform))]
     [RequireComponent(typeof(Collider2D))]
-    public abstract class BaseColliderSizeSyncer: MonoBehaviour{
+    public abstract class BaseColliderSizeSyncer : MonoBehaviour{
         protected new Collider2D collider;
         protected RectTransform rect;
 

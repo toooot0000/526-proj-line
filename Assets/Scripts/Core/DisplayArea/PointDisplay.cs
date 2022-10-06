@@ -1,14 +1,13 @@
-﻿using System;
-using Model;
+﻿using Model;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Core.DisplayArea{
     [RequireComponent(typeof(TextMeshProUGUI))]
-    public class PointDisplay: MonoBehaviour{
-        private TextMeshProUGUI _text;
+    public class PointDisplay : MonoBehaviour{
         private Game _game;
+        private TextMeshProUGUI _text;
+
         private void Start(){
             _text = GetComponent<TextMeshProUGUI>();
             _game = GameManager.shared.game;

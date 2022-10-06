@@ -1,18 +1,18 @@
 using UnityEngine;
 using Utility;
 
-namespace UI.Interfaces {
-    public class UIGameEnd : UIBase {
+namespace UI.Interfaces{
+    public class UIGameEnd : UIBase{
         private CanvasGroup _canvasGroup;
 
         private bool _inAnimation;
 
-        private void Start() {
+        private void Start(){
             _canvasGroup = GetComponent<CanvasGroup>();
             _canvasGroup.alpha = 1;
         }
 
-        public override void Open(object args) {
+        public override void Open(object args){
             base.Open(args);
             _inAnimation = true;
             var coroutine = TweenUtility.Lerp(0.2f,
@@ -23,7 +23,7 @@ namespace UI.Interfaces {
             StartCoroutine(coroutine());
         }
 
-        public override void Close() {
+        public override void Close(){
             _inAnimation = true;
             var coroutine = TweenUtility.Lerp(0.2f,
                 () => _canvasGroup.alpha = 1,

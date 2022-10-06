@@ -3,23 +3,22 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.GearDisplayer {
-    public class GearItem: MonoBehaviour {
-
+namespace UI.GearDisplayer{
+    public class GearItem : MonoBehaviour{
         public Image image;
         public TextMeshProUGUI textMesh;
 
-        private Gear _model = null;
+        private Gear _model;
 
-        public Gear Model {
-            set {
+        public Gear Model{
+            set{
                 _model = value;
                 UpdateContent();
             }
             get => _model;
         }
 
-        public void UpdateContent() {
+        public void UpdateContent(){
             image.sprite = Resources.Load<Sprite>(_model.imgPath);
             textMesh.text = $"{_model.name} Att: {_model.ball.point} Ball Num: {_model.ballNum}";
         }

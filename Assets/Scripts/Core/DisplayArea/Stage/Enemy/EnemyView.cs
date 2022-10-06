@@ -1,11 +1,8 @@
 using System;
-using Core.DisplayArea.Stage.Player;
 using Model;
 using UnityEngine;
-using Utility;
 
 namespace Core.DisplayArea.Stage.Enemy{
-
     [RequireComponent(typeof(PlayerAnimationController))]
     public class EnemyView : DamageableView{
         public RemainingEnemy remaining;
@@ -22,16 +19,16 @@ namespace Core.DisplayArea.Stage.Enemy{
         public void BindToCurrentEnemy(Action callback = null){
             isDead = false;
             Model = GameManager.shared.game.CurrentEnemy;
-            var model = ((Model.Enemy)Model);
+            var model = (Model.Enemy)Model;
             UpdateIntention();
             animationController.Play(PlayerAnimation.Appear, callback);
         }
 
         private void UpdateIntention(){
             var enemy = (Model.Enemy)Model;
-            intentionDisplayer.UpdateIntention(new IntentionDisplayer.IntentionInfo(){
+            intentionDisplayer.UpdateIntention(new IntentionDisplayer.IntentionInfo{
                 intention = enemy.CurrentIntention,
-                number = ((Model.Enemy)Model).CurrentIntention switch {
+                number = ((Model.Enemy)Model).CurrentIntention switch{
                     EnemyIntention.Attack => enemy.attack,
                     EnemyIntention.Defend => enemy.defend,
                     EnemyIntention.SpecialAttack => 0,
@@ -41,15 +38,15 @@ namespace Core.DisplayArea.Stage.Enemy{
         }
 
         public override void Attack(){
-            animationController.Play(PlayerAnimation.Attack, 0.07f, 
-            ()=> {
-                UpdateIntention();
-                wrappedActionInfo.target.TakeDamage();
-            });
+            animationController.Play(PlayerAnimation.Attack, 0.07f,
+                () => {
+                    UpdateIntention();
+                    wrappedActionInfo.target.TakeDamage();
+                });
         }
 
         public void Defend(){
-            animationController.Play(PlayerAnimation.Defend, ()=> {
+            animationController.Play(PlayerAnimation.Defend, () => {
                 armorDisplayer.Number = Model.Armor;
                 UpdateIntention();
                 wrappedActionInfo.resolvedCallback(wrappedActionInfo);
@@ -71,11 +68,12 @@ namespace Core.DisplayArea.Stage.Enemy{
             damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
             CurrentHp = Model.CurrentHp;
             armorDisplayer.Number = Model.Armor;
-            if (isDead){
-                animationController.Play(PlayerAnimation.Die, () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
-            } else{
-                animationController.Play(PlayerAnimation.BeingAttacked, () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
-            }
+            if (isDead)
+                animationController.Play(PlayerAnimation.Die,
+                    () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
+            else
+                animationController.Play(PlayerAnimation.BeingAttacked,
+                    () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
         }
     }
 }

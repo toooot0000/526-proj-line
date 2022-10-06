@@ -4,11 +4,10 @@ namespace Core.Common.SizeSyncer{
     [RequireComponent(typeof(SpriteRenderer))]
     [RequireComponent(typeof(RectTransform))]
     public class SpriteSizeSyncer : MonoBehaviour{
+        private RectTransform _rectTransform;
         private SpriteRenderer _spriteRenderer;
 
-        private RectTransform _rectTransform;
-
-        void Start(){
+        private void Start(){
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _rectTransform = GetComponent<RectTransform>();
             SyncSize();

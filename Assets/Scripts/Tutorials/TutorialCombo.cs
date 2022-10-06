@@ -1,5 +1,3 @@
 namespace Tutorials{
-    public class TutorialCombo{
-        
-    }
+    public class TutorialCombo{ }
 }

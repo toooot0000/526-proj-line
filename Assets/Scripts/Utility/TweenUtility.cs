@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Utility{
@@ -9,19 +8,19 @@ namespace Utility{
         T Sub(T other);
         T Mul(float other);
     }
+
     public struct Tween<T>
-        where T: ITweenArithmetic<T>{
+        where T : ITweenArithmetic<T>{
         private readonly T _start;
         private T _growth;
         public readonly float totalTime;
         private readonly AnimationCurve _curve;
-            
+
         public Tween(T start, T end, float time, AnimationCurve curve){
-            this._start = start;
+            _start = start;
             _growth = end.Sub(start);
             totalTime = time;
-            this._curve = curve;
-                
+            _curve = curve;
         }
 
         public T GetCurrentValue(float time){
@@ -29,9 +28,10 @@ namespace Utility{
             return _growth.Mul(_curve.Evaluate(time / totalTime)).Add(_start);
         }
     }
+
     public static class TweenUtility{
-        public static IEnumerator MakeEnumerator<T>(Tween<T> tween, Action<T> callback )
-        where T: ITweenArithmetic<T>{
+        public static IEnumerator MakeEnumerator<T>(Tween<T> tween, Action<T> callback)
+            where T : ITweenArithmetic<T>{
             // return new TweenEnumerator<T>(tween);
             var time = 0.0f;
             while (time < tween.totalTime){
@@ -40,18 +40,20 @@ namespace Utility{
                 callback(tween.GetCurrentValue(time));
             }
         }
-        
+
         public static Func<IEnumerator> Lerp(float seconds, Action begin, Action<float> update, Action complete){
             IEnumerator Inner(){
                 begin?.Invoke();
                 float curTime = 0;
-                while (curTime < seconds) {
+                while (curTime < seconds){
                     curTime += Time.deltaTime;
                     update?.Invoke(curTime / seconds);
                     yield return null;
                 }
+
                 complete?.Invoke();
             }
+
             return Inner;
         }
     }

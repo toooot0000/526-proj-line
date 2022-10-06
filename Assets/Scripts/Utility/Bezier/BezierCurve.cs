@@ -1,27 +1,21 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utility.Bezier {
-    public class BezierCurve: MonoBehaviour{
+namespace Utility.Bezier{
+    public class BezierCurve : MonoBehaviour{
         public Vector3[] points;
 
-        void Awake(){
-            if(points == null || points.Length < 4){
-                Reset();
-            }
+        private void Awake(){
+            if (points == null || points.Length < 4) Reset();
         }
 
-        void Reset(){
-            if(points.Length == 0){
-                points = new Vector3[]{
-                    new Vector3(0, 0, 0),
+        private void Reset(){
+            if (points.Length == 0)
+                points = new[]{
+                    new(0, 0, 0),
                     new Vector3(0, 0, 0),
                     new Vector3(0, 0, 0),
                     new Vector3(0, 0, 0)
                 };
-            }
         }
 
         public Vector3 GetPoint(float t){
@@ -29,20 +23,20 @@ namespace Utility.Bezier {
         }
 
         public Vector3 GetVelocity(float t){
-            return transform.TransformPoint(BezierLerp.GetFirstDerivative(points[0], points[1], points[2], points[3], t));
+            return transform.TransformPoint(
+                BezierLerp.GetFirstDerivative(points[0], points[1], points[2], points[3], t));
         }
 
         public Vector3 GetDirection(float t){
             return GetVelocity(t).normalized;
         }
-
     }
 
 
-    static class BezierLerp{
-        public static Vector3 GetPoint (Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t) {
+    internal static class BezierLerp{
+        public static Vector3 GetPoint(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t){
             t = Mathf.Clamp01(t);
-            float oneMinusT = 1f - t;
+            var oneMinusT = 1f - t;
             return
                 oneMinusT * oneMinusT * oneMinusT * p0 +
                 3f * oneMinusT * oneMinusT * t * p1 +
@@ -50,9 +44,9 @@ namespace Utility.Bezier {
                 t * t * t * p3;
         }
 
-        public static Vector3 GetFirstDerivative (Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t) {
+        public static Vector3 GetFirstDerivative(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t){
             t = Mathf.Clamp01(t);
-            float oneMinusT = 1f - t;
+            var oneMinusT = 1f - t;
             return
                 3f * oneMinusT * oneMinusT * (p1 - p0) +
                 6f * oneMinusT * t * (p2 - p1) +

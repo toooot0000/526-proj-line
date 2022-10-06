@@ -5,9 +5,9 @@ using Utility;
 
 namespace Core.DisplayArea.Stage.Player{
     [RequireComponent(typeof(PlayerAnimationController))]
-    public class PlayerView: DamageableView{
-        public override IDamageable Model {
-            set {
+    public class PlayerView : DamageableView{
+        public override IDamageable Model{
+            set{
                 base.Model = value;
                 armorDisplayer.Number = value.Armor;
             }
@@ -20,13 +20,11 @@ namespace Core.DisplayArea.Stage.Player{
 
         public override void Die(){
             base.Die();
-            StartCoroutine(CoroutineUtility.Delayed(0.5f, () => {
-                UIManager.shared.OpenUI("UIGameEnd");
-            }));
+            StartCoroutine(CoroutineUtility.Delayed(0.5f, () => { UIManager.shared.OpenUI("UIGameEnd"); }));
         }
 
         public override void Attack(){
-            animationController.Play(PlayerAnimation.Attack, 0.07f, ()=> {
+            animationController.Play(PlayerAnimation.Attack, 0.07f, () => {
                 wrappedActionInfo.target.TakeDamage();
                 armorDisplayer.Number = Model.Armor;
             });
@@ -37,11 +35,12 @@ namespace Core.DisplayArea.Stage.Player{
             damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
             CurrentHp = Model.CurrentHp;
             armorDisplayer.Number = Model.Armor;
-            if (isDead){
-                animationController.Play(PlayerAnimation.Die, () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
-            } else{
-                animationController.Play(PlayerAnimation.BeingAttacked, () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
-            }
+            if (isDead)
+                animationController.Play(PlayerAnimation.Die,
+                    () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
+            else
+                animationController.Play(PlayerAnimation.BeingAttacked,
+                    () => wrappedActionInfo.resolvedCallback(wrappedActionInfo));
         }
     }
 }

@@ -6,20 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Core.DisplayArea.Stage.Enemy{
-    public class IntentionDisplayer: MonoBehaviour{
-        
-        [Serializable]
-        public struct IntentionPair{
-            public EnemyIntention intention;
-            public Sprite sprite;
-        }
-        
-        public struct IntentionInfo{
-            public EnemyIntention intention;
-            public int number;
-        }
-
-
+    public class IntentionDisplayer : MonoBehaviour{
         public Image icon;
         public TextMeshProUGUI number;
 
@@ -33,6 +20,17 @@ namespace Core.DisplayArea.Stage.Enemy{
             } else{
                 number.enabled = false;
             }
+        }
+
+        [Serializable]
+        public struct IntentionPair{
+            public EnemyIntention intention;
+            public Sprite sprite;
+        }
+
+        public struct IntentionInfo{
+            public EnemyIntention intention;
+            public int number;
         }
     }
 }

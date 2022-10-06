@@ -1,25 +1,24 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
-using Unity.VisualScripting;
 using UnityEditor;
 using Debug = UnityEngine.Debug;
-using Directory = System.IO.Directory;
 
 namespace Utility.ConfigDownloader{
 #if UNITY_EDITOR
     public static class Downloader{
         private static string _pyDir = "";
-        
+
         [MenuItem("Tools/Download ^#d")]
         public static void DownloadConfig(){
             var process = new Process();
 #if UNITY_EDITOR_WIN
-            var args = $"\"{Directory.GetCurrentDirectory()}\\Assets\\Scripts\\Utility\\ConfigDownloader\\DownloadConfig.py\"";
+            var args =
+                $"\"{Directory.GetCurrentDirectory()}\\Assets\\Scripts\\Utility\\ConfigDownloader\\DownloadConfig.py\"";
 #elif UNITY_EDITOR_OSX
-            var args = $"\"{Directory.GetCurrentDirectory()}/Assets/Scripts/Utility/ConfigDownloader/DownloadConfig.py\"";
+            var args =
+ $"\"{Directory.GetCurrentDirectory()}/Assets/Scripts/Utility/ConfigDownloader/DownloadConfig.py\"";
 #endif
-            process.StartInfo = new(){
+            process.StartInfo = new ProcessStartInfo{
                 FileName = GetPythonPath(),
                 Arguments = args,
                 UseShellExecute = false,
@@ -39,12 +38,10 @@ namespace Utility.ConfigDownloader{
         }
 
         private static string GetPythonPath(){
-            if (_pyDir != ""){
-                return _pyDir;
-            }
+            if (_pyDir != "") return _pyDir;
 #if UNITY_EDITOR_WIN
             var process = new Process();
-            process.StartInfo = new(){
+            process.StartInfo = new ProcessStartInfo{
                 FileName = "where.exe",
                 Arguments = "python",
                 UseShellExecute = false,
