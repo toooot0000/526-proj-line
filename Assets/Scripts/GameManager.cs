@@ -1,18 +1,18 @@
 using System;
 using BackendApi;
+using Core.DisplayArea.Stage;
 using Model;
 using Tutorials;
 using UnityEngine;
 using Utility;
 
 public class GameManager : MonoBehaviour{
-    public static GameManager shared;
-
+    public StageManager stageManager;
     public TutorialManager tutorialManager;
-
-
+    
+    public static GameManager shared;
+    [HideInInspector]
     public bool isAcceptingInput = true;
-
     public Game game;
     public Guid uuid = Guid.NewGuid();
 
@@ -34,9 +34,7 @@ public class GameManager : MonoBehaviour{
     private void InitGame(){
         PreInit();
         game ??= new Game();
-        game.OnTurnChanged += game1 => {
-            if (game1.turn == Game.Turn.Player) isAcceptingInput = true;
-        };
+        stageManager.OnStageLoaded(game.currentStage);
     }
 
     private void PreInit(){
@@ -66,8 +64,10 @@ public class GameManager : MonoBehaviour{
     public void GoToNextStage(){
         if (game.currentStage.nextStage == -1)
             Complete();
-        else
+        else{
             game.LoadStage(game.currentStage.nextStage);
+            stageManager.OnStageLoaded(game.currentStage);
+        }
     }
 
     public void Complete(){
@@ -84,10 +84,13 @@ public class GameManager : MonoBehaviour{
 
     private void SwitchToEnemyTurn(){
         isAcceptingInput = false;
+        var stageInfo = game.CurrentEnemy.GetCurrentStageAction();
+        stageManager.ProcessStageActionInfo(stageInfo);
     }
 
     public void OnPlayerFinishInput(){
-        var currentAction = game.player.GetAttackAction();
-        game.currentStage.ProcessStageAction(currentAction);
+        var currentAction = game.player.GetAttackActionInfo();
+        game.player.ClearAllBalls();
+        stageManager.ProcessStageActionInfo(currentAction);
     }
 }

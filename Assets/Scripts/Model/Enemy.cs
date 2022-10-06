@@ -38,8 +38,6 @@ namespace Model{
             attack = (int)enemy["attack"];
             intentions = (enemy["action_pattern"] as string)!.Split(";")
                 .Select(s => EnumUtility.GetValue<EnemyIntention>(s)).ToArray();
-            Debug.Log(intentions.Length.ToString());
-
             var spStr = (enemy["special"] as string)!.Split(";");
             var className = spStr.First();
             special = Activator.CreateInstance(Type.GetType($"Model.EnemySpecialAttacks.{className}", true),
@@ -91,19 +89,19 @@ namespace Model{
             };
         }
 
-        public StageActionInfoEnemyAttack GetEnemyAttackInfo(){
+        private StageActionInfoEnemyAttack GetEnemyAttackInfo(){
             return new StageActionInfoEnemyAttack(this){
                 damage = GetDamage()
             };
         }
 
-        public StageActionInfoEnemyDefend GetEnemyDefendInfo(){
+        private StageActionInfoEnemyDefend GetEnemyDefendInfo(){
             return new StageActionInfoEnemyDefend(this){
                 defend = defend
             };
         }
 
-        public StageActionInfoEnemySpecial GetEnemySpecialInfo(){
+        private StageActionInfoEnemySpecial GetEnemySpecialInfo(){
             return new StageActionInfoEnemySpecial(this){
                 special = special
             };
@@ -114,13 +112,15 @@ namespace Model{
             OnIntentionChanged?.Invoke(currentGame, this);
         }
 
-        public StageActionInfoBase IntentionToStageAction(){
-            return intentions[_nextActionInd] switch{
+        public StageActionInfoBase GetCurrentStageAction(){
+            StageActionInfoBase ret =  intentions[_nextActionInd] switch{
                 EnemyIntention.Attack => GetEnemyAttackInfo(),
                 EnemyIntention.Defend => GetEnemyDefendInfo(),
                 EnemyIntention.SpecialAttack => GetEnemySpecialInfo(),
                 _ => null
             };
+            ForwardIntention();
+            return ret;
         }
 
         public void Die(){

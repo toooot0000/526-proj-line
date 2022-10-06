@@ -23,7 +23,22 @@ namespace Core.PlayArea.Balls{
         }
 
         public Vector2 velocity;
-        public State currentState = State.Free;
+        private State _currentState = State.Free;
+
+        public State CurrentState{
+            set{
+                _currentState = value;
+                switch (value){
+                    case State.Combo:
+                        _ballBg.color = Color.yellow;
+                        break;
+                    case State.Charged:
+                        _ballBg.color = Color.magenta;
+                        break;
+                }
+            }
+            get => _currentState;
+        }
         public AnimationCurve curve;
         public SpriteRenderer weaponIcon;
 
@@ -51,16 +66,16 @@ namespace Core.PlayArea.Balls{
         }
 
         private void Update(){
-            if (currentState != State.Free) return;
+            if (CurrentState != State.Free) return;
             _rectTransform.position += (Vector3)velocity * Time.deltaTime;
         }
 
         public void ControlledByTutorial(TutorialBase tutorial){
-            currentState = State.Controlled;
+            CurrentState = State.Controlled;
         }
 
         public void GainBackControl(TutorialBase tutorial){
-            currentState = State.Hide;
+            CurrentState = State.Hide;
         }
 
         public event BallViewEvent OnHitted;
@@ -71,45 +86,28 @@ namespace Core.PlayArea.Balls{
         }
 
         public void OnHittingWall(Wall wall){
-            if (currentState != State.Free) return;
+            if (CurrentState != State.Free) return;
             velocity = new Vector2(velocity.x * wall.velocityChangeRate.x, velocity.y * wall.velocityChangeRate.y);
         }
 
         public void OnBeingTouched(){
-            Debug.Log("Hit Touch!");
-            if (currentState != State.Free && currentState == State.Controlled && !tutorCanBeHit) return;
+            if (CurrentState != State.Free && CurrentState == State.Controlled && !tutorCanBeHit) return;
             _game.player.AddHitBall(config.modelBall);
-            if (((Gear)Model.parent).IsComboIng()){
-                currentState = State.Touched;
-            } else{
-                currentState = State.Combo;
-                _ballBg.color = Color.yellow;
-            }
-
             OnHitted?.Invoke(this);
         }
 
         public void OnBeingCircled(){
-            Debug.Log("Circled!");
-            if (currentState != State.Free || (currentState == State.Controlled && !tutorCanBeCircled)) return;
+            if (CurrentState != State.Free || (CurrentState == State.Controlled && !tutorCanBeCircled)) return;
             _game.player.AddCircledBall(config.modelBall);
-            currentState = State.Circled;
-            if (((Gear)Model.parent).IsCharged()){
-                currentState = State.Touched;
-            } else{
-                currentState = State.Charged;
-                _ballBg.color = Color.blue;
-            }
-
             OnCharged?.Invoke(this);
         }
 
         public void ResetView(){
-            currentState = State.Free;
+            CurrentState = State.Free;
         }
 
         public void FlyToLocation(float seconds, Vector3 targetWorldLocation){
-            currentState = State.Flying;
+            CurrentState = State.Flying;
             var startWorldLocation = transform.position;
             var p1 = new Vector3{
                 x = startWorldLocation.x,
@@ -135,17 +133,15 @@ namespace Core.PlayArea.Balls{
                     transform.position = BezierLerp.GetPoint(startWorldLocation, p1, p2, targetWorldLocation, i);
                 },
                 () => {
-                    currentState = State.Hide;
-                    // _ballBg.color = Color.Lerp(bgStartColor, bgEndColor, i);
+                    CurrentState = State.Hide;
                     _ballBg.color = bgEndColor;
-                    // weaponIcon.color = Color.Lerp(iconStartColor, iconEndColor, i);
                     weaponIcon.color = iconEndColor;
                 });
             StartCoroutine(lerp());
         }
 
         public void FadeOut(float seconds){
-            currentState = State.Fading;
+            CurrentState = State.Fading;
             var bgStartColor = _ballBg.color;
             var bgEndColor = new Color(bgStartColor.r, bgStartColor.g, bgStartColor.b, 0);
             var iconStartColor = weaponIcon.color;
@@ -159,13 +155,13 @@ namespace Core.PlayArea.Balls{
                     _ballBg.color = Color.Lerp(bgStartColor, bgEndColor, i);
                     weaponIcon.color = Color.Lerp(iconStartColor, iconEndColor, i);
                 },
-                () => currentState = State.Hide
+                () => CurrentState = State.Hide
             );
             StartCoroutine(lerp());
         }
 
         public void TutorialSetPosition(Vector3 worldPosition){
-            if (currentState != State.Controlled) return;
+            if (CurrentState != State.Controlled) return;
             transform.position = worldPosition;
         }
     }

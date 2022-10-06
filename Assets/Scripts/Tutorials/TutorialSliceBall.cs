@@ -48,11 +48,11 @@ namespace Tutorials{
             _steps[0].SetUp(this);
         }
 
-        private void WrappedComplete(ITutorialControllable controllable){
+        private void Complete(ITutorialControllable controllable){
             _steps[_currentStepIndex].Complete(this);
             _currentStepIndex++;
             if (_currentStepIndex == _steps.Length)
-                Complete();
+                base.Complete();
             else
                 _steps[_currentStepIndex].SetUp(this);
         }
@@ -87,7 +87,7 @@ namespace Tutorials{
                 ttr.movingPointer.Positions = new[]{ ttr.start.position, ttr.end.position };
                 ttr.movingPointer.StartMoving();
 
-                ttr._tracker.OnTouchEnd += ttr.WrappedComplete;
+                ttr._tracker.OnTouchEnd += ttr.Complete;
             }
 
             public override void Complete(TutorialSliceBall ttr){
@@ -96,7 +96,7 @@ namespace Tutorials{
                 ttr._tracker.GainBackControl(ttr);
                 ttr.PutToBack(ttr._attackBallView.gameObject);
                 ttr.PutToBack(ttr._tracker.gameObject);
-                ttr._tracker.OnTouchEnd -= ttr.WrappedComplete;
+                ttr._tracker.OnTouchEnd -= ttr.Complete;
             }
         }
 
@@ -105,11 +105,11 @@ namespace Tutorials{
         /// </summary>
         private class SliceBallStep2 : StepBase<TutorialSliceBall>{
             public override void SetUp(TutorialSliceBall tutorial){
-                throw new NotImplementedException();
+                
             }
 
             public override void Complete(TutorialSliceBall tutorial){
-                throw new NotImplementedException();
+                
             }
         }
     }

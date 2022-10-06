@@ -20,11 +20,6 @@ namespace Core.DisplayArea.Stage{
 
         private Model.Stage _modelStage;
 
-        private void Start(){
-            GameManager.shared.game.OnStageLoaded += OnStageLoaded;
-            OnStageLoaded(GameManager.shared.game);
-        }
-
         public void ControlledByTutorial(TutorialBase tutorial){
             _isInTutorial = true;
         }
@@ -33,14 +28,14 @@ namespace Core.DisplayArea.Stage{
             _isInTutorial = false;
         }
 
-        private void OnStageLoaded(Game game){
-            _modelStage = game.currentStage;
-            _modelStage.OnProcessStageAction += OnProcessStageAction;
+        public void OnStageLoaded(Model.Stage currentStage){
+            _modelStage = currentStage;
             enemyView.BindToCurrentEnemy();
         }
 
-        private void OnProcessStageAction(Game game, GameModel model){
-            switch (model){
+        public void ProcessStageActionInfo(StageActionInfoBase info){
+            info.Execute();
+            switch (info){
                 case StageActionInfoPlayerAttack attack:
                     ProcessPlayerAttack(attack);
                     break;
@@ -113,7 +108,8 @@ namespace Core.DisplayArea.Stage{
             if (enemyView.isDead){
                 if (dmg.currentGame.currentStage.NextEnemy != null){
                     dmg.currentGame.currentStage.ForwardCurrentEnemy();
-                    enemyView.BindToCurrentEnemy(
+                    enemyView.BindToCurrentEnemy();
+                    enemyView.Appear(
                         () => StartCoroutine(CoroutineUtility.Delayed(1f, GameManager.shared.SwitchTurn))
                     );
                 } else{

@@ -138,7 +138,7 @@ namespace Model{
             };
         }
 
-        public StageActionInfoPlayerAttack GetAttackAction(){
+        public StageActionInfoPlayerAttack GetAttackActionInfo(){
             return new StageActionInfoPlayerAttack(this, GetTriggeredEffects()){
                 damage = GetDamage(),
                 defend = GetTotalDefendPoint(),
@@ -162,6 +162,11 @@ namespace Model{
             if (ind == -1) return;
             gears.RemoveAt(ind);
             OnGearChanged?.Invoke(currentGame, this);
+        }
+
+        public void ClearAllBalls(){
+            hitBalls.Clear();
+            circledBalls.Clear();
         }
     }
 }

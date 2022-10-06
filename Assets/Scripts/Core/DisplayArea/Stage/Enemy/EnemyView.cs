@@ -16,11 +16,13 @@ namespace Core.DisplayArea.Stage.Enemy{
             }
         }
 
-        public void BindToCurrentEnemy(Action callback = null){
+        public void BindToCurrentEnemy(){
             isDead = false;
             Model = GameManager.shared.game.CurrentEnemy;
-            var model = (Model.Enemy)Model;
             UpdateIntention();
+        }
+
+        public void Appear(Action callback = null){
             animationController.Play(PlayerAnimation.Appear, callback);
         }
 

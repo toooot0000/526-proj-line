@@ -57,9 +57,8 @@ namespace Core.PlayArea.Balls{
                 } else{
                     var newBallObject = Instantiate(ballPrefab, transform, false);
                     curBallView = newBallObject.GetComponent<BallView>();
-                    curBallView.OnHitted += view => {
-                        comboDisplayer.Show(view.Model.currentGame.player.hitBalls.Count, view.transform.position);
-                    };
+                    curBallView.OnHitted += OnBallHit;
+                    curBallView.OnCharged += OnBallCircled;
                     balls.Add(curBallView);
                 }
 
@@ -74,18 +73,39 @@ namespace Core.PlayArea.Balls{
 
         public void FlyAllBalls(StageManager stageManager, float seconds){
             foreach (var ball in balls){
-                if (ball.currentState == BallView.State.Free){
+                if (ball.CurrentState == BallView.State.Free){
                     ball.FadeOut(seconds);
                     continue;
                 }
-
-                ;
                 if (ball.Model.type == BallType.Debuff) continue;
 
                 var target = stageManager.enemyView.transform.position;
                 if (ball.Model.type == BallType.Defend) target = stageManager.playerView.transform.position;
                 ball.FlyToLocation(seconds, target);
             }
+        }
+
+        private void OnBallHit(BallView view){
+            comboDisplayer.Show(view.Model.currentGame.player.hitBalls.Count, view.transform.position);
+            view.CurrentState = BallView.State.Touched;
+            UpdateBallState();
+        }
+
+        private void UpdateBallState(){
+            foreach (var ball in balls){
+                if (((Gear)ball.Model.parent).IsComboIng() && ball.CurrentState == BallView.State.Touched){
+                    ball.CurrentState = BallView.State.Combo;
+                }
+
+                if (((Gear)ball.Model.parent).IsCharged() && ball.CurrentState == BallView.State.Circled){
+                    ball.CurrentState = BallView.State.Charged;
+                }
+            }
+        }
+
+        private void OnBallCircled(BallView view){
+            view.CurrentState = BallView.State.Circled;
+            UpdateBallState();
         }
     }
 }
