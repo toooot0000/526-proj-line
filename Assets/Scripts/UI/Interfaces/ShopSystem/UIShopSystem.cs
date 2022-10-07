@@ -28,7 +28,7 @@ namespace UI.Interfaces.ShopSystem {
                 () => _inAnimation = false
             );
             items = gears as Gear[];
-            LoadGearPanel();
+            UpdateGearPanel();
             StartCoroutine(coroutine());
         }
 
@@ -44,7 +44,7 @@ namespace UI.Interfaces.ShopSystem {
                 });
             StartCoroutine(coroutine());
         } // ReSharper disable Unity.PerformanceAnalysis
-        public void LoadGearPanel() {
+        public void UpdateGearPanel() {
             var curPanelInd = 0;
             if (items.Length > 6) {
                 Debug.LogError("Gears in Shop more than 6!");
@@ -58,7 +58,7 @@ namespace UI.Interfaces.ShopSystem {
                 gearPanel.Model = gear;
                 curPanelInd++;
                 if (gear.rarity > GameManager.shared.game.player.Coin) gearPanel.highLight.enabled = false;
-            }
+            } // change gear.rarity to gear.price later
 
             for (; curPanelInd < _panels.Length; curPanelInd++) _panels[curPanelInd].Show = false;
             container.UpdateLayout();
@@ -69,12 +69,13 @@ namespace UI.Interfaces.ShopSystem {
             Close();
         }
         
+
         private void PurchaseSelectedGear(UIShopPanel clickedPanel)
         {
-            if (GameManager.shared.game.player.Coin < clickedPanel.Model.rarity) return;
-            GameManager.shared.game.player.Coin -= clickedPanel.Model.rarity;
+            if (GameManager.shared.game.player.Coin < clickedPanel.Model.rarity) return; // change gear.rarity to gear.price later
+            GameManager.shared.game.player.Coin -= clickedPanel.Model.rarity; // change gear.rarity to gear.price later
             GameManager.shared.game.player.AddGear(clickedPanel.Model);
-            LoadGearPanel();
+            UpdateGearPanel();
         }
     }
 }
