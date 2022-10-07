@@ -73,8 +73,8 @@ namespace UI.Interfaces.SelectStage
             container.UpdateLayout();
         }
         
-        public void ConfirmButtonEvent()
-        {
+        public void ConfirmButtonEvent(){
+            if (_selected == null) return;
             GameManager.shared.GotoStage(_selected.Id);
             Close();
         }
