@@ -45,6 +45,10 @@ namespace Tutorials.Turn2{
                 if (GameManager.shared.game.player.hitBalls.Count == 2){
                     _ttr.StepComplete(controllable);
                 }
+                else {
+                    _ttr._attBallView.CurrentState = BallView.State.Controlled;
+                    _ttr._attBallView.CurrentState = BallView.State.Controlled;
+                }
             }
 
             public override void Complete(TutorialBase tutorial){
