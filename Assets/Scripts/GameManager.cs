@@ -40,17 +40,13 @@ public class GameManager : MonoBehaviour{
     }
 
     private void Update(){
-        if (Input.GetKeyUp("e"))
-        {
-            print("enter the stage");
-            GameManager.shared.game.TestOnStageLoaded();
-        }
-
-        if (Input.GetKeyUp("s"))
-        {
-            print("stage success");
-            GameManager.shared.game.currentStage.TestOnStageBeaten();
-        }
+        if (Input.GetKeyUp("k")){
+            UIManager.shared.OpenUI("UIShopSystem", (object)(new Gear[]{
+                new Gear(game, -1),
+                new Gear(game, 1),
+                new Gear(game, 2)
+            }));
+        };
     }
 
     private void InitGame(){
