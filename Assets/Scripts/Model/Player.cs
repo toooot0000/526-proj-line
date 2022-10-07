@@ -12,8 +12,11 @@ namespace Model{
         public int gearUpLimit;
         public int energy;
 
-        public List<Ball> hitBalls = new();
-        public List<Ball> circledBalls = new();
+        public readonly List<Ball> hitBalls = new();
+        public readonly List<Ball> circledBalls = new();
+        public readonly List<Ball> hitDebuffBalls = new();
+        public readonly List<Ball> activeDebuffBalls = new();
+        
         private int _armor;
 
         private int _coin;
@@ -99,13 +102,20 @@ namespace Model{
 
 
         public void AddHitBall(Ball ball){
-            hitBalls.Add(ball);
-
+            if (ball.type == BallType.Debuff){
+                hitDebuffBalls.Add(ball);
+            } else{
+                hitBalls.Add(ball);
+            }
             OnHitBall?.Invoke(currentGame, ball);
         }
 
         public void AddCircledBall(Ball ball){
-            circledBalls.Add(ball);
+            if (ball.type == BallType.Debuff){
+                hitDebuffBalls.Add(ball);
+            } else{
+                circledBalls.Add(ball);
+            }
             OnCircledBall?.Invoke(currentGame, ball);
         }
 
@@ -168,6 +178,10 @@ namespace Model{
         public void ClearAllBalls(){
             hitBalls.Clear();
             circledBalls.Clear();
+        }
+
+        public void GainDebuffBall(Ball ball){
+            activeDebuffBalls.Add(ball);
         }
     }
 }

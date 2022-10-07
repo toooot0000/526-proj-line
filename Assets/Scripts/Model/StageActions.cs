@@ -21,6 +21,7 @@ namespace Model{
         public Ball[] circledBalls;
         public int defend;
         public Ball[] hitBalls;
+        public int lifeDeduction = 0;
 
         public StageActionInfoPlayerAttack(GameModel parent, GearEffectBase[] effects) : base(parent){
             this.effects = effects;
@@ -28,6 +29,8 @@ namespace Model{
 
         public override void Execute(){
             ExecuteSpecials();
+            currentGame.player.CurrentHp -= lifeDeduction;
+            if (currentGame.player.CurrentHp <= 0) return;
             damage?.target.TakeDamage(damage);
             currentGame.player.Armor += defend;
         }
