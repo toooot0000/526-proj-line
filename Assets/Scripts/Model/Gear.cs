@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Model.GearEffects;
@@ -27,6 +28,8 @@ namespace Model{
         public int comboNum;
         public GearEffectBase chargeEffect;
         public GearEffectBase comboEffect;
+        public string comboDesc;
+        public string chargeDesc;
         public Gear(GameModel parent) : base(parent){ }
 
         public Gear(GameModel parent, int id) : base(parent){
@@ -49,6 +52,8 @@ namespace Model{
 
             chargeNum = (int)gear["charge_num"];
             comboNum = (int)gear["combo_num"];
+            comboDesc = gear["combo_desc"] as string;
+            chargeDesc = gear["charge_desc"] as string;
 
             var spStr = (gear["charge_effect"] as string)!.Split(";");
             var className = spStr.First();
@@ -77,6 +82,22 @@ namespace Model{
             if (comboEffect == null) return false;
             var player = (parent as Player)!;
             return player.hitBalls.Count >= comboNum && player.hitBalls.Any(b => b.parent == this);
+        }
+
+        public string ToDescString(){
+            List<string> parts = new();
+            if (type == GearType.Weapon){
+                parts.Add($"Att: {ball.point.ToString()}");
+            } else{
+                parts.Add($"Def: {ball.point.ToString()}");
+            }
+            if (comboEffect != null && comboNum != -1){
+                parts.Add($"Combo({comboNum.ToString()}): {comboDesc}");
+            }
+            if (chargeEffect != null && chargeNum != -1){
+                parts.Add($"Charge({chargeNum.ToString()}): {chargeDesc}");
+            }
+            return string.Join("\n", parts);
         }
     }
 

@@ -20,7 +20,7 @@ namespace UI.GearDisplayer{
 
         public void UpdateContent(){
             image.sprite = Resources.Load<Sprite>(_model.imgPath);
-            textMesh.text = $"{_model.name} Att: {_model.ball.point} Ball Num: {_model.ballNum}";
+            textMesh.text = Model.ToDescString();
         }
     }
 }
