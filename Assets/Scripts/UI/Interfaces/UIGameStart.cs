@@ -21,8 +21,9 @@ namespace UI.Interfaces{
                     _inAnimation = false;
                     base.Close();
                     Destroy(gameObject);
+                    GameManager.shared.GameStart();
                 });
-            StartCoroutine(coroutine());
+            StartCoroutine(coroutine()); 
         }
     }
 }

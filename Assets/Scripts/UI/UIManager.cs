@@ -8,6 +8,9 @@ namespace UI{
     public delegate void UINormalEvent(UIBase ui);
 
     public class UIManager : MonoBehaviour, ITutorialControllable{
+
+        public const float UITransitionTime = 0.2f;
+        
         private const string ResourcesFolder = "Prefabs/UIs/";
         public static UIManager shared;
         public Shade shade;
@@ -76,8 +79,16 @@ namespace UI{
             }
         }
 
-        public void SetUIVisibility(bool value){
-            //TODO 
+        public void HideAllComponents(){
+            foreach (var comp in uiComponents){
+                comp.Hide();
+            }
+        }
+
+        public void ShowAllComponents(){
+            foreach (var comp in uiComponents){
+                comp.Show();
+            }
         }
     }
 }

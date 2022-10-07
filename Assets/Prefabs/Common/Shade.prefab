@@ -155,6 +155,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caeb02812f9f4864b5a21e1b0bd70e38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxShade: 0.7
   transitionTime: 0.2
-  shadeColor: {r: 0, g: 0, b: 0, a: 1}
+  shadeColor: {r: 0, g: 0, b: 0, a: 0.56078434}

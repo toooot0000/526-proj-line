@@ -37,7 +37,7 @@ namespace UI.Interfaces{
         }
 
         public void OnBtnClicked(){
-            GameManager.shared.Restart();
+            GameManager.shared.GameRestart();
             Close();
         }
     }

@@ -1,8 +1,10 @@
 using System;
 using BackendApi;
 using Core.DisplayArea.Stage;
+using Core.PlayArea.Balls;
 using Model;
 using Tutorials;
+using UI;
 using UnityEngine;
 using Utility;
 
@@ -15,6 +17,7 @@ public class GameManager : MonoBehaviour{
     public bool isAcceptingInput = true;
     public Game game;
     public Guid uuid = Guid.NewGuid();
+    public BallManager ballManager;
 
     private int _currentTurnNum = 0;
 
@@ -23,6 +26,8 @@ public class GameManager : MonoBehaviour{
         if (shared != null) Destroy(gameObject);
         shared = this;
         InitGame();
+        StartCoroutine(CoroutineUtility.Delayed(1, () =>
+            UIManager.shared.OpenUI("UIGameStart")));
     }
 
     private void Start(){
@@ -30,14 +35,33 @@ public class GameManager : MonoBehaviour{
     }
 
     private void Update(){
-        if (Input.GetKeyUp("k")) print("kill the current enemy!\n");
+        
     }
 
     private void InitGame(){
         PreInit();
         game ??= new Game();
+        game.CreatePlayer();
+    }
+
+    public void GameStart(){
+        game.LoadStage(0);
         stageManager.OnStageLoaded(game.currentStage);
         SwitchToPlayerTurn();
+    }
+
+    public void GameComplete(){
+        game.Complete();
+    }
+
+    public void GameEnd(){
+        game.End();
+    }
+
+    public void GameRestart(){
+        game.Restart();
+        game.CreatePlayer();
+        game.LoadStage(0);
     }
 
     private void PreInit(){
@@ -79,15 +103,24 @@ public class GameManager : MonoBehaviour{
         game.Complete();
     }
 
-    public void Restart(){
-        game.Restart();
-    }
+
 
     private void SwitchToPlayerTurn(){
         _currentTurnNum++;
         isAcceptingInput = true;
-        if (_currentTurnNum == 2){
-            tutorialManager.LoadTutorial("TutorialTurn2");
+        ballManager.SpawnBalls();
+        if (game.currentStage.id == 0){
+            switch (_currentTurnNum){
+                case 1:
+                    StartCoroutine(CoroutineUtility.Delayed(1, () => tutorialManager.LoadTutorial("TutorialSliceBall")));
+                    break;
+                case 2:
+                    tutorialManager.LoadTutorial("TutorialTurn2");
+                    break;
+                case 3:
+                    tutorialManager.LoadTutorial("TutorialCharge");
+                    break;
+            }
         }
     }
 

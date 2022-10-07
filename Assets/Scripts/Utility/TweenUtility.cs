@@ -56,5 +56,29 @@ namespace Utility{
 
             return Inner;
         }
+
+        public static IEnumerator Move(float seconds, Transform transform, Vector3 start, Vector3 end, AnimationCurve curve = null){
+            return Lerp(
+                seconds: seconds,
+                begin: () => { transform.position = start; },
+                update: (i) => {
+                    if (curve != null) i = curve.Evaluate(i);
+                    transform.position = Vector3.Lerp(start, end, i);
+                },
+                complete: () => { transform.position = end;}
+            )();
+        }
+        
+        public static IEnumerator Move(float seconds, RectTransform transform, Vector2 anchoredStart, Vector2 anchoredEnd, AnimationCurve curve = null){
+            return Lerp(
+                seconds: seconds,
+                begin: () => { transform.anchoredPosition = anchoredStart; },
+                update: (i) => {
+                    if (curve != null) i = curve.Evaluate(i);
+                    transform.anchoredPosition = Vector2.Lerp(anchoredStart, anchoredEnd, i);
+                },
+                complete: () => { transform.anchoredPosition = anchoredEnd;}
+            )();
+        }
     }
 }

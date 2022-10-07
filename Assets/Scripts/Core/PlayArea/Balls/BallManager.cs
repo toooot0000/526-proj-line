@@ -16,9 +16,6 @@ namespace Core.PlayArea.Balls{
 
 
         private void Start(){
-            GameManager.shared.game.OnTurnChanged += game => {
-                if (game.turn == Game.Turn.Player) SpawnBalls();
-            };
             SpawnBalls();
         }
 

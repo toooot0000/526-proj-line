@@ -14,9 +14,6 @@ namespace Tutorials.Turn2{
                 _ttr.meshes[1].enabled = true;
                 _ttr.touchCatcher.Enabled = false;
                 
-                
-
-
                 var startPosition = _ttr.startPoint.transform.position;
                 _ttr._attBallView.transform.position = startPosition;
                 var endPosition = _ttr.endPoint.transform.position;

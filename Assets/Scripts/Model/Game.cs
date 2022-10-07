@@ -18,12 +18,10 @@ namespace Model{
 
         public Game(GameModel parent = null) : base(parent){
             currentGame = this;
-            InitPlayer();
-            LoadStage(0);
         }
 
-        public bool HasNextStage => currentStage.nextStage != -1;
-        public Enemy CurrentEnemy => currentStage.CurrentEnemy;
+        public bool HasNextStage => currentStage?.nextStage != -1;
+        public Enemy CurrentEnemy => currentStage?.CurrentEnemy;
         public event SimpleModelEvent OnTurnChanged;
         public event SimpleModelEvent OnGameEnd;
         public event SimpleModelEvent OnGameComplete;
@@ -51,7 +49,7 @@ namespace Model{
             OnTurnChanged?.Invoke(this);
         }
 
-        private void InitPlayer(){
+        public void CreatePlayer(){
             player = new Player(this);
             OnPlayerInit?.Invoke(this);
         }
@@ -61,13 +59,10 @@ namespace Model{
         }
 
         public void Complete(){
-            Debug.Log("Game Complete!");
             OnGameComplete?.Invoke(this);
         }
 
         public void Restart(){
-            player.Init();
-            LoadStage(0);
             OnGameRestart?.Invoke(this);
         }
     }

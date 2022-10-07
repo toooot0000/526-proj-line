@@ -28,13 +28,18 @@ namespace Tutorials{
 
         private void Update(){
             if (Input.GetKeyUp(KeyCode.A)){
-                LoadTutorial("TutorialCharge");
+                // LoadTutorial("TutorialCharge");
             }
         }
 
         public TutorialBase LoadTutorial(string tutorialName){
             if (_completeTutorials.Contains(tutorialName)) return null;
+            if (_curName != null){
+                Debug.Log("Multiple Tutorial Invoke!");
+                return null;
+            }
             _curName = tutorialName;
+            UIManager.shared.HideAllComponents();
             var prefab = Resources.Load<GameObject>($"{PrefabPathPrefix}{tutorialName}");
             var inst = Instantiate(prefab, transform);
             var tutorial = inst.GetComponent<TutorialBase>();
@@ -47,11 +52,13 @@ namespace Tutorials{
         public void CompleteTutorial(TutorialBase tutorial){
             shade.SetActive(false);
             _completeTutorials.Add(_curName);
+            _curName = null;
             if (!string.IsNullOrEmpty(tutorial.nextTutorialName)){
                 _nextName = tutorial.nextTutorialName;
                 _nextDelay = Math.Max(0.1f, tutorial.nextDelay);
                 StartCoroutine(CoroutineUtility.Delayed(_nextDelay, () => { LoadTutorial(_nextName); }));
             }
+            UIManager.shared.ShowAllComponents();
         }
     }
 }
