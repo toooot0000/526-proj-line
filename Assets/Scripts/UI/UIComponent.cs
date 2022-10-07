@@ -6,8 +6,9 @@ namespace UI{
         private void Start(){
             UIManager.shared.RegisterComponent(this);
         }
-        public abstract void HandOverControlTo(TutorialBase tutorial);
-        public abstract void GainBackControlFrom(TutorialBase tutorial);
+
+        public virtual void HandOverControlTo(TutorialBase tutorial){ }
+        public virtual void GainBackControlFrom(TutorialBase tutorial){ }
         public abstract void Hide();
         public abstract void Show();
     }
