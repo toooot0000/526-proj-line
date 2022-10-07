@@ -66,11 +66,6 @@ namespace UI.Interfaces.SelectGear{
         public void ConfirmButtonEvent(){
             StartCoroutine(CoroutineUtility.Delayed(GameManager.shared.GoToNextStage));
             GameManager.shared.game.player.AddGear(_selected.Model);
-            EventLogger.Shared.Log(new EventItemInteract{
-                itemId = _selected.Model.id,
-                status = "obtained",
-                count = 1
-            });
             Close();
         }
 

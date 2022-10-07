@@ -29,20 +29,20 @@ namespace BackendApi{
     public class EventGearObtains : LoggableEvent
     {
         public int gearId;
-        public override string URLPath =>"logGearObtains"
+        public override string URLPath => "logGearObtains";
     }
 
     public class EventHpofEnemies : LoggableEvent
     {
         public int enemyId;
         public int hp;
-        public override string URLPath =>"logHpofEnemies"
+        public override string URLPath => "logHpofEnemies";
     }
 
     public class EventHitofBalls : LoggableEvent
     {
         public int ballId;
         public int hitCount;
-        public override string URLPath =>"logHitofBalls"
+        public override string URLPath => "logHitofBalls";
     }
 }
