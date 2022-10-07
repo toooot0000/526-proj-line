@@ -4,6 +4,7 @@ using System.Linq;
 using BackendApi;
 using Model.GearEffects;
 using Utility.Loader;
+using UnityEngine;
 
 namespace Model{
     [Serializable]
