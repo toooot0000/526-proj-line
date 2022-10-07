@@ -102,7 +102,7 @@ namespace Core.DisplayArea.Stage{
                     yield return new WaitWhile(() => _pause);
                     yield return CoroutineUtility.Delayed(1f, GameManager.shared.SwitchTurn);
                 } else{
-                    if (_modelStage.nextStage != -1){
+                    if (!_modelStage.IsLast){
                         if (_modelStage.bonusCoins == -1)
                             UIManager.shared.OpenUI("UISelectGear", _modelStage.bonusGears);
                         else

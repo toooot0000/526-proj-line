@@ -10,7 +10,7 @@ namespace UI
     {
         public StageWithNumber stageid;
         private void Start(){
-            GameManager.shared.game.player.OnStageChanged += (game, model) => stageid.Number = ((Player)model).StageId;
+            GameManager.shared.game.OnStageLoaded += (game) => stageid.Number = game.currentStage.id;
             stageid.Number = GameManager.shared.game.currentStage.id;
         }
     }

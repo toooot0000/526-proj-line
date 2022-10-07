@@ -20,7 +20,7 @@ namespace Model{
             currentGame = this;
         }
 
-        public bool HasNextStage => currentStage?.nextStage != -1;
+        public bool IsLastStage => currentStage.IsLast;
         public Enemy CurrentEnemy => currentStage?.CurrentEnemy;
         public event SimpleModelEvent OnTurnChanged;
         public event SimpleModelEvent OnGameEnd;

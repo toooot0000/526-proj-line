@@ -15,13 +15,19 @@ namespace UI.Interfaces.SelectStage
         private UIStagePanel[] _panels;
         private UIStagePanel _selected;
 
+        // public override string PrefabName{ get; } = "UISelectStage";
+
         private void Start()
         {
             _canvasGroup = GetComponent<CanvasGroup>();
             _canvasGroup.alpha = 0;
             _panels = transform.GetComponentsInChildren<UIStagePanel>();
         }
-        
+
+        // public static UISelectStage Open(int[] nextStageIds){
+        //     return UIBase.Open<UISelectStage, int[]>(nextStageIds);
+        // }
+
         public override void Open(object nextStageChoice) {
             base.Open(nextStageChoice);
             _inAnimation = true;
@@ -69,8 +75,7 @@ namespace UI.Interfaces.SelectStage
         
         public void ConfirmButtonEvent()
         {
-            GameManager.shared.game.LoadStage(_selected.Id);
-            GameManager.shared.game.player.StageId = _selected.Id;
+            GameManager.shared.GotoStage(_selected.Id);
             Close();
         }
         

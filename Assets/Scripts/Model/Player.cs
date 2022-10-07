@@ -23,7 +23,6 @@ namespace Model{
 
         private int _currentHp;
 
-        private int _currentStageId;
 
         public Player(GameModel parent) : base(parent){
             Init();
@@ -35,16 +34,6 @@ namespace Model{
                 OnCoinChanged?.Invoke(currentGame, this);
             }
             get => _coin;
-        }
-
-        public int StageId
-        {
-            set
-            {
-                _currentStageId = value;
-                OnStageChanged?.Invoke(currentGame,this);
-            }
-            get => _currentStageId;
         }
 
         [Obsolete("Use CurrentGears!")]

@@ -15,14 +15,11 @@ namespace Model{
         public readonly Gear[] bonusGears;
 
         private int _enemyIndex = 0;
-
         public Enemy CurrentEnemy => _enemyIndex < enemies.Length ? enemies[_enemyIndex] : null;
-        
         public Enemy NextEnemy => _enemyIndex >= enemies.Length - 1 ? null : enemies[_enemyIndex + 1];
-
         public bool IsBeaten => _enemyIndex == enemies.Length;
-
         public int RemainingEnemyNumber => enemies.Length - _enemyIndex;
+        public bool IsLast => nextStageChoice.Length == 0 || nextStageChoice[0] == -1;
 
         public event ModelEvent OnStageBeaten;
         public event ModelEvent OnEnemyChanged;
@@ -32,11 +29,12 @@ namespace Model{
         /// model = StageActionInfo
         /// </summary>
         public event ModelEvent OnProcessStageAction;
-
-        public int nextStage = 0;
+        
+        [Obsolete("Use Next StageChoice")]
+        public readonly int nextStage = 0;
         public String desc;
-        public int bonusCoins = -1;
-        public int[] nextStageChoice;
+        public readonly int bonusCoins = -1;
+        public readonly int[] nextStageChoice;
         //public int[] nextStageChoiceInt;
         public Stage(GameModel parent, Enemy[] enemies) : base(parent)
         {
@@ -52,8 +50,7 @@ namespace Model{
             nextStage = (int)info["next_stage"];
 
             var nextStageStr = (string)info["next_stage_choices"];
-            if (!string.IsNullOrEmpty(nextStageStr))
-            {
+            if (!string.IsNullOrEmpty(nextStageStr)){
                 nextStageChoice = nextStageStr.Split(";").Select(int.Parse).ToArray();
             }
             enemies = (info["enemies"] as string)!.Split(";").Select((s => new Enemy(parent, IntUtility.ParseString(s)) )).ToArray();

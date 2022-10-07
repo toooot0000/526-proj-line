@@ -14,6 +14,7 @@ using Utility;
 namespace Tutorials{
     public class TutorialManager : MonoBehaviour{
         private const string PrefabPathPrefix = "Prefabs/Tutorials/";
+        private const bool IsActive = true;
 
         public BallManager ballManager;
         public Shade shade;
@@ -33,6 +34,7 @@ namespace Tutorials{
         }
 
         public TutorialBase LoadTutorial(string tutorialName){
+            if (!IsActive) return null;
             if (_completeTutorials.Contains(tutorialName)) return null;
             if (_curName != null){
                 Debug.Log("Multiple Tutorial Invoke!");

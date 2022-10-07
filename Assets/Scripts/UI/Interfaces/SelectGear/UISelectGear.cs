@@ -40,6 +40,7 @@ namespace UI.Interfaces.SelectGear{
                 () => {
                     _inAnimation = false;
                     base.Close();
+                    GameManager.shared.Delayed(0.1f, ()=>UIManager.shared.OpenUI("UISelectStage", GameManager.shared.game.currentStage.nextStageChoice));
                     Destroy(gameObject);
                 });
             StartCoroutine(coroutine());
@@ -64,7 +65,6 @@ namespace UI.Interfaces.SelectGear{
         }
 
         public void ConfirmButtonEvent(){
-            StartCoroutine(CoroutineUtility.Delayed(GameManager.shared.GoToNextStage));
             GameManager.shared.game.player.AddGear(_selected.Model);
             Close();
         }

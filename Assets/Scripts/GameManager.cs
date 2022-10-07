@@ -88,6 +88,13 @@ public class GameManager : MonoBehaviour{
             SwitchToEnemyTurn();
     }
 
+    public void GotoStage(int id){
+        _currentTurnNum = 0;
+        game.LoadStage(id);
+        stageManager.OnStageLoaded(game.currentStage);
+        SwitchToPlayerTurn();
+    }
+
     public void GoToNextStage(){
         _currentTurnNum = 0;
         if (game.currentStage.nextStage == -1)
