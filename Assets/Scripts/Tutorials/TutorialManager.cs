@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Core.DisplayArea;
 using Core.DisplayArea.Stage;
 using Core.PlayArea.Balls;
 using Core.PlayArea.TouchTracking;
@@ -18,6 +19,7 @@ namespace Tutorials{
         public Shade shade;
         public TouchTracker tracker;
         public StageManager stageManager;
+        public ActionDetailDisplayer actionDetailDisplayer;
 
         private readonly HashSet<string> _completeTutorials = new();
         private float _nextDelay;
@@ -26,7 +28,7 @@ namespace Tutorials{
 
         private void Update(){
             if (Input.GetKeyUp(KeyCode.A)){
-                LoadTutorial("TutorialSliceBall");
+                LoadTutorial("TutorialCharge");
             }
         }
 

@@ -27,9 +27,13 @@ namespace Model{
         }
 
         public override void Execute(){
-            foreach (var effect in effects) effect.Execute(this);
+            ExecuteSpecials();
             damage?.target.TakeDamage(damage);
             currentGame.player.Armor += defend;
+        }
+        
+        public void ExecuteSpecials(){
+            foreach (var effect in effects) effect.Execute(this);
         }
     }
 

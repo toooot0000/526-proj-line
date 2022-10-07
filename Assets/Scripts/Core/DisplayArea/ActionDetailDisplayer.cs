@@ -3,13 +3,11 @@ using TMPro;
 using UnityEngine;
 
 namespace Core.DisplayArea{
-    [RequireComponent(typeof(TextMeshProUGUI))]
-    public class PointDisplay : MonoBehaviour{
+    public class ActionDetailDisplayer : MonoBehaviour{
         private Game _game;
-        private TextMeshProUGUI _text;
+        public TextMeshProUGUI text;
 
         private void Start(){
-            _text = GetComponent<TextMeshProUGUI>();
             _game = GameManager.shared.game;
             _game.player.OnHitBall += (game, model) => UpdateNumber();
             _game.player.OnCircledBall += (game, model) => UpdateNumber();
@@ -18,7 +16,11 @@ namespace Core.DisplayArea{
         }
 
         private void UpdateNumber(){
-            _text.text = $"Current Energy: {_game.player.GetTotalAttackPoint().ToString()}";
+            var info = _game.player.GetAttackActionInfo();
+            info.ExecuteSpecials();
+            var attStr = info.damage.totalPoint > 0 ? $"Att: {info.damage.totalPoint}" : "";
+            var defStr = info.defend > 0 ? $"Def: {info.defend}" : "";
+            text.text = $"{attStr}{defStr}";
         }
     }
 }

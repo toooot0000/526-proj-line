@@ -34,7 +34,7 @@ namespace Core.PlayArea.Balls{
                         _ballBg.color = Color.yellow;
                         break;
                     case State.Charged:
-                        _ballBg.color = Color.magenta;
+                        _ballBg.color = Color.blue;
                         break;
                 }
             }
@@ -93,14 +93,14 @@ namespace Core.PlayArea.Balls{
 
         public void OnBeingTouched(){
             if (CurrentState != State.Free && CurrentState == State.Controlled && !tutorCanBeHit) return;
-            if (CurrentState is State.Combo or State.Touched) return;
+            if (CurrentState is State.Circled or State.Charged or State.Combo or State.Touched) return;
             _game.player.AddHitBall(config.modelBall);
             OnHitted?.Invoke(this);
         }
 
         public void OnBeingCircled(){
-            if (CurrentState != State.Free || (CurrentState == State.Controlled && !tutorCanBeCircled)) return;
-            if (CurrentState is State.Circled or State.Charged) return;
+            if (CurrentState != State.Free && (CurrentState == State.Controlled && !tutorCanBeCircled)) return;
+            if (CurrentState is State.Circled or State.Charged or State.Combo or State.Touched) return;
             _game.player.AddCircledBall(config.modelBall);
             OnCharged?.Invoke(this);
         }

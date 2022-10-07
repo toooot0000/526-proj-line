@@ -1,18 +1,18 @@
 namespace Tutorials.Charge{
     public partial class TutorialCharge{
-        private partial class Step1: StepBase{
+        private partial class Step4{
             public override void SetUp(TutorialBase tutorial){
                 var ttr = (TutorialCharge)tutorial;
-                ttr.meshes[0].enabled = true;
-                ttr.LiftToFront(ttr.tutorialManager.stageManager.enemyView.intentionDisplayer.gameObject);
+                ttr.meshes[3].enabled = true;
                 ttr.touchCatcher.Enabled = true;
                 ttr.touchCatcher.OnTouched += ttr.StepComplete;
+                ttr.LiftToFront(ttr.tutorialManager.actionDetailDisplayer.gameObject);
             }
 
             public override void Complete(TutorialBase tutorial){
                 var ttr = (TutorialCharge)tutorial;
-                ttr.PutToBack(ttr.tutorialManager.stageManager.enemyView.intentionDisplayer.gameObject);
-                ttr.meshes[0].enabled = false;
+                ttr.meshes[3].enabled = false;
+                ttr.PutToBack(ttr.tutorialManager.actionDetailDisplayer.gameObject);
                 ttr.touchCatcher.OnTouched -= ttr.StepComplete;
             }
         }
