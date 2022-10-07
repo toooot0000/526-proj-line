@@ -36,7 +36,7 @@ namespace Model{
         public int nextStage = 0;
         public String desc;
         public int bonusCoins = -1;
-        public Stage[] nextStageChoice;
+        public int[] nextStageChoice;
         //public int[] nextStageChoiceInt;
         public Stage(GameModel parent, Enemy[] enemies) : base(parent)
         {
@@ -50,10 +50,11 @@ namespace Model{
             id = (int)info["id"];
             desc = info["desc"] as string;
             nextStage = (int)info["next_stage"];
-            if (((string)info["next_stage_choices"]).Length != 0)
+
+            var nextStageStr = (string)info["next_stage_choices"];
+            if (!string.IsNullOrEmpty(nextStageStr))
             {
-                nextStageChoice = ((string)info["next_stage_choices"])!.Split(";")
-                    .Select((s => new Stage(parent, IntUtility.ParseString(s)))).ToArray();
+                nextStageChoice = nextStageStr.Split(";").Select(int.Parse).ToArray();
             }
             enemies = (info["enemies"] as string)!.Split(";").Select((s => new Enemy(parent, IntUtility.ParseString(s)) )).ToArray();
             if (((string)info["bonus_gears"]).Length != 0){

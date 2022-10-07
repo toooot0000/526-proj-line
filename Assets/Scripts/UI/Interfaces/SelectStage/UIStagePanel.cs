@@ -2,6 +2,7 @@ using UnityEngine;
 using Model;
 using TMPro;
 using UnityEngine.UI;
+using Utility.Loader;
 
 namespace UI.Interfaces.SelectStage
 {
@@ -16,13 +17,13 @@ namespace UI.Interfaces.SelectStage
         private Stage _model;
         private Transform _parent;
 
-        public Stage Model {
-            set {
-                _model = value;
-                //image.sprite = Resources.Load<Sprite>(value.imgPath);
-                text.text = value.desc;
+        private int _id;
+        public int Id{
+            set{
+                _id = value;
+                text.text = CsvLoader.TryToLoad("Configs/stages", value)["desc"] as string;
             }
-            get => _model;
+            get => _id;
         }
         
         public bool Show {

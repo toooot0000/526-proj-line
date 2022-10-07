@@ -8,8 +8,6 @@ namespace UI.Interfaces.SelectStage
 {
     public class UISelectStage : UIBase
     {
-        
-        public Stage currentStage;
         public UIContainerFlexBox container;
         private CanvasGroup _canvasGroup;
         private bool _inAnimation;
@@ -24,16 +22,15 @@ namespace UI.Interfaces.SelectStage
             _panels = transform.GetComponentsInChildren<UIStagePanel>();
         }
         
-        public override void Open(object nextstagechoice) {
-            base.Open(nextstagechoice);
+        public override void Open(object nextStageChoice) {
+            base.Open(nextStageChoice);
             _inAnimation = true;
             var coroutine = TweenUtility.Lerp(0.2f,
                 () => _canvasGroup.alpha = 0,
                 i => _canvasGroup.alpha = i,
                 () => _inAnimation = false
             ); 
-            currentStage.nextStageChoice = nextstagechoice as Stage[];
-            LoadStagePanel();
+            LoadStagePanel(nextStageChoice as int[]);
             StartCoroutine(coroutine());
         }
         
@@ -51,18 +48,18 @@ namespace UI.Interfaces.SelectStage
         } 
         
         
-        public void LoadStagePanel() {
+        public void LoadStagePanel(int[] nextStageIds) {
             var curPanelInd = 0;
-            if (currentStage.nextStageChoice.Length > 5) {
+            if (nextStageIds.Length > 5) {
                 Debug.LogError("stages more than 5!");
                 return;
             }
 
-            foreach (var nextstage in currentStage.nextStageChoice) {
+            foreach (var nextStage in nextStageIds) {
                 var stagePanel = _panels[curPanelInd]; 
                 stagePanel.OnClick += ChangeSelectedItemTo;
                 stagePanel.Show = true; 
-                stagePanel.Model = nextstage;
+                stagePanel.Id = nextStage;
                 curPanelInd++;
             }
 
@@ -72,7 +69,7 @@ namespace UI.Interfaces.SelectStage
         
         public void ConfirmButtonEvent()
         {
-            GameManager.shared.game.LoadStage(_selected.Model.id);
+            GameManager.shared.game.LoadStage(_selected.Id);
             Close();
         }
         

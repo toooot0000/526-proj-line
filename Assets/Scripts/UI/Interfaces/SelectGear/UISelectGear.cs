@@ -19,15 +19,15 @@ namespace UI.Interfaces.SelectGear{
             _panels = transform.GetComponentsInChildren<UIGearPanel>();
         }
 
-        public override void Open(object gears){
-            base.Open(gears);
+        public override void Open(object nextStageChoice){
+            base.Open(nextStageChoice);
             _inAnimation = true;
             var coroutine = TweenUtility.Lerp(0.2f,
                 () => _canvasGroup.alpha = 0,
                 i => _canvasGroup.alpha = i,
                 () => _inAnimation = false
             );
-            items = gears as Gear[];
+            items = nextStageChoice as Gear[];
             LoadGearPanel();
             StartCoroutine(coroutine());
         }

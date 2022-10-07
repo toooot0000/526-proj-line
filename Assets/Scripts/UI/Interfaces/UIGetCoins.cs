@@ -15,8 +15,8 @@ namespace UI.Interfaces{
             _canvasGroup.alpha = 0;
         }
 
-        public override void Open(object coins){
-            base.Open(coins);
+        public override void Open(object nextStageChoice){
+            base.Open(nextStageChoice);
             _inAnimation = true;
             var coroutine = TweenUtility.Lerp(0.2f,
                 () => _canvasGroup.alpha = 0,
@@ -24,7 +24,7 @@ namespace UI.Interfaces{
                 () => _inAnimation = false
             );
             StartCoroutine(coroutine());
-            _coinNum = (int)coins;
+            _coinNum = (int)nextStageChoice;
             UpdateContent();
         }
 

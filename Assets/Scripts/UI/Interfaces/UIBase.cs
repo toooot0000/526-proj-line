@@ -4,7 +4,7 @@ namespace UI.Interfaces{
     public abstract class UIBase : MonoBehaviour{
         public string Name => "Base";
 
-        public virtual void Open(object arg){
+        public virtual void Open(object nextStageChoice){
             OnOpen?.Invoke(this);
         }
 

@@ -3,6 +3,7 @@ using BackendApi;
 using Core.DisplayArea.Stage;
 using Model;
 using Tutorials;
+using UI;
 using UnityEngine;
 using Utility;
 
@@ -30,7 +31,9 @@ public class GameManager : MonoBehaviour{
     }
 
     private void Update(){
-        if (Input.GetKeyUp("k")) print("kill the current enemy!\n");
+        if (Input.GetKeyUp("k")){
+            UIManager.shared.OpenUI("UISelectStage", (object)(new int[]{ 1, 2, 3 }));
+        }
     }
 
     private void InitGame(){
