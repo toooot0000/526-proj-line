@@ -1,5 +1,6 @@
 using UnityEngine;
 using Model;
+using TMPro;
 using UI.Container;
 using UnityEngine;
 using Utility;
@@ -13,8 +14,7 @@ namespace UI.Interfaces.SelectStage
         private bool _inAnimation;
         private UIStagePanel[] _panels;
         private UIStagePanel _selected;
-        
-        // Start is called before the first frame update
+
         private void Start()
         {
             _canvasGroup = GetComponent<CanvasGroup>();
@@ -33,7 +33,7 @@ namespace UI.Interfaces.SelectStage
             LoadStagePanel(nextStageChoice as int[]);
             StartCoroutine(coroutine());
         }
-        
+
         public override void Close() {
             _inAnimation = true;
             var coroutine = TweenUtility.Lerp(0.2f,
@@ -70,6 +70,7 @@ namespace UI.Interfaces.SelectStage
         public void ConfirmButtonEvent()
         {
             GameManager.shared.game.LoadStage(_selected.Id);
+            GameManager.shared.game.player.StageId = _selected.Id;
             Close();
         }
         
@@ -80,7 +81,6 @@ namespace UI.Interfaces.SelectStage
             clickedPanel.highLight.enabled = true;
             _selected = clickedPanel;
         }
-        
     }
 }
 

@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour{
 
     private void Update(){
         if (Input.GetKeyUp("k")){
-            UIManager.shared.OpenUI("UISelectStage", (object)(new int[]{ 1, 2, 3 }));
+            UIManager.shared.OpenUI("UISelectStage", (object)(new int[]{ 101,102,103}));
         }
     }
 

@@ -20,6 +20,8 @@ namespace Model{
 
         private int _currentHp;
 
+        private int _currentStageId;
+
         public Player(GameModel parent) : base(parent){
             Init();
         }
@@ -30,6 +32,16 @@ namespace Model{
                 OnCoinChanged?.Invoke(currentGame, this);
             }
             get => _coin;
+        }
+
+        public int StageId
+        {
+            set
+            {
+                _currentStageId = value;
+                OnStageChanged?.Invoke(currentGame,this);
+            }
+            get => _currentStageId;
         }
 
         [Obsolete("Use CurrentGears!")]
@@ -72,6 +84,7 @@ namespace Model{
         public event ModelEvent OnCoinChanged;
         public event ModelEvent OnArmorChanged;
 
+        public event ModelEvent OnStageChanged;
         public void Init(){
             HpUpLimit = (int)CsvLoader.GetConfig("player_init_hp");
             Coin = (int)CsvLoader.GetConfig("player_init_coin");
@@ -156,7 +169,7 @@ namespace Model{
             gears.Add(gear);
             OnGearChanged?.Invoke(currentGame, this);
         }
-
+        
         public void RemoveGear(int id){
             var ind = gears.FindIndex(g => g.id == id);
             if (ind == -1) return;

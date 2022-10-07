@@ -10,6 +10,7 @@ namespace UI.Interfaces.SelectStage
     public class UIStagePanel : MonoBehaviour
     {
         public TextMeshProUGUI text;
+        public TextMeshProUGUI bonusCoins;
         public Image image;
         public Image highLight;
         private CanvasGroup _group;
@@ -17,11 +18,13 @@ namespace UI.Interfaces.SelectStage
         private Stage _model;
         private Transform _parent;
 
-        private int _id;
+        public int _id;
         public int Id{
             set{
                 _id = value;
-                text.text = CsvLoader.TryToLoad("Configs/stages", value)["desc"] as string;
+                text.text = (string)CsvLoader.TryToLoad("Configs/stages", value)["desc"];
+                bonusCoins.text = (string)CsvLoader.TryToLoad("Configs/stages", value)["desc"] + " clear" +
+                                  " bonus coins: " + CsvLoader.TryToLoad("Configs/stages", value)["bonus_coins"] as string;
             }
             get => _id;
         }

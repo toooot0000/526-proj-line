@@ -12,7 +12,7 @@ namespace UI.Interfaces.SelectGear{
         private bool _inAnimation;
         private UIGearPanel[] _panels;
         private UIGearPanel _selected;
-
+        
         private void Start(){
             _canvasGroup = GetComponent<CanvasGroup>();
             _canvasGroup.alpha = 0;
