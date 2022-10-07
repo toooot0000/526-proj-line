@@ -36,6 +36,7 @@ namespace Core.DisplayArea.Stage{
                 _currentHp = value;
                 tmp.text = $"{Math.Max(value, 0).ToString()}/{Model.HpUpLimit.ToString()}";
                 progressBar.Percentage = (float)value / Model.HpUpLimit * 100f;
+                if (value <= 0) isDead = true;
             }
             get => _currentHp;
         }
