@@ -44,7 +44,10 @@ public class GameManager : MonoBehaviour{
             UIManager.shared.OpenUI("UIShopSystem", (object)(new Gear[]{
                 new Gear(game, -1),
                 new Gear(game, 1),
-                new Gear(game, 2)
+                new Gear(game, 2),
+                new Gear(game, 3),
+                new Gear(game, 4),
+                new Gear(game, 5)
             }));
         };
     }
