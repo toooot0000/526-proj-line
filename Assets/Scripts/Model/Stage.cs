@@ -4,41 +4,20 @@ using Utility;
 using Utility.Loader;
 
 namespace Model{
-    public class Stage : GameModel{
-        public readonly Gear[] bonusGears;
 
-        public readonly Enemy[] enemies;
 
-        private int _enemyIndex;
-
-        public readonly int bonusCoins = -1;
+    public class Stage: GameModel{
 
         public int id;
 
+        public readonly Enemy[] enemies;
 
-        public readonly int nextStage;
+        public readonly Gear[] bonusGears;
 
-        public Stage(GameModel parent, Enemy[] enemies) : base(parent){
-            this.enemies = enemies;
-            // BindEvents();
-        }
-
-        public Stage(GameModel parent, int id) : base(parent){
-            var info = CsvLoader.TryToLoad("Configs/stages", id);
-            if (info == null) return;
-            id = (int)info["id"];
-            nextStage = (int)info["next_stage"];
-            enemies = (info["enemies"] as string)!.Split(";").Select(s => new Enemy(parent, IntUtility.ParseString(s)))
-                .ToArray();
-            if (((string)info["bonus_gears"]).Length != 0)
-                bonusGears = ((string)info["bonus_gears"])!.Split(";")
-                    .Select(s => new Gear(parent, IntUtility.ParseString(s))).ToArray();
-            bonusCoins = (int)info["bonus_coins"];
-            CurrentEnemy.BecomeCurrent();
-        }
+        private int _enemyIndex = 0;
 
         public Enemy CurrentEnemy => _enemyIndex < enemies.Length ? enemies[_enemyIndex] : null;
-
+        
         public Enemy NextEnemy => _enemyIndex >= enemies.Length - 1 ? null : enemies[_enemyIndex + 1];
 
         public bool IsBeaten => _enemyIndex == enemies.Length;
@@ -47,16 +26,45 @@ namespace Model{
 
         public event ModelEvent OnStageBeaten;
         public event ModelEvent OnEnemyChanged;
-
         [Obsolete("Use OnProcessStageAction")]
         public event ModelEvent OnProcessDamage;
-
         /// <summary>
-        ///     model = StageActionInfo
+        /// model = StageActionInfo
         /// </summary>
         public event ModelEvent OnProcessStageAction;
 
-        private void ForwardCurrentEnemy(Game game, GameModel deadEnemy){
+        public int nextStage = 0;
+        public String desc;
+        public int bonusCoins = -1;
+        public int[] nextStageChoice;
+        //public int[] nextStageChoiceInt;
+        public Stage(GameModel parent, Enemy[] enemies) : base(parent)
+        {
+            this.enemies = enemies;
+            // BindEvents();
+        }
+
+        public Stage(GameModel parent, int id) : base(parent) {
+            var info = CsvLoader.TryToLoad("Configs/stages", id);
+            if (info == null) return;
+            id = (int)info["id"];
+            desc = info["desc"] as string;
+            nextStage = (int)info["next_stage"];
+
+            var nextStageStr = (string)info["next_stage_choices"];
+            if (!string.IsNullOrEmpty(nextStageStr))
+            {
+                nextStageChoice = nextStageStr.Split(";").Select(int.Parse).ToArray();
+            }
+            enemies = (info["enemies"] as string)!.Split(";").Select((s => new Enemy(parent, IntUtility.ParseString(s)) )).ToArray();
+            if (((string)info["bonus_gears"]).Length != 0){
+                bonusGears = ((string)info["bonus_gears"])!.Split(";").Select((s => new Gear(parent, IntUtility.ParseString(s)) )).ToArray();
+            }
+            bonusCoins = (int)info["bonus_coins"];
+            CurrentEnemy.BecomeCurrent();
+        }
+
+        private void ForwardCurrentEnemy(Game game, GameModel deadEnemy) {
             _enemyIndex++;
             if (_enemyIndex == enemies.Length){
                 GameManager.shared.Delayed(1, () => { OnStageBeaten?.Invoke(currentGame, this); });

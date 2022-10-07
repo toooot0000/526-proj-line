@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Model{
@@ -20,8 +20,8 @@ namespace Model{
             currentGame = this;
         }
 
-        public bool HasNextStage => currentStage?.nextStage != -1;
-        public Enemy CurrentEnemy => currentStage?.CurrentEnemy;
+        public bool HasNextStage => currentStage.nextStage != -1;
+        public Enemy CurrentEnemy => currentStage.CurrentEnemy;
         public event SimpleModelEvent OnTurnChanged;
         public event SimpleModelEvent OnGameEnd;
         public event SimpleModelEvent OnGameComplete;

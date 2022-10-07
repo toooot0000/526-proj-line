@@ -1,38 +1,40 @@
-using BackendApi;
+using UnityEngine;
 using Model;
+using TMPro;
 using UI.Container;
 using UnityEngine;
 using Utility;
 
-namespace UI.Interfaces.SelectGear{
-    public class UISelectGear : UIBase{
+namespace UI.Interfaces.SelectStage
+{
+    public class UISelectStage : UIBase
+    {
         public UIContainerFlexBox container;
-        public Gear[] items;
         private CanvasGroup _canvasGroup;
         private bool _inAnimation;
-        private UIGearPanel[] _panels;
-        private UIGearPanel _selected;
-        
-        private void Start(){
+        private UIStagePanel[] _panels;
+        private UIStagePanel _selected;
+
+        private void Start()
+        {
             _canvasGroup = GetComponent<CanvasGroup>();
             _canvasGroup.alpha = 0;
-            _panels = transform.GetComponentsInChildren<UIGearPanel>();
+            _panels = transform.GetComponentsInChildren<UIStagePanel>();
         }
-
-        public override void Open(object nextStageChoice){
+        
+        public override void Open(object nextStageChoice) {
             base.Open(nextStageChoice);
             _inAnimation = true;
             var coroutine = TweenUtility.Lerp(0.2f,
                 () => _canvasGroup.alpha = 0,
                 i => _canvasGroup.alpha = i,
                 () => _inAnimation = false
-            );
-            items = nextStageChoice as Gear[];
-            LoadGearPanel();
+            ); 
+            LoadStagePanel(nextStageChoice as int[]);
             StartCoroutine(coroutine());
         }
 
-        public override void Close(){
+        public override void Close() {
             _inAnimation = true;
             var coroutine = TweenUtility.Lerp(0.2f,
                 () => _canvasGroup.alpha = 1,
@@ -43,33 +45,37 @@ namespace UI.Interfaces.SelectGear{
                     Destroy(gameObject);
                 });
             StartCoroutine(coroutine());
-        } // ReSharper disable Unity.PerformanceAnalysis
-        public void LoadGearPanel(){
+        } 
+        
+        
+        public void LoadStagePanel(int[] nextStageIds) {
             var curPanelInd = 0;
-            if (items.Length > 3){
-                Debug.LogError("Gears more than 3!");
+            if (nextStageIds.Length > 5) {
+                Debug.LogError("stages more than 5!");
                 return;
             }
 
-            foreach (var gear in items){
-                var gearPanel = _panels[curPanelInd];
-                gearPanel.OnClick += ChangeSelectedItemTo;
-                gearPanel.Show = true;
-                gearPanel.Model = gear;
+            foreach (var nextStage in nextStageIds) {
+                var stagePanel = _panels[curPanelInd]; 
+                stagePanel.OnClick += ChangeSelectedItemTo;
+                stagePanel.Show = true; 
+                stagePanel.Id = nextStage;
                 curPanelInd++;
             }
 
             for (; curPanelInd < _panels.Length; curPanelInd++) _panels[curPanelInd].Show = false;
             container.UpdateLayout();
         }
-
-        public void ConfirmButtonEvent(){
-            StartCoroutine(CoroutineUtility.Delayed(GameManager.shared.GoToNextStage));
-            GameManager.shared.game.player.AddGear(_selected.Model);
+        
+        public void ConfirmButtonEvent()
+        {
+            GameManager.shared.game.LoadStage(_selected.Id);
+            GameManager.shared.game.player.StageId = _selected.Id;
             Close();
         }
-
-        private void ChangeSelectedItemTo(UIGearPanel clickedPanel){
+        
+        private void ChangeSelectedItemTo(UIStagePanel clickedPanel)
+        {
             if (_selected == clickedPanel) return;
             if (_selected != null) _selected.highLight.enabled = false;
             clickedPanel.highLight.enabled = true;
@@ -77,3 +83,6 @@ namespace UI.Interfaces.SelectGear{
         }
     }
 }
+
+
+

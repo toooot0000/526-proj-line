@@ -103,7 +103,9 @@ public class GameManager : MonoBehaviour{
         game.Complete();
     }
 
-
+    public void Restart(){
+        game.Restart();
+    }
 
     private void SwitchToPlayerTurn(){
         _currentTurnNum++;
