@@ -5,6 +5,7 @@ using BackendApi;
 using Model.GearEffects;
 using Utility.Extensions;
 using Utility.Loader;
+using UnityEngine;
 
 namespace Model{
     [Serializable]
