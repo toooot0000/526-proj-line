@@ -51,9 +51,11 @@ namespace Core.Common{
 
         private void Update(){
             var diff = _percentage - _currentPercentage;
+            if (Mathf.Abs(diff) < Mathf.Epsilon) return;
             var speed = Mathf.Sign(diff) * tweenCurve.Evaluate(Mathf.Abs(diff) / 100) * tweenMaxSpeed;
             _currentPercentage += speed * Time.deltaTime;
             _currentPercentage = Mathf.Clamp(_currentPercentage, 0, 100f);
+            _line.SetPosition(0, PercentageToLocalPosition(0));
             _line.SetPosition(1, PercentageToLocalPosition(_currentPercentage));
         }
 

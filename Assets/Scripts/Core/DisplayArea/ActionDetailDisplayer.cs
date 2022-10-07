@@ -20,7 +20,7 @@ namespace Core.DisplayArea{
             info.ExecuteSpecials();
             var attStr = info.damage.totalPoint > 0 ? $"Att: {info.damage.totalPoint}" : "";
             var defStr = info.defend > 0 ? $"Def: {info.defend}" : "";
-            text.text = $"{attStr}{defStr}";
+            text.text = $"{attStr} {defStr}";
         }
     }
 }

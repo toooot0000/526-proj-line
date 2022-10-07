@@ -89,23 +89,11 @@ namespace Model{
             hitBalls.Add(ball);
 
             OnHitBall?.Invoke(currentGame, ball);
-            // Send Event
-            var skillEvent = new EventSkillUses{
-                skillId = ball.id,
-                uses = 1
-            };
-            EventLogger.Shared.Log(skillEvent);
         }
 
         public void AddCircledBall(Ball ball){
             circledBalls.Add(ball);
             OnCircledBall?.Invoke(currentGame, ball);
-            // Send Event
-            var skillEvent = new EventSkillUses{
-                skillId = ball.id,
-                uses = 1
-            };
-            EventLogger.Shared.Log(skillEvent);
         }
 
         public int GetTotalAttackPoint(){
