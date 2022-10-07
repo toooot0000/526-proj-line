@@ -6,7 +6,6 @@ using Utility;
 
 namespace UI.Interfaces.ShopSystem {
     public class UIShopSystem : UIBase {
-        public UIContainerFlexBox container;
         public Gear[] items;
         private CanvasGroup _canvasGroup;
         private bool _inAnimation;
@@ -60,7 +59,6 @@ namespace UI.Interfaces.ShopSystem {
             } // change gear.rarity to gear.price later
 
             for (; curPanelInd < _panels.Length; curPanelInd++) _panels[curPanelInd].Show = false;
-            container.UpdateLayout();
         }
 
         public void ConfirmButtonEvent()
