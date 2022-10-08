@@ -410,6 +410,7 @@ MonoBehaviour:
   bonusCoins: {fileID: 8670674656180050002}
   image: {fileID: 4282308873893342514}
   highLight: {fileID: 7648841941926180812}
+  _id: 0
 --- !u!1 &5628016036239541468
 GameObject:
   m_ObjectHideFlags: 0
@@ -521,7 +522,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.0634421, y: 0.048}
   m_AnchorMax: {x: 0.9081404, y: 0.6827408}
-  m_AnchoredPosition: {x: -0.88990784, y: 201.8404}
+  m_AnchoredPosition: {x: -0.8898926, y: 201.8404}
   m_SizeDelta: {x: 1.7798, y: -443.68076}
   m_Pivot: {x: 0.5, y: 0.49999997}
 --- !u!222 &7023064045604137699

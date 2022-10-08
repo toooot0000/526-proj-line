@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace UI.Common{
+namespace UI.Common.Shade{
     public class Shade : MonoBehaviour{
         public SpriteRenderer image;
         private Coroutine _coroutine;

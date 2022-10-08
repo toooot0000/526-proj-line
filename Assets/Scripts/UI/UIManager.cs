@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Tutorials;
 using UI.Common;
+using UI.Common.Shade;
 using UI.Interfaces;
 using UnityEngine;
 using Utility;

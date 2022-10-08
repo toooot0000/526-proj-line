@@ -8,13 +8,14 @@ using Tutorials.Display;
 using Tutorials.SliceBall;
 using UI;
 using UI.Common;
+using UI.Common.Shade;
 using UnityEngine;
 using Utility;
 
 namespace Tutorials{
     public class TutorialManager : MonoBehaviour{
         private const string PrefabPathPrefix = "Prefabs/Tutorials/";
-        private const bool IsActive = true;
+        private const bool IsActive = false;
 
         public BallManager ballManager;
         public Shade shade;
