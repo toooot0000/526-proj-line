@@ -18,6 +18,8 @@ namespace Tutorials.Turn2{
                 _ttr._attBallView.transform.position = startPosition;
                 var endPosition = _ttr.endPoint.transform.position;
                 _ttr._defBallView.transform.position = endPosition;
+                _ttr._attBallView.HandOverControlTo(_ttr);
+                _ttr._defBallView.HandOverControlTo(_ttr);
                 
                 _ttr.LiftToFront(_ttr._attBallView.gameObject);
                 _ttr.LiftToFront(_ttr._defBallView.gameObject);

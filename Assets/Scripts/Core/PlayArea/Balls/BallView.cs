@@ -17,10 +17,9 @@ namespace Core.PlayArea.Balls{
             Combo,
             Circled,
             Charged,
-            Flying,
-            Fading,
             Hide,
-            Controlled
+            Controlled,
+            Animating,
         }
 
         public Vector2 velocity;
@@ -92,15 +91,13 @@ namespace Core.PlayArea.Balls{
         }
 
         public void OnBeingTouched(){
-            if (CurrentState != State.Free && CurrentState == State.Controlled && !tutorCanBeHit) return;
-            if (CurrentState is State.Circled or State.Charged or State.Combo or State.Touched) return;
+            if (CurrentState != State.Free && (CurrentState != State.Controlled || !tutorCanBeHit)) return;
             _game.player.AddHitBall(config.modelBall);
             OnHitted?.Invoke(this);
         }
 
         public void OnBeingCircled(){
-            if (CurrentState != State.Free && (CurrentState == State.Controlled && !tutorCanBeCircled)) return;
-            if (CurrentState is State.Circled or State.Charged or State.Combo or State.Touched) return;
+            if (CurrentState != State.Free && (CurrentState != State.Controlled || !tutorCanBeCircled)) return;
             _game.player.AddCircledBall(config.modelBall);
             OnCharged?.Invoke(this);
         }
@@ -110,7 +107,7 @@ namespace Core.PlayArea.Balls{
         }
 
         public void FlyToLocation(float seconds, Vector3 targetWorldLocation){
-            CurrentState = State.Flying;
+            CurrentState = State.Animating;
             var startWorldLocation = transform.position;
             var p1 = new Vector3{
                 x = startWorldLocation.x,
@@ -144,7 +141,7 @@ namespace Core.PlayArea.Balls{
         }
 
         public void FadeOut(float seconds){
-            CurrentState = State.Fading;
+            CurrentState = State.Animating;
             var bgStartColor = _ballBg.color;
             var bgEndColor = new Color(bgStartColor.r, bgStartColor.g, bgStartColor.b, 0);
             var iconStartColor = weaponIcon.color;

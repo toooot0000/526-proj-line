@@ -95,6 +95,7 @@ public class GameManager : MonoBehaviour{
         SwitchToPlayerTurn();
     }
 
+    [Obsolete]
     public void GoToNextStage(){
         _currentTurnNum = 0;
         if (game.currentStage.nextStage == -1)
@@ -116,7 +117,7 @@ public class GameManager : MonoBehaviour{
 
     private void SwitchToPlayerTurn(){
         _currentTurnNum++;
-        isAcceptingInput = true;
+        StartCoroutine(CoroutineUtility.Delayed(0.1f, () => isAcceptingInput = true));
         ballManager.SpawnBalls();
         if (game.currentStage.id == 0){
             switch (_currentTurnNum){
