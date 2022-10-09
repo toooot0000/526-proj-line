@@ -66,7 +66,8 @@ public class GameManager : MonoBehaviour{
 
     private void PreInit(){
         // Backend API url
-        EventLogger.serverURL = "https://test526.wn.r.appspot.com/";
+        // EventLogger.serverURL = "https://test526.wn.r.appspot.com/";
+        EventLogger.serverURL = "http://localhost:8080/";
     }
 
     public void Delayed(int frames, Action modelAction){
