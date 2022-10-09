@@ -26,9 +26,11 @@ namespace Model{
         public event SimpleModelEvent OnGameEnd;
         public event SimpleModelEvent OnGameComplete;
         public event SimpleModelEvent OnStageLoaded;
+
+        public event ModelEvent OnStageBeaten;
         public event SimpleModelEvent OnGameRestart;
         public event SimpleModelEvent OnPlayerInit;
-
+        
         public List<Ball> GetAllSkillBalls(){
             var ret = new List<Ball>();
             foreach (var item in player.CurrentGears)
@@ -47,6 +49,10 @@ namespace Model{
             OnStageLoaded?.Invoke(this);
             turn = Turn.Player;
             OnTurnChanged?.Invoke(this);
+            currentStage.OnStageBeaten += (g, m) =>
+            {
+                OnStageBeaten?.Invoke(this,m);
+            };
         }
 
         public void CreatePlayer(){
@@ -65,5 +71,17 @@ namespace Model{
         public void Restart(){
             OnGameRestart?.Invoke(this);
         }
+
+        public void TestOnStageLoaded()
+        {
+            OnStageLoaded?.Invoke(this);
+        }
+
+        public void TestOnStageBeaten()
+        {
+            
+        }
+
+        
     }
 }

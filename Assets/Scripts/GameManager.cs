@@ -22,12 +22,14 @@ public class GameManager : MonoBehaviour{
     private int _currentTurnNum = 0;
 
 
-    private void Awake(){
+    private void Awake()
+    {
         if (shared != null) Destroy(gameObject);
         shared = this;
         InitGame();
         StartCoroutine(CoroutineUtility.Delayed(1, () =>
             UIManager.shared.OpenUI("UIGameStart")));
+        EventLogger.Shared.init();//should do this afeter game is initialized
     }
 
     private void Start(){
@@ -35,7 +37,17 @@ public class GameManager : MonoBehaviour{
     }
 
     private void Update(){
-        
+        if (Input.GetKeyUp("e"))
+        {
+            print("enter the stage");
+            GameManager.shared.game.TestOnStageLoaded();
+        }
+
+        if (Input.GetKeyUp("s"))
+        {
+            print("stage success");
+            GameManager.shared.game.currentStage.TestOnStageBeaten();
+        }
     }
 
     private void InitGame(){

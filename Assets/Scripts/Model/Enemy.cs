@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using Model.EnemySpecialAttacks;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using Utility;
 using Utility.Loader;
@@ -40,6 +41,7 @@ namespace Model{
                 .Select(s => EnumUtility.GetValue<EnemyIntention>(s)).ToArray();
             var spStr = (enemy["special"] as string)!.Split(";");
             var className = spStr.First();
+            if(className != "")
             special = Activator.CreateInstance(Type.GetType($"Model.EnemySpecialAttacks.{className}", true),
                     new object[]{ spStr[1..] }) as
                 SpecialAttackBase;

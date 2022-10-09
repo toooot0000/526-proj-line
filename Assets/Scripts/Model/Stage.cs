@@ -51,7 +51,7 @@ namespace Model{
 
             var nextStageStr = (string)info["next_stage_choices"];
             if (!string.IsNullOrEmpty(nextStageStr)){
-                nextStageChoice = nextStageStr.Split(";").Select(int.Parse).ToArray();
+                nextStageChoice = nextStageStr.Split(";").Select(IntUtility.ParseString).ToArray();
             }
             enemies = (info["enemies"] as string)!.Split(";").Select((s => new Enemy(parent, IntUtility.ParseString(s)) )).ToArray();
             if (((string)info["bonus_gears"]).Length != 0){
@@ -85,6 +85,11 @@ namespace Model{
         public void ProcessStageAction(StageActionInfoBase info){
             info.Execute();
             OnProcessStageAction?.Invoke(currentGame, info);
+        }
+
+        public void TestOnStageBeaten()
+        {
+            OnStageBeaten?.Invoke(currentGame,this);
         }
     }
 }
