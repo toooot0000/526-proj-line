@@ -119,7 +119,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09bf0745b9be04ecb834377e65b89809, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _selectedStageId: 0
   container: {fileID: 760213856501728159}
 --- !u!1 &5492518811391179845
 GameObject:

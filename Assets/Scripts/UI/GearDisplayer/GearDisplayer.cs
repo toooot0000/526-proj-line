@@ -19,11 +19,7 @@ namespace UI.GearDisplayer{
             UIManager.shared.RegisterComponent(this);
             UpdateGears(GameManager.shared.game, GameManager.shared.game.player);
         }
-
-        public override void HandOverControlTo(TutorialBase tutorial){ }
-
-        public override void GainBackControlFrom(TutorialBase tutorial){ }
-
+        
         public override void Hide(){
             if (_isHidden) return;
             _isHidden = true;

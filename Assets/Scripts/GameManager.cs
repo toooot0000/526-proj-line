@@ -13,11 +13,11 @@ public class GameManager : MonoBehaviour{
     public TutorialManager tutorialManager;
     
     public static GameManager shared;
-    [HideInInspector]
-    public bool isAcceptingInput = true;
+    
     public Game game;
     public Guid uuid = Guid.NewGuid();
     public BallManager ballManager;
+    public TurnSignDisplayer turnSignDisplayer;
 
     private int _currentTurnNum = 0;
 
@@ -96,6 +96,7 @@ public class GameManager : MonoBehaviour{
         SwitchToPlayerTurn();
     }
 
+    [Obsolete]
     public void GoToNextStage(){
         _currentTurnNum = 0;
         if (game.currentStage.nextStage == -1)
@@ -117,7 +118,6 @@ public class GameManager : MonoBehaviour{
 
     private void SwitchToPlayerTurn(){
         _currentTurnNum++;
-        isAcceptingInput = true;
         ballManager.SpawnBalls();
         if (game.currentStage.id == 0){
             switch (_currentTurnNum){
@@ -135,12 +135,12 @@ public class GameManager : MonoBehaviour{
     }
 
     private void SwitchToEnemyTurn(){
-        isAcceptingInput = false;
         var stageInfo = game.CurrentEnemy.GetCurrentStageAction();
         stageManager.ProcessStageActionInfo(stageInfo);
     }
 
     public void OnPlayerFinishInput(){
+        if (game.turn != Game.Turn.Player) return;
         var currentAction = game.player.GetAttackActionInfo();
         game.player.ClearAllBalls();
         stageManager.ProcessStageActionInfo(currentAction);

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Tutorials;
+using UI.Common;
+using UI.Common.Shade;
 using UI.Interfaces;
 using UnityEngine;
 using Utility;
@@ -13,7 +15,7 @@ namespace UI{
         
         private const string ResourcesFolder = "Prefabs/UIs/";
         public static UIManager shared;
-        public Shade shade;
+        public UIShade shade;
         private readonly List<UIBase> _uiList = new();
         private bool _isInTutorial = false;
         public readonly List<UIComponent> uiComponents = new();

@@ -18,6 +18,8 @@ namespace Tutorials.Turn2{
                 _ttr._attBallView.transform.position = startPosition;
                 var endPosition = _ttr.endPoint.transform.position;
                 _ttr._defBallView.transform.position = endPosition;
+                _ttr._attBallView.HandOverControlTo(_ttr);
+                _ttr._defBallView.HandOverControlTo(_ttr);
                 
                 _ttr.LiftToFront(_ttr._attBallView.gameObject);
                 _ttr.LiftToFront(_ttr._defBallView.gameObject);
@@ -44,6 +46,10 @@ namespace Tutorials.Turn2{
             private void WrappedStepComplete(ITutorialControllable controllable){
                 if (GameManager.shared.game.player.hitBalls.Count == 2){
                     _ttr.StepComplete(controllable);
+                }
+                else {
+                    _ttr._attBallView.CurrentState = BallView.State.Controlled;
+                    _ttr._attBallView.CurrentState = BallView.State.Controlled;
                 }
             }
 

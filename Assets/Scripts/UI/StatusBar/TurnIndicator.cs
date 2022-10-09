@@ -1,15 +1,22 @@
 using Model;
 using TMPro;
-using UnityEngine;
 
-namespace Core.DisplayArea{
-    public class TurnIndicator : MonoBehaviour{
+namespace UI.StatusBar{
+    public class TurnIndicator : UIComponent{
         private TextMeshProUGUI _textMesh;
 
         private void Start(){
             _textMesh = GetComponent<TextMeshProUGUI>();
             GameManager.shared.game.OnTurnChanged += UpdateText;
             UpdateText(GameManager.shared.game);
+        }
+        
+        public override void Hide(){
+            
+        }
+
+        public override void Show(){
+            
         }
 
         private void UpdateText(Game game){

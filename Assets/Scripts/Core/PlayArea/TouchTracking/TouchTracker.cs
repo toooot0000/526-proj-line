@@ -27,6 +27,7 @@ namespace Core.PlayArea.TouchTracking{
         private Game _game;
         private bool _isInTutorial;
         public bool tutorKeepLine = false;
+        public bool isAcceptingInput = true;
 
 
         private bool _isTracing;
@@ -41,22 +42,22 @@ namespace Core.PlayArea.TouchTracking{
         }
 
         private void Update(){
-            if (!GameManager.shared.isAcceptingInput) return;
+            if (isAcceptingInput) return;
             TraceTouchPosition();
         }
 
         private void OnMouseDown(){
-            if (!GameManager.shared.isAcceptingInput) return;
+            if (!isAcceptingInput) return;
             StartTracking();
         }
 
         private void OnMouseExit(){
-            if (!GameManager.shared.isAcceptingInput) return;
+            if (!isAcceptingInput) return;
             StopTracking();
         }
 
         private void OnMouseUp(){
-            if (!GameManager.shared.isAcceptingInput) return;
+            if (!isAcceptingInput) return;
             StopTracking();
         }
 
@@ -84,8 +85,10 @@ namespace Core.PlayArea.TouchTracking{
             if (!_isTracing) return;
             _isTracing = false;
             touchCollider.SetEnabled(false);
-            if (_game.player.hitBalls.Count == 0 && _game.player.circledBalls.Count == 0) return;
             if (_isInTutorial) OnTouchEnd?.Invoke(this);
+            if (_game.player.hitBalls.Count == 0 && _game.player.circledBalls.Count == 0) return;
+
+            isAcceptingInput = false;
             StartCoroutine(HideLine());
             GameManager.shared.OnPlayerFinishInput();
         }
