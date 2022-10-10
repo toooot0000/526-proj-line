@@ -9,6 +9,7 @@ namespace UI.Interfaces.ShopSystem {
     public class UIShopPanel : MonoBehaviour {
         public TextMeshProUGUI name;
         public TextMeshProUGUI price;
+        public TextMeshProUGUI soldOut;
         public TextMeshProUGUI desc;
         public Image image;
         public Image highLight;
@@ -22,7 +23,9 @@ namespace UI.Interfaces.ShopSystem {
                 _model = value;
                 image.sprite = Resources.Load<Sprite>(value.imgPath);
                 name.text = value.name;
-                price.text = value.rarity.ToString(); // change to value.price later
+                soldOut.text = "Sold Out";
+                soldOut.enabled = false;
+                price.text = value.id.ToString(); // change to value.price later
                 desc.text = value.desc;
             }
             get => _model;

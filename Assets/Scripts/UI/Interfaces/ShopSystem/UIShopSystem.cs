@@ -1,20 +1,25 @@
+using System.Collections.Generic;
+using System.Linq;
 using BackendApi;
 using Model;
 using UI.Container;
+using Unity.VisualScripting;
 using UnityEngine;
 using Utility;
 
 namespace UI.Interfaces.ShopSystem {
     public class UIShopSystem : UIBase {
-        public Gear[] items;
+        public Gear[] items; // only contains gears which the player haven't got
         private CanvasGroup _canvasGroup;
         private bool _inAnimation;
         private UIShopPanel[] _panels;
+        private List<int> soldItems;
 
         private void Start() {
             _canvasGroup = GetComponent<CanvasGroup>();
             _canvasGroup.alpha = 0;
             _panels = transform.GetComponentsInChildren<UIShopPanel>();
+            soldItems = new List<int>();
         }
 
         public override void Open(object gears) {
@@ -49,15 +54,16 @@ namespace UI.Interfaces.ShopSystem {
                 return;
             }
 
-            foreach (var gear in items) {
+            foreach (var gear in items)
+            {
                 var gearPanel = _panels[curPanelInd];
-                gearPanel.OnClick += PurchaseSelectedGear;
                 gearPanel.Show = true;
                 gearPanel.Model = gear;
+                if (gear.id <= GameManager.shared.game.player.Coin) gearPanel.OnClick += PurchaseSelectedGear;
+                else gearPanel.price.color = Color.red;
+                if (soldItems.Contains(gear.id)) gearPanel.soldOut.enabled = true;
                 curPanelInd++;
-                if (gear.rarity > GameManager.shared.game.player.Coin) gearPanel.highLight.enabled = false;
-            } // change gear.rarity to gear.price later
-
+            }
             for (; curPanelInd < _panels.Length; curPanelInd++) _panels[curPanelInd].Show = false;
         }
 
@@ -69,9 +75,11 @@ namespace UI.Interfaces.ShopSystem {
 
         private void PurchaseSelectedGear(UIShopPanel clickedPanel)
         {
-            if (GameManager.shared.game.player.Coin < clickedPanel.Model.rarity) return; // change gear.rarity to gear.price later
-            GameManager.shared.game.player.Coin -= clickedPanel.Model.rarity; // change gear.rarity to gear.price later
+            if (GameManager.shared.game.player.Coin < clickedPanel.Model.id) return; // change gear.id to gear.price later
+            GameManager.shared.game.player.Coin -= clickedPanel.Model.id; // change gear.id to gear.price later
             GameManager.shared.game.player.AddGear(clickedPanel.Model);
+            soldItems.Add(clickedPanel.Model.id);
+            // clickedPanel.soldOut.enabled = true;
             UpdateGearPanel();
         }
     }
