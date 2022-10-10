@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Utility{
     public interface ITweenArithmetic<T>{
@@ -78,6 +79,18 @@ namespace Utility{
                     transform.anchoredPosition = Vector2.Lerp(anchoredStart, anchoredEnd, i);
                 },
                 complete: () => { transform.anchoredPosition = anchoredEnd;}
+            )();
+        }
+        
+        public static IEnumerator Fade(float seconds, Image image, Color startColor, Color endColor, AnimationCurve curve = null){
+            return Lerp(
+                seconds: seconds,
+                begin: () => { image.color = startColor; },
+                update: (i) => {
+                    if (curve != null) i = curve.Evaluate(i);
+                    image.color = Color.Lerp(startColor, endColor, i);
+                },
+                complete: () => { image.color = endColor;}
             )();
         }
     }

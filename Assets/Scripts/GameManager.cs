@@ -1,23 +1,26 @@
 using System;
+using System.Collections;
 using BackendApi;
 using Core.DisplayArea.Stage;
 using Core.PlayArea.Balls;
+using Core.PlayArea.TouchTracking;
 using Model;
 using Tutorials;
 using UI;
+using UI.TurnSignDisplayer;
 using UnityEngine;
 using Utility;
 
 public class GameManager : MonoBehaviour{
-    public StageManager stageManager;
-    public TutorialManager tutorialManager;
-    
     public static GameManager shared;
     
+    public StageManager stageManager;
+    public TutorialManager tutorialManager;
     public Game game;
     public Guid uuid = Guid.NewGuid();
     public BallManager ballManager;
     public TurnSignDisplayer turnSignDisplayer;
+    public TouchTracker touchTracker;
 
     private int _currentTurnNum = 0;
 
@@ -59,7 +62,7 @@ public class GameManager : MonoBehaviour{
     public void GameStart(){
         game.LoadStage(0);
         stageManager.OnStageLoaded(game.currentStage);
-        SwitchToPlayerTurn();
+        StartCoroutine(StartBattleStage());
     }
 
     public void GameComplete(){
@@ -78,8 +81,8 @@ public class GameManager : MonoBehaviour{
 
     private void PreInit(){
         // Backend API url
-        // EventLogger.serverURL = "https://test526.wn.r.appspot.com/";
-        EventLogger.serverURL = "http://localhost:8080/";
+        EventLogger.serverURL = "https://test526.wn.r.appspot.com/";
+        // EventLogger.serverURL = "http://localhost:8080/";
     }
 
     public void Delayed(int frames, Action modelAction){
@@ -95,29 +98,19 @@ public class GameManager : MonoBehaviour{
     /// </summary>
     public void SwitchTurn(){
         game.SwitchTurn();
-        if (game.turn == Game.Turn.Player)
-            SwitchToPlayerTurn();
-        else
-            SwitchToEnemyTurn();
+        StartCoroutine(game.turn == Game.Turn.Player ? SwitchToPlayerTurn() : SwitchToEnemyTurn());
     }
 
     public void GotoStage(int id){
         _currentTurnNum = 0;
         game.LoadStage(id);
         stageManager.OnStageLoaded(game.currentStage);
-        SwitchToPlayerTurn();
+        // Temp
+        StartCoroutine(StartBattleStage());
     }
 
-    [Obsolete]
-    public void GoToNextStage(){
-        _currentTurnNum = 0;
-        if (game.currentStage.nextStage == -1)
-            Complete();
-        else{
-            game.LoadStage(game.currentStage.nextStage);
-            stageManager.OnStageLoaded(game.currentStage);
-            SwitchToPlayerTurn();
-        }
+    private IEnumerator StartBattleStage(){
+        yield return SwitchToPlayerTurn();
     }
 
     public void Complete(){
@@ -128,8 +121,10 @@ public class GameManager : MonoBehaviour{
         game.Restart();
     }
 
-    private void SwitchToPlayerTurn(){
+    private IEnumerator SwitchToPlayerTurn(){
         _currentTurnNum++;
+        yield return turnSignDisplayer.Show(Game.Turn.Player);
+        touchTracker.isAcceptingInput = true;
         ballManager.SpawnBalls();
         if (game.currentStage.id == 0){
             switch (_currentTurnNum){
@@ -146,8 +141,9 @@ public class GameManager : MonoBehaviour{
         }
     }
 
-    private void SwitchToEnemyTurn(){
+    private IEnumerator SwitchToEnemyTurn(){
         var stageInfo = game.CurrentEnemy.GetCurrentStageAction();
+        yield return turnSignDisplayer.Show(Game.Turn.Enemy);
         stageManager.ProcessStageActionInfo(stageInfo);
     }
 
