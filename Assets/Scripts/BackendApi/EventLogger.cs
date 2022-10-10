@@ -18,6 +18,7 @@ namespace BackendApi{
     public class EventLogger{
         private static readonly HttpClient Client = new();
         public static string serverURL = "http://localhost:8080/";
+        private const bool IsActive = false;
 
         private static EventLogger _shared;
 
@@ -60,6 +61,7 @@ namespace BackendApi{
         }
 
         public async void Log<T>(T loggableEvent) where T : LoggableEvent{
+            if (!IsActive) return;
             var stringContent = new StringContent(JsonConvert.SerializeObject(loggableEvent), Encoding.UTF8,
                 "application/json");
             var response = await Client.PostAsync($"{serverURL}{loggableEvent.URLPath}", stringContent);

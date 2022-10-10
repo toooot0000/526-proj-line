@@ -42,7 +42,7 @@ namespace Core.PlayArea.TouchTracking{
         }
 
         private void Update(){
-            if (isAcceptingInput) return;
+            if (!isAcceptingInput) return;
             TraceTouchPosition();
         }
 

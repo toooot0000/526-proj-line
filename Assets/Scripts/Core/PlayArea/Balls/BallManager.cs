@@ -14,11 +14,6 @@ namespace Core.PlayArea.Balls{
 
         private bool _isInTutorial = false;
 
-
-        private void Start(){
-            SpawnBalls();
-        }
-
         public void SpawnNewBallView(Ball ball){
             var newBallObject = Instantiate(ballPrefab, transform, false);
             var newBallConfig = newBallObject.GetComponent<BallConfig>();

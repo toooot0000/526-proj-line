@@ -19,7 +19,7 @@ namespace UI.Common.Shade{
             var spd = _shadeColor.a / transitionTime * (_isToShow ? 1 : -1);
             var curAlpha = image.color.a;
             image.color = new Color(_shadeColor.r, _shadeColor.g, _shadeColor.b, Mathf.Clamp(curAlpha + spd * Time.deltaTime, 0, _shadeColor.a));
-            if (image.color.a.AlmostEquals(0)){
+            if (image.color.a.AlmostEquals(0) && !_isToShow){
                 image.raycastTarget = false;
             }
         }
