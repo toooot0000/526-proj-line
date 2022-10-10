@@ -33,6 +33,7 @@ namespace Core.DisplayArea.Stage{
         public void OnStageLoaded(Model.Stage currentStage){
             _modelStage = currentStage;
             enemyView.BindToCurrentEnemy();
+            enemyView.Appear(null);
         }
 
         public void ProcessStageActionInfo(StageActionInfoBase info){
@@ -55,7 +56,9 @@ namespace Core.DisplayArea.Stage{
             yield return new WaitForSeconds(0.4f);
             yield return new WaitWhile(() => _pause);
             playerView.Attack(null);
-            yield return CoroutineUtility.Delayed(0.07f, () => enemyView.TakeDamage(null));
+            // yield return CoroutineUtility.Delayed(0.07f, () => enemyView.TakeDamage(null));
+            yield return new WaitForSeconds(0.07f);
+            yield return enemyView.TakeDamage();
             GameManager.shared.tutorialManager.LoadTutorial("TutorialDisplay");
             yield return new WaitWhile(() => _pause);
             yield return OnPlayerAttackResolved(info);
