@@ -23,7 +23,7 @@ namespace UI.Interfaces.ShopSystem {
         }
 
         public override void Open(object gears) {
-            base.Open();
+            base.Open(gears);
             _inAnimation = true;
             var coroutine = TweenUtility.Lerp(0.2f,
                 () => _canvasGroup.alpha = 0,
@@ -67,11 +67,11 @@ namespace UI.Interfaces.ShopSystem {
             for (; curPanelInd < _panels.Length; curPanelInd++) _panels[curPanelInd].Show = false;
         }
 
-        public void ConfirmButtonEvent()
-        {
-            StartCoroutine(CoroutineUtility.Delayed(GameManager.shared.game.GoToNextStage));
+        public void ConfirmButtonEvent() {
+            // StartCoroutine(CoroutineUtility.Delayed(GameManager.shared.game.GoToNextStage));
             Close();
         }
+        
 
         private void PurchaseSelectedGear(UIShopPanel clickedPanel)
         {
