@@ -51,6 +51,12 @@ public class GameManager : MonoBehaviour{
             print("stage success");
             GameManager.shared.game.currentStage.TestOnStageBeaten();
         }
+        
+        if (Input.GetKeyUp("space"))
+        {
+            print("special event");
+            UIManager.shared.OpenUI("UIEvent");
+        }
     }
 
     private void InitGame(){

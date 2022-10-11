@@ -6,17 +6,21 @@ using UnityEngine.UI;
 using Model;
 using Event = Model.Event;
 using TMPro;
+using UI.Interfaces;
 using UnityEngine.UIElements;
+using Utility;
 using Image = UnityEngine.UI.Image;
 using Random = UnityEngine.Random;
 
-public class EventDisplay : MonoBehaviour
+public class UIEvent : UIBase
 {
     [SerializeField] TextMeshProUGUI questionText;
     [SerializeField] GameObject[] answerButtons;
     [SerializeField]Sprite defaultAnswerSprite;
     [SerializeField]Sprite selectedAnswerSprite;
     [SerializeField] int eventIndex = 4;
+    private CanvasGroup _canvasGroup;
+    private bool _inAnimation;
 
     private void Awake()
     {
@@ -27,6 +31,8 @@ public class EventDisplay : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _canvasGroup = GetComponent<CanvasGroup>();
+        _canvasGroup.alpha = 0;
         
         Event currentEvent = new Event(eventIndex);
         questionText.text = currentEvent.getQuestion();
@@ -40,6 +46,30 @@ public class EventDisplay : MonoBehaviour
         Debug.Log(GameManager.shared.game.player.gears.Count);
 
     }
+    
+    public override void Open(object nextStageChoice) {
+        base.Open(nextStageChoice);
+        _inAnimation = true;
+        var coroutine = TweenUtility.Lerp(0.2f,
+            () => _canvasGroup.alpha = 0,
+            i => _canvasGroup.alpha = i,
+            () => _inAnimation = false
+        );
+        StartCoroutine(coroutine());
+    }
+
+    public override void Close() {
+        _inAnimation = true;
+        var coroutine = TweenUtility.Lerp(0.2f,
+            () => _canvasGroup.alpha = 1,
+            i => _canvasGroup.alpha = 1 - i,
+            () => {
+                _inAnimation = false;
+                base.Close();
+                Destroy(gameObject);
+            });
+        StartCoroutine(coroutine());
+    } 
 
     public void OnAnswerSelected(int index)
     {
@@ -50,6 +80,7 @@ public class EventDisplay : MonoBehaviour
         Image buttonImage = answerButtons[index].GetComponent<Image>();
         buttonImage.sprite = selectedAnswerSprite;
         Debug.Log(GameManager.shared.game.player.gears.Count);
+        Close();
         
     }
     
