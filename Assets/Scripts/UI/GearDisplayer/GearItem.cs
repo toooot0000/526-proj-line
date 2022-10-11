@@ -1,15 +1,21 @@
+using Core.PlayArea.Balls;
 using Model;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Utility.Loader;
 
 namespace UI.GearDisplayer{
     public class GearItem : MonoBehaviour{
-        public Image image;
+        
         public TextMeshProUGUI textMesh;
         public TextMeshProUGUI ballspeed;
         public TextMeshProUGUI ballNum;
-
+        public Image image;
+        
+        public Image icon;
+        public float ballsize;
+        
         private Gear _model;
 
         public Gear Model{
@@ -20,10 +26,16 @@ namespace UI.GearDisplayer{
             get => _model;
         }
 
-        public void UpdateContent(){
-            image.sprite = Resources.Load<Sprite>(_model.imgPath);
+        public void UpdateContent()
+        {
+
+            var ball = CsvLoader.TryToLoad("Configs/balls", _model.ball.id);
+            ballsize = (float)ball["size"];
+            RectTransform rectTrans = image.GetComponent<RectTransform>();
+            rectTrans!.localScale = new Vector3(ballsize, ballsize, 1);
+            icon.sprite = Resources.Load<Sprite>(_model.imgPath);
+
             textMesh.text = Model.ToDescString();
-            
             if (_model.ball.speed <= 0)
             {
                 ballspeed.text = "";
