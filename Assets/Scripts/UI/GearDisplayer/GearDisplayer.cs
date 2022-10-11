@@ -62,5 +62,9 @@ namespace UI.GearDisplayer{
 
             container.UpdateLayout();
         }
+
+        public void Heelo(){
+            Debug.Log("Hello!");
+        }
     }
 }

@@ -7,13 +7,13 @@ using UnityEngine;
 namespace Core.DisplayArea.Stage.Enemy{
     [RequireComponent(typeof(PlayerAnimationController))]
     public class EnemyView : DamageableView{
-        public RemainingEnemy remaining;
+        // public RemainingEnemy remaining;
         public IntentionDisplayer intentionDisplayer;
 
         public override IDamageable Model{
             set{
                 base.Model = value;
-                remaining.Number = GameManager.shared.game.currentStage.RemainingEnemyNumber;
+                // remaining.Number = GameManager.shared.game.currentStage.RemainingEnemyNumber;
                 armorDisplayer.Number = value.Armor;
             }
         }
