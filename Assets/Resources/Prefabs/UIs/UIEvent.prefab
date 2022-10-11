@@ -234,7 +234,7 @@ MonoBehaviour:
   - {fileID: 4332236228366634103}
   defaultAnswerSprite: {fileID: 21300000, guid: 0b8bdf974014b4d44a6ebdc18ca353a2, type: 3}
   selectedAnswerSprite: {fileID: 21300000, guid: da8892ec54ae64d739adcfc103deaba6, type: 3}
-  eventIndex: 1
+  eventIndex: 2
 --- !u!225 &5466251847093378278
 CanvasGroup:
   m_ObjectHideFlags: 0
