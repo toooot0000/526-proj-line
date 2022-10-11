@@ -81,28 +81,19 @@ namespace Model
             String description = dt.Rows[index]["desc"].ToString(); //传给button，传进来的参数还需要一个object
             String effect = dt.Rows[index]["effect"].ToString();
             int effectValue = dt.Rows[index].Field<int>("value");
-
-            
             switch (effect)
             {   
                 case "GetLife":
-                    GameManager.shared.game.player.GetLife(effectValue);
-                    //Debug.Log("GetLife" + (effectValue).ToString());
+                    //Player.GetLife(effectValue);
+                    Debug.Log("GetLife" + (effectValue).ToString());
                     break;
                 case "GetGear":
-                    GameManager.shared.game.player.GetGear(effectValue);
-                    //Debug.Log("GetGear" + (effectValue).ToString());
+                    //Player.GetGear(effectValue);
+                    Debug.Log("GetGear" + (effectValue).ToString());
                     break;
                 case "GetCoin":
-                    GameManager.shared.game.player.GetCoin(effectValue);
+                    //Player.GetCoin(effectValue);
                     Debug.Log("GetCoin" + (effectValue).ToString());
-                    break;
-                case "GetArtifact":
-                    //GameManager.shared.game.player.GetArtifact(effectValue);
-                    Debug.Log("GetArtifact" + (effectValue).ToString());
-                    break;
-                case "Nothing":
-                    Debug.Log("Nothing");
                     break;
                 default:
                     Debug.LogError("No such effect");
