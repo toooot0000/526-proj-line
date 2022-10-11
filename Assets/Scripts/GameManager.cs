@@ -1,29 +1,38 @@
 using System;
+using System.Collections;
 using BackendApi;
 using Core.DisplayArea.Stage;
+using Core.PlayArea.Balls;
+using Core.PlayArea.TouchTracking;
 using Model;
 using Tutorials;
 using UI;
+using UI.TurnSignDisplayer;
 using UnityEngine;
 using Utility;
 
 public class GameManager : MonoBehaviour{
+    public static GameManager shared;
+    
     public StageManager stageManager;
     public TutorialManager tutorialManager;
-    
-    public static GameManager shared;
-    [HideInInspector]
-    public bool isAcceptingInput = true;
     public Game game;
     public Guid uuid = Guid.NewGuid();
+    public BallManager ballManager;
+    public TurnSignDisplayer turnSignDisplayer;
+    public TouchTracker touchTracker;
 
     private int _currentTurnNum = 0;
 
 
-    private void Awake(){
+    private void Awake()
+    {
         if (shared != null) Destroy(gameObject);
         shared = this;
         InitGame();
+        StartCoroutine(CoroutineUtility.Delayed(1, () =>
+            UIManager.shared.OpenUI("UIGameStart")));
+        EventLogger.Shared.init();//should do this afeter game is initialized
     }
 
     private void Start(){
@@ -33,12 +42,9 @@ public class GameManager : MonoBehaviour{
     private void Update(){
         if (Input.GetKeyUp("k")){
             UIManager.shared.OpenUI("UIShopSystem", (object)(new Gear[]{
+                new Gear(game, -1),
                 new Gear(game, 1),
-                new Gear(game, 2),
-                new Gear(game, 3),
-                new Gear(game, 4),
-                new Gear(game, 5),
-                new Gear(game, 6)
+                new Gear(game, 2)
             }));
         };
     }
@@ -46,13 +52,33 @@ public class GameManager : MonoBehaviour{
     private void InitGame(){
         PreInit();
         game ??= new Game();
+        game.CreatePlayer();
+    }
+
+    public void GameStart(){
+        game.LoadStage(0);
         stageManager.OnStageLoaded(game.currentStage);
-        SwitchToPlayerTurn();
+        StartCoroutine(StartBattleStage());
+    }
+
+    public void GameComplete(){
+        game.Complete();
+    }
+
+    public void GameEnd(){
+        game.End();
+    }
+
+    public void GameRestart(){
+        game.Restart();
+        game.CreatePlayer();
+        game.LoadStage(0);
     }
 
     private void PreInit(){
         // Backend API url
         EventLogger.serverURL = "https://test526.wn.r.appspot.com/";
+        // EventLogger.serverURL = "http://localhost:8080/";
     }
 
     public void Delayed(int frames, Action modelAction){
@@ -68,21 +94,19 @@ public class GameManager : MonoBehaviour{
     /// </summary>
     public void SwitchTurn(){
         game.SwitchTurn();
-        if (game.turn == Game.Turn.Player)
-            SwitchToPlayerTurn();
-        else
-            SwitchToEnemyTurn();
+        StartCoroutine(game.turn == Game.Turn.Player ? SwitchToPlayerTurn() : SwitchToEnemyTurn());
     }
 
-    public void GoToNextStage(){
+    public void GotoStage(int id){
         _currentTurnNum = 0;
-        if (game.currentStage.nextStage == -1)
-            Complete();
-        else{
-            game.LoadStage(game.currentStage.nextStage);
-            stageManager.OnStageLoaded(game.currentStage);
-            SwitchToPlayerTurn();
-        }
+        game.LoadStage(id);
+        stageManager.OnStageLoaded(game.currentStage);
+        // Temp
+        StartCoroutine(StartBattleStage());
+    }
+
+    private IEnumerator StartBattleStage(){
+        yield return SwitchToPlayerTurn();
     }
 
     public void Complete(){
@@ -93,21 +117,34 @@ public class GameManager : MonoBehaviour{
         game.Restart();
     }
 
-    private void SwitchToPlayerTurn(){
+    private IEnumerator SwitchToPlayerTurn(){
         _currentTurnNum++;
-        isAcceptingInput = true;
-        if (_currentTurnNum == 2){
-            tutorialManager.LoadTutorial("TutorialTurn2");
+        yield return turnSignDisplayer.Show(Game.Turn.Player);
+        touchTracker.isAcceptingInput = true;
+        ballManager.SpawnBalls();
+        if (game.currentStage.id == 0){
+            switch (_currentTurnNum){
+                case 1:
+                    StartCoroutine(CoroutineUtility.Delayed(1, () => tutorialManager.LoadTutorial("TutorialSliceBall")));
+                    break;
+                case 2:
+                    tutorialManager.LoadTutorial("TutorialTurn2");
+                    break;
+                case 3:
+                    tutorialManager.LoadTutorial("TutorialCharge");
+                    break;
+            }
         }
     }
 
-    private void SwitchToEnemyTurn(){
-        isAcceptingInput = false;
+    private IEnumerator SwitchToEnemyTurn(){
         var stageInfo = game.CurrentEnemy.GetCurrentStageAction();
+        yield return turnSignDisplayer.Show(Game.Turn.Enemy);
         stageManager.ProcessStageActionInfo(stageInfo);
     }
 
     public void OnPlayerFinishInput(){
+        if (game.turn != Game.Turn.Player) return;
         var currentAction = game.player.GetAttackActionInfo();
         game.player.ClearAllBalls();
         stageManager.ProcessStageActionInfo(currentAction);
