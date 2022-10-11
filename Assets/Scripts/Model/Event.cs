@@ -35,8 +35,8 @@ namespace Model
             argsArray[1] = event1["arg2"] as string;
             argsArray[2] = event1["arg3"] as string;
             dt.Columns.Add("desc", typeof(String));
-            dt.Columns.Add("effect", typeof(String));
-            dt.Columns.Add("value", typeof(Int32));
+            dt.Columns.Add("effect", typeof(String[]));
+            dt.Columns.Add("value", typeof(Int32[]));
             dt.Rows.Add(parseArgs(argsArray[0]));
             dt.Rows.Add(parseArgs(argsArray[1]));
             dt.Rows.Add(parseArgs(argsArray[2]));
@@ -64,9 +64,23 @@ namespace Model
 
             object[] args = new object[3];
             var temp = arg.Split(';');
+            int num = temp.Length / 2;
+            string[] tempArr = new string[num];
+            int[] tempArr2 = new int[num];
+            for (int i = 1; i < temp.Length; i++)
+            {
+                if (i % 2 == 1)
+                {
+                    tempArr[i / 2] = temp[i];
+                }
+                else
+                {
+                    tempArr2[i / 2 - 1] = int.Parse(temp[i]);
+                }
+            }
             args[0] = temp[0];
-            args[1] = temp[1];
-            args[2] = Convert.ToInt32(temp[2]);
+            args[1] = tempArr;
+            args[2] = tempArr2;
             return args;
         }
 
@@ -78,35 +92,37 @@ namespace Model
                 Debug.Log("no data in datatable");
                 return;
             }
-            String description = dt.Rows[index]["desc"].ToString(); //传给button，传进来的参数还需要一个object
-            String effect = dt.Rows[index]["effect"].ToString();
-            int effectValue = dt.Rows[index].Field<int>("value");
-
             
-            switch (effect)
-            {   
-                case "GetLife":
-                    GameManager.shared.game.player.GetLife(effectValue);
-                    //Debug.Log("GetLife" + (effectValue).ToString());
-                    break;
-                case "GetGear":
-                    GameManager.shared.game.player.GetGear(effectValue);
-                    //Debug.Log("GetGear" + (effectValue).ToString());
-                    break;
-                case "GetCoin":
-                    GameManager.shared.game.player.GetCoin(effectValue);
-                    Debug.Log("GetCoin" + (effectValue).ToString());
-                    break;
-                case "GetArtifact":
-                    //GameManager.shared.game.player.GetArtifact(effectValue);
-                    Debug.Log("GetArtifact" + (effectValue).ToString());
-                    break;
-                case "Nothing":
-                    Debug.Log("Nothing");
-                    break;
-                default:
-                    Debug.LogError("No such effect");
-                    break;
+            String[] effect = dt.Rows[index]["effect"] as String[];
+            int[] effectValue = dt.Rows[index]["value"] as int[];
+
+            for (int i = 0; i < effect.Length; i++)
+            {
+                switch (effect[i])
+                {
+                    case "GetLife":
+                        GameManager.shared.game.player.GetLife(effectValue[i]);
+                        //Debug.Log("GetLife" + (effectValue).ToString());
+                        break;
+                    case "GetGear":
+                        GameManager.shared.game.player.GetGear(effectValue[i]);
+                        //Debug.Log("GetGear" + (effectValue).ToString());
+                        break;
+                    case "GetCoin":
+                        GameManager.shared.game.player.GetCoin(effectValue[i]);
+                        Debug.Log("GetCoin" + effectValue);
+                        break;
+                    case "GetArtifact":
+                        //GameManager.shared.game.player.GetArtifact(effectValue);
+                        Debug.Log("GetArtifact" + effectValue[i]);
+                        break;
+                    case "Nothing":
+                        Debug.Log("Nothing");
+                        break;
+                    default:
+                        Debug.Log("No such effect");
+                        break;
+                }
             }
         }
     }
