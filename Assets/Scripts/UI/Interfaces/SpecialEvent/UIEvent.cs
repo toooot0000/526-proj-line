@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using Model;
 using Event = Model.Event;
 using TMPro;
+using UI;
 using UI.Interfaces;
 using UnityEngine.UIElements;
 using Utility;
@@ -24,8 +25,8 @@ public class UIEvent : UIBase
 
     private void Awake()
     {
-        //eventIndex = Random.Range(0, 3);
-        //eventIndex = 4;
+        eventIndex = Random.Range(0, 4);
+        //eventIndex = 3;
     }
 
     // Start is called before the first frame update
@@ -78,7 +79,6 @@ public class UIEvent : UIBase
         questionText.text = index.ToString();
         e.explainArgs(index);
         Image buttonImage = answerButtons[index].GetComponent<Image>();
-        buttonImage.sprite = selectedAnswerSprite;
         Debug.Log(GameManager.shared.game.player.gears.Count);
         Close();
         
