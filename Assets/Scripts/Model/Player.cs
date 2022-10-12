@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BackendApi;
 using Model.GearEffects;
+using UI;
 using Utility.Loader;
 using UnityEngine;
 
@@ -198,6 +199,7 @@ namespace Model{
         public void GetGear(int index)
         {
             Gear gear = new Gear(GameManager.shared.game,index);
+            String result = "";
             Boolean hasGear = false;
             foreach (var item in gears)
             {
@@ -210,7 +212,8 @@ namespace Model{
             if(hasGear == false)
             {
                 AddGear(gear);
-                Debug.Log("New gear name:" + gear.name);
+                result += "Get Gear: " + gear.name;
+                UIManager.shared.OpenUI("UIResult",result);
             }
             else
             {

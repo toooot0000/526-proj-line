@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Runtime.CompilerServices;
+using UI;
 using UnityEngine;
 using Utility.Loader;
 
@@ -95,6 +96,8 @@ namespace Model
             
             String[] effect = dt.Rows[index]["effect"] as String[];
             int[] effectValue = dt.Rows[index]["value"] as int[];
+            String result = "";
+            bool _getItem = false;
 
             for (int i = 0; i < effect.Length; i++)
             {
@@ -102,27 +105,54 @@ namespace Model
                 {
                     case "GetLife":
                         GameManager.shared.game.player.GetLife(effectValue[i]);
-                        //Debug.Log("GetLife" + (effectValue).ToString());
+                        if (effectValue[i] > 0)
+                        {
+                            result += "You got " + effectValue[i] + " HP\n";
+                        }
+                        else
+                        {
+                            result += "You lost " + effectValue[i] + " HP\n";
+                        }
+                        
                         break;
                     case "GetGear":
                         GameManager.shared.game.player.GetGear(effectValue[i]);
-                        //Debug.Log("GetGear" + (effectValue).ToString());
+                        _getItem = true;
+                        
                         break;
                     case "GetCoin":
                         GameManager.shared.game.player.GetCoin(effectValue[i]);
+                        if(effectValue[i] > 0)
+                        {
+                            result += "You got " + effectValue[i] + " coins\n";
+                        }
+                        else
+                        {
+                            result += "You lost " + effectValue[i] + " coins\n";
+                        }
                         Debug.Log("GetCoin" + effectValue);
                         break;
                     case "GetArtifact":
-                        //GameManager.shared.game.player.GetArtifact(effectValue);
+                        _getItem = true;
                         Debug.Log("GetArtifact" + effectValue[i]);
                         break;
                     case "Nothing":
+                        result = "Nothing happened";
                         Debug.Log("Nothing");
                         break;
                     default:
                         Debug.Log("No such effect");
                         break;
                 }
+            }
+
+            if (_getItem)
+            {
+                return;
+            }
+            else
+            {
+                UIManager.shared.OpenUI("UIResult",result);
             }
         }
     }
