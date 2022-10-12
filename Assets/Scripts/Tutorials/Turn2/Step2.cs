@@ -7,9 +7,9 @@ namespace Tutorials.Turn2{
         /// <summary>
         ///     Combo the balls
         /// </summary>
-        private partial class Step2: StepBase{
+        private partial class Step2: IStepBase{
             private TutorialTurn2 _ttr;
-            public override void SetUp(TutorialBase tutorial){
+            public virtual void SetUp(TutorialBase tutorial){
                 _ttr = (TutorialTurn2)tutorial;
                 _ttr.meshes[1].enabled = true;
                 _ttr.touchCatcher.Enabled = false;
@@ -32,13 +32,13 @@ namespace Tutorials.Turn2{
 
                 _ttr.tutorialManager.tracker.tutorKeepLine = true;
 
-                _ttr.movingPointer.Enabled = true;
-                _ttr.movingPointer.Positions = new[]{
+                _ttr.tutorialMovingPointer.Enabled = true;
+                _ttr.tutorialMovingPointer.Positions = new[]{
                     startPosition,
                     endPosition
                 };
                 
-                _ttr.movingPointer.StartMoving();
+                _ttr.tutorialMovingPointer.StartMoving();
 
                 _ttr.tutorialManager.tracker.OnTouchEnd += WrappedStepComplete;
             }
@@ -53,9 +53,9 @@ namespace Tutorials.Turn2{
                 }
             }
 
-            public override void Complete(TutorialBase tutorial){
+            public virtual void Complete(TutorialBase tutorial){
                 _ttr.meshes[1].enabled = false;
-                _ttr.movingPointer.Enabled = false;
+                _ttr.tutorialMovingPointer.Enabled = false;
                 _ttr.PutToBack(_ttr.tutorialManager.tracker.gameObject);
                 _ttr.tutorialManager.tracker.OnTouchEnd -= WrappedStepComplete;
             }

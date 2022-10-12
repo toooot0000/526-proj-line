@@ -1,8 +1,8 @@
 using System;
 
 namespace Tutorials{
-    public abstract class StepBase{
-        public abstract void SetUp(TutorialBase tutorial);
-        public abstract void Complete(TutorialBase tutorial);
+    public interface IStepBase{
+        void SetUp(TutorialBase tutorial);
+        void Complete(TutorialBase tutorial);
     }
 }

@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace Tutorials.SliceBall{
     public partial class TutorialSliceBall{
-        private partial class Step1: StepBase{
-            public override void SetUp(TutorialBase tutorial){
+        private partial class Step1: IStepBase{
+            public virtual void SetUp(TutorialBase tutorial){
                 var ttr = (TutorialSliceBall)tutorial;
                 ttr._attackBallView.HandOverControlTo(ttr);
                 ttr._attackBallView.tutorCanBeCircled = false;
@@ -26,12 +26,12 @@ namespace Tutorials.SliceBall{
                 var defTransform = ttr._defendBallView.transform;
                 var positionZ = defTransform.position.z;
                 defTransform.position = new Vector3( position.x, position.y -1.2f, positionZ);
-                ttr.movingPointer.Positions = new[]{ ttr.start.position, ttr.end.position };
-                ttr.movingPointer.StartMoving();
+                ttr.tutorialMovingPointer.Positions = new[]{ ttr.start.position, ttr.end.position };
+                ttr.tutorialMovingPointer.StartMoving();
                 ttr._tracker.OnTouchEnd += ttr.StepComplete;
             }
 
-            public override void Complete(TutorialBase tutorial){
+            public virtual void Complete(TutorialBase tutorial){
                 var ttr = (TutorialSliceBall)tutorial;
                 ttr._attackBallView.GainBackControlFrom(ttr);
                 ttr._defendBallView.GainBackControlFrom(ttr);

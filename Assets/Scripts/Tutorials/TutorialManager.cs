@@ -9,6 +9,7 @@ using Tutorials.SliceBall;
 using UI;
 using UI.Common;
 using UI.Common.Shade;
+using UI.GearDisplayer;
 using UnityEngine;
 using Utility;
 
@@ -22,6 +23,7 @@ namespace Tutorials{
         public TouchTracker tracker;
         public StageManager stageManager;
         public ActionDetailDisplayer actionDetailDisplayer;
+        public GearDisplayer gearDisplayer;
 
         private readonly HashSet<string> _completeTutorials = new();
         private float _nextDelay;
@@ -30,12 +32,16 @@ namespace Tutorials{
 
         private void Update(){
             if (Input.GetKeyUp(KeyCode.A)){
-                // LoadTutorial("TutorialCharge");
+                ForceLoadTutorial("TutorialBasicConcept");
             }
         }
 
         public TutorialBase LoadTutorial(string tutorialName){
             if (!IsActive) return null;
+            return ForceLoadTutorial(tutorialName);
+        }
+
+        public TutorialBase ForceLoadTutorial(string tutorialName){
             if (_completeTutorials.Contains(tutorialName)) return null;
             if (_curName != null){
                 Debug.Log("Multiple Tutorial Invoke!");
@@ -46,7 +52,7 @@ namespace Tutorials{
             var prefab = Resources.Load<GameObject>($"{PrefabPathPrefix}{tutorialName}");
             var inst = Instantiate(prefab, transform);
             var tutorial = inst.GetComponent<TutorialBase>();
-            tutorial.Load(this);
+            tutorial.OnLoaded(this);
             tutorial.OnComplete += CompleteTutorial;
             shade.SetActive(true);
             return tutorial;

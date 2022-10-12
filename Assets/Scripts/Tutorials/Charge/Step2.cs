@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace Tutorials.Charge{
     public partial class TutorialCharge{
-        private partial class Step2: StepBase{
+        private partial class Step2: IStepBase{
             private TutorialCharge _ttr;
-            public override void SetUp(TutorialBase tutorial){
+            public virtual void SetUp(TutorialBase tutorial){
                 _ttr = (TutorialCharge)tutorial;
                 _ttr.meshes[1].enabled = true;
                 _ttr.touchCatcher.Enabled = false;
@@ -27,7 +27,7 @@ namespace Tutorials.Charge{
 
                 _ttr.tutorialManager.tracker.tutorKeepLine = true;
 
-                _ttr.movingPointer.Enabled = true;
+                _ttr.tutorialMovingPointer.Enabled = true;
 
                 var positions = new Vector3[10];
                 var curDeg = -90f;
@@ -39,9 +39,9 @@ namespace Tutorials.Charge{
                     curDeg += 360f/9;
                 }
 
-                _ttr.movingPointer.Positions = positions;
+                _ttr.tutorialMovingPointer.Positions = positions;
                 
-                _ttr.movingPointer.StartMoving();
+                _ttr.tutorialMovingPointer.StartMoving();
 
                 _ttr.tutorialManager.tracker.OnTouchEnd += WrappedStepComplete;
             }
@@ -52,9 +52,9 @@ namespace Tutorials.Charge{
                 }
             }
 
-            public override void Complete(TutorialBase tutorial){
+            public virtual void Complete(TutorialBase tutorial){
                 _ttr.meshes[1].enabled = false;
-                _ttr.movingPointer.Enabled = false;
+                _ttr.tutorialMovingPointer.Enabled = false;
                 _ttr.PutToBack(_ttr.tutorialManager.tracker.gameObject);
                 _ttr.tutorialManager.tracker.OnTouchEnd -= WrappedStepComplete;
             }

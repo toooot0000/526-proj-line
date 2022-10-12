@@ -52,7 +52,7 @@ namespace Utility.Loader{
             return ret;
         }
 
-        private static object ParseValue(string typename, string val){
+        public static object ParseValue(string typename, string val){
             return typename.ToLower() switch{
                 "int" => IntUtility.ParseString(val),
                 "string" => val.Equals(EmptyString) ? "" : val,

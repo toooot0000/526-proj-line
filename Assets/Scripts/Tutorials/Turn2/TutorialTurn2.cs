@@ -3,24 +3,25 @@ using Core.DisplayArea.Stage;
 using Core.PlayArea.Balls;
 using Model;
 using TMPro;
+using Tutorials.Common;
 using UnityEngine;
 
 namespace Tutorials.Turn2{
     public partial class TutorialTurn2: TutorialBase{
-        protected override StepBase[] Steps{ get; } = new StepBase[]{
+        protected override IStepBase[] Steps{ get; } = new IStepBase[]{
             new Step1(), new Step2(), new Step3(), new Step4()
         };
 
         public TextMeshProUGUI[] meshes;
         public TouchCatcher touchCatcher;
-        public MovingPointer movingPointer;
+        public TutorialMovingPointer tutorialMovingPointer;
         public Transform startPoint;
         public Transform endPoint;
 
         private BallView _attBallView;
         private BallView _defBallView;
 
-        public override void Load(TutorialManager mng){
+        public override void OnLoaded(TutorialManager mng){
 
             mng.stageManager.HandOverControlTo(this);
             mng.stageManager.TutorSetPause(true);
@@ -32,9 +33,9 @@ namespace Tutorials.Turn2{
             
             mng.tracker.HandOverControlTo(this);
             
-            movingPointer.Enabled = false;
+            tutorialMovingPointer.Enabled = false;
             foreach (var mesh in meshes) mesh.enabled = false;
-            base.Load(mng);
+            base.OnLoaded(mng);
         }
 
         protected override void Complete(){
@@ -45,9 +46,9 @@ namespace Tutorials.Turn2{
             base.Complete();
         }
         
-        private partial class Step1: StepBase{ }
-        private partial class Step2: StepBase{ }
-        private partial class Step3: StepBase{ }
-        private partial class Step4: StepBase{ }
+        private partial class Step1: IStepBase{ }
+        private partial class Step2: IStepBase{ }
+        private partial class Step3: IStepBase{ }
+        private partial class Step4: IStepBase{ }
     }
 }

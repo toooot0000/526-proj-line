@@ -17,10 +17,10 @@ namespace Core.DisplayArea.Stage{
         public PlayerView playerView;
         public EnemyView enemyView;
         public BallManager ballManager;
-        private bool _isInTutorial;
-        public bool _pause = false;
 
         private Model.Stage _modelStage;
+        private bool _isInTutorial;
+        private bool _pause = false;
 
         public void HandOverControlTo(TutorialBase tutorial){
             _isInTutorial = true;

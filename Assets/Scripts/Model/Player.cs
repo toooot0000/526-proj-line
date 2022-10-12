@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BackendApi;
 using Model.GearEffects;
+using Utility.Extensions;
 using Utility.Loader;
 
 namespace Model{
@@ -81,10 +82,11 @@ namespace Model{
             HpUpLimit = (int)CsvLoader.GetConfig("player_init_hp");
             Coin = (int)CsvLoader.GetConfig("player_init_coin");
             CurrentHp = HpUpLimit;
-            gears = new List<Gear>{
-                new(this, -1),
-                new(this, -2)
-            };
+            gears = ((string)CsvLoader.GetConfig("player_init_gears")).ParseAsParams(new []{"int"}).Select(i => new Gear(this, (int)i)).ToList();
+            // gears = new List<Gear>{
+            //     new(this, -1),
+            //     new(this, -2)
+            // };
             OnGearChanged?.Invoke(currentGame, this);
             OnInit?.Invoke(currentGame, this);
         }

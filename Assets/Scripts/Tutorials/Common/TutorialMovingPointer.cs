@@ -2,8 +2,8 @@ using System;
 using UnityEngine;
 using Utility.Extensions;
 
-namespace Tutorials{
-    public class MovingPointer : MonoBehaviour{
+namespace Tutorials.Common{
+    public class TutorialMovingPointer : MonoBehaviour{
         public SpriteRenderer pointerSpr;
         public float seconds = 3f;
         public bool repeat = true;

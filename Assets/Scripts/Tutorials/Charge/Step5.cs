@@ -6,7 +6,7 @@ namespace Tutorials.Charge{
     public partial class TutorialCharge{
         private partial class Step5{
             private GearDisplayer _displayer;
-            public override void SetUp(TutorialBase tutorial){
+            public virtual void SetUp(TutorialBase tutorial){
                 var ttr = (TutorialCharge)tutorial;
                 ttr.meshes[4].enabled = true;
                 ttr.touchCatcher.Enabled = true;
@@ -15,7 +15,7 @@ namespace Tutorials.Charge{
                 ttr.touchCatcher.OnTouched += ttr.StepComplete;
             }
 
-            public override void Complete(TutorialBase tutorial){
+            public virtual void Complete(TutorialBase tutorial){
                 var ttr = (TutorialCharge)tutorial;
                 ttr.meshes[4].enabled = false;
                 ttr.tutorialManager.tracker.tutorKeepLine = false;

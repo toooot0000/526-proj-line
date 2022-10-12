@@ -1,7 +1,7 @@
 namespace Tutorials.Charge{
     public partial class TutorialCharge{
         private partial class Step4{
-            public override void SetUp(TutorialBase tutorial){
+            public virtual void SetUp(TutorialBase tutorial){
                 var ttr = (TutorialCharge)tutorial;
                 ttr.meshes[3].enabled = true;
                 ttr.touchCatcher.Enabled = true;
@@ -9,7 +9,7 @@ namespace Tutorials.Charge{
                 ttr.LiftToFront(ttr.tutorialManager.actionDetailDisplayer.gameObject);
             }
 
-            public override void Complete(TutorialBase tutorial){
+            public virtual void Complete(TutorialBase tutorial){
                 var ttr = (TutorialCharge)tutorial;
                 ttr.meshes[3].enabled = false;
                 ttr.PutToBack(ttr.tutorialManager.actionDetailDisplayer.gameObject);
