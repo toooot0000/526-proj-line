@@ -1,139 +1,117 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Data;
-using System.Runtime.CompilerServices;
 using UI;
 using UnityEngine;
 using Utility.Loader;
 
-namespace Model
-{
-    public class Event
-    {
-        public int ID;
-        public string Name;
-        public string Desc;
-        public string Type;
-        public string[] answers = {"ans1", "ans2", "ans3"};
-        public string[] argsArray = new string[3];
-        public DataTable dt = new DataTable();
+namespace Model{
 
+    public class EventChoice{
+        public string desc;
+        public string[] effectToken;
+        public int[] values;
 
-        public Event(int id)
-        {
-            var event1  = CsvLoader.TryToLoad("Configs/events", id);
-            if (event1 == null)
-            {
-                Debug.LogError("Event not found");
-                return;
-            }
-            this.ID = id;
-            Name = event1["name"] as string;
-            Desc = event1["desc"] as string;
-            Type = event1["type"] as string;
-            argsArray[0] = event1["arg1"] as string;
-            argsArray[1] = event1["arg2"] as string;
-            argsArray[2] = event1["arg3"] as string;
-            dt.Columns.Add("desc", typeof(String));
-            dt.Columns.Add("effect", typeof(String[]));
-            dt.Columns.Add("value", typeof(Int32[]));
-            dt.Rows.Add(parseArgs(argsArray[0]));
-            dt.Rows.Add(parseArgs(argsArray[1]));
-            dt.Rows.Add(parseArgs(argsArray[2]));
-
+        public EventChoice(string fromString){
+            var result = EventChoice.ParseArgs(fromString);
+            desc = result[0] as string;
+            effectToken = result[1] as string[];
+            values = result[2] as int[];
         }
         
-        public string getQuestion()
-        {
-            return Desc;
-        }
-        
-        public string getAnswer(int index)
-        {
-            return dt.Rows[index]["desc"].ToString();
-        }
-        
-        
-        public object[] parseArgs(string arg)
-        {
-            
-            if (arg == "__empty")
-            {
-                return null;
-            }
+        private static object[] ParseArgs(string arg){
+            if (arg == "__empty") return null;
 
-            object[] args = new object[3];
+            var args = new object[3];
             var temp = arg.Split(';');
-            int num = temp.Length / 2;
-            string[] tempArr = new string[num];
-            int[] tempArr2 = new int[num];
-            for (int i = 1; i < temp.Length; i++)
-            {
+            var num = temp.Length / 2;
+            var tempArr = new string[num];
+            var tempArr2 = new int[num];
+            for (var i = 1; i < temp.Length; i++)
                 if (i % 2 == 1)
-                {
                     tempArr[i / 2] = temp[i];
-                }
                 else
-                {
                     tempArr2[i / 2 - 1] = int.Parse(temp[i]);
-                }
-            }
             args[0] = temp[0];
             args[1] = tempArr;
             args[2] = tempArr2;
             return args;
         }
+    }
+    
+    public class Event{
+        public string[] answers ={ "ans1", "ans2", "ans3" };
+        public readonly string[] argsArray = new string[3];
+        public readonly string desc;
+        public int id;
+        public string name;
+        public string type;
+        public readonly EventChoice[] choices;
 
-        
-        public void explainArgs(int index)
-        {
-            if(dt.Rows[index] == null)
-            {
-                Debug.Log("no data in datatable");
+
+        public Event(int id){
+            var event1 = CsvLoader.TryToLoad("Configs/events", id);
+            if (event1 == null){
+                Debug.LogError("Event not found");
                 return;
             }
-            
-            String[] effect = dt.Rows[index]["effect"] as String[];
-            int[] effectValue = dt.Rows[index]["value"] as int[];
-            String result = "";
-            bool _getItem = false;
 
-            for (int i = 0; i < effect.Length; i++)
-            {
-                switch (effect[i])
-                {
+            this.id = id;
+            name = event1["name"] as string;
+            desc = event1["desc"] as string;
+            type = event1["type"] as string;
+            argsArray[0] = event1["arg1"] as string;
+            argsArray[1] = event1["arg2"] as string;
+            argsArray[2] = event1["arg3"] as string;
+            choices = new[]{
+                new EventChoice(argsArray[0]),
+                new EventChoice(argsArray[1]),
+                new EventChoice(argsArray[2])
+            };
+        }
+
+        public string GetQuestion(){
+            return desc;
+        }
+
+        public string GetAnswer(int index){
+            return choices[index].desc;
+        }
+
+
+        public string ExplainArgsToAction(int index){
+            if (index >= choices.Length){
+                Debug.Log("no data in datatable");
+                return null;
+            }
+
+            var effect = choices[index].effectToken;
+            var effectValue = choices[index].values;
+            var result = "";
+
+            for (var i = 0; i < effect.Length; i++){
+                switch (effect[i]){
                     case "GetLife":
-                        GameManager.shared.game.player.GetLife(effectValue[i]);
+                        GameManager.shared.game.player.CurrentHp += effectValue[i];
                         if (effectValue[i] > 0)
-                        {
                             result += "You got " + effectValue[i] + " HP\n";
-                        }
                         else
-                        {
                             result += "You lost " + effectValue[i] + " HP\n";
-                        }
-                        
                         break;
                     case "GetGear":
-                        GameManager.shared.game.player.GetGear(effectValue[i]);
-                        _getItem = true;
-                        
+                        var player = GameManager.shared.game.player;
+                        if (player.gears.Find(g => g.id == effectValue[i]) == null){
+                            player.AddGear(new Gear(player, effectValue[i]));
+                        }
                         break;
                     case "GetCoin":
-                        GameManager.shared.game.player.GetCoin(effectValue[i]);
-                        if(effectValue[i] > 0)
-                        {
+                        GameManager.shared.game.player.Coin += effectValue[i];
+                        if (effectValue[i] > 0)
                             result += "You got " + effectValue[i] + " coins\n";
-                        }
                         else
-                        {
                             result += "You lost " + effectValue[i] + " coins\n";
-                        }
                         Debug.Log("GetCoin" + effectValue);
                         break;
                     case "GetArtifact":
-                        _getItem = true;
                         Debug.Log("GetArtifact" + effectValue[i]);
                         break;
                     case "Nothing":
@@ -145,17 +123,7 @@ namespace Model
                         break;
                 }
             }
-
-            if (_getItem)
-            {
-                return;
-            }
-            else
-            {
-                UIManager.shared.OpenUI("UIResult",result);
-            }
+            return result;
         }
     }
-    
-    
 }

@@ -15,42 +15,31 @@ using Random = UnityEngine.Random;
 
 public class UIEvent : UIBase
 {
-    [SerializeField] TextMeshProUGUI questionText;
-    [SerializeField] GameObject[] answerButtons;
-    [SerializeField]Sprite defaultAnswerSprite;
-    [SerializeField]Sprite selectedAnswerSprite;
-    [SerializeField] int eventIndex = 4;
+    public TextMeshProUGUI questionText;
+    public  GameObject[] answerButtons;
+    public Sprite defaultAnswerSprite;
+    public Sprite selectedAnswerSprite;
+    public  int eventIndex = 4;
+    public Event eventModel;
     private CanvasGroup _canvasGroup;
     private bool _inAnimation;
-
-    private void Awake()
-    {
-        eventIndex = Random.Range(0, 4);
-        //eventIndex = 3;
-    }
 
     // Start is called before the first frame update
     void Start()
     {
         _canvasGroup = GetComponent<CanvasGroup>();
         _canvasGroup.alpha = 0;
-        
-        Event currentEvent = new Event(eventIndex);
-        questionText.text = currentEvent.getQuestion();
-        
-        for (int i = 0; i < answerButtons.Length; i++)
-        {
-            TextMeshProUGUI buttonText = answerButtons[i].GetComponentInChildren<TextMeshProUGUI>();
-            buttonText.text = currentEvent.getAnswer(i);
-        }
-        
-        Debug.Log(GameManager.shared.game.player.gears.Count);
 
     }
     
-    public override void Open(object nextStageChoice) {
-        base.Open(nextStageChoice);
+    public override void Open(object model){
+        eventModel = (Event)model;
+        base.Open(model);
         _inAnimation = true;
+
+        questionText.text = eventModel.desc;
+        UpdateButton(eventModel);
+
         var coroutine = TweenUtility.Lerp(0.2f,
             () => _canvasGroup.alpha = 0,
             i => _canvasGroup.alpha = i,
@@ -58,8 +47,16 @@ public class UIEvent : UIBase
         );
         StartCoroutine(coroutine());
     }
+    
+    /// <summary>
+    /// 调整按钮显示，包括但不限于更新按钮文字，调整按钮位置，隐去不用的按钮，绑定按钮事件
+    /// </summary>
+    /// <param name="model"></param>
+    private void UpdateButton(Event model){
+        // TODO
+    }
 
-    public override void Close() {
+    public void Close(int index) {
         _inAnimation = true;
         var coroutine = TweenUtility.Lerp(0.2f,
             () => _canvasGroup.alpha = 1,
@@ -67,6 +64,7 @@ public class UIEvent : UIBase
             () => {
                 _inAnimation = false;
                 base.Close();
+                UIManager.shared.OpenUI("UIResult", eventModel.ExplainArgsToAction(index));
                 Destroy(gameObject);
             });
         StartCoroutine(coroutine());
@@ -74,17 +72,8 @@ public class UIEvent : UIBase
 
     public void OnAnswerSelected(int index)
     {
-        Debug.Log("pressed");
-        Event e = new Event(eventIndex);
-        questionText.text = index.ToString();
-        e.explainArgs(index);
-        Image buttonImage = answerButtons[index].GetComponent<Image>();
-        Debug.Log(GameManager.shared.game.player.gears.Count);
-        Close();
-        
+        Close(index);
     }
-    
-    
 }
 
 

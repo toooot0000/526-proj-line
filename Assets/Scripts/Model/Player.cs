@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BackendApi;
 using Model.GearEffects;
-using Utility.Extensions;
 using Utility.Loader;
-using UnityEngine;
 
 namespace Model{
     [Serializable]
@@ -47,7 +45,7 @@ namespace Model{
 
         public int CurrentHp{
             set{
-                _currentHp = value;
+                _currentHp = Math.Clamp(value, 0, HpUpLimit);
                 if (value == 0) Die();
             }
             get => _currentHp;
@@ -83,11 +81,10 @@ namespace Model{
             HpUpLimit = (int)CsvLoader.GetConfig("player_init_hp");
             Coin = (int)CsvLoader.GetConfig("player_init_coin");
             CurrentHp = HpUpLimit;
-            gears = ((string)CsvLoader.GetConfig("player_init_gears")).ParseAsParams(new []{"int"}).Select(i => new Gear(this, (int)i)).ToList();
-            // gears = new List<Gear>{
-            //     new(this, -1),
-            //     new(this, -2)
-            // };
+            gears = new List<Gear>{
+                new(this, -1),
+                new(this, -2)
+            };
             OnGearChanged?.Invoke(currentGame, this);
             OnInit?.Invoke(currentGame, this);
         }
@@ -166,61 +163,6 @@ namespace Model{
             gears.RemoveAt(ind);
             OnGearChanged?.Invoke(currentGame, this);
         }
-        
-        
-        //special event system related functions
-        public void GetLife(int value)
-        {
-            int beforeHp = CurrentHp;
-            CurrentHp += value;
-            
-            if (CurrentHp > HpUpLimit)
-            {
-                CurrentHp = HpUpLimit;
-            }
-            else if (CurrentHp < 0)
-            {
-                Debug.Log("Player Died");
-                Die();
-            }
-            Debug.Log("Before:"+beforeHp.ToString()+ "After:" + CurrentHp.ToString());
-        }
-
-        public void GetCoin(int value)
-        {
-            Coin += value;
-            
-            if(Coin < 0)
-            {
-                Coin = 0;
-            }
-            Debug.Log("Coin:"+Coin.ToString());
-        }
-
-        public void GetGear(int index)
-        {
-            Gear gear = new Gear(GameManager.shared.game,index);
-            Boolean hasGear = false;
-            foreach (var item in gears)
-            {
-                if (item.id == gear.id)
-                {
-                    hasGear = true;
-                    break;
-                }
-            }
-            if(hasGear == false)
-            {
-                AddGear(gear);
-                Debug.Log("New gear name:" + gear.name);
-            }
-            else
-            {
-                Debug.Log("Player already have this gear");
-            }
-            
-        }
-        
 
         public void ClearAllBalls(){
             hitBalls.Clear();
