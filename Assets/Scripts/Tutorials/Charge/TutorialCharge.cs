@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Core.PlayArea.Balls;
 using Model;
@@ -6,11 +7,13 @@ using Tutorials.Common;
 using UnityEngine;
 
 namespace Tutorials.Charge{
+    
     /// <summary>
     /// 1. "Enemy is going to do a special attack. Better to be prepared!"
     /// 2. "Circle the shield ball to trigger the charge effect"
     /// 3. "You can check your current action result here.\nNow you will gain 5 shield that will counter the enemy's heavy attack!"
     /// </summary>
+    [Obsolete]
     public partial class TutorialCharge: TutorialBase{
         protected override IStepBase[] Steps{ get; } = new IStepBase[]{
             new Step1(), new Step2(), new Step3(), new Step4(), new Step5()

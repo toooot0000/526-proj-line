@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Core.DisplayArea.Stage;
 using Core.DisplayArea.Stage.Enemy;
@@ -16,6 +17,7 @@ namespace Tutorials.SliceBall{
     }
 
 
+    [Obsolete]
     public partial class TutorialSliceBall : TutorialBase{
         public TutorialMovingPointer tutorialMovingPointer;
 

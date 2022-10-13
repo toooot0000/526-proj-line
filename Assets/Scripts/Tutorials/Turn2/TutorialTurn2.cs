@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Core.DisplayArea.Stage;
 using Core.PlayArea.Balls;
@@ -7,6 +8,7 @@ using Tutorials.Common;
 using UnityEngine;
 
 namespace Tutorials.Turn2{
+    [Obsolete]
     public partial class TutorialTurn2: TutorialBase{
         protected override IStepBase[] Steps{ get; } = new IStepBase[]{
             new Step1(), new Step2(), new Step3(), new Step4()

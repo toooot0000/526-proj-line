@@ -7,6 +7,8 @@ using UnityEngine;
 
 namespace Tutorials.BasicConcept{
     public class TutorialBasicConcept: TutorialBase{
+        public new const string PrefabName = "TutorialBasicConcept";
+        
         public TutorialText[] desc;
         public TouchCatcher touchCatcher;
         public RectTransform ballPosition;

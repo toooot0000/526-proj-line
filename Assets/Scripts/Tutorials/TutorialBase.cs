@@ -14,6 +14,8 @@ namespace Tutorials{
         public string nextTutorialName;
         public float nextDelay = 0.1f;
         public TutorialManager tutorialManager;
+        public const string PrefabName = "NotApplicable";
+
 
         private readonly Dictionary<GameObject, Vector3> _positions = new();
         private int _currentStepIndex;

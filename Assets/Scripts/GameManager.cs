@@ -6,6 +6,7 @@ using Core.PlayArea.Balls;
 using Core.PlayArea.TouchTracking;
 using Model;
 using Tutorials;
+using Tutorials.BasicConcept;
 using UI;
 using UI.TurnSignDisplayer;
 using UnityEngine;
@@ -21,8 +22,7 @@ public class GameManager : MonoBehaviour{
     public BallManager ballManager;
     public TurnSignDisplayer turnSignDisplayer;
     public TouchTracker touchTracker;
-
-    private int _currentTurnNum = 0;
+    public int CurrentTurnNum => game.currentTurnNum;
 
 
     private void Awake()
@@ -102,7 +102,6 @@ public class GameManager : MonoBehaviour{
     }
 
     public void GotoStage(int id){
-        _currentTurnNum = 0;
         game.LoadStage(id);
         stageManager.OnStageLoaded(game.currentStage);
         // Temp
@@ -122,20 +121,14 @@ public class GameManager : MonoBehaviour{
     }
 
     private IEnumerator SwitchToPlayerTurn(){
-        _currentTurnNum++;
         yield return turnSignDisplayer.Show(Game.Turn.Player);
         touchTracker.isAcceptingInput = true;
         ballManager.SpawnBalls();
         if (game.currentStage.id == 0){
-            switch (_currentTurnNum){
+            switch (CurrentTurnNum){
                 case 1:
-                    StartCoroutine(CoroutineUtility.Delayed(1, () => tutorialManager.LoadTutorial("TutorialSliceBall")));
-                    break;
-                case 2:
-                    tutorialManager.LoadTutorial("TutorialTurn2");
-                    break;
-                case 3:
-                    tutorialManager.LoadTutorial("TutorialCharge");
+                    StartCoroutine(CoroutineUtility.Delayed(1, 
+                        () => tutorialManager.LoadTutorial(TutorialBasicConcept.PrefabName)));
                     break;
             }
         }

@@ -446,6 +446,7 @@ MonoBehaviour:
   stageManager: {fileID: 2123417103}
   actionDetailDisplayer: {fileID: 5927433399298939270}
   gearDisplayer: {fileID: 1937470752}
+  turnSignDisplayer: {fileID: 5902399932300061428}
 --- !u!223 &742632498
 Canvas:
   m_ObjectHideFlags: 0
@@ -1108,9 +1109,33 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -101.683685
       objectReference: {fileID: 0}
+    - target: {fileID: 1695437925376347613, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1695437925376347613, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1905367853393669214, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_Name
       value: GearDisplayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 2344570377733130751, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2344570377733130751, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2344570377733130751, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2344570377733130751, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3205034689525924670, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_VerticalFit
@@ -1146,6 +1171,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4454418114874261386, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649186841777183097, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649186841777183097, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6330200261918158996, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}

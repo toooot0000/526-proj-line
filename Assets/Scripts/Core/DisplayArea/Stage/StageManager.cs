@@ -59,7 +59,7 @@ namespace Core.DisplayArea.Stage{
             // yield return CoroutineUtility.Delayed(0.07f, () => enemyView.TakeDamage(null));
             yield return new WaitForSeconds(0.07f);
             yield return enemyView.TakeDamage();
-            GameManager.shared.tutorialManager.LoadTutorial("TutorialDisplay");
+            // GameManager.shared.tutorialManager.LoadTutorial("TutorialDisplay");
             yield return new WaitWhile(() => _pause);
             yield return OnPlayerAttackResolved(info);
         }

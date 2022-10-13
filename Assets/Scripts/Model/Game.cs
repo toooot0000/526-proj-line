@@ -22,6 +22,8 @@ namespace Model{
 
         public bool IsLastStage => currentStage.IsLast;
         public Enemy CurrentEnemy => currentStage?.CurrentEnemy;
+        
+        public int currentTurnNum = 0;
         public event SimpleModelEvent OnTurnChanged;
         public event SimpleModelEvent OnGameEnd;
         public event SimpleModelEvent OnGameComplete;
@@ -41,11 +43,13 @@ namespace Model{
 
         public void SwitchTurn(){
             turn = turn == Turn.Player ? Turn.Enemy : Turn.Player;
+            if (turn == Turn.Player) currentTurnNum++;
             OnTurnChanged?.Invoke(this);
         }
 
         public void LoadStage(int id){
             currentStage = new Stage(this, id);
+            currentTurnNum = 1;
             OnStageLoaded?.Invoke(this);
             turn = Turn.Player;
             OnTurnChanged?.Invoke(this);
@@ -76,12 +80,5 @@ namespace Model{
         {
             OnStageLoaded?.Invoke(this);
         }
-
-        public void TestOnStageBeaten()
-        {
-            
-        }
-
-        
     }
 }

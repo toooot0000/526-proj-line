@@ -10,13 +10,14 @@ using UI;
 using UI.Common;
 using UI.Common.Shade;
 using UI.GearDisplayer;
+using UI.TurnSignDisplayer;
 using UnityEngine;
 using Utility;
 
 namespace Tutorials{
     public class TutorialManager : MonoBehaviour{
         private const string PrefabPathPrefix = "Prefabs/Tutorials/";
-        private const bool IsActive = false;
+        private const bool IsActive = true;
 
         public BallManager ballManager;
         public Shade shade;
@@ -24,6 +25,7 @@ namespace Tutorials{
         public StageManager stageManager;
         public ActionDetailDisplayer actionDetailDisplayer;
         public GearDisplayer gearDisplayer;
+        public TurnSignDisplayer turnSignDisplayer;
 
         private readonly HashSet<string> _completeTutorials = new();
         private float _nextDelay;
@@ -41,7 +43,7 @@ namespace Tutorials{
             return ForceLoadTutorial(tutorialName);
         }
 
-        public TutorialBase ForceLoadTutorial(string tutorialName){
+        private TutorialBase ForceLoadTutorial(string tutorialName){
             if (_completeTutorials.Contains(tutorialName)) return null;
             if (_curName != null){
                 Debug.Log("Multiple Tutorial Invoke!");
