@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using BackendApi;
 using Model.GearEffects;
+using UI;
 using Utility.Loader;
+using UnityEngine;
 
 namespace Model{
     [Serializable]
@@ -163,6 +165,63 @@ namespace Model{
             gears.RemoveAt(ind);
             OnGearChanged?.Invoke(currentGame, this);
         }
+        
+        
+        //special event system related functions
+        public void GetLife(int value)
+        {
+            int beforeHp = CurrentHp;
+            CurrentHp += value;
+            
+            if (CurrentHp > HpUpLimit)
+            {
+                CurrentHp = HpUpLimit;
+            }
+            else if (CurrentHp < 0)
+            {
+                Debug.Log("Player Died");
+                Die();
+            }
+            Debug.Log("Before:"+beforeHp.ToString()+ "After:" + CurrentHp.ToString());
+        }
+
+        public void GetCoin(int value)
+        {
+            Coin += value;
+            
+            if(Coin < 0)
+            {
+                Coin = 0;
+            }
+            Debug.Log("Coin:"+Coin.ToString());
+        }
+
+        public void GetGear(int index)
+        {
+            Gear gear = new Gear(GameManager.shared.game,index);
+            String result = "";
+            Boolean hasGear = false;
+            foreach (var item in gears)
+            {
+                if (item.id == gear.id)
+                {
+                    hasGear = true;
+                    break;
+                }
+            }
+            if(hasGear == false)
+            {
+                AddGear(gear);
+                result += "Get Gear: " + gear.name;
+                UIManager.shared.OpenUI("UIResult",result);
+            }
+            else
+            {
+                Debug.Log("Player already have this gear");
+            }
+            
+        }
+        
 
         public void ClearAllBalls(){
             hitBalls.Clear();
