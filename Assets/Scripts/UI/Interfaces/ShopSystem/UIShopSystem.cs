@@ -60,7 +60,7 @@ namespace UI.Interfaces.ShopSystem {
                 gearPanel.Show = true;
                 gearPanel.Model = gear;
                 if (gear.id <= GameManager.shared.game.player.Coin) gearPanel.OnClick += PurchaseSelectedGear;
-                else gearPanel.price.color = Color.red;
+                else gearPanel.coinWithNumber.color = Color.red;
                 if (soldItems.Contains(gear.id)) gearPanel.soldOut.enabled = true;
                 curPanelInd++;
             }
