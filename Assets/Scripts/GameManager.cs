@@ -5,8 +5,11 @@ using Core.DisplayArea.Stage;
 using Core.PlayArea.Balls;
 using Core.PlayArea.TouchTracking;
 using Model;
+using Tutorial;
+using Tutorial.Tutorials.BasicConcept;
+using Tutorial.Tutorials.EnemyIntention;
+using Tutorial.Tutorials.Stage1Soft;
 using Tutorials;
-using Tutorials.BasicConcept;
 using UI;
 using UI.TurnSignDisplayer;
 using UnityEngine;
@@ -130,6 +133,9 @@ public class GameManager : MonoBehaviour{
                     StartCoroutine(CoroutineUtility.Delayed(1, 
                         () => tutorialManager.LoadTutorial(TutorialBasicConcept.PrefabName)));
                     break;
+                case 2:
+                    tutorialManager.LoadTutorial(TutorialStage1Soft.PrefabName);
+                    break;
             }
         }
     }
@@ -137,6 +143,13 @@ public class GameManager : MonoBehaviour{
     private IEnumerator SwitchToEnemyTurn(){
         var stageInfo = game.CurrentEnemy.GetCurrentStageAction();
         yield return turnSignDisplayer.Show(Game.Turn.Enemy);
+        if (game.currentStage.id == 0){
+            switch (CurrentTurnNum){
+                case 1:
+                    tutorialManager.LoadTutorial(TutorialEnemyIntention.PrefabName);
+                    break;
+            }
+        }
         stageManager.ProcessStageActionInfo(stageInfo);
     }
 
