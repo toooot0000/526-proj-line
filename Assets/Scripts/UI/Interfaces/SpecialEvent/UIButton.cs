@@ -1,5 +1,3 @@
-
-
 using Model;
 using TMPro;
 using UnityEngine;

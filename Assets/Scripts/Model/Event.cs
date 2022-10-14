@@ -39,7 +39,6 @@ namespace Model{
     }
     
     public class Event{
-        public string[] answers ={ "ans1", "ans2", "ans3" };
         public readonly string[] argsArray = new string[3];
         public readonly string desc;
         public int id;

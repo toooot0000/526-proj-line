@@ -10,6 +10,9 @@ namespace UI.Interfaces.SpecialEvent
         private CanvasGroup _canvasGroup;
         private bool _inAnimation;
         public Image shade;
+        public Image[] _images;
+        public Image image;
+        public TextMeshProUGUI[] _texts;
         public TextMeshProUGUI text;
         
         

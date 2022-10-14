@@ -19,10 +19,6 @@ public class UIEvent : UIBase
 {
     public UIContainerFlexBox container;
     public TextMeshProUGUI questionText;
-    public  GameObject[] answerButtons;
-    public Sprite defaultAnswerSprite;
-    public Sprite selectedAnswerSprite;
-    public  int eventIndex = 4;
     public Event eventModel;
     private CanvasGroup _canvasGroup;
     private bool _inAnimation;

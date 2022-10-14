@@ -15,7 +15,6 @@ using Event = Model.Event;
 
 public class GameManager : MonoBehaviour{
     public static GameManager shared;
-    
     public StageManager stageManager;
     public TutorialManager tutorialManager;
     public Game game;

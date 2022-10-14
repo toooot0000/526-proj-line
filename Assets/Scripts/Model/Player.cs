@@ -195,34 +195,8 @@ namespace Model{
             }
             Debug.Log("Coin:"+Coin.ToString());
         }
-
-        public void GetGear(int index)
-        {
-            Gear gear = new Gear(GameManager.shared.game,index);
-            String result = "";
-            Boolean hasGear = false;
-            foreach (var item in gears)
-            {
-                if (item.id == gear.id)
-                {
-                    hasGear = true;
-                    break;
-                }
-            }
-            if(hasGear == false)
-            {
-                AddGear(gear);
-                result += "Get Gear: " + gear.name;
-                UIManager.shared.OpenUI("UIResult",result);
-            }
-            else
-            {
-                Debug.Log("Player already have this gear");
-            }
-            
-        }
         
-
+        
         public void ClearAllBalls(){
             hitBalls.Clear();
             circledBalls.Clear();
