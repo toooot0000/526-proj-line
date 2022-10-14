@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Tutorial;
+using Tutorial.UI;
 using Tutorials;
 using UI.Common;
 using UI.Common.Shade;
@@ -12,13 +14,14 @@ namespace UI{
     public class UIManager : MonoBehaviour, ITutorialControllable{
 
         public const float UITransitionTime = 0.2f;
-        
         private const string ResourcesFolder = "Prefabs/UIs/";
+        
         public static UIManager shared;
         public UIShade shade;
-        private readonly List<UIBase> _uiList = new();
+        public readonly List<UIBase> uiList = new();
         private bool _isInTutorial = false;
         public readonly List<UIComponent> uiComponents = new();
+        public GameObject uiContainer;
 
         private void Awake(){
             if (shared) Destroy(this);
@@ -26,10 +29,10 @@ namespace UI{
         }
 
         public UIBase OpenUI(string uiPrefabName, object arg1 = null){
-            var cur = _uiList.Find(uiBase => uiBase.name == uiPrefabName);
+            var cur = uiList.Find(uiBase => uiBase.name == uiPrefabName);
             if (cur != null){
-                _uiList.Remove(cur);
-                _uiList.Add(cur);
+                uiList.Remove(cur);
+                uiList.Add(cur);
                 return cur;
             }
 
@@ -39,14 +42,14 @@ namespace UI{
                 return null;
             }
 
-            ui = Instantiate(ui, transform);
+            ui = Instantiate(ui, uiContainer.transform);
             cur = ui.GetComponent<UIBase>();
             if (cur == null){
                 Debug.LogError($"UI prefab doesn't have UIBase component! PrefabName = {uiPrefabName}");
                 return null;
             }
 
-            _uiList.Add(cur);
+            uiList.Add(cur);
             shade.SetActive(true);
             cur.OnClose += RemoveUI;
             StartCoroutine(CoroutineUtility.Delayed(() => cur.Open(arg1)));
@@ -54,8 +57,8 @@ namespace UI{
         }
 
         public void RemoveUI(UIBase ui){
-            _uiList.Remove(ui);
-            if (_uiList.Count == 0) shade.SetActive(false);
+            uiList.Remove(ui);
+            if (uiList.Count == 0) shade.SetActive(false);
         }
 
 
@@ -91,6 +94,14 @@ namespace UI{
             foreach (var comp in uiComponents){
                 comp.Show();
             }
+        }
+
+        public T GetUI<T>() where T : UIBase{
+            return uiList.Find(b => b.GetType() == typeof(T)) as T;
+        }
+
+        public T GetUIComponent<T>() where T : UIComponent{
+            return uiComponents.Find(b => b.GetType() == typeof(T)) as T;
         }
     }
 }

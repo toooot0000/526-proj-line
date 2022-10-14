@@ -1,5 +1,6 @@
 using System.Collections;
 using Model;
+using Tutorial;
 using Tutorials;
 using UnityEngine;
 using Utility;

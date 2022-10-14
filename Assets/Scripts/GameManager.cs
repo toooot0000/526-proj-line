@@ -5,16 +5,19 @@ using Core.DisplayArea.Stage;
 using Core.PlayArea.Balls;
 using Core.PlayArea.TouchTracking;
 using Model;
+using Tutorial;
+using Tutorial.Tutorials.BasicConcept;
+using Tutorial.Tutorials.EnemyIntention;
+using Tutorial.Tutorials.Stage1Soft;
 using Tutorials;
-using Tutorials.BasicConcept;
 using UI;
 using UI.TurnSignDisplayer;
 using UnityEngine;
 using Utility;
-using Event = Model.Event;
 
 public class GameManager : MonoBehaviour{
     public static GameManager shared;
+    
     public StageManager stageManager;
     public TutorialManager tutorialManager;
     public Game game;
@@ -32,7 +35,6 @@ public class GameManager : MonoBehaviour{
         InitGame();
         StartCoroutine(CoroutineUtility.Delayed(1, () =>
             UIManager.shared.OpenUI("UIGameStart")));
-        EventLogger.Shared.init();//should do this afeter game is initialized
     }
 
     private void Start(){
@@ -40,23 +42,6 @@ public class GameManager : MonoBehaviour{
     }
 
     private void Update(){
-        if (Input.GetKeyUp("e"))
-        {
-            print("enter the stage");
-            GameManager.shared.game.TestOnStageLoaded();
-        }
-
-        if (Input.GetKeyUp("s"))
-        {
-            print("stage success");
-            GameManager.shared.game.currentStage.TestOnStageBeaten();
-        }
-        
-        if (Input.GetKeyUp("space"))
-        {
-            print("special event");
-            UIManager.shared.OpenUI("UIEvent",new Event(1) );
-        }
     }
 
     private void InitGame(){
@@ -67,6 +52,7 @@ public class GameManager : MonoBehaviour{
 
     public void GameStart(){
         game.LoadStage(0);
+        EventLogger.Shared.init();//should do this after game is initialized
         stageManager.OnStageLoaded(game.currentStage);
         StartCoroutine(StartBattleStage());
     }
@@ -136,6 +122,9 @@ public class GameManager : MonoBehaviour{
                     StartCoroutine(CoroutineUtility.Delayed(1, 
                         () => tutorialManager.LoadTutorial(TutorialBasicConcept.PrefabName)));
                     break;
+                case 2:
+                    tutorialManager.LoadTutorial(TutorialStage1Soft.PrefabName);
+                    break;
             }
         }
     }
@@ -143,6 +132,13 @@ public class GameManager : MonoBehaviour{
     private IEnumerator SwitchToEnemyTurn(){
         var stageInfo = game.CurrentEnemy.GetCurrentStageAction();
         yield return turnSignDisplayer.Show(Game.Turn.Enemy);
+        if (game.currentStage.id == 0){
+            switch (CurrentTurnNum){
+                case 1:
+                    tutorialManager.LoadTutorial(TutorialEnemyIntention.PrefabName);
+                    break;
+            }
+        }
         stageManager.ProcessStageActionInfo(stageInfo);
     }
 

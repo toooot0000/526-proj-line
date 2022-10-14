@@ -47,11 +47,13 @@ namespace UI.Common.SimpleAnimation{
         public void Hide(){
             _isToShow = false;
             isMoving = true;
+            _curTime = 0;
         }
 
         public void Show(){
             _isToShow = true;
             isMoving = true;
+            _curTime = 0;
         }
     }
 }
