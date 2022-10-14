@@ -7,7 +7,9 @@ using Model;
 using Event = Model.Event;
 using TMPro;
 using UI;
+using UI.Container;
 using UI.Interfaces;
+using UI.Interfaces.SpecialEvent;
 using UnityEngine.UIElements;
 using Utility;
 using Image = UnityEngine.UI.Image;
@@ -15,6 +17,7 @@ using Random = UnityEngine.Random;
 
 public class UIEvent : UIBase
 {
+    public UIContainerFlexBox container;
     public TextMeshProUGUI questionText;
     public  GameObject[] answerButtons;
     public Sprite defaultAnswerSprite;
@@ -23,12 +26,14 @@ public class UIEvent : UIBase
     public Event eventModel;
     private CanvasGroup _canvasGroup;
     private bool _inAnimation;
+    private UIButton[] _buttons;
 
     // Start is called before the first frame update
     void Start()
     {
         _canvasGroup = GetComponent<CanvasGroup>();
         _canvasGroup.alpha = 0;
+        _buttons = transform.GetComponentsInChildren<UIButton>();
 
     }
     
@@ -52,8 +57,27 @@ public class UIEvent : UIBase
     /// 调整按钮显示，包括但不限于更新按钮文字，调整按钮位置，隐去不用的按钮，绑定按钮事件
     /// </summary>
     /// <param name="model"></param>
-    private void UpdateButton(Event model){
-        // TODO
+    private void UpdateButton(Event model)
+    {
+        var curButtonInd = 0;
+        foreach (var choice in model.choices)
+        {
+            if (choice.desc == "")
+            {
+                _buttons[curButtonInd].Show = false;
+                curButtonInd++;
+            }
+            else
+            {
+                var answerButton = _buttons[curButtonInd];
+                answerButton.Show = true;
+                Debug.Log(curButtonInd);
+                answerButton.Model = choice;
+                curButtonInd++;
+            }
+        }
+        container.UpdateLayout();
+
     }
 
     public void Close(int index) {
@@ -69,11 +93,9 @@ public class UIEvent : UIBase
             });
         StartCoroutine(coroutine());
     } 
-
+    
     public void OnAnswerSelected(int index)
     {
         Close(index);
     }
 }
-
-

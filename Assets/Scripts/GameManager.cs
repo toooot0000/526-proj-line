@@ -11,6 +11,7 @@ using UI;
 using UI.TurnSignDisplayer;
 using UnityEngine;
 using Utility;
+using Event = Model.Event;
 
 public class GameManager : MonoBehaviour{
     public static GameManager shared;
@@ -55,7 +56,7 @@ public class GameManager : MonoBehaviour{
         if (Input.GetKeyUp("space"))
         {
             print("special event");
-            UIManager.shared.OpenUI("UIEvent");
+            UIManager.shared.OpenUI("UIEvent",new Event(1) );
         }
     }
 

@@ -13,7 +13,6 @@ namespace UI.Interfaces.SpecialEvent
         public TextMeshProUGUI text;
         
         
-        
         void Start()
         {
             _canvasGroup = GetComponent<CanvasGroup>();

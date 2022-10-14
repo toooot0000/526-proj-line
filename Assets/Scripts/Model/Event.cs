@@ -17,7 +17,7 @@ namespace Model{
             effectToken = result[1] as string[];
             values = result[2] as int[];
         }
-        
+
         private static object[] ParseArgs(string arg){
             if (arg == "__empty") return null;
 
@@ -101,6 +101,7 @@ namespace Model{
                         var player = GameManager.shared.game.player;
                         if (player.gears.Find(g => g.id == effectValue[i]) == null){
                             player.AddGear(new Gear(player, effectValue[i]));
+                            result = "You got a gear: " + player.gears[^1].name;
                         }
                         break;
                     case "GetCoin":
