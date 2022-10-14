@@ -17,6 +17,7 @@ namespace UI.GearDisplayer{
         public float ballsize;
         
         private Gear _model;
+        private Rect _rectTransRect;
 
         public Gear Model{
             set{
@@ -32,7 +33,22 @@ namespace UI.GearDisplayer{
             var ball = CsvLoader.TryToLoad("Configs/balls", _model.ball.id);
             ballsize = (float)ball["size"];
             RectTransform rectTrans = image.GetComponent<RectTransform>();
+            if (ballsize > 1.5)
+            {
+                ballsize = (float)1.5;
+            }
             rectTrans!.localScale = new Vector3(ballsize, ballsize, 1);
+            // _rectTransRect = rectTrans.rect;
+            // if (_rectTransRect.width > 1.5)
+            // {
+            //     _rectTransRect.width = (float)1.5;
+            // }
+            //
+            // if (_rectTransRect.height > 1.5)
+            // {
+            //     _rectTransRect.height = (float)1.5;
+            // }
+            
             icon.sprite = Resources.Load<Sprite>(_model.imgPath);
 
             textMesh.text = Model.ToDescString();
