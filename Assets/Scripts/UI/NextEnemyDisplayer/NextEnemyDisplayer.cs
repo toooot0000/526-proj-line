@@ -6,6 +6,7 @@ namespace UI.NextEnemyDisplayer{
 
         private void Start(){
             UIManager.shared.RegisterComponent(this);
+            
         }
 
         public override void Hide(){

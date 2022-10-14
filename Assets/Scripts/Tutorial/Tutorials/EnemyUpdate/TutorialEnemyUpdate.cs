@@ -3,6 +3,9 @@ using Tutorials;
 using Tutorials.Utility;
 
 namespace Tutorial.Tutorials.EnemyUpdate{
+    /// <summary>
+    /// 当第一只怪物死掉的时候触发，告诉玩家需要
+    /// </summary>
     public class TutorialEnemyUpdate : TutorialBase{
 
         // TODO

@@ -5,6 +5,7 @@ using Core.DisplayArea.Stage;
 using Core.PlayArea.Balls;
 using Core.PlayArea.TouchTracking;
 using Tutorial.Tutorials.EnemyIntention;
+using Tutorial.UI;
 using Tutorials;
 using UI;
 using UI.Common.Shade;

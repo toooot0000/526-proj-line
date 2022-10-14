@@ -35,7 +35,6 @@ public class GameManager : MonoBehaviour{
         InitGame();
         StartCoroutine(CoroutineUtility.Delayed(1, () =>
             UIManager.shared.OpenUI("UIGameStart")));
-        EventLogger.Shared.init();//should do this afeter game is initialized
     }
 
     private void Start(){
@@ -43,17 +42,6 @@ public class GameManager : MonoBehaviour{
     }
 
     private void Update(){
-        if (Input.GetKeyUp("e"))
-        {
-            print("enter the stage");
-            GameManager.shared.game.TestOnStageLoaded();
-        }
-
-        if (Input.GetKeyUp("s"))
-        {
-            print("stage success");
-            GameManager.shared.game.currentStage.TestOnStageBeaten();
-        }
     }
 
     private void InitGame(){
@@ -64,6 +52,7 @@ public class GameManager : MonoBehaviour{
 
     public void GameStart(){
         game.LoadStage(0);
+        EventLogger.Shared.init();//should do this after game is initialized
         stageManager.OnStageLoaded(game.currentStage);
         StartCoroutine(StartBattleStage());
     }
