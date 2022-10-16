@@ -11,10 +11,11 @@ namespace Tutorial{
     /// </summary>
     public abstract class TutorialBase : MonoBehaviour{
         private const float HighLightZIndex = -190;
+        public const string PrefabName = "NotApplicable";
         public string nextTutorialName;
         public float nextDelay = 0.1f;
+        [HideInInspector]
         public TutorialManager tutorialManager;
-        public const string PrefabName = "NotApplicable";
 
 
         private readonly Dictionary<GameObject, Vector3> _positions = new();
@@ -52,18 +53,19 @@ namespace Tutorial{
             return _currentStepIndex >= Steps.Length ? null : Steps[_currentStepIndex];
         }
 
-        public void LiftToFront(GameObject obj, float relative = 0){
+        public virtual void LiftToFront(GameObject obj, float relative = 0){
             if (obj == null) return;
             _positions[obj] = obj.transform.position;
             obj.transform.position =
                 new Vector3(_positions[obj].x, _positions[obj].y, HighLightZIndex + relative);
         }
 
-        public void PutToBack(GameObject obj){
+        public virtual void PutToBack(GameObject obj){
             if (obj == null) return;
             obj.transform.position = _positions[obj];
         }
     }
-
+    
+    [Obsolete]
     public class TutorialContextBase{ }
 }
