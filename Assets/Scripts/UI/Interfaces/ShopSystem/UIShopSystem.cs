@@ -8,14 +8,24 @@ using UnityEngine;
 using Utility;
 
 namespace UI.Interfaces.ShopSystem {
-    public class UIShopSystem : UIBase {
-        public Gear[] items; // only contains gears which the player haven't got
+    public class UIShopSystem : UIBase
+    {
+        private List<Gear> items;
+        public Game game;
         private CanvasGroup _canvasGroup;
         private bool _inAnimation;
         private UIShopPanel[] _panels;
+        private List<int> playerOwnedItems;
         private List<int> soldItems;
 
         private void Start() {
+            items = new List<Gear>();
+            playerOwnedItems = new List<int>();
+            foreach (var gear in GameManager.shared.game.player.gears)
+            {
+                playerOwnedItems.Add(gear.id);
+            }
+
             _canvasGroup = GetComponent<CanvasGroup>();
             _canvasGroup.alpha = 0;
             _panels = transform.GetComponentsInChildren<UIShopPanel>();
@@ -30,7 +40,19 @@ namespace UI.Interfaces.ShopSystem {
                 i => _canvasGroup.alpha = i,
                 () => _inAnimation = false
             );
-            items = gears as Gear[];
+            items = gears as List<Gear>;
+            
+            int index = 0;
+            for (int j = -2; j <= 7; j++)
+            {
+                if(j == 0) continue;
+                if (index < 6 && !playerOwnedItems.Contains(j))
+                {
+                    items.Add(new Gear(game, j));
+                    index += 1;
+                }
+            }
+            
             UpdateGearPanel();
             StartCoroutine(coroutine());
         }
@@ -49,7 +71,7 @@ namespace UI.Interfaces.ShopSystem {
         } // ReSharper disable Unity.PerformanceAnalysis
         public void UpdateGearPanel() {
             var curPanelInd = 0;
-            if (items.Length > 6) {
+            if (items.Count > 6) {
                 Debug.LogError("Gears in Shop more than 6!");
                 return;
             }
@@ -59,7 +81,7 @@ namespace UI.Interfaces.ShopSystem {
                 var gearPanel = _panels[curPanelInd];
                 gearPanel.Show = true;
                 gearPanel.Model = gear;
-                if (gear.id <= GameManager.shared.game.player.Coin) gearPanel.OnClick += PurchaseSelectedGear;
+                if (2 <= GameManager.shared.game.player.Coin) gearPanel.OnClick += PurchaseSelectedGear;
                 else gearPanel.coinWithNumber.color = Color.red;
                 if (soldItems.Contains(gear.id)) gearPanel.soldOut.enabled = true;
                 curPanelInd++;
@@ -75,8 +97,8 @@ namespace UI.Interfaces.ShopSystem {
 
         private void PurchaseSelectedGear(UIShopPanel clickedPanel)
         {
-            if (GameManager.shared.game.player.Coin < clickedPanel.Model.id) return; // change gear.id to gear.price later
-            GameManager.shared.game.player.Coin -= clickedPanel.Model.id; // change gear.id to gear.price later
+            if (GameManager.shared.game.player.Coin < 2) return; // change gear.id to gear.price later
+            GameManager.shared.game.player.Coin -= 2; // change gear.id to gear.price later
             GameManager.shared.game.player.AddGear(clickedPanel.Model);
             soldItems.Add(clickedPanel.Model.id);
             // clickedPanel.soldOut.enabled = true;

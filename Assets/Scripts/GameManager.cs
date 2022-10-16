@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using BackendApi;
 using Core.DisplayArea.Stage;
 using Core.PlayArea.Balls;
@@ -41,14 +42,7 @@ public class GameManager : MonoBehaviour{
 
     private void Update(){
         if (Input.GetKeyUp("k")){
-            UIManager.shared.OpenUI("UIShopSystem", (object)(new Gear[]{
-                new Gear(game, 1),
-                new Gear(game, 2),
-                new Gear(game, 3),
-                new Gear(game, 4),
-                new Gear(game, 5),
-                new Gear(game, 6)
-            }));
+            UIManager.shared.OpenUI("UIShopSystem", (object)(new List<Gear>()));
         };
     }
 

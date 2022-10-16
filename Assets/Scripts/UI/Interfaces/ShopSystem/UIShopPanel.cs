@@ -25,7 +25,7 @@ namespace UI.Interfaces.ShopSystem {
                 name.text = value.name;
                 soldOut.text = "Sold Out";
                 soldOut.enabled = false;
-                coinWithNumber.text = "x " + value.id.ToString(); // change to value.price later
+                coinWithNumber.text = "x 2"; // change to value.price later
                 desc.text = value.desc;
             }
             get => _model;
