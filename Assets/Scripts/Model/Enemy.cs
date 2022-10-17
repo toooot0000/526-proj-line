@@ -21,6 +21,7 @@ namespace Model{
         public string desc;
         public EnemyIntention[] intentions;
         public int defend;
+        public string imgPath;
         private int _armor;
         private int _currentHp;
         private int _nextActionInd;
