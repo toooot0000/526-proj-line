@@ -56,23 +56,29 @@ namespace Tutorial.Tutorials.Stage1Clear{
                     if (selectGear == null) return;
                     selectGear.OnConfirmClicked -= tutorial.StepComplete;
                 }),
-                new StepTapToContinue(texts[3], null, (t, s) => {
+                new StepTapToContinue(texts[3], mng.uiController.touchCatcher, setUp: (t, s) => {
                     UIManager.shared.OnOpenUI += ui => {
                         if (ui is not UISelectStage selectStage) return;
                         var step = (StepTapToContinue)s;
-                        step.AddHighlightObject(selectStage.confirmButton.gameObject);
+                        step.AddHighlightObject(selectStage.GetFirstPanel().gameObject);
                         step.HighlightAll(t);
                         step.SetTextEnabled(true);
                     };
+                }),
+                new StepTapToContinue(texts[4], null, (t, s) => {
+                    var selectStage = UIManager.shared.GetUI<UISelectStage>();
+                    var step = (StepTapToContinue)s;
+                    step.AddHighlightObject(selectStage.confirmButton.gameObject);
+                    step.HighlightAll(t);
+                    step.SetTextEnabled(true);
                 }, (t, s) => {
                     var step = (StepTapToContinue)s;
                     step.LowlightAll(t);
                     step.SetTextEnabled(false);
                 }, bind: (tutorial, step) => {
-                    UIManager.shared.OnOpenUI += ui => {
-                        if (ui is not UISelectStage selectStage) return;
-                        selectStage.OnConfirmClicked += tutorial.StepComplete;
-                    };
+                    var selectStage = UIManager.shared.GetUI<UISelectStage>();
+                    if (selectStage == null) return;
+                    selectStage.OnConfirmClicked += tutorial.StepComplete;
                 }, unbind: (tutorial, step) => {
                     var selectStage = UIManager.shared.GetUI<UISelectStage>();
                     if (selectStage == null) return;

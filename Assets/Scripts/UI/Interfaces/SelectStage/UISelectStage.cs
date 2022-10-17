@@ -93,6 +93,8 @@ namespace UI.Interfaces.SelectStage
             clickedPanel.highLight.enabled = true;
             _selected = clickedPanel;
         }
+
+        public UIStagePanel GetFirstPanel() => _panels.Length > 0 ? _panels[0] : null;
     }
 }
 
