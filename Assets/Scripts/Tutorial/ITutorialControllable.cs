@@ -1,4 +1,3 @@
-using Tutorials;
 
 namespace Tutorial{
     public delegate void TutorialControllableEvent(ITutorialControllable controllable);

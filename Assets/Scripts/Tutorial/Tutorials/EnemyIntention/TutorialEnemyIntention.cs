@@ -1,15 +1,14 @@
 using Tutorial.Common;
-using Tutorials;
-using Tutorials.Utility;
+using Tutorial.Utility;
 
 namespace Tutorial.Tutorials.EnemyIntention{
     public class TutorialEnemyIntention: TutorialBase{
         public new const string PrefabName = "TutorialEnemyIntention";
         
-        private IStepBase[] _step;
+        private StepBase[] _step;
         public TutorialText[] texts;
         public TouchCatcher touchCatcher;
-        protected override IStepBase[] Steps => _step;
+        protected override StepBase[] Steps => _step;
         
         public override void OnLoaded(TutorialManager mng){
             foreach (var text in texts){
@@ -17,7 +16,7 @@ namespace Tutorial.Tutorials.EnemyIntention{
             }
 
             var obj = mng.stageManager.enemyView.intentionDisplayer.gameObject;
-            _step = new IStepBase[]{
+            _step = new StepBase[]{
                 new StepTouchToContinue(texts[0], touchCatcher, obj),
                 new StepTouchToContinue(texts[1], touchCatcher, obj)
             };

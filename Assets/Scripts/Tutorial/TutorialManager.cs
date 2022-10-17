@@ -10,7 +10,6 @@ using Tutorial.Tutorials;
 using Tutorial.Tutorials.BasicConcept;
 using Tutorial.Tutorials.EnemyIntention;
 using Tutorial.UI;
-using Tutorials;
 using UI;
 using UI.Common.Shade;
 using UI.GearDisplayer;

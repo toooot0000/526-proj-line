@@ -5,7 +5,6 @@ using Core.DisplayArea.Stage.Player;
 using Core.PlayArea.Balls;
 using Model;
 using Tutorial;
-using Tutorials;
 using UI;
 using UnityEngine;
 using Utility;

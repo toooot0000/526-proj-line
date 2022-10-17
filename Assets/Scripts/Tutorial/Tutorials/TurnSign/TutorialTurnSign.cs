@@ -1,6 +1,5 @@
 using Tutorial.Common;
-using Tutorials;
-using Tutorials.Utility;
+using Tutorial.Utility;
 
 namespace Tutorial.Tutorials.TurnSign{
     public class TutorialTurnSign: TutorialBase{
@@ -8,14 +7,14 @@ namespace Tutorial.Tutorials.TurnSign{
         public TutorialText[] texts;
         public TouchCatcher touchCatcher;
         
-        private IStepBase[] _step;
-        protected override IStepBase[] Steps => _step;
+        private StepBase[] _step;
+        protected override StepBase[] Steps => _step;
 
         public override void OnLoaded(TutorialManager mng){
             foreach (var text in texts){
                 text.Enable = false;
             }
-            _step = new IStepBase[]{
+            _step = new StepBase[]{
                 new StepTouchToContinue(texts[0], touchCatcher),
                 new StepTouchToContinue(texts[1], touchCatcher)
             };

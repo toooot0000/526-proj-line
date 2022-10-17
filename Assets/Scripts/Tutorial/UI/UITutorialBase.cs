@@ -3,6 +3,7 @@ using UI;
 using UnityEngine;
 
 namespace Tutorial.UI{
+
     public abstract class UITutorialBase: TutorialBase{
 
         private readonly Dictionary<GameObject, Transform> _parents = new();

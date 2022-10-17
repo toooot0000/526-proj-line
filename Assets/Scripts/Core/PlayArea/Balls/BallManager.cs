@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Core.DisplayArea.Stage;
 using Model;
 using Tutorial;
-using Tutorials;
 using UnityEngine;
 
 namespace Core.PlayArea.Balls{

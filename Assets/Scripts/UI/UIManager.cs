@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Tutorial;
 using Tutorial.UI;
-using Tutorials;
 using UI.Common;
 using UI.Common.Shade;
 using UI.Interfaces;

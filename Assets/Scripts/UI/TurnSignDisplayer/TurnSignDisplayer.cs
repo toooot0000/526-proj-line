@@ -3,7 +3,6 @@ using System.Collections;
 using Model;
 using Tutorial;
 using Tutorial.Tutorials.TurnSign;
-using Tutorials;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility;

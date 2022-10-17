@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Tutorials;
 using UnityEngine;
 
 namespace Tutorial{
@@ -20,7 +19,7 @@ namespace Tutorial{
 
         private readonly Dictionary<GameObject, Vector3> _positions = new();
         private int _currentStepIndex;
-        protected abstract IStepBase[] Steps{ get; }
+        protected abstract StepBase[] Steps{ get; }
         public event TutorialEvent OnLoad;
         public event TutorialEvent OnComplete;
 
@@ -28,16 +27,21 @@ namespace Tutorial{
             tutorialManager = mng;
             OnLoad?.Invoke(this);
             _currentStepIndex = 0;
-            CurrentStep().SetUp(this);
+            CurrentStep.SetUp(this);
         }
 
         public virtual void StepComplete(ITutorialControllable controllable){
-            CurrentStep().Complete(this);
+            CurrentStep.Complete(this);
             MoveToNextStep();
-            if (CurrentStep() == null)
+            if (CurrentStep == null)
                 Complete();
-            else
-                Steps[_currentStepIndex].SetUp(this);
+            else {
+                if (CurrentStep.BindEvent != null){
+                    CurrentStep.BindEvent(this, CurrentStep);
+                } else{
+                    Steps[_currentStepIndex].SetUp(this);
+                }
+            }
         }
 
         protected virtual void Complete(){
@@ -49,9 +53,7 @@ namespace Tutorial{
             _currentStepIndex = Math.Min(Steps.Length, _currentStepIndex + 1);
         }
 
-        protected IStepBase CurrentStep(){
-            return _currentStepIndex >= Steps.Length ? null : Steps[_currentStepIndex];
-        }
+        protected StepBase CurrentStep => _currentStepIndex >= Steps.Length ? null : Steps[_currentStepIndex];
 
         public virtual void LiftToFront(GameObject obj, float relative = 0){
             if (obj == null) return;

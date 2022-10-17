@@ -9,7 +9,6 @@ using Tutorial;
 using Tutorial.Tutorials.BasicConcept;
 using Tutorial.Tutorials.EnemyIntention;
 using Tutorial.Tutorials.Stage1Soft;
-using Tutorials;
 using UI;
 using UI.TurnSignDisplayer;
 using UnityEngine;

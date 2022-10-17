@@ -1,12 +1,11 @@
 using Core.PlayArea.Balls;
-using Tutorials;
 using UnityEngine;
 
 namespace Tutorial.Tutorials.BasicConcept{
-    public class Step4: IStepBase{
+    public class Step4: StepBase{
         private BallView _ball;
         private TutorialBasicConcept _ttr;
-        public void SetUp(TutorialBase tutorial){
+        public override void SetUp(TutorialBase tutorial){
             _ttr = (TutorialBasicConcept)tutorial;
             _ttr.desc[3].Enable = true;
             _ball = _ttr.tutorialManager.ballManager.balls[0];
@@ -36,7 +35,7 @@ namespace Tutorial.Tutorials.BasicConcept{
             }
         }
 
-        public void Complete(TutorialBase tutorial){
+        public override void Complete(TutorialBase tutorial){
             _ball.GainBackControlFrom(_ttr);
             _ttr.tutorialManager.tracker.GainBackControlFrom(_ttr);
             _ttr.PutToBack(_ball.gameObject);

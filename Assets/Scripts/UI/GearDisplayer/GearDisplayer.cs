@@ -1,6 +1,5 @@
 using System;
 using Model;
-using Tutorials;
 using UI.Common.SimpleAnimation;
 using UI.Container;
 using UnityEngine;
