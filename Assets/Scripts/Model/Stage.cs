@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using UnityEngine;
 using Utility;
 using Utility.Loader;
 
@@ -62,6 +63,7 @@ namespace Model{
         }
 
         public void ForwardCurrentEnemy(){
+            Debug.Log("forward current enemy");
             _enemyIndex++;
             if (_enemyIndex == enemies.Length){
                 GameManager.shared.Delayed(1, () => { OnStageBeaten?.Invoke(currentGame, this); });
@@ -94,6 +96,7 @@ namespace Model{
             bonusCoins = (int)info["bonus_coins"];
             CurrentEnemy.BecomeCurrent();
             OnNewConfigLoaded?.Invoke(currentGame, this);
+            OnEnemyChanged?.Invoke(currentGame, this);
         }
     }
 }
