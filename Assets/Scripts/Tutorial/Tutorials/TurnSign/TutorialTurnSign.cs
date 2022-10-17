@@ -5,7 +5,7 @@ namespace Tutorial.Tutorials.TurnSign{
     public class TutorialTurnSign: TutorialBase{
         public new const string PrefabName = "TutorialTurnSign";
         public TutorialText[] texts;
-        public TouchCatcher touchCatcher;
+        public TutorialTapCatcher tutorialTapCatcher;
         
         private StepBase[] _step;
         protected override StepBase[] Steps => _step;
@@ -15,8 +15,8 @@ namespace Tutorial.Tutorials.TurnSign{
                 text.Enabled = false;
             }
             _step = new StepBase[]{
-                new StepTapToContinue(texts[0], touchCatcher),
-                new StepTapToContinue(texts[1], touchCatcher)
+                new StepTapToContinue<TutorialTurnSign>(texts[0], tutorialTapCatcher),
+                new StepTapToContinue<TutorialTurnSign>(texts[1], tutorialTapCatcher)
             };
             
             mng.turnSignDisplayer.HandOverControlTo(this);

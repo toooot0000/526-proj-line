@@ -58,7 +58,7 @@ MonoBehaviour:
   texts:
   - {fileID: 1937131072521728428}
   - {fileID: 3603534728638293162}
-  touchCatcher: {fileID: 105518093928886141}
+  tutorialTapCatcher: {fileID: 105518093928886141}
 --- !u!1001 &6171613476064087885
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -140,7 +140,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7469125957905066982, guid: 6fa9136e769f80a439d468c594bbb49f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.94365
+      value: -0.94366455
       objectReference: {fileID: 0}
     - target: {fileID: 7469125957905066982, guid: 6fa9136e769f80a439d468c594bbb49f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -206,6 +206,10 @@ PrefabInstance:
     - target: {fileID: 1819236009785042203, guid: 52040baa5dec746489dfb1a0cd1170f6, type: 3}
       propertyPath: m_Name
       value: TouchCatcher
+      objectReference: {fileID: 0}
+    - target: {fileID: 2671802308652144069, guid: 52040baa5dec746489dfb1a0cd1170f6, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.26800537
       objectReference: {fileID: 0}
     - target: {fileID: 8563492536311476810, guid: 52040baa5dec746489dfb1a0cd1170f6, type: 3}
       propertyPath: m_Pivot.x
@@ -390,7 +394,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7469125957905066982, guid: 6fa9136e769f80a439d468c594bbb49f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.966
+      value: -0.9660034
       objectReference: {fileID: 0}
     - target: {fileID: 7469125957905066982, guid: 6fa9136e769f80a439d468c594bbb49f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

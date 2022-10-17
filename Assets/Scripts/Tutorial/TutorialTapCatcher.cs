@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Tutorial{
     [RequireComponent(typeof(Collision2D))]
-    public class TouchCatcher : MonoBehaviour{
+    public class TutorialTapCatcher : MonoBehaviour{
         public Collider2D col;
         public TextMeshProUGUI mesh;
 

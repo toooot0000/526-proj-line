@@ -3,7 +3,7 @@ using Model;
 using UI.Common.SimpleAnimation;
 using UI.Container;
 using UnityEngine;
-using Utility;
+using UnityEngine.UI;
 
 namespace UI.GearDisplayer{
     public class GearDisplayer : UIComponent{
@@ -19,6 +19,9 @@ namespace UI.GearDisplayer{
             GameManager.shared.game.player.OnGearChanged += UpdateGears;
             UIManager.shared.RegisterComponent(this);
             UpdateGears(GameManager.shared.game, GameManager.shared.game.player);
+            var scrollRect = GetComponentInChildren<ScrollRect>();
+            scrollRect.verticalNormalizedPosition = 1;
+            scrollRect.horizontalNormalizedPosition = 0;
         }
         
         public override void Hide(){

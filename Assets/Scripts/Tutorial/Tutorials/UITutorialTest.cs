@@ -17,8 +17,8 @@ namespace Tutorial.Tutorials{
             var gearDisplayer = UIManager.shared.GetUIComponent<GearDisplayer>();
             
             _step = new StepBase[]{
-                new StepTapToContinue(texts[0], mng.uiController.touchCatcher, gearDisplayer.gameObject),
-                new StepTapToContinue(texts[0], mng.uiController.touchCatcher, gearDisplayer.gameObject, (tutorial, step) => {
+                new StepTapToContinue<UITutorialTest>(texts[0], mng.uiController.tutorialTapCatcher, gearDisplayer.gameObject),
+                new StepTapToContinue<UITutorialTest>(texts[0], mng.uiController.tutorialTapCatcher, gearDisplayer.gameObject, (tutorial, step) => {
                     tutorial.tutorialManager.uiController.shade.SetActive(false);
                     var gameStart = UIManager.shared.GetUI<UIGameStart>();
                     if (gameStart == null) return;
@@ -28,12 +28,12 @@ namespace Tutorial.Tutorials{
                     };
                 })
             };
-            mng.uiController.touchCatcher.Enabled = true;
+            mng.uiController.tutorialTapCatcher.Enabled = true;
             base.OnLoaded(mng);
         }
 
         protected override void Complete(){
-            tutorialManager.uiController.touchCatcher.Enabled = false;
+            tutorialManager.uiController.tutorialTapCatcher.Enabled = false;
             base.Complete();
         }
     }

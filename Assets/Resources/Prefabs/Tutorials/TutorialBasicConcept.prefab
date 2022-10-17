@@ -100,7 +100,7 @@ MonoBehaviour:
   - {fileID: 282024332884716999}
   - {fileID: 282024331792711604}
   - {fileID: 282024331209221771}
-  touchCatcher: {fileID: 1764568782683102599}
+  tutorialTapCatcher: {fileID: 1764568782683102599}
   ballPosition: {fileID: 7227813265571162400}
   movingPointer: {fileID: 4799851207233187516}
 --- !u!1001 &282024333072000669

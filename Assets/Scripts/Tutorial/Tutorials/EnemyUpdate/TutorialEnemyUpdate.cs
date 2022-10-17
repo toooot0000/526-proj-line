@@ -12,7 +12,7 @@ namespace Tutorial.Tutorials.EnemyUpdate{
         public new const string PrefabName = "TutorialEnemyUpdate";
         private StepBase[] _step;
         public TutorialText[] texts;
-        public TouchCatcher touchCatcher;
+        public TutorialTapCatcher tutorialTapCatcher;
         protected override StepBase[] Steps => _step;
         
         public override void OnLoaded(TutorialManager mng){
@@ -20,7 +20,7 @@ namespace Tutorial.Tutorials.EnemyUpdate{
                 text.Enabled = false;
             }
             _step = new StepBase[]{
-                new StepTapToContinue(texts[0], touchCatcher)
+                new StepTapToContinue<TutorialEnemyUpdate>(texts[0], tutorialTapCatcher)
             };
             
             mng.turnSignDisplayer.HandOverControlTo(this);

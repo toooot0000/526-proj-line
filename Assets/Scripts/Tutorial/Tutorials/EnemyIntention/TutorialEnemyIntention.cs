@@ -7,7 +7,7 @@ namespace Tutorial.Tutorials.EnemyIntention{
         
         private StepBase[] _step;
         public TutorialText[] texts;
-        public TouchCatcher touchCatcher;
+        public TutorialTapCatcher tutorialTapCatcher;
         protected override StepBase[] Steps => _step;
         
         public override void OnLoaded(TutorialManager mng){
@@ -17,8 +17,8 @@ namespace Tutorial.Tutorials.EnemyIntention{
 
             var obj = mng.stageManager.enemyView.intentionDisplayer.gameObject;
             _step = new StepBase[]{
-                new StepTapToContinue(texts[0], touchCatcher, obj),
-                new StepTapToContinue(texts[1], touchCatcher, obj)
+                new StepTapToContinue<TutorialEnemyIntention>(texts[0], tutorialTapCatcher, obj),
+                new StepTapToContinue<TutorialEnemyIntention>(texts[1], tutorialTapCatcher, obj)
             };
             
             mng.stageManager.HandOverControlTo(this);

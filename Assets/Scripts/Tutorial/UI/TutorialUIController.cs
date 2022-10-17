@@ -6,6 +6,6 @@ using UnityEngine;
 namespace Tutorial.UI{
     public class TutorialUIController: MonoBehaviour{
         public UIShade shade;
-        public TouchCatcher touchCatcher;
+        public TutorialTapCatcher tutorialTapCatcher;
     }
 }

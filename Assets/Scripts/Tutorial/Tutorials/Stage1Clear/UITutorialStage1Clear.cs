@@ -25,28 +25,25 @@ namespace Tutorial.Tutorials.Stage1Clear{
             }
 
             _step = new StepBase[]{
-                new StepTapToContinue(texts[0], mng.uiController.touchCatcher),
-                new StepTapToContinue(texts[1], mng.uiController.touchCatcher, (t, s) => {
+                new StepTapToContinue<UITutorialStage1Clear>(texts[0], mng.uiController.tutorialTapCatcher),
+                new StepTapToContinue<UITutorialStage1Clear>(texts[1], mng.uiController.tutorialTapCatcher, (t, s) => {
                     t.tutorialManager.stageManager.TutorSetPause(false);
                     UIManager.shared.OnOpenUI += ui => {
                         if (ui is not UISelectGear selectGear) return;
-                        var step = (StepTapToContinue)s;
                         t.tutorialManager.stageManager.TutorSetPause(true);
-                        step.AddHighlightObject(selectGear.GetFirstPanel().gameObject);
-                        StepTapToContinue.DefaultSetUp(t, s);
+                        s.AddHighlightObject(selectGear.GetFirstPanel().gameObject);
+                        StepTapToContinue<UITutorialStage1Clear>.DefaultSetUp(t, s);
                     };
                 }),
-                new StepTapToContinue(texts[2], null, (t, s) => {
+                new StepTapToContinue<UITutorialStage1Clear>(texts[2], null, (t, s) => {
                     var selectGear = UIManager.shared.GetUI<UISelectGear>();
                     if (selectGear == null) return;
-                    var step = (StepTapToContinue)s;
-                    step.AddHighlightObject(selectGear.confirmButton.gameObject);
-                    step.HighlightAll(t);
-                    step.SetTextEnabled(true);
+                    s.AddHighlightObject(selectGear.confirmButton.gameObject);
+                    s.HighlightAll(t);
+                    s.SetTextEnabled(true);
                 }, (t, s) => {
-                    var step = (StepTapToContinue)s;
-                    step.LowlightAll(t);
-                    step.SetTextEnabled(false);
+                    s.LowlightAll(t);
+                    s.SetTextEnabled(false);
                 }, bind: (tutorial, step) => {
                     var selectGear = UIManager.shared.GetUI<UISelectGear>();
                     if (selectGear == null) return;
@@ -56,23 +53,20 @@ namespace Tutorial.Tutorials.Stage1Clear{
                     if (selectGear == null) return;
                     selectGear.OnConfirmClicked -= tutorial.StepComplete;
                 }),
-                new StepTapToContinue(texts[3], mng.uiController.touchCatcher, setUp: (t, s) => {
+                new StepTapToContinue<UITutorialStage1Clear>(texts[3], mng.uiController.tutorialTapCatcher, setUp: (t, s) => {
                     UIManager.shared.OnOpenUI += ui => {
                         if (ui is not UISelectStage selectStage) return;
-                        var step = (StepTapToContinue)s;
-                        step.AddHighlightObject(selectStage.GetFirstPanel().gameObject);
-                        step.HighlightAll(t);
-                        step.SetTextEnabled(true);
+                        s.AddHighlightObject(selectStage.GetFirstPanel().gameObject);
+                        s.HighlightAll(t);
+                        s.SetTextEnabled(true);
                     };
                 }),
-                new StepTapToContinue(texts[4], null, (t, s) => {
+                new StepTapToContinue<UITutorialStage1Clear>(texts[4], null, (t, step) => {
                     var selectStage = UIManager.shared.GetUI<UISelectStage>();
-                    var step = (StepTapToContinue)s;
                     step.AddHighlightObject(selectStage.confirmButton.gameObject);
                     step.HighlightAll(t);
                     step.SetTextEnabled(true);
-                }, (t, s) => {
-                    var step = (StepTapToContinue)s;
+                }, (t, step) => {
                     step.LowlightAll(t);
                     step.SetTextEnabled(false);
                 }, bind: (tutorial, step) => {

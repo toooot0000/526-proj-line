@@ -7,14 +7,15 @@ using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 
 namespace Tutorial.Utility{
-    public class StepTapToContinue : StepConditionToContinue{
+    public class StepTapToContinue<T> : StepConditionToContinue<T>
+    where T: TutorialBase{
         private readonly TutorialText _textMesh;
-        private readonly TouchCatcher _catcher;
+        private readonly TutorialTapCatcher _catcher;
         private readonly List<GameObject> _highlights = new();
 
-        public StepTapToContinue(TutorialText text, TouchCatcher catcher, GameObject highlight = null): this(text, catcher, new []{highlight}){ }
+        public StepTapToContinue(TutorialText text, TutorialTapCatcher catcher, GameObject highlight = null): this(text, catcher, new []{highlight}){ }
 
-        private StepTapToContinue(TutorialText text, TouchCatcher catcher, GameObject[] highlights)
+        private StepTapToContinue(TutorialText text, TutorialTapCatcher catcher, GameObject[] highlights)
             : base(
                 setUpProcedure: DefaultSetUp,
                 cleanUpProcedure: DefaultCleanUp,
@@ -29,37 +30,45 @@ namespace Tutorial.Utility{
             }
         }
 
-        public StepTapToContinue(TutorialText text, TouchCatcher catcher, GameObject highlight, StepCallbackDelegate setUp): this(text, catcher, highlight){
-            SetUpProcedure = setUp;
+        public StepTapToContinue(TutorialText text, TutorialTapCatcher catcher, GameObject highlight, Action<T, StepTapToContinue<T>> setUp): this(text, catcher, highlight){
+            SetUpProcedure = (t, s) => {
+                setUp(t, (StepTapToContinue<T>)s);
+            };
         }
 
-        public StepTapToContinue(TutorialText text,  TouchCatcher catcher, StepCallbackDelegate setUp, StepCallbackDelegate cleanUp = null,
-            StepCallbackDelegate bind = null, StepCallbackDelegate unbind = null): base(setUp, cleanUp ?? DefaultCleanUp, bind ?? DefaultBind, unbind ?? DefaultUnbind){
+        public StepTapToContinue(TutorialText text,  TutorialTapCatcher catcher, Action<T, StepTapToContinue<T>>  setUp, Action<T, StepTapToContinue<T>>  cleanUp = null,
+            Action<T, StepTapToContinue<T>>  bind = null, Action<T, StepTapToContinue<T>>  unbind = null)
+            : base(
+            (t, s) => { setUp(t, (StepTapToContinue<T>)s); }, 
+                cleanUp != null ? (t, s) => { cleanUp(t, (StepTapToContinue<T>)s); } : DefaultCleanUp, 
+                bind != null ? (t, s) => { bind(t, (StepTapToContinue<T>)s); } : DefaultBind, 
+                unbind != null ? (t, s) => { unbind(t, (StepTapToContinue<T>)s); } : DefaultUnbind
+            ){
             _textMesh = text;
             _catcher = catcher;
         }
 
         public static void DefaultSetUp(TutorialBase t, StepBase s){
-            if (s is not StepTapToContinue step) return;
+            if (s is not StepTapToContinue<T> step) return;
             step._textMesh.Enabled = true;
             step._catcher.Enabled = true;
             step.HighlightAll(t);
         }
 
         public static void DefaultBind(TutorialBase t, StepBase s){
-            if (s is not StepTapToContinue step) return;
+            if (s is not StepTapToContinue<T> step) return;
             step._catcher.OnTouched += t.StepComplete;
         }
 
         public static void DefaultCleanUp(TutorialBase t, StepBase s){
-            if (s is not StepTapToContinue step) return;
+            if (s is not StepTapToContinue<T> step) return;
             step._textMesh.Enabled = false;
             step._catcher.Enabled = false;
             step.LowlightAll(t);
         }
 
         public static void DefaultUnbind(TutorialBase t, StepBase s){
-            if (s is not StepTapToContinue step) return;
+            if (s is not StepTapToContinue<T> step) return;
             step._catcher.OnTouched -= t.StepComplete;
         }
 

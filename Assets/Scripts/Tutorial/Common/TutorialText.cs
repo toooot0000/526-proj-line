@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +8,10 @@ namespace Tutorial.Common{
         public TextMeshProUGUI textMesh;
         public SpriteRenderer bg;
         public Image imgBg;
+
+        private void Awake(){
+            Enabled = false;
+        }
 
         public string Text{
             set => textMesh.text = value;

@@ -17,6 +17,10 @@ namespace Tutorial.Common{
         private Vector3[] _positions;
         private float _totalLength;
 
+        private void Awake(){
+            Enabled = false;
+        }
+
         public Vector3[] Positions{
             set{
                 _positions = value;
