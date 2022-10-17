@@ -5,6 +5,7 @@ using Core.DisplayArea.Stage.Player;
 using Core.PlayArea.Balls;
 using Model;
 using Tutorial;
+using Tutorial.Tutorials.Stage1Clear;
 using UI;
 using UnityEngine;
 using Utility;
@@ -98,6 +99,7 @@ namespace Core.DisplayArea.Stage{
         private IEnumerator OnPlayerAttackResolved(StageActionInfoBase info){
             var dmg = info.damage;
             if (enemyView.isDead){
+                GameManager.shared.tutorialManager.ForceLoadTutorial<UITutorialStage1Clear>();
                 if (dmg.currentGame.currentStage.NextEnemy != null){
                     dmg.currentGame.currentStage.ForwardCurrentEnemy();
                     enemyView.BindToCurrentEnemy();
@@ -105,11 +107,15 @@ namespace Core.DisplayArea.Stage{
                     yield return new WaitWhile(() => _pause);
                     yield return CoroutineUtility.Delayed(1f, GameManager.shared.SwitchTurn);
                 } else{
+                    yield return new WaitWhile(() => _pause);
                     if (!_modelStage.IsLast){
-                        if (_modelStage.bonusCoins == -1)
+                        if (_modelStage.bonusCoins == -1){
+                            yield return new WaitWhile(() => _pause);
                             UIManager.shared.OpenUI("UISelectGear", _modelStage.bonusGears);
-                        else
+                        } else{
+                            yield return new WaitWhile(() => _pause);
                             UIManager.shared.OpenUI("UIGetCoins", _modelStage.bonusCoins);
+                        }
                     } else{
                         UIManager.shared.OpenUI("UIGameComplete");
                     }

@@ -45,11 +45,11 @@ namespace Tutorial{
             Destroy(gameObject);
         }
 
-        protected void MoveToNextStep(){
+        private void MoveToNextStep(){
             _currentStepIndex = Math.Min(Steps.Length, _currentStepIndex + 1);
         }
 
-        protected StepBase CurrentStep => _currentStepIndex >= Steps.Length ? null : Steps[_currentStepIndex];
+        private StepBase CurrentStep => _currentStepIndex >= Steps.Length ? null : Steps[_currentStepIndex];
 
         public virtual void LiftToFront(GameObject obj, float relative = 0){
             if (obj == null) return;

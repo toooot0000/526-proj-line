@@ -1,5 +1,6 @@
 using BackendApi;
 using Model;
+using Tutorial;
 using UI.Container;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,8 @@ namespace UI.Interfaces.SelectGear{
         private bool _inAnimation;
         private UIGearPanel[] _panels;
         private UIGearPanel _selected;
+
+        public event TutorialControllableEvent OnConfirmClicked;
         
         private void Start(){
             _canvasGroup = GetComponent<CanvasGroup>();
@@ -66,9 +69,11 @@ namespace UI.Interfaces.SelectGear{
 
             for (; curPanelInd < _panels.Length; curPanelInd++) _panels[curPanelInd].Show = false;
             container.UpdateLayout();
+            ChangeSelectedItemTo(_panels[0]);
         }
 
         public void ConfirmButtonEvent(){
+            OnConfirmClicked?.Invoke(null);
             GameManager.shared.game.player.AddGear(_selected.Model);
             Close();
         }

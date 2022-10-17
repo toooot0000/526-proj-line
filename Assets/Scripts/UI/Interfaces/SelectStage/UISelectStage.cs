@@ -1,8 +1,10 @@
 using UnityEngine;
 using Model;
 using TMPro;
+using Tutorial;
 using UI.Container;
 using UnityEngine;
+using UnityEngine.UI;
 using Utility;
 
 namespace UI.Interfaces.SelectStage
@@ -10,10 +12,13 @@ namespace UI.Interfaces.SelectStage
     public class UISelectStage : UIBase
     {
         public UIContainerFlexBox container;
+        public Button confirmButton;
         private CanvasGroup _canvasGroup;
         private bool _inAnimation;
         private UIStagePanel[] _panels;
         private UIStagePanel _selected;
+
+        public event TutorialControllableEvent OnConfirmClicked;
 
         // public override string PrefabName{ get; } = "UISelectStage";
 
@@ -71,10 +76,12 @@ namespace UI.Interfaces.SelectStage
 
             for (; curPanelInd < _panels.Length; curPanelInd++) _panels[curPanelInd].Show = false;
             container.UpdateLayout();
+            ChangeSelectedItemTo(_panels[0]);
         }
         
         public void ConfirmButtonEvent(){
             if (_selected == null) return;
+            OnConfirmClicked?.Invoke(null);
             GameManager.shared.GotoStage(_selected.Id);
             Close();
         }

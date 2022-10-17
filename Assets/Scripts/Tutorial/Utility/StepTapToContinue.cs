@@ -32,47 +32,59 @@ namespace Tutorial.Utility{
         public StepTapToContinue(TutorialText text, TouchCatcher catcher, GameObject highlight, StepCallbackDelegate setUp): this(text, catcher, highlight){
             SetUpProcedure = setUp;
         }
-        
-        public StepTapToContinue(TutorialText text, TouchCatcher catcher, StepCallbackDelegate setUp): this(text, catcher){
-            SetUpProcedure = setUp;
-        }
 
-        public StepTapToContinue(TutorialText text, StepCallbackDelegate setUp, StepCallbackDelegate cleanUp = null,
-            StepCallbackDelegate bind = null, StepCallbackDelegate unbind = null): base(setUp, cleanUp, bind, unbind){
+        public StepTapToContinue(TutorialText text,  TouchCatcher catcher, StepCallbackDelegate setUp, StepCallbackDelegate cleanUp = null,
+            StepCallbackDelegate bind = null, StepCallbackDelegate unbind = null): base(setUp, cleanUp ?? DefaultCleanUp, bind ?? DefaultBind, unbind ?? DefaultUnbind){
             _textMesh = text;
-            _catcher = null;
+            _catcher = catcher;
         }
 
-        private static void DefaultSetUp(TutorialBase t, StepBase s){
+        public static void DefaultSetUp(TutorialBase t, StepBase s){
             if (s is not StepTapToContinue step) return;
             step._textMesh.Enabled = true;
-            foreach (var gObj in step._highlights){
-                t.LiftToFront(gObj);
-            }
+            step._catcher.Enabled = true;
+            step.HighlightAll(t);
         }
 
-        private static void DefaultBind(TutorialBase t, StepBase s){
+        public static void DefaultBind(TutorialBase t, StepBase s){
             if (s is not StepTapToContinue step) return;
-            step._catcher.Enabled = true;
             step._catcher.OnTouched += t.StepComplete;
         }
 
-        private static void DefaultCleanUp(TutorialBase t, StepBase s){
+        public static void DefaultCleanUp(TutorialBase t, StepBase s){
             if (s is not StepTapToContinue step) return;
             step._textMesh.Enabled = false;
             step._catcher.Enabled = false;
-            foreach (var gameObject in step._highlights){
-                t.PutToBack(gameObject);
-            }
+            step.LowlightAll(t);
         }
 
-        private static void DefaultUnbind(TutorialBase t, StepBase s){
+        public static void DefaultUnbind(TutorialBase t, StepBase s){
             if (s is not StepTapToContinue step) return;
             step._catcher.OnTouched -= t.StepComplete;
         }
 
         public void AddHighlightObject(GameObject obj){
             _highlights.Add(obj);
+        }
+
+        public void HighlightAll(TutorialBase tutorial){
+            foreach (var gObj in _highlights){
+                tutorial.LiftToFront(gObj);
+            }
+        }
+
+        public void LowlightAll(TutorialBase tutorial){
+            foreach (var gameObject in _highlights){
+                tutorial.PutToBack(gameObject);
+            }
+        }
+
+        public void SetTextEnabled(bool value){
+            _textMesh.Enabled = value;
+        }
+
+        public void SetCatcherEnabled(bool value){
+            _catcher.Enabled = value;
         }
     }
 }

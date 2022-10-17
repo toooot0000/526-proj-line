@@ -114,10 +114,12 @@ MonoBehaviour:
       charge: 0
       combo: 0
     ballNum: 0
-    chargeEffect: 
-    comboEffect: 
     cooldown: 0
     imgPath: 
+    chargeNum: 0
+    comboNum: 0
+    comboDesc: 
+    chargeDesc: 
   - gameObject: {fileID: 0}
     id: 0
     name: 
@@ -136,10 +138,12 @@ MonoBehaviour:
       charge: 0
       combo: 0
     ballNum: 0
-    chargeEffect: 
-    comboEffect: 
     cooldown: 0
     imgPath: 
+    chargeNum: 0
+    comboNum: 0
+    comboDesc: 
+    chargeDesc: 
   - gameObject: {fileID: 0}
     id: 0
     name: 
@@ -158,10 +162,13 @@ MonoBehaviour:
       charge: 0
       combo: 0
     ballNum: 0
-    chargeEffect: 
-    comboEffect: 
     cooldown: 0
     imgPath: 
+    chargeNum: 0
+    comboNum: 0
+    comboDesc: 
+    chargeDesc: 
+  confirmButton: {fileID: 1283721797100147480}
 --- !u!225 &6826066176524789359
 CanvasGroup:
   m_ObjectHideFlags: 0
