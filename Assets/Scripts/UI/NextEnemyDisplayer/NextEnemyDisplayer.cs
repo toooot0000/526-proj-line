@@ -13,12 +13,11 @@ namespace UI.NextEnemyDisplayer{
         private void Start(){
             GameManager.shared.game.currentStage.OnEnemyChanged += UpdateEnemy;
             UIManager.shared.RegisterComponent(this);
-            //UpdateEnemy(GameManager.shared.game, GameManager.shared.game.currentStage);
+            UpdateEnemy(GameManager.shared.game, GameManager.shared.game.currentStage);
         }
 
         private void UpdateEnemy(Game game, GameModel stage)
         {
-            Debug.Log("Execute UpdateEnemy");
             Enemy nextEnemy = (stage as Stage)!.NextEnemy;
             if(nextEnemy == null){
                 nameText.text = "No More";
