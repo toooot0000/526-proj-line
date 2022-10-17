@@ -7,7 +7,7 @@ namespace Tutorial.Tutorials.BasicConcept{
         private TutorialBasicConcept _ttr;
         public override void SetUp(TutorialBase tutorial){
             _ttr = (TutorialBasicConcept)tutorial;
-            _ttr.desc[3].Enable = true;
+            _ttr.desc[3].Enabled = true;
             _ball = _ttr.tutorialManager.ballManager.balls[0];
             _ttr.LiftToFront(_ball.gameObject);
             
@@ -40,7 +40,7 @@ namespace Tutorial.Tutorials.BasicConcept{
             _ttr.tutorialManager.tracker.GainBackControlFrom(_ttr);
             _ttr.PutToBack(_ball.gameObject);
             _ttr.PutToBack(_ttr.tutorialManager.tracker.gameObject);
-            _ttr.desc[3].Enable = false;
+            _ttr.desc[3].Enabled = false;
             _ttr.movingPointer.Enabled = false;
             tutorial.tutorialManager.tracker.OnTouchEnd -= WrappedComplete;
         }

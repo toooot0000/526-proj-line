@@ -13,10 +13,10 @@ namespace Tutorial.Tutorials.Stage1Soft{
         
         public override void OnLoaded(TutorialManager mng){
             foreach (var text in texts){
-                text.Enable = false;
+                text.Enabled = false;
             }
             _step = new StepBase[]{
-                new StepTouchToContinue(texts[0], touchCatcher)
+                new StepTapToContinue(texts[0], touchCatcher)
             };
             
             mng.turnSignDisplayer.HandOverControlTo(this);

@@ -17,10 +17,14 @@ namespace UI{
         
         public static UIManager shared;
         public UIShade shade;
-        public readonly List<UIBase> uiList = new();
+        private readonly List<UIBase> _uiList = new();
         private bool _isInTutorial = false;
-        public readonly List<UIComponent> uiComponents = new();
+        private readonly List<UIComponent> _uiComponents = new();
         public GameObject uiContainer;
+
+        public event UINormalEvent OnLoadUI; // right after load a ui;
+        public event UINormalEvent OnOpenUI; // Right after ui is opened;
+        public event UINormalEvent OnCloseUI; // Right after ui is closed;
 
         private void Awake(){
             if (shared) Destroy(this);
@@ -28,10 +32,10 @@ namespace UI{
         }
 
         public UIBase OpenUI(string uiPrefabName, object arg1 = null){
-            var cur = uiList.Find(uiBase => uiBase.name == uiPrefabName);
+            var cur = _uiList.Find(uiBase => uiBase.name == uiPrefabName);
             if (cur != null){
-                uiList.Remove(cur);
-                uiList.Add(cur);
+                _uiList.Remove(cur);
+                _uiList.Add(cur);
                 return cur;
             }
 
@@ -43,21 +47,26 @@ namespace UI{
 
             ui = Instantiate(ui, uiContainer.transform);
             cur = ui.GetComponent<UIBase>();
+            OnLoadUI?.Invoke(cur);
             if (cur == null){
                 Debug.LogError($"UI prefab doesn't have UIBase component! PrefabName = {uiPrefabName}");
                 return null;
             }
 
-            uiList.Add(cur);
+            _uiList.Add(cur);
             shade.SetActive(true);
             cur.OnClose += RemoveUI;
-            StartCoroutine(CoroutineUtility.Delayed(() => cur.Open(arg1)));
+            StartCoroutine(CoroutineUtility.Delayed(() => {
+                cur.Open(arg1);
+                OnOpenUI?.Invoke(cur);
+            }));
             return cur;
         }
 
         public void RemoveUI(UIBase ui){
-            uiList.Remove(ui);
-            if (uiList.Count == 0) shade.SetActive(false);
+            OnCloseUI?.Invoke(ui);
+            _uiList.Remove(ui);
+            if (_uiList.Count == 0) shade.SetActive(false);
         }
 
 
@@ -66,41 +75,41 @@ namespace UI{
         }
 
         public void RegisterComponent(UIComponent component){
-            uiComponents.Add(component);
+            _uiComponents.Add(component);
         }
 
         public void HandOverControlTo(TutorialBase tutorial){
             _isInTutorial = true;
-            foreach (var comp in uiComponents){
+            foreach (var comp in _uiComponents){
                 comp.HandOverControlTo(tutorial);
             }
         }
 
         public void GainBackControlFrom(TutorialBase tutorial){
             _isInTutorial = false;
-            foreach (var comp in uiComponents){
+            foreach (var comp in _uiComponents){
                 comp.GainBackControlFrom(tutorial);
             }
         }
 
         public void HideAllComponents(){
-            foreach (var comp in uiComponents){
+            foreach (var comp in _uiComponents){
                 comp.Hide();
             }
         }
 
         public void ShowAllComponents(){
-            foreach (var comp in uiComponents){
+            foreach (var comp in _uiComponents){
                 comp.Show();
             }
         }
 
         public T GetUI<T>() where T : UIBase{
-            return uiList.Find(b => b.GetType() == typeof(T)) as T;
+            return _uiList.Find(b => b.GetType() == typeof(T)) as T;
         }
 
         public T GetUIComponent<T>() where T : UIComponent{
-            return uiComponents.Find(b => b.GetType() == typeof(T)) as T;
+            return _uiComponents.Find(b => b.GetType() == typeof(T)) as T;
         }
     }
 }

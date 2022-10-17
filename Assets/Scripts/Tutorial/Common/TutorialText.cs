@@ -13,7 +13,7 @@ namespace Tutorial.Common{
             get => textMesh.text;
         }
 
-        public bool Enable{
+        public bool Enabled{
             set{
                 enabled = value;
                 textMesh.enabled = value;

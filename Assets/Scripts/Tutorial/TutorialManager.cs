@@ -20,7 +20,7 @@ using Utility;
 namespace Tutorial{
     public class TutorialManager : MonoBehaviour{
         private const string PrefabPathPrefix = "Prefabs/Tutorials/";
-        private const bool IsActive = false;
+        private const bool IsActive = true;
 
         public BallManager ballManager;
         public Shade shade;

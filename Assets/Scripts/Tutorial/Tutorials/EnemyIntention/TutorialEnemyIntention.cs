@@ -12,13 +12,13 @@ namespace Tutorial.Tutorials.EnemyIntention{
         
         public override void OnLoaded(TutorialManager mng){
             foreach (var text in texts){
-                text.Enable = false;
+                text.Enabled = false;
             }
 
             var obj = mng.stageManager.enemyView.intentionDisplayer.gameObject;
             _step = new StepBase[]{
-                new StepTouchToContinue(texts[0], touchCatcher, obj),
-                new StepTouchToContinue(texts[1], touchCatcher, obj)
+                new StepTapToContinue(texts[0], touchCatcher, obj),
+                new StepTapToContinue(texts[1], touchCatcher, obj)
             };
             
             mng.stageManager.HandOverControlTo(this);

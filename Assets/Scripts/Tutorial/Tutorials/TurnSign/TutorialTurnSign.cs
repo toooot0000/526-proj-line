@@ -12,11 +12,11 @@ namespace Tutorial.Tutorials.TurnSign{
 
         public override void OnLoaded(TutorialManager mng){
             foreach (var text in texts){
-                text.Enable = false;
+                text.Enabled = false;
             }
             _step = new StepBase[]{
-                new StepTouchToContinue(texts[0], touchCatcher),
-                new StepTouchToContinue(texts[1], touchCatcher)
+                new StepTapToContinue(texts[0], touchCatcher),
+                new StepTapToContinue(texts[1], touchCatcher)
             };
             
             mng.turnSignDisplayer.HandOverControlTo(this);

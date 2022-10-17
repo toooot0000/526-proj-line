@@ -2,12 +2,14 @@ using BackendApi;
 using Model;
 using UI.Container;
 using UnityEngine;
+using UnityEngine.UI;
 using Utility;
 
 namespace UI.Interfaces.SelectGear{
     public class UISelectGear : UIBase{
         public UIContainerFlexBox container;
         public Gear[] items;
+        public Button confirmButton;
         private CanvasGroup _canvasGroup;
         private bool _inAnimation;
         private UIGearPanel[] _panels;
@@ -44,7 +46,9 @@ namespace UI.Interfaces.SelectGear{
                     Destroy(gameObject);
                 });
             StartCoroutine(coroutine());
-        } // ReSharper disable Unity.PerformanceAnalysis
+        } 
+        
+        // ReSharper disable Unity.PerformanceAnalysis
         public void LoadGearPanel(){
             var curPanelInd = 0;
             if (items.Length > 3){
@@ -75,5 +79,7 @@ namespace UI.Interfaces.SelectGear{
             clickedPanel.highLight.enabled = true;
             _selected = clickedPanel;
         }
+        
+        public UIGearPanel GetFirstPanel() => _panels.Length > 0 ? _panels[0] : null;
     }
 }

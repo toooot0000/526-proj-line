@@ -36,11 +36,7 @@ namespace Tutorial{
             if (CurrentStep == null)
                 Complete();
             else {
-                if (CurrentStep.BindEvent != null){
-                    CurrentStep.BindEvent(this, CurrentStep);
-                } else{
-                    Steps[_currentStepIndex].SetUp(this);
-                }
+                Steps[_currentStepIndex].SetUp(this);
             }
         }
 

@@ -17,8 +17,8 @@ namespace Tutorial.Tutorials{
             var gearDisplayer = UIManager.shared.GetUIComponent<GearDisplayer>();
             
             _step = new StepBase[]{
-                new StepTouchToContinue(texts[0], mng.uiController.touchCatcher, gearDisplayer.gameObject),
-                new StepTouchToContinue(texts[0], mng.uiController.touchCatcher, gearDisplayer.gameObject, (tutorial, step) => {
+                new StepTapToContinue(texts[0], mng.uiController.touchCatcher, gearDisplayer.gameObject),
+                new StepTapToContinue(texts[0], mng.uiController.touchCatcher, gearDisplayer.gameObject, (tutorial, step) => {
                     tutorial.tutorialManager.uiController.shade.SetActive(false);
                     var gameStart = UIManager.shared.GetUI<UIGameStart>();
                     if (gameStart == null) return;
