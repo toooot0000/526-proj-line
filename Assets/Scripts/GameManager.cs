@@ -6,7 +6,10 @@ using Core.DisplayArea.Stage;
 using Core.PlayArea.Balls;
 using Core.PlayArea.TouchTracking;
 using Model;
-using Tutorials;
+using Tutorial;
+using Tutorial.Tutorials.BasicConcept;
+using Tutorial.Tutorials.EnemyIntention;
+using Tutorial.Tutorials.Stage1Soft;
 using UI;
 using UI.TurnSignDisplayer;
 using UnityEngine;
@@ -22,8 +25,7 @@ public class GameManager : MonoBehaviour{
     public BallManager ballManager;
     public TurnSignDisplayer turnSignDisplayer;
     public TouchTracker touchTracker;
-
-    private int _currentTurnNum = 0;
+    public int CurrentTurnNum => game.currentTurnNum;
 
 
     private void Awake()
@@ -33,7 +35,6 @@ public class GameManager : MonoBehaviour{
         InitGame();
         StartCoroutine(CoroutineUtility.Delayed(1, () =>
             UIManager.shared.OpenUI("UIGameStart")));
-        EventLogger.Shared.init();//should do this afeter game is initialized
     }
 
     private void Start(){
@@ -41,9 +42,6 @@ public class GameManager : MonoBehaviour{
     }
 
     private void Update(){
-        if (Input.GetKeyUp("k")){
-            UIManager.shared.OpenUI("UIShopSystem", (object)(new List<Gear>()));
-        };
     }
 
     private void InitGame(){
@@ -54,6 +52,7 @@ public class GameManager : MonoBehaviour{
 
     public void GameStart(){
         game.LoadStage(0);
+        EventLogger.Shared.init();//should do this after game is initialized
         stageManager.OnStageLoaded(game.currentStage);
         StartCoroutine(StartBattleStage());
     }
@@ -95,7 +94,6 @@ public class GameManager : MonoBehaviour{
     }
 
     public void GotoStage(int id){
-        _currentTurnNum = 0;
         game.LoadStage(id);
         stageManager.OnStageLoaded(game.currentStage);
         // Temp
@@ -115,20 +113,17 @@ public class GameManager : MonoBehaviour{
     }
 
     private IEnumerator SwitchToPlayerTurn(){
-        _currentTurnNum++;
         yield return turnSignDisplayer.Show(Game.Turn.Player);
         touchTracker.isAcceptingInput = true;
         ballManager.SpawnBalls();
         if (game.currentStage.id == 0){
-            switch (_currentTurnNum){
+            switch (CurrentTurnNum){
                 case 1:
-                    StartCoroutine(CoroutineUtility.Delayed(1, () => tutorialManager.LoadTutorial("TutorialSliceBall")));
+                    StartCoroutine(CoroutineUtility.Delayed(1, 
+                        () => tutorialManager.LoadTutorial(TutorialBasicConcept.PrefabName)));
                     break;
                 case 2:
-                    tutorialManager.LoadTutorial("TutorialTurn2");
-                    break;
-                case 3:
-                    tutorialManager.LoadTutorial("TutorialCharge");
+                    tutorialManager.LoadTutorial(TutorialStage1Soft.PrefabName);
                     break;
             }
         }
@@ -137,6 +132,13 @@ public class GameManager : MonoBehaviour{
     private IEnumerator SwitchToEnemyTurn(){
         var stageInfo = game.CurrentEnemy.GetCurrentStageAction();
         yield return turnSignDisplayer.Show(Game.Turn.Enemy);
+        if (game.currentStage.id == 0){
+            switch (CurrentTurnNum){
+                case 1:
+                    tutorialManager.LoadTutorial(TutorialEnemyIntention.PrefabName);
+                    break;
+            }
+        }
         stageManager.ProcessStageActionInfo(stageInfo);
     }
 

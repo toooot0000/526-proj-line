@@ -17,6 +17,7 @@ namespace UI.Common.SimpleAnimation{
         public AnimationCurve curve = AnimationCurve.Constant(0, 1, 1);
         public float transitionTime = 0.2f;
         public EdgeHiderDirection direction = EdgeHiderDirection.Up;
+        public float padding = 10;
 
         private RectTransform _rect;
         private float _curTime = 0;
@@ -30,26 +31,29 @@ namespace UI.Common.SimpleAnimation{
 
         private void Update(){
             if (!isMoving) return;
-            Vector2 target;
             var rect = _rect.rect;
             var hidePosition = direction switch{          
-                EdgeHiderDirection.Up => _oriPosition +  new Vector2(0, rect.height),
-                EdgeHiderDirection.Left => _oriPosition + new Vector2(-rect.width, 0),
-                EdgeHiderDirection.Right => _oriPosition + new Vector2(rect.width, 0),
-                EdgeHiderDirection.Bottom => _oriPosition + new Vector2(0, -rect.height),
+                EdgeHiderDirection.Up => _oriPosition +  new Vector2(0, rect.height + padding),
+                EdgeHiderDirection.Left => _oriPosition + new Vector2(- rect.width - padding, 0),
+                EdgeHiderDirection.Right => _oriPosition + new Vector2(rect.width + padding, 0),
+                EdgeHiderDirection.Bottom => _oriPosition + new Vector2(0, - rect.height - padding),
                 _ => throw new ArgumentOutOfRangeException()
             };
-            _rect.anchoredPosition = Vector2.Lerp(hidePosition, _oriPosition,  _isToShow ? _curTime / transitionTime : 1 - _curTime / transitionTime);
+            _rect.anchoredPosition = Vector2.Lerp(hidePosition, _oriPosition,  _isToShow ? (_curTime / transitionTime) : (1 - _curTime / transitionTime));
             _curTime = Mathf.Clamp(_curTime + Time.deltaTime, 0, transitionTime);
             if (_curTime.AlmostEquals(1)) isMoving = false;
         }
 
         public void Hide(){
             _isToShow = false;
+            isMoving = true;
+            _curTime = 0;
         }
 
         public void Show(){
             _isToShow = true;
+            isMoving = true;
+            _curTime = 0;
         }
     }
 }

@@ -4,7 +4,8 @@ using Core.DisplayArea.Stage.Enemy;
 using Core.DisplayArea.Stage.Player;
 using Core.PlayArea.Balls;
 using Model;
-using Tutorials;
+using Tutorial;
+using Tutorial.Tutorials.Stage1Clear;
 using UI;
 using UnityEngine;
 using Utility;
@@ -17,10 +18,10 @@ namespace Core.DisplayArea.Stage{
         public PlayerView playerView;
         public EnemyView enemyView;
         public BallManager ballManager;
-        private bool _isInTutorial;
-        public bool _pause = false;
 
         private Model.Stage _modelStage;
+        private bool _isInTutorial;
+        private bool _pause = false;
 
         public void HandOverControlTo(TutorialBase tutorial){
             _isInTutorial = true;
@@ -59,7 +60,7 @@ namespace Core.DisplayArea.Stage{
             // yield return CoroutineUtility.Delayed(0.07f, () => enemyView.TakeDamage(null));
             yield return new WaitForSeconds(0.07f);
             yield return enemyView.TakeDamage();
-            GameManager.shared.tutorialManager.LoadTutorial("TutorialDisplay");
+            // GameManager.shared.tutorialManager.LoadTutorial("TutorialDisplay");
             yield return new WaitWhile(() => _pause);
             yield return OnPlayerAttackResolved(info);
         }
@@ -98,6 +99,7 @@ namespace Core.DisplayArea.Stage{
         private IEnumerator OnPlayerAttackResolved(StageActionInfoBase info){
             var dmg = info.damage;
             if (enemyView.isDead){
+                GameManager.shared.tutorialManager.LoadTutorial<UITutorialStage1Clear>();
                 if (dmg.currentGame.currentStage.NextEnemy != null){
                     dmg.currentGame.currentStage.ForwardCurrentEnemy();
                     enemyView.BindToCurrentEnemy();
@@ -105,11 +107,15 @@ namespace Core.DisplayArea.Stage{
                     yield return new WaitWhile(() => _pause);
                     yield return CoroutineUtility.Delayed(1f, GameManager.shared.SwitchTurn);
                 } else{
+                    yield return new WaitWhile(() => _pause);
                     if (!_modelStage.IsLast){
-                        if (_modelStage.bonusCoins == -1)
+                        if (_modelStage.bonusCoins == -1){
+                            yield return new WaitWhile(() => _pause);
                             UIManager.shared.OpenUI("UISelectGear", _modelStage.bonusGears);
-                        else
+                        } else{
+                            yield return new WaitWhile(() => _pause);
                             UIManager.shared.OpenUI("UIGetCoins", _modelStage.bonusCoins);
+                        }
                     } else{
                         UIManager.shared.OpenUI("UIGameComplete");
                     }

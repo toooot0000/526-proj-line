@@ -3,7 +3,7 @@ using System.Linq;
 using Core.Common;
 using Core.DisplayArea.Stage;
 using Model;
-using Tutorials;
+using Tutorial;
 using UnityEngine;
 using Utility;
 

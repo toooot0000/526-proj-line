@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Model{
@@ -12,24 +13,26 @@ namespace Model{
             Enemy
         }
 
-        public Stage currentStage;
+        public readonly Stage currentStage;
         public Player player;
         public Turn turn = Turn.Player;
 
-        public Game(GameModel parent = null) : base(parent){
-            currentGame = this;
-        }
 
         public bool IsLastStage => currentStage.IsLast;
         public Enemy CurrentEnemy => currentStage?.CurrentEnemy;
+        
+        public int currentTurnNum = 0;
         public event SimpleModelEvent OnTurnChanged;
         public event SimpleModelEvent OnGameEnd;
         public event SimpleModelEvent OnGameComplete;
         public event SimpleModelEvent OnStageLoaded;
-
-        public event ModelEvent OnStageBeaten;
         public event SimpleModelEvent OnGameRestart;
         public event SimpleModelEvent OnPlayerInit;
+        
+        public Game(GameModel parent = null) : base(parent){
+            currentGame = this;
+            currentStage = new Stage(this);
+        }
         
         public List<Ball> GetAllSkillBalls(){
             var ret = new List<Ball>();
@@ -41,18 +44,16 @@ namespace Model{
 
         public void SwitchTurn(){
             turn = turn == Turn.Player ? Turn.Enemy : Turn.Player;
+            if (turn == Turn.Player) currentTurnNum++;
             OnTurnChanged?.Invoke(this);
         }
 
         public void LoadStage(int id){
-            currentStage = new Stage(this, id);
+            currentStage.LoadFromConfig(id);
+            currentTurnNum = 1;
             OnStageLoaded?.Invoke(this);
             turn = Turn.Player;
             OnTurnChanged?.Invoke(this);
-            currentStage.OnStageBeaten += (g, m) =>
-            {
-                OnStageBeaten?.Invoke(this,m);
-            };
         }
 
         public void CreatePlayer(){
@@ -71,17 +72,5 @@ namespace Model{
         public void Restart(){
             OnGameRestart?.Invoke(this);
         }
-
-        public void TestOnStageLoaded()
-        {
-            OnStageLoaded?.Invoke(this);
-        }
-
-        public void TestOnStageBeaten()
-        {
-            
-        }
-
-        
     }
 }

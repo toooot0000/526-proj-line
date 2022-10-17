@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   container: {fileID: 760213856501728159}
+  confirmButton: {fileID: 1283721797100147480}
 --- !u!1 &5492518811391179845
 GameObject:
   m_ObjectHideFlags: 0

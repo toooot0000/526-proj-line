@@ -1,41 +1,35 @@
+using System;
 using Model;
-using Tutorials;
+using UI.Common.SimpleAnimation;
 using UI.Container;
 using UnityEngine;
-using Utility;
+using UnityEngine.UI;
 
 namespace UI.GearDisplayer{
     public class GearDisplayer : UIComponent{
         public UIContainerBase container;
         public GameObject gearItemPrefab;
-        
-        
-        private Coroutine _coroutine;
-        private Vector2 _prevAnchoredPosition;
-        private bool _isHidden = false;
+        private EdgeHider _edgeHider;
+
+        private void Awake(){
+            _edgeHider = GetComponent<EdgeHider>();
+        }
 
         private void Start(){
             GameManager.shared.game.player.OnGearChanged += UpdateGears;
             UIManager.shared.RegisterComponent(this);
             UpdateGears(GameManager.shared.game, GameManager.shared.game.player);
+            var scrollRect = GetComponentInChildren<ScrollRect>();
+            scrollRect.verticalNormalizedPosition = 1;
+            scrollRect.horizontalNormalizedPosition = 0;
         }
         
         public override void Hide(){
-            if (_isHidden) return;
-            _isHidden = true;
-            var rectTrans = (RectTransform)transform;
-            _prevAnchoredPosition = rectTrans.anchoredPosition;
-            var target = _prevAnchoredPosition + new Vector2(-rectTrans.rect.width, 0);
-            if(_coroutine != null) StopCoroutine(_coroutine);
-            _coroutine = StartCoroutine(TweenUtility.Move(UIManager.UITransitionTime, rectTrans, _prevAnchoredPosition, target));
+            _edgeHider.Hide();
         }
 
         public override void Show(){
-            if (!_isHidden) return;
-            _isHidden = false;
-            var rectTrans = (RectTransform)transform;
-            if(_coroutine != null) StopCoroutine(_coroutine);
-            _coroutine = StartCoroutine(TweenUtility.Move(UIManager.UITransitionTime, rectTrans, rectTrans.anchoredPosition, _prevAnchoredPosition));
+            _edgeHider.Show();
         }
 
         private void UpdateGears(Game game, GameModel player){
@@ -61,10 +55,6 @@ namespace UI.GearDisplayer{
             }
 
             container.UpdateLayout();
-        }
-
-        public void Heelo(){
-            Debug.Log("Hello!");
         }
     }
 }

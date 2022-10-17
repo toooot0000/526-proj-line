@@ -1,4 +1,4 @@
-using Tutorials;
+using Tutorial;
 using UnityEngine;
 
 namespace UI{

@@ -1,5 +1,4 @@
 using Model;
-using Tutorials;
 using UI.Common;
 using UnityEngine;
 using Utility;

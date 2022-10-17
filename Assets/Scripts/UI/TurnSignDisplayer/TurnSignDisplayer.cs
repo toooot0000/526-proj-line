@@ -1,7 +1,8 @@
 using System;
 using System.Collections;
 using Model;
-using Tutorials;
+using Tutorial;
+using Tutorial.Tutorials.TurnSign;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility;
@@ -21,10 +22,6 @@ namespace UI.TurnSignDisplayer{
 
         private bool _isInTutorial = false;
         private bool _isPaused = false;
-        
-        private void Start(){
-            
-        }
 
         public IEnumerator Show(Game.Turn turn){
             switch (turn){
@@ -40,6 +37,12 @@ namespace UI.TurnSignDisplayer{
             StartCoroutine(SprIn());
             yield return new WaitWhile(() => _isPaused);
             yield return new WaitForSeconds(animationTime + displayTime);
+            /* Turn Sign Tutorial Begin */
+            if (turn == Game.Turn.Enemy && GameManager.shared.game.currentStage.id == 0 &&
+                GameManager.shared.CurrentTurnNum == 1){
+                GameManager.shared.tutorialManager.LoadTutorial(TutorialTurnSign.PrefabName);
+            }
+            /* Turn Sign Tutorial End */
             yield return new WaitWhile(() => _isPaused);
             StartCoroutine(ShadeFadeOut());
             StartCoroutine(SprOut());

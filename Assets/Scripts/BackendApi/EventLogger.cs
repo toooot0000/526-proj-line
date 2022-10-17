@@ -22,23 +22,11 @@ namespace BackendApi{
 
         private static EventLogger _shared;
 
-        public static EventLogger Shared
-        {
-            get
-            {
-                if (_shared == null) _shared = new EventLogger();
-                return _shared;
-            }
-        }
+        public static EventLogger Shared => _shared ??= new EventLogger();
 
         public void init()
         {
-            
-        }
-
-        private EventLogger()
-        {
-            Debug.Log("construct EventLogger");
+            Debug.Log("Init EventLogger");
             GameManager.shared.game.OnStageLoaded += game =>
             {
                 var stage = game.currentStage;
@@ -48,8 +36,10 @@ namespace BackendApi{
                     level = id,
                     status = "enter"
                 });
+                
             };
-            GameManager.shared.game.OnStageBeaten += (game1, stage) =>
+
+            GameManager.shared.game.currentStage.OnStageBeaten += (game1, stage) =>
             {
                 var id = ((Stage)stage).id;
                 this.Log(new EventPeopleEnterSuccesses()
@@ -59,6 +49,12 @@ namespace BackendApi{
                 });
             };
         }
+
+        private void LogStageBeaten(Game g, GameModel m){
+            
+        }
+
+        private EventLogger(){ }
 
         public async void Log<T>(T loggableEvent) where T : LoggableEvent{
             if (!IsActive) return;

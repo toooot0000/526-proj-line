@@ -1,17 +1,22 @@
 using BackendApi;
 using Model;
+using Tutorial;
 using UI.Container;
 using UnityEngine;
+using UnityEngine.UI;
 using Utility;
 
 namespace UI.Interfaces.SelectGear{
     public class UISelectGear : UIBase{
         public UIContainerFlexBox container;
         public Gear[] items;
+        public Button confirmButton;
         private CanvasGroup _canvasGroup;
         private bool _inAnimation;
         private UIGearPanel[] _panels;
         private UIGearPanel _selected;
+
+        public event TutorialControllableEvent OnConfirmClicked;
         
         private void Start(){
             _canvasGroup = GetComponent<CanvasGroup>();
@@ -44,7 +49,9 @@ namespace UI.Interfaces.SelectGear{
                     Destroy(gameObject);
                 });
             StartCoroutine(coroutine());
-        } // ReSharper disable Unity.PerformanceAnalysis
+        } 
+        
+        // ReSharper disable Unity.PerformanceAnalysis
         public void LoadGearPanel(){
             var curPanelInd = 0;
             if (items.Length > 3){
@@ -62,9 +69,11 @@ namespace UI.Interfaces.SelectGear{
 
             for (; curPanelInd < _panels.Length; curPanelInd++) _panels[curPanelInd].Show = false;
             container.UpdateLayout();
+            ChangeSelectedItemTo(_panels[0]);
         }
 
         public void ConfirmButtonEvent(){
+            OnConfirmClicked?.Invoke(null);
             GameManager.shared.game.player.AddGear(_selected.Model);
             Close();
         }
@@ -75,5 +84,7 @@ namespace UI.Interfaces.SelectGear{
             clickedPanel.highLight.enabled = true;
             _selected = clickedPanel;
         }
+        
+        public UIGearPanel GetFirstPanel() => _panels.Length > 0 ? _panels[0] : null;
     }
 }

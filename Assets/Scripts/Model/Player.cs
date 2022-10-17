@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using BackendApi;
 using Model.GearEffects;
+using UI;
 using Utility.Loader;
+using UnityEngine;
+using Utility;
+using Utility.Extensions;
 
 namespace Model{
     [Serializable]
@@ -45,7 +49,7 @@ namespace Model{
 
         public int CurrentHp{
             set{
-                _currentHp = value;
+                _currentHp = Math.Clamp(value, 0, HpUpLimit);
                 if (value == 0) Die();
             }
             get => _currentHp;
@@ -81,10 +85,7 @@ namespace Model{
             HpUpLimit = (int)CsvLoader.GetConfig("player_init_hp");
             Coin = (int)CsvLoader.GetConfig("player_init_coin");
             CurrentHp = HpUpLimit;
-            gears = new List<Gear>{
-                new(this, -1),
-                new(this, -2)
-            };
+            gears = ((string)CsvLoader.GetConfig("player_init_gears")).ParseAsParams(IntUtility.ParseString).Select(i => new Gear(this, i)).ToList();
             OnGearChanged?.Invoke(currentGame, this);
             OnInit?.Invoke(currentGame, this);
         }
@@ -163,7 +164,38 @@ namespace Model{
             gears.RemoveAt(ind);
             OnGearChanged?.Invoke(currentGame, this);
         }
+        
+        
+        //special event system related functions
+        public void GetLife(int value)
+        {
+            int beforeHp = CurrentHp;
+            CurrentHp += value;
+            
+            if (CurrentHp > HpUpLimit)
+            {
+                CurrentHp = HpUpLimit;
+            }
+            else if (CurrentHp < 0)
+            {
+                Debug.Log("Player Died");
+                Die();
+            }
+            Debug.Log("Before:"+beforeHp.ToString()+ "After:" + CurrentHp.ToString());
+        }
 
+        public void GetCoin(int value)
+        {
+            Coin += value;
+            
+            if(Coin < 0)
+            {
+                Coin = 0;
+            }
+            Debug.Log("Coin:"+Coin.ToString());
+        }
+        
+        
         public void ClearAllBalls(){
             hitBalls.Clear();
             circledBalls.Clear();

@@ -21,6 +21,7 @@ namespace Model{
         public string desc;
         public EnemyIntention[] intentions;
         public int defend;
+        public string imgPath;
         private int _armor;
         private int _currentHp;
         private int _nextActionInd;
@@ -37,6 +38,7 @@ namespace Model{
             desc = enemy["desc"] as string;
             HpUpLimit = (int)enemy["hp"];
             attack = (int)enemy["attack"];
+            imgPath = enemy["img_path"] as string;
             intentions = (enemy["action_pattern"] as string)!.Split(";")
                 .Select(s => EnumUtility.GetValue<EnemyIntention>(s)).ToArray();
             var spStr = (enemy["special"] as string)!.Split(";");

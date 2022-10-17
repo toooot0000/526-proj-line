@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using Tutorials;
+using Tutorial;
+using Tutorial.UI;
 using UI.Common;
 using UI.Common.Shade;
 using UI.Interfaces;
@@ -12,13 +13,18 @@ namespace UI{
     public class UIManager : MonoBehaviour, ITutorialControllable{
 
         public const float UITransitionTime = 0.2f;
-        
         private const string ResourcesFolder = "Prefabs/UIs/";
+        
         public static UIManager shared;
         public UIShade shade;
         private readonly List<UIBase> _uiList = new();
         private bool _isInTutorial = false;
-        public readonly List<UIComponent> uiComponents = new();
+        private readonly List<UIComponent> _uiComponents = new();
+        public GameObject uiContainer;
+
+        public event UINormalEvent OnLoadUI; // right after load a ui;
+        public event UINormalEvent OnOpenUI; // Right after ui is opened;
+        public event UINormalEvent OnCloseUI; // Right after ui is closed;
 
         private void Awake(){
             if (shared) Destroy(this);
@@ -39,8 +45,9 @@ namespace UI{
                 return null;
             }
 
-            ui = Instantiate(ui, transform);
+            ui = Instantiate(ui, uiContainer.transform);
             cur = ui.GetComponent<UIBase>();
+            OnLoadUI?.Invoke(cur);
             if (cur == null){
                 Debug.LogError($"UI prefab doesn't have UIBase component! PrefabName = {uiPrefabName}");
                 return null;
@@ -49,11 +56,15 @@ namespace UI{
             _uiList.Add(cur);
             shade.SetActive(true);
             cur.OnClose += RemoveUI;
-            StartCoroutine(CoroutineUtility.Delayed(() => cur.Open(arg1)));
+            StartCoroutine(CoroutineUtility.Delayed(() => {
+                cur.Open(arg1);
+                OnOpenUI?.Invoke(cur);
+            }));
             return cur;
         }
 
         public void RemoveUI(UIBase ui){
+            OnCloseUI?.Invoke(ui);
             _uiList.Remove(ui);
             if (_uiList.Count == 0) shade.SetActive(false);
         }
@@ -64,33 +75,41 @@ namespace UI{
         }
 
         public void RegisterComponent(UIComponent component){
-            uiComponents.Add(component);
+            _uiComponents.Add(component);
         }
 
         public void HandOverControlTo(TutorialBase tutorial){
             _isInTutorial = true;
-            foreach (var comp in uiComponents){
+            foreach (var comp in _uiComponents){
                 comp.HandOverControlTo(tutorial);
             }
         }
 
         public void GainBackControlFrom(TutorialBase tutorial){
             _isInTutorial = false;
-            foreach (var comp in uiComponents){
+            foreach (var comp in _uiComponents){
                 comp.GainBackControlFrom(tutorial);
             }
         }
 
         public void HideAllComponents(){
-            foreach (var comp in uiComponents){
+            foreach (var comp in _uiComponents){
                 comp.Hide();
             }
         }
 
         public void ShowAllComponents(){
-            foreach (var comp in uiComponents){
+            foreach (var comp in _uiComponents){
                 comp.Show();
             }
+        }
+
+        public T GetUI<T>() where T : UIBase{
+            return _uiList.Find(b => b.GetType() == typeof(T)) as T;
+        }
+
+        public T GetUIComponent<T>() where T : UIComponent{
+            return _uiComponents.Find(b => b.GetType() == typeof(T)) as T;
         }
     }
 }
