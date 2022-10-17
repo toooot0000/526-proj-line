@@ -8,6 +8,7 @@ using Core.PlayArea.Balls;
 using Core.PlayArea.TouchTracking;
 using Tutorial.Tutorials;
 using Tutorial.Tutorials.BasicConcept;
+using Tutorial.Tutorials.Combo;
 using Tutorial.Tutorials.EnemyIntention;
 using Tutorial.Tutorials.Stage1Clear;
 using Tutorial.UI;
@@ -41,7 +42,7 @@ namespace Tutorial{
 
         private void Update(){
             if (Input.GetKeyUp(KeyCode.A)){
-                ForceLoadTutorial<UITutorialStage1Clear>();
+                ForceLoadTutorial<TutorialCombo>();
             }
         }
         

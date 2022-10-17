@@ -1,3 +1,4 @@
+using System;
 using Tutorial.Common;
 using Tutorial.UI;
 using Tutorial.Utility;
@@ -6,6 +7,7 @@ using UI.GearDisplayer;
 using UI.Interfaces;
 
 namespace Tutorial.Tutorials{
+    [Obsolete]
     public class UITutorialTest: UITutorialBase{
         public new const string PrefabName = "UITutorialTest";
         public TutorialText[] texts;

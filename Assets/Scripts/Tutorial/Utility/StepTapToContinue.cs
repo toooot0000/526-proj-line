@@ -48,26 +48,26 @@ namespace Tutorial.Utility{
             _catcher = catcher;
         }
 
-        public static void DefaultSetUp(TutorialBase t, StepBase s){
+        public static void DefaultSetUp(T t, StepConditionToContinue<T> s){
             if (s is not StepTapToContinue<T> step) return;
             step._textMesh.Enabled = true;
             step._catcher.Enabled = true;
             step.HighlightAll(t);
         }
 
-        public static void DefaultBind(TutorialBase t, StepBase s){
+        public static void DefaultBind(T t, StepConditionToContinue<T> s){
             if (s is not StepTapToContinue<T> step) return;
             step._catcher.OnTouched += t.StepComplete;
         }
 
-        public static void DefaultCleanUp(TutorialBase t, StepBase s){
+        public static void DefaultCleanUp(T t, StepConditionToContinue<T> s){
             if (s is not StepTapToContinue<T> step) return;
             step._textMesh.Enabled = false;
             step._catcher.Enabled = false;
             step.LowlightAll(t);
         }
 
-        public static void DefaultUnbind(TutorialBase t, StepBase s){
+        public static void DefaultUnbind(T t, StepConditionToContinue<T> s){
             if (s is not StepTapToContinue<T> step) return;
             step._catcher.OnTouched -= t.StepComplete;
         }

@@ -99,7 +99,7 @@ namespace Core.DisplayArea.Stage{
         private IEnumerator OnPlayerAttackResolved(StageActionInfoBase info){
             var dmg = info.damage;
             if (enemyView.isDead){
-                GameManager.shared.tutorialManager.ForceLoadTutorial<UITutorialStage1Clear>();
+                GameManager.shared.tutorialManager.LoadTutorial<UITutorialStage1Clear>();
                 if (dmg.currentGame.currentStage.NextEnemy != null){
                     dmg.currentGame.currentStage.ForwardCurrentEnemy();
                     enemyView.BindToCurrentEnemy();

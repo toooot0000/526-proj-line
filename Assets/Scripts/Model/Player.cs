@@ -6,6 +6,7 @@ using Model.GearEffects;
 using UI;
 using Utility.Loader;
 using UnityEngine;
+using Utility;
 using Utility.Extensions;
 
 namespace Model{
@@ -84,7 +85,7 @@ namespace Model{
             HpUpLimit = (int)CsvLoader.GetConfig("player_init_hp");
             Coin = (int)CsvLoader.GetConfig("player_init_coin");
             CurrentHp = HpUpLimit;
-            gears = ((string)CsvLoader.GetConfig("player_init_gears")).ParseAsParams(new []{"int"}).Select(i => new Gear(this, (int)i)).ToList();
+            gears = ((string)CsvLoader.GetConfig("player_init_gears")).ParseAsParams(IntUtility.ParseString).Select(i => new Gear(this, i)).ToList();
             OnGearChanged?.Invoke(currentGame, this);
             OnInit?.Invoke(currentGame, this);
         }

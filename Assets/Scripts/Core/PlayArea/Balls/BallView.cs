@@ -30,7 +30,7 @@ namespace Core.PlayArea.Balls{
                 _currentState = value;
                 switch (value){
                     case State.Combo:
-                        _ballBg.color = Color.yellow;
+                        _ballBg.color = Color.green;
                         break;
                     case State.Charged:
                         _ballBg.color = Color.blue;
