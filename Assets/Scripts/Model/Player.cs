@@ -204,5 +204,9 @@ namespace Model{
         public void GainDebuffBall(Ball ball){
             activeDebuffBalls.Add(ball);
         }
+        
+        public Gear FindGearOfId(int id){
+            return gears.Find(g => g.id == id);
+        }
     }
 }

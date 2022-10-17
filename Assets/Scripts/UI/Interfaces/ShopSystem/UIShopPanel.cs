@@ -25,10 +25,21 @@ namespace UI.Interfaces.ShopSystem {
                 name.text = value.name;
                 soldOut.text = "Sold Out";
                 soldOut.enabled = false;
-                coinWithNumber.text = "x 2"; // change to value.price later
+                coinWithNumber.text = $"{Price.ToString()}"; // change to value.price later
                 desc.text = value.desc;
             }
             get => _model;
+        }
+
+        private int _price;
+        public int Price{
+            set{
+                _price = value;
+                if (_price > GameManager.shared.game.player.Coin){
+                    coinWithNumber.color = Color.red;;
+                }
+            }
+            get => _price;
         }
 
         public bool Show {
