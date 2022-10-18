@@ -9,7 +9,8 @@ namespace UI.NextEnemyDisplayer{
         public EdgeHider edgeHider;
         public Image enemyImage;
         public TextMeshProUGUI nameText;
-        public Image _img;
+        public EnemyItem enemyItemPrefab;
+        private EnemyItem shownEnemyItem;
 
         private void Start(){
             GameManager.shared.game.currentStage.OnEnemyChanged += UpdateEnemy;
@@ -19,18 +20,9 @@ namespace UI.NextEnemyDisplayer{
 
         private void UpdateEnemy(Game game, GameModel stage)
         {
-            Debug.Log("Execute UpdateEnemy");
-            Enemy nextEnemy = (stage as Stage)!.NextEnemy;
-            if(nextEnemy == null)
-            {
-                //GameObject.GetComponent<Image>().enabled = false;
-                GameObject.Find("Image").SetActive(false);
-                nameText.text = "No More";
-                enemyImage.sprite = null;
-                return;
-            }
-            nameText.text = nextEnemy.desc;
-            enemyImage.sprite = Resources.Load<Sprite>(nextEnemy.imgPath);
+            if(shownEnemyItem != null) Destroy(shownEnemyItem.gameObject);
+            shownEnemyItem = Instantiate(enemyItemPrefab, transform);
+            shownEnemyItem.UpdateContent();
         }
         
 
