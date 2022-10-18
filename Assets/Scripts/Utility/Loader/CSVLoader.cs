@@ -8,9 +8,9 @@ namespace Utility.Loader{
     using TableInfo = Dictionary<string, object>;
 
     public static class CsvLoader{
-        public const string EmptyString = "__empty";
+        private const string EmptyString = "__empty";
         private static readonly Dictionary<string, Table> PrevLoaded = new();
-        private static readonly Dictionary<string, object> configTable = new();
+        private static readonly Dictionary<string, object> ConfigTable = new();
 
         public static Table Load(string filename){
             if (PrevLoaded.ContainsKey(filename)) return PrevLoaded[filename];
@@ -94,8 +94,8 @@ namespace Utility.Loader{
         }
 
         public static object GetConfig(string configKey){
-            if (configTable.Count != 0){
-                if (configTable.Keys.Contains(configKey)) return configTable[configKey];
+            if (ConfigTable.Count != 0){
+                if (ConfigTable.Keys.Contains(configKey)) return ConfigTable[configKey];
 
                 Debug.LogError($"No config key: {configKey}!");
                 return null;
@@ -111,11 +111,11 @@ namespace Utility.Loader{
                 var key = pair.Value["key"] as string;
                 var type = pair.Value["type"] as string;
                 var val = ParseValue(type, pair.Value["value"] as string);
-                configTable[key!] = val!;
+                ConfigTable[key!] = val!;
             }
 
-            if (configTable.Keys.Contains(configKey)){
-                return configTable[configKey];
+            if (ConfigTable.Keys.Contains(configKey)){
+                return ConfigTable[configKey];
             }
 
             Debug.LogError($"No config key: {configKey}!");
