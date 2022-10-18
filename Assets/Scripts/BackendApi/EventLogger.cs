@@ -17,7 +17,7 @@ namespace BackendApi{
      */
     public class EventLogger{
         private static readonly HttpClient Client = new();
-        public static string serverURL = "http://localhost:8080/";
+        public static string serverURL = "https://test526.wn.r.appspot.com/";
         private const bool IsActive = false;
 
         private static EventLogger _shared;

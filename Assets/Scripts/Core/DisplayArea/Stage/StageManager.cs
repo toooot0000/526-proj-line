@@ -5,7 +5,7 @@ using Core.DisplayArea.Stage.Player;
 using Core.PlayArea.Balls;
 using Model;
 using Tutorial;
-using Tutorial.Tutorials.MultipleEnemy;
+using Tutorial.Tutorials.EnemyUpdate;
 using Tutorial.Tutorials.Stage1Clear;
 using UI;
 using UnityEngine;
@@ -23,6 +23,7 @@ namespace Core.DisplayArea.Stage{
         private Model.Stage _modelStage;
         private bool _isInTutorial;
         private bool _pause = false;
+        public event TutorialControllableEvent OnEnemyAppear;
 
         public void HandOverControlTo(TutorialBase tutorial){
             _isInTutorial = true;
@@ -36,6 +37,7 @@ namespace Core.DisplayArea.Stage{
             _modelStage = currentStage;
             enemyView.BindToCurrentEnemy();
             enemyView.Appear(null);
+            if(_isInTutorial) OnEnemyAppear?.Invoke(this);
         }
 
         public void ProcessStageActionInfo(StageActionInfoBase info){
@@ -103,8 +105,10 @@ namespace Core.DisplayArea.Stage{
                 OnEnemyDieTriggerTutorial();
                 if (dmg.currentGame.currentStage.NextEnemy != null){
                     dmg.currentGame.currentStage.ForwardCurrentEnemy();
+                    yield return new WaitWhile(() => _pause);
                     enemyView.BindToCurrentEnemy();
-                    yield return enemyView.Appear();
+                    yield return enemyView.Appear(); 
+                    if(_isInTutorial) OnEnemyAppear?.Invoke(this);
                     yield return new WaitWhile(() => _pause);
                     yield return CoroutineUtility.Delayed(1f, GameManager.shared.SwitchTurn);
                 } else{
@@ -137,7 +141,7 @@ namespace Core.DisplayArea.Stage{
                     GameManager.shared.tutorialManager.LoadTutorial<UITutorialStage1Clear>();
                     break;
                 case 1:
-                    GameManager.shared.tutorialManager.LoadTutorial<TutorialMultipleEnemy>();
+                    GameManager.shared.tutorialManager.LoadTutorial<TutorialEnemyUpdate>();
                     break;
             }
         }

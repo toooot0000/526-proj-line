@@ -17,6 +17,7 @@ using UI.Interfaces.SpecialEvent;
 using UI.TurnSignDisplayer;
 using UnityEngine;
 using Utility;
+using Utility.Loader;
 
 public class GameManager : MonoBehaviour{
     public static GameManager shared;
@@ -64,7 +65,7 @@ public class GameManager : MonoBehaviour{
     }
 
     public void GameStart(){
-        game.LoadStage(0);
+        game.LoadStage((int)CsvLoader.GetConfig("init_stage"));
         EventLogger.Shared.init();//should do this after game is initialized
         stageManager.PresentStage(game.currentStage);
         StartCoroutine(StartBattleStage());
@@ -81,7 +82,7 @@ public class GameManager : MonoBehaviour{
     public void GameRestart(){
         game.Restart();
         game.CreatePlayer();
-        game.LoadStage(0);
+        game.LoadStage((int)CsvLoader.GetConfig("init_stage"));
     }
 
     private void PreInit(){
