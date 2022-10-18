@@ -11,7 +11,7 @@ using Utility.Loader;
 
 namespace UI.Interfaces.ShopSystem {
     public class UIShopSystem : UIBase{
-        private const int UnifiedPrice = 20;
+        private const int UnifiedPrice = 3;
         private List<Gear> _items;
         private static Game Game => GameManager.shared.game;
         private CanvasGroup _canvasGroup;
@@ -35,22 +35,23 @@ namespace UI.Interfaces.ShopSystem {
                 i => _canvasGroup.alpha = i,
                 () => _inAnimation = false
             );
-            SelectDisplayedGears();
+            UpdateDisplayedGears();
             UpdateGearPanel();
             StartCoroutine(coroutine());
         }
 
-        private void SelectDisplayedGears(){
-            _items = GetAllGearsPlayerNotOwned().ToArray()[..5].Select(i => new Gear(Game, i)).ToList();
+        private void UpdateDisplayedGears(){
+            _items = GetAllGearsPlayerNotOwned(3).Select(i => new Gear(Game, i)).ToList();
         }
 
-        private static List<int> GetAllGearsPlayerNotOwned(){
+        private static List<int> GetAllGearsPlayerNotOwned(int length = -1){
             var gearIds = CsvLoader.Load("Configs/gears").Keys;
             var ret = new List<int>();
             var playerOwned = new HashSet<int>(GameManager.shared.game.player.gears.Select(g => g.id));
             foreach (var id in gearIds){
                 if (playerOwned.Contains(id)) continue;
                 ret.Add(id);
+                if (length > 0 && ret.Count >= length) break;
             }
             return ret;
         }
@@ -68,13 +69,8 @@ namespace UI.Interfaces.ShopSystem {
             StartCoroutine(coroutine());
         }
         
-        public void UpdateGearPanel() {
+        public void UpdateGearPanel(){
             var curPanelInd = 0;
-            if (_items.Count > 6) {
-                Debug.LogError("Gears in Shop more than 6!");
-                return;
-            }
-
             foreach (var gear in _items)
             {
                 var gearPanel = _panels[curPanelInd];
@@ -100,7 +96,13 @@ namespace UI.Interfaces.ShopSystem {
             GameManager.shared.game.player.AddGear(clickedPanel.Model);
             _soldItems.Add(clickedPanel.Model.id);
             clickedPanel.soldOut.enabled = true;
-            UpdateGearPanel();
+            UpdatePriceTags();
+        }
+
+        private void UpdatePriceTags(){
+            foreach (var uiShopPanel in _panels){
+                uiShopPanel.UpdatePriceColor();
+            }
         }
     }
 }

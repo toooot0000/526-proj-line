@@ -7,7 +7,7 @@ namespace UI.Interfaces.ShopSystem {
     public delegate void ClickEvent(UIShopPanel panel);
 
     public class UIShopPanel : MonoBehaviour {
-        public TextMeshProUGUI name;
+        public new TextMeshProUGUI name;
         public TextMeshProUGUI coinWithNumber;
         public TextMeshProUGUI soldOut;
         public TextMeshProUGUI desc;
@@ -25,7 +25,6 @@ namespace UI.Interfaces.ShopSystem {
                 name.text = value.name;
                 soldOut.text = "Sold Out";
                 soldOut.enabled = false;
-                coinWithNumber.text = $"{Price.ToString()}"; // change to value.price later
                 desc.text = value.desc;
             }
             get => _model;
@@ -35,9 +34,8 @@ namespace UI.Interfaces.ShopSystem {
         public int Price{
             set{
                 _price = value;
-                if (_price > GameManager.shared.game.player.Coin){
-                    coinWithNumber.color = Color.red;;
-                }
+                coinWithNumber.text = $"{value.ToString()}"; // change to value.price later
+                UpdatePriceColor();
             }
             get => _price;
         }
@@ -64,6 +62,14 @@ namespace UI.Interfaces.ShopSystem {
 
         public void Click() {
             OnClick?.Invoke(this);
+        }
+
+        public void UpdatePriceColor(){
+            if (Price > GameManager.shared.game.player.Coin){
+                coinWithNumber.color = Color.red;
+            } else{
+                coinWithNumber.color = Color.black;
+            }
         }
     }
 }
