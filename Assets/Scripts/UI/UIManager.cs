@@ -25,6 +25,7 @@ namespace UI{
         public event UINormalEvent OnLoadUI; // right after load a ui;
         public event UINormalEvent OnOpenUI; // Right after ui is opened;
         public event UINormalEvent OnCloseUI; // Right after ui is closed;
+        public event UINormalEvent TutorOnOpenUI;
 
         private void Awake(){
             if (shared) Destroy(this);
@@ -59,6 +60,8 @@ namespace UI{
             StartCoroutine(CoroutineUtility.Delayed(() => {
                 cur.Open(arg1);
                 OnOpenUI?.Invoke(cur);
+                TutorOnOpenUI?.Invoke(cur);
+                TutorOnOpenUI = null;
             }));
             return cur;
         }

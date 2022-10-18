@@ -77,6 +77,8 @@ namespace Core.DisplayArea.Stage{
             yield return new WaitWhile(() => _pause);
             GameManager.shared.SwitchTurn();
             yield return new WaitWhile(() => _pause);
+            if(playerView.isDead) UIManager.shared.OpenUI("UIGameEnd");
+            yield return new WaitWhile(() => _pause);
         }
 
         private IEnumerator ProcessEnemySpecialAttack(StageActionInfoEnemySpecial info){
@@ -87,6 +89,8 @@ namespace Core.DisplayArea.Stage{
             yield return playerView.TakeDamage();
             yield return new WaitWhile(() => _pause);
             GameManager.shared.SwitchTurn();
+            yield return new WaitWhile(() => _pause);
+            if(playerView.isDead) UIManager.shared.OpenUI("UIGameEnd");
             yield return new WaitWhile(() => _pause);
         }
 

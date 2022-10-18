@@ -26,7 +26,7 @@ namespace UI.Interfaces.SelectStage
                 text.text = (string)CsvLoader.TryToLoad("Configs/stages", value)["desc"];
                 geartype.text = "stage type: " + (string)CsvLoader.TryToLoad("Configs/stages", value)["type"];
                 bonusCoins.text = (string)CsvLoader.TryToLoad("Configs/stages", value)["desc"] + " clear" +
-                                  " bonus coins: " + CsvLoader.TryToLoad("Configs/stages", value)["bonus_coins"] as string;
+                                  " bonus coins: " + CsvLoader.TryToLoad("Configs/stages", value)["bonus_coins"];
                 
             }
             get => _id;

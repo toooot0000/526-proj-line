@@ -28,7 +28,7 @@ namespace Tutorial.Tutorials.Stage1Clear{
                 new StepTapToContinue<UITutorialStage1Clear>(texts[0], mng.uiController.tutorialTapCatcher),
                 new StepTapToContinue<UITutorialStage1Clear>(texts[1], mng.uiController.tutorialTapCatcher, (t, s) => {
                     t.tutorialManager.stageManager.TutorSetPause(false);
-                    UIManager.shared.OnOpenUI += ui => {
+                    UIManager.shared.TutorOnOpenUI += ui => {
                         if (ui is not UISelectGear selectGear) return;
                         t.tutorialManager.stageManager.TutorSetPause(true);
                         s.AddHighlightObject(selectGear.GetFirstPanel().gameObject);
@@ -55,7 +55,7 @@ namespace Tutorial.Tutorials.Stage1Clear{
                 }),
                 new StepTapToContinue<UITutorialStage1Clear>(texts[3], mng.uiController.tutorialTapCatcher, 
                     setUp: (t, s) => {
-                    UIManager.shared.OnOpenUI += ui => {
+                    UIManager.shared.TutorOnOpenUI += ui => {
                         if (ui is not UISelectStage selectStage) return;
                         s.AddHighlightObject(selectStage.GetFirstPanel().gameObject);
                         StepTapToContinue<UITutorialStage1Clear>.DefaultSetUp(t, s);

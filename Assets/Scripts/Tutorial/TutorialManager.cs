@@ -12,10 +12,12 @@ using Tutorial.Tutorials.Charge;
 using Tutorial.Tutorials.Combo;
 using Tutorial.Tutorials.EnemyIntention;
 using Tutorial.Tutorials.Stage1Clear;
+using Tutorial.Tutorials.StageTypes;
 using Tutorial.UI;
 using UI;
 using UI.Common.Shade;
 using UI.GearDisplayer;
+using UI.Interfaces.SelectGear;
 using UI.TurnSignDisplayer;
 using UnityEngine;
 using Utility;
@@ -42,8 +44,11 @@ namespace Tutorial{
         private Type _curTutorialType;
 
         private void Update(){
-            // if (Input.GetKeyUp(KeyCode.A)){
-            //     ForceLoadTutorial<TutorialCharge>();
+            // if (Input.GetKeyUp(KeyCode.A)){ 
+            //     UIManager.shared.OpenUI("UISelectStage", new int []{2, 3});
+            //     StartCoroutine(CoroutineUtility.Delayed(0.5f, () => {
+            //         ForceLoadTutorial<UITutorialStageTypes>();
+            //     }));
             // }
         }
         
@@ -110,7 +115,7 @@ namespace Tutorial{
             return ForceLoadTutorial<T>();
         }
 
-        public T ForceLoadTutorial<T>() where T : TutorialBase{
+        private T ForceLoadTutorial<T>() where T : TutorialBase{
             _curTutorialType = typeof(T);
             var tutorial = InstanceTutorial<T>();
             tutorial.OnLoaded(this);

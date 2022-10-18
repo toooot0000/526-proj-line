@@ -47,6 +47,17 @@ public class GameManager : MonoBehaviour{
 
     private void Start(){
         Application.targetFrameRate = 120;
+        
+        
+        UIManager.shared.OnCloseUI += ui => {
+            if (ui is not UIShopSystem shop) return;
+            _isInShop = false;
+        };
+        
+        UIManager.shared.OnCloseUI += ui => {
+            if (ui is not UIResult) return;
+            _isInEvent = false;
+        };
     }
 
     private void Update(){
@@ -126,10 +137,6 @@ public class GameManager : MonoBehaviour{
     private IEnumerator StartShopStage(){
         _isInShop = true;
         UIManager.shared.OpenUI("UIShopSystem");
-        UIManager.shared.OnCloseUI += ui => {
-            if (ui is not UIShopSystem shop) return;
-            _isInShop = false;
-        };
         yield return new WaitWhile(() => _isInShop);
         UIManager.shared.OpenUI("UISelectStage", game.currentStage.nextStageChoice);
     }
@@ -137,10 +144,6 @@ public class GameManager : MonoBehaviour{
     private IEnumerator StartEventStage(){
         _isInEvent = true;
         UIManager.shared.OpenUI("UIEvent", game.currentStage.CurrentEvent);
-        UIManager.shared.OnCloseUI += ui => {
-            if (ui is not UIResult) return;
-            _isInEvent = false;
-        };
         yield return new WaitWhile(() => _isInEvent);
         UIManager.shared.OpenUI("UISelectStage", game.currentStage.nextStageChoice);
     }

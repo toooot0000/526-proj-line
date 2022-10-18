@@ -1,7 +1,9 @@
+using System.Linq;
 using UnityEngine;
 using Model;
 using TMPro;
 using Tutorial;
+using Tutorial.Tutorials.StageTypes;
 using UI.Container;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +11,7 @@ using Utility;
 
 namespace UI.Interfaces.SelectStage
 {
-    public class UISelectStage : UIBase
+    public class UISelectStage : UIBase, ITutorialControllable
     {
         public UIContainerFlexBox container;
         public Button confirmButton;
@@ -17,6 +19,8 @@ namespace UI.Interfaces.SelectStage
         private bool _inAnimation;
         private UIStagePanel[] _panels;
         private UIStagePanel _selected;
+        
+        private bool _isInTutorial = false;
 
         public event TutorialControllableEvent OnConfirmClicked;
 
@@ -43,6 +47,9 @@ namespace UI.Interfaces.SelectStage
             ); 
             LoadStagePanel(nextStageChoice as int[]);
             StartCoroutine(coroutine());
+            if (GameManager.shared.game.currentStage.id == 1){
+                GameManager.shared.tutorialManager.LoadTutorial<UITutorialStageTypes>();
+            }
         }
 
         public override void Close() {
@@ -89,8 +96,8 @@ namespace UI.Interfaces.SelectStage
             Close();
         }
         
-        private void ChangeSelectedItemTo(UIStagePanel clickedPanel)
-        {
+        private void ChangeSelectedItemTo(UIStagePanel clickedPanel){
+            if (_isInTutorial) return;
             if (_selected == clickedPanel) return;
             if (_selected != null) _selected.highLight.enabled = false;
             clickedPanel.highLight.enabled = true;
@@ -98,6 +105,15 @@ namespace UI.Interfaces.SelectStage
         }
 
         public UIStagePanel GetFirstPanel() => _panels.Length > 0 ? _panels[0] : null;
+
+        public UIStagePanel GetPanelOfId(int id) => _panels.First(p => p.Id == id);
+        public void HandOverControlTo(TutorialBase tutorial){
+            _isInTutorial = true;
+        }
+
+        public void GainBackControlFrom(TutorialBase tutorial){
+            _isInTutorial = false;
+        }
     }
 }
 

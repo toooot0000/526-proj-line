@@ -97,7 +97,7 @@ namespace Model{
                         bonusGears = ((string)info["bonus_gears"])!.Split(";").Select((s => new Gear(parent, IntUtility.ParseString(s)) )).ToArray();
                     }
                     bonusCoins = (int)info["bonus_coins"];
-                    CurrentEnemy.BecomeCurrent();
+                    _enemyIndex = 0;
                     OnEnemyChanged?.Invoke(currentGame, this);
                     break;
                 case StageType.Shop:
