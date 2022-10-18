@@ -1,5 +1,6 @@
 using Model;
 using TMPro;
+using UI.Common;
 using UI.Common.SimpleAnimation;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,10 +8,11 @@ using UnityEngine.UI;
 namespace UI.NextEnemyDisplayer{
     public class NextEnemyDisplayer: UIComponent{
         public EdgeHider edgeHider;
-        public Image enemyImage;
-        public TextMeshProUGUI nameText;
-        public EnemyItem enemyItemPrefab;
-        private EnemyItem shownEnemyItem;
+        //public Image enemyImage;
+        //public TextMeshProUGUI nameText;
+        //public EnemyItem enemyItemPrefab;
+        public EnemyWithName enemyWithNamePrefab;
+        private EnemyWithName _shownEnemyItem;
 
         private void Start(){
             GameManager.shared.game.currentStage.OnEnemyChanged += UpdateEnemy;
@@ -20,9 +22,9 @@ namespace UI.NextEnemyDisplayer{
 
         private void UpdateEnemy(Game game, GameModel stage)
         {
-            if(shownEnemyItem != null) Destroy(shownEnemyItem.gameObject);
-            shownEnemyItem = Instantiate(enemyItemPrefab, transform);
-            shownEnemyItem.UpdateContent();
+            if(_shownEnemyItem != null) Destroy(_shownEnemyItem.gameObject);
+            _shownEnemyItem = Instantiate(enemyWithNamePrefab, transform);
+            _shownEnemyItem.SetEnemy((stage as Stage)?.NextEnemy);
         }
         
 

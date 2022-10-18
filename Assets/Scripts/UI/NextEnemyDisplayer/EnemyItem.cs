@@ -1,14 +1,15 @@
 using Model;
 using TMPro;
+using UI.Common;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.NextEnemyDisplayer
 {
-    public class EnemyItem: MonoBehaviour
+    public class EnemyItem: EnemyWithName
     {
-        public TextMeshProUGUI nameText;
-        public Image enemyImage;
+        // public TextMeshProUGUI nameText;
+        // public Image enemyImage;
         
         public void UpdateContent()
         {
