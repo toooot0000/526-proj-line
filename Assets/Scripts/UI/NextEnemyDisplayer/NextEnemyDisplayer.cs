@@ -1,9 +1,7 @@
 using Model;
-using TMPro;
 using UI.Common;
 using UI.Common.SimpleAnimation;
-using UnityEngine;
-using UnityEngine.UI;
+
 
 namespace UI.NextEnemyDisplayer{
     public class NextEnemyDisplayer: UIComponent{
