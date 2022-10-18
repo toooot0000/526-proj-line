@@ -5,6 +5,7 @@ using Core.DisplayArea.Stage.Player;
 using Core.PlayArea.Balls;
 using Model;
 using Tutorial;
+using Tutorial.Tutorials.MultipleEnemy;
 using Tutorial.Tutorials.Stage1Clear;
 using UI;
 using UnityEngine;
@@ -31,11 +32,13 @@ namespace Core.DisplayArea.Stage{
             _isInTutorial = false;
         }
 
-        public void OnStageLoaded(Model.Stage currentStage){
+        public void PresentStage(Model.Stage currentStage){
             _modelStage = currentStage;
             enemyView.BindToCurrentEnemy();
             enemyView.Appear(null);
         }
+        
+        // private void Present
 
         public void ProcessStageActionInfo(StageActionInfoBase info){
             playerView.stageActionInfo = info;
@@ -99,7 +102,7 @@ namespace Core.DisplayArea.Stage{
         private IEnumerator OnPlayerAttackResolved(StageActionInfoBase info){
             var dmg = info.damage;
             if (enemyView.isDead){
-                GameManager.shared.tutorialManager.LoadTutorial<UITutorialStage1Clear>();
+                OnEnemyDieTriggerTutorial();
                 if (dmg.currentGame.currentStage.NextEnemy != null){
                     dmg.currentGame.currentStage.ForwardCurrentEnemy();
                     enemyView.BindToCurrentEnemy();
@@ -128,6 +131,17 @@ namespace Core.DisplayArea.Stage{
         public void TutorSetPause(bool value){
             if (!_isInTutorial) return;
             _pause = value;
+        }
+
+        private static void OnEnemyDieTriggerTutorial(){
+            switch (GameManager.shared.game.currentStage.id){
+                case 0:
+                    GameManager.shared.tutorialManager.LoadTutorial<UITutorialStage1Clear>();
+                    break;
+                case 1:
+                    GameManager.shared.tutorialManager.LoadTutorial<TutorialMultipleEnemy>();
+                    break;
+            }
         }
     }
 }
