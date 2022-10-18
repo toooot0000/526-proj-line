@@ -8,6 +8,7 @@ using Core.PlayArea.TouchTracking;
 using Model;
 using Tutorial;
 using Tutorial.Tutorials.BasicConcept;
+using Tutorial.Tutorials.Charge;
 using Tutorial.Tutorials.Combo;
 using Tutorial.Tutorials.EnemyIntention;
 using Tutorial.Tutorials.Stage1Soft;
@@ -171,6 +172,10 @@ public class GameManager : MonoBehaviour{
                 case 1:
                     tutorialManager.LoadTutorial<TutorialCombo>();
                     break;
+            }
+
+            if (game.currentStage.CurrentEnemy.id == -3){
+                tutorialManager.LoadTutorial<TutorialCharge>();
             }
         }
     }

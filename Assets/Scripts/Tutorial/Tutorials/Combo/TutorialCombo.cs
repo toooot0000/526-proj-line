@@ -29,11 +29,14 @@ namespace Tutorial.Tutorials.Combo{
             mng.ballManager.HandOverControlTo(this);
             mng.tracker.HandOverControlTo(this);
 
+            var intentionDisplayerGameObject = mng.stageManager.enemyView.intentionDisplayer.gameObject;
+            
             _step = new StepBase[]{
-                new StepTapToContinue<TutorialCombo>(texts[0], tapCatcher, mng.stageManager.enemyView.gameObject),
-                new StepTapToContinue<TutorialCombo>(texts[1], null, 
+                new StepTapToContinue<TutorialCombo>(texts[0], tapCatcher, intentionDisplayerGameObject),
+                new StepTapToContinue<TutorialCombo>(texts[1], tapCatcher, intentionDisplayerGameObject),
+                new StepTapToContinue<TutorialCombo>(texts[2], null, 
                     setUp:(combo, step) => {
-                        combo.texts[1].Enabled = true;
+                        step.SetTextEnabled(true);
                         // Set up the moving pointer
                         var start = combo.startPosition.position;
                         var end = combo.endPosition.position;
@@ -65,29 +68,30 @@ namespace Tutorial.Tutorials.Combo{
                         t.tutorialManager.tracker.OnTouchEnd += t.WrappedStepComplete;
                     },
                     cleanUp: (t, s) => {
-                        t.texts[1].Enabled = false;
+                        s.SetTextEnabled(false);
                         t.movingPointer.Enabled = false;
                         t.PutToBack(t.tutorialManager.tracker.gameObject);
                     },
                     unbind: (t, s) => {
-                        t.tutorialManager.tracker.OnTouchEnd -= t.StepComplete;
+                        t.tutorialManager.tracker.OnTouchEnd -= t.WrappedStepComplete;
                     }
                 ),
-                new StepTapToContinue<TutorialCombo>(texts[2], tapCatcher,
+                new StepTapToContinue<TutorialCombo>(texts[3], tapCatcher,
                     setUp: StepTapToContinue<TutorialCombo>.DefaultSetUp,
                     cleanUp: (t, s) => {
                         t.tutorialManager.tracker.tutorKeepLine = false;
                         s.LowlightAll(t);
-                        t.texts[2].Enabled = false;
+                        s.SetTextEnabled(false);
                     }
                 ),
-                new StepTapToContinue<TutorialCombo>(texts[3], tapCatcher, 
+                new StepTapToContinue<TutorialCombo>(texts[4], tapCatcher, 
                     setUp: (t, s) => {
                         var gearDisplay = UIManager.shared.GetUIComponent<GearDisplayer>();
                         gearDisplay.Show();
                         StepTapToContinue<TutorialCombo>.DefaultSetUp(t, s);
                     }
-                ), 
+                ),
+                new StepTapToContinue<TutorialCombo>(texts[5], tapCatcher)
             };
             
             base.OnLoaded(mng);

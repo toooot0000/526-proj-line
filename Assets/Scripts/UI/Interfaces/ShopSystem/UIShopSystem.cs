@@ -64,6 +64,9 @@ namespace UI.Interfaces.ShopSystem {
                 () => {
                     _inAnimation = false;
                     base.Close();
+                    foreach (var uiShopPanel in _panels){
+                        Destroy(uiShopPanel.gameObject);
+                    }
                     Destroy(gameObject);
                 });
             StartCoroutine(coroutine());

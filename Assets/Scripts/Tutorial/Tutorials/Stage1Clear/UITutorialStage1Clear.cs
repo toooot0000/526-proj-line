@@ -53,12 +53,12 @@ namespace Tutorial.Tutorials.Stage1Clear{
                     if (selectGear == null) return;
                     selectGear.OnConfirmClicked -= tutorial.StepComplete;
                 }),
-                new StepTapToContinue<UITutorialStage1Clear>(texts[3], mng.uiController.tutorialTapCatcher, setUp: (t, s) => {
+                new StepTapToContinue<UITutorialStage1Clear>(texts[3], mng.uiController.tutorialTapCatcher, 
+                    setUp: (t, s) => {
                     UIManager.shared.OnOpenUI += ui => {
                         if (ui is not UISelectStage selectStage) return;
                         s.AddHighlightObject(selectStage.GetFirstPanel().gameObject);
-                        s.HighlightAll(t);
-                        s.SetTextEnabled(true);
+                        StepTapToContinue<UITutorialStage1Clear>.DefaultSetUp(t, s);
                     };
                 }),
                 new StepTapToContinue<UITutorialStage1Clear>(texts[4], null, (t, step) => {

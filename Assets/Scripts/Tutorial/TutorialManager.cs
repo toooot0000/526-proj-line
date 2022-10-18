@@ -8,6 +8,7 @@ using Core.PlayArea.Balls;
 using Core.PlayArea.TouchTracking;
 using Tutorial.Tutorials;
 using Tutorial.Tutorials.BasicConcept;
+using Tutorial.Tutorials.Charge;
 using Tutorial.Tutorials.Combo;
 using Tutorial.Tutorials.EnemyIntention;
 using Tutorial.Tutorials.Stage1Clear;
@@ -22,7 +23,7 @@ using Utility;
 namespace Tutorial{
     public class TutorialManager : MonoBehaviour{
         private const string PrefabPathPrefix = "Prefabs/Tutorials/";
-        private const bool IsActive = false;
+        private const bool IsActive = true;
 
         public BallManager ballManager;
         public Shade shade;
@@ -42,7 +43,7 @@ namespace Tutorial{
 
         private void Update(){
             // if (Input.GetKeyUp(KeyCode.A)){
-            //     ForceLoadTutorial<TutorialCombo>();
+            //     ForceLoadTutorial<TutorialCharge>();
             // }
         }
         

@@ -27,7 +27,7 @@ namespace Tutorial.Common{
                 _totalLength = 0;
                 for (var i = 0; i < value.Length - 1; i++) _totalLength += (value[i + 1] - value[i]).magnitude;
             }
-            get => _positions;
+            private get => _positions;
         }
 
         public bool Enabled{

@@ -205,8 +205,12 @@ MonoBehaviour:
     charge: 0
     combo: 0
   icon: {fileID: 1621735645257668365}
-  sprite: {fileID: 3584327994911392432}
+  bg: {fileID: 3584327994911392432}
   ballView: {fileID: 3584327994911392446}
+  sprNormal: {fileID: 21300000, guid: 2f087db3a32ab4448a754d55f43c32f4, type: 3}
+  sprDebuff: {fileID: 21300000, guid: 633acca6fc4b18e4b8f44a6a13f1d1f1, type: 3}
+  sprCombo: {fileID: 21300000, guid: 44c58a25fb8675d4bb3710047cb15520, type: 3}
+  sprCharge: {fileID: 21300000, guid: ce68fe2b398ced54d95586c59e66265f, type: 3}
 --- !u!114 &8155498347057018365
 MonoBehaviour:
   m_ObjectHideFlags: 0

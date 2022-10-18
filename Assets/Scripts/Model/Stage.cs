@@ -62,22 +62,10 @@ namespace Model{
             LoadFromConfig(id);
         }
 
-        private void ForwardCurrentEnemy(Game game, GameModel deadEnemy) {
-            _enemyIndex++;
-            if (_enemyIndex == enemies.Length){
-                GameManager.shared.Delayed(1, () => {
-                    OnStageBeaten?.Invoke(currentGame, this);
-                });
-            } else{
-                CurrentEnemy.BecomeCurrent();
-                OnEnemyChanged?.Invoke(currentGame, this);
-            }
-        }
-
         public void ForwardCurrentEnemy(){
-            Debug.Log("forward current enemy");
             _enemyIndex++;
             if (_enemyIndex == enemies.Length){
+                _enemyIndex = 0;
                 GameManager.shared.Delayed(1, () => { OnStageBeaten?.Invoke(currentGame, this); });
             } else{
                 CurrentEnemy.BecomeCurrent();

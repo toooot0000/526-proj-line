@@ -19,7 +19,7 @@ namespace Core.PlayArea.Balls{
             var newBallConfig = newBallObject.GetComponent<BallConfig>();
             newBallConfig.modelBall = ball;
             newBallObject.transform.localPosition = GenerateRandomLocalPosition();
-            newBallConfig.UpdateConfig();
+            newBallConfig.ResetView();
         }
 
         public void SpawnRandom() // Temp

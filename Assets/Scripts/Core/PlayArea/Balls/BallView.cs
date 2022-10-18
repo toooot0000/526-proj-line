@@ -30,10 +30,10 @@ namespace Core.PlayArea.Balls{
                 _currentState = value;
                 switch (value){
                     case State.Combo:
-                        _ballBg.color = Color.green;
+                        BallBg.sprite = config.sprCombo;
                         break;
                     case State.Charged:
-                        _ballBg.color = Color.blue;
+                        BallBg.sprite = config.sprCharge;
                         break;
                 }
             }
@@ -46,7 +46,7 @@ namespace Core.PlayArea.Balls{
 
         public bool tutorCanBeCircled = true;
         public BallConfig config;
-        private SpriteRenderer _ballBg;
+        private SpriteRenderer BallBg => config.bg;
 
         private Game _game;
 
@@ -60,7 +60,6 @@ namespace Core.PlayArea.Balls{
 
         private void Start(){
             _rectTransform = GetComponent<RectTransform>();
-            _ballBg = GetComponent<SpriteRenderer>();
             _game = GameManager.shared.game;
             config = GetComponent<BallConfig>();
         }
@@ -82,7 +81,7 @@ namespace Core.PlayArea.Balls{
         public event BallViewEvent OnCharged;
 
         public void UpdateConfig(){
-            config.UpdateConfig();
+            config.ResetView();
         }
 
         public void OnHittingWall(Wall wall){
@@ -120,7 +119,7 @@ namespace Core.PlayArea.Balls{
                 z = startWorldLocation.z
             };
 
-            var bgStartColor = _ballBg.color;
+            var bgStartColor = BallBg.color;
             var bgEndColor = new Color(bgStartColor.r, bgStartColor.g, bgStartColor.b, 0);
             var iconStartColor = weaponIcon.color;
             var iconEndColor = new Color(iconStartColor.r, iconStartColor.g, iconStartColor.b, 0);
@@ -134,7 +133,7 @@ namespace Core.PlayArea.Balls{
                 },
                 () => {
                     CurrentState = State.Hide;
-                    _ballBg.color = bgEndColor;
+                    BallBg.color = bgEndColor;
                     weaponIcon.color = iconEndColor;
                 });
             StartCoroutine(lerp());
@@ -142,7 +141,7 @@ namespace Core.PlayArea.Balls{
 
         public void FadeOut(float seconds){
             CurrentState = State.Animating;
-            var bgStartColor = _ballBg.color;
+            var bgStartColor = BallBg.color;
             var bgEndColor = new Color(bgStartColor.r, bgStartColor.g, bgStartColor.b, 0);
             var iconStartColor = weaponIcon.color;
             var iconEndColor = new Color(iconStartColor.r, iconStartColor.g, iconStartColor.b, 0);
@@ -152,7 +151,7 @@ namespace Core.PlayArea.Balls{
                 null,
                 i => {
                     i = curve.Evaluate(i);
-                    _ballBg.color = Color.Lerp(bgStartColor, bgEndColor, i);
+                    BallBg.color = Color.Lerp(bgStartColor, bgEndColor, i);
                     weaponIcon.color = Color.Lerp(iconStartColor, iconEndColor, i);
                 },
                 () => CurrentState = State.Hide
@@ -160,9 +159,10 @@ namespace Core.PlayArea.Balls{
             StartCoroutine(lerp());
         }
 
-        public void TutorialSetPosition(Vector3 worldPosition){
+        public void TutorialSetPosition(Vector2 worldPosition){
             if (CurrentState != State.Controlled) return;
-            transform.position = worldPosition;
+            var transform1 = transform;
+            transform1.position = new Vector3(worldPosition.x, worldPosition.y, transform1.position.z);
         }
     }
 }

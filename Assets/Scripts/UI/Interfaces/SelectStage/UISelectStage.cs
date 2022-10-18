@@ -53,6 +53,9 @@ namespace UI.Interfaces.SelectStage
                 () => {
                     _inAnimation = false;
                     base.Close();
+                    foreach (var uiStagePanel in _panels){
+                        Destroy(uiStagePanel.gameObject);
+                    }
                     Destroy(gameObject);
                 });
             StartCoroutine(coroutine());
