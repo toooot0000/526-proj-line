@@ -9,6 +9,7 @@ namespace UI.NextEnemyDisplayer{
         public EdgeHider edgeHider;
         public Image enemyImage;
         public TextMeshProUGUI nameText;
+        public Image _img;
 
         private void Start(){
             GameManager.shared.game.currentStage.OnEnemyChanged += UpdateEnemy;
@@ -20,7 +21,10 @@ namespace UI.NextEnemyDisplayer{
         {
             Debug.Log("Execute UpdateEnemy");
             Enemy nextEnemy = (stage as Stage)!.NextEnemy;
-            if(nextEnemy == null){
+            if(nextEnemy == null)
+            {
+                //GameObject.GetComponent<Image>().enabled = false;
+                GameObject.Find("Image").SetActive(false);
                 nameText.text = "No More";
                 enemyImage.sprite = null;
                 return;
