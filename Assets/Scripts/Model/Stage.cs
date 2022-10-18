@@ -91,7 +91,7 @@ namespace Model{
         }
 
         public void LoadFromConfig(int stageId){
-            var info = CsvLoader.TryToLoad("Configs/stages", id);
+            var info = CsvLoader.TryToLoad("Configs/stages", stageId);
             if (info == null) return;
             id = stageId;
             desc = info["desc"] as string;
@@ -100,15 +100,15 @@ namespace Model{
             if (!string.IsNullOrEmpty(nextStageStr)){
                 nextStageChoice = nextStageStr.Split(";").Select(IntUtility.ParseString).ToArray();
             }
-            enemies = (info["enemies"] as string)!.Split(";").Select((s => new Enemy(parent, IntUtility.ParseString(s)) )).ToArray();
-            if (((string)info["bonus_gears"]).Length != 0){
-                bonusGears = ((string)info["bonus_gears"])!.Split(";").Select((s => new Gear(parent, IntUtility.ParseString(s)) )).ToArray();
-            }
-            bonusCoins = (int)info["bonus_coins"];
             type = EnumUtility.GetValue<StageType>(info["type"] as string);
 
             switch (type){
                 case StageType.Battle:
+                    enemies = (info["enemies"] as string)!.Split(";").Select((s => new Enemy(parent, IntUtility.ParseString(s)) )).ToArray();
+                    if (((string)info["bonus_gears"]).Length != 0){
+                        bonusGears = ((string)info["bonus_gears"])!.Split(";").Select((s => new Gear(parent, IntUtility.ParseString(s)) )).ToArray();
+                    }
+                    bonusCoins = (int)info["bonus_coins"];
                     CurrentEnemy.BecomeCurrent();
                     OnEnemyChanged?.Invoke(currentGame, this);
                     break;

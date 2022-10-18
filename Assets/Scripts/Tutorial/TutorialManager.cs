@@ -41,9 +41,9 @@ namespace Tutorial{
         private Type _curTutorialType;
 
         private void Update(){
-            if (Input.GetKeyUp(KeyCode.A)){
-                ForceLoadTutorial<TutorialCombo>();
-            }
+            // if (Input.GetKeyUp(KeyCode.A)){
+            //     ForceLoadTutorial<TutorialCombo>();
+            // }
         }
         
         [Obsolete("Use the generic one")]

@@ -8,9 +8,12 @@ using Core.PlayArea.TouchTracking;
 using Model;
 using Tutorial;
 using Tutorial.Tutorials.BasicConcept;
+using Tutorial.Tutorials.Combo;
 using Tutorial.Tutorials.EnemyIntention;
 using Tutorial.Tutorials.Stage1Soft;
 using UI;
+using UI.Interfaces.ShopSystem;
+using UI.Interfaces.SpecialEvent;
 using UI.TurnSignDisplayer;
 using UnityEngine;
 using Utility;
@@ -27,6 +30,9 @@ public class GameManager : MonoBehaviour{
     public TouchTracker touchTracker;
     public int CurrentTurnNum => game.currentTurnNum;
 
+    private bool _isInShop = false;
+    private bool _isInEvent = false;
+
 
     private void Awake()
     {
@@ -42,6 +48,13 @@ public class GameManager : MonoBehaviour{
     }
 
     private void Update(){
+        // if (Input.GetKeyUp(KeyCode.T)){
+        //     UIManager.shared.OpenUI("UIShopSystem");
+        // }
+        //
+        // if (Input.GetKeyUp(KeyCode.B)){
+        //     UIManager.shared.OpenUI("UIEvent", new Model.Event(game, 0));
+        // }
     }
 
     private void InitGame(){
@@ -53,7 +66,7 @@ public class GameManager : MonoBehaviour{
     public void GameStart(){
         game.LoadStage(0);
         EventLogger.Shared.init();//should do this after game is initialized
-        stageManager.OnStageLoaded(game.currentStage);
+        stageManager.PresentStage(game.currentStage);
         StartCoroutine(StartBattleStage());
     }
 
@@ -95,13 +108,39 @@ public class GameManager : MonoBehaviour{
 
     public void GotoStage(int id){
         game.LoadStage(id);
-        stageManager.OnStageLoaded(game.currentStage);
-        // Temp
-        StartCoroutine(StartBattleStage());
+        StartCoroutine(game.currentStage.type switch{
+            StageType.Battle => StartBattleStage(),
+            StageType.Shop => StartShopStage(),
+            StageType.Event => StartEventStage()
+        });
+
     }
 
     private IEnumerator StartBattleStage(){
+        stageManager.PresentStage(game.currentStage);
         yield return SwitchToPlayerTurn();
+    }
+
+    private IEnumerator StartShopStage(){
+        _isInShop = true;
+        UIManager.shared.OpenUI("UIShopSystem");
+        UIManager.shared.OnCloseUI += ui => {
+            if (ui is not UIShopSystem shop) return;
+            _isInShop = false;
+        };
+        yield return new WaitWhile(() => _isInShop);
+        UIManager.shared.OpenUI("UISelectStage", game.currentStage.nextStageChoice);
+    }
+
+    private IEnumerator StartEventStage(){
+        _isInEvent = true;
+        UIManager.shared.OpenUI("UIEvent", game.currentStage.CurrentEvent);
+        UIManager.shared.OnCloseUI += ui => {
+            if (ui is not UIResult) return;
+            _isInEvent = false;
+        };
+        yield return new WaitWhile(() => _isInEvent);
+        UIManager.shared.OpenUI("UISelectStage", game.currentStage.nextStageChoice);
     }
 
     public void Complete(){
@@ -120,10 +159,16 @@ public class GameManager : MonoBehaviour{
             switch (CurrentTurnNum){
                 case 1:
                     StartCoroutine(CoroutineUtility.Delayed(1, 
-                        () => tutorialManager.LoadTutorial(TutorialBasicConcept.PrefabName)));
+                        () => tutorialManager.LoadTutorial<TutorialBasicConcept>()));
                     break;
                 case 2:
-                    tutorialManager.LoadTutorial(TutorialStage1Soft.PrefabName);
+                    tutorialManager.LoadTutorial<TutorialStage1Soft>();
+                    break;
+            }
+        } else if (game.currentStage.id == 1){
+            switch (CurrentTurnNum){
+                case 1:
+                    tutorialManager.LoadTutorial<TutorialCombo>();
                     break;
             }
         }
@@ -135,7 +180,7 @@ public class GameManager : MonoBehaviour{
         if (game.currentStage.id == 0){
             switch (CurrentTurnNum){
                 case 1:
-                    tutorialManager.LoadTutorial(TutorialEnemyIntention.PrefabName);
+                    tutorialManager.LoadTutorial<TutorialEnemyIntention>();
                     break;
             }
         }
@@ -148,4 +193,5 @@ public class GameManager : MonoBehaviour{
         game.player.ClearAllBalls();
         stageManager.ProcessStageActionInfo(currentAction);
     }
+
 }

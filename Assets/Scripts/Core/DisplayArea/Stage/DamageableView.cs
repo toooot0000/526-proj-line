@@ -40,5 +40,9 @@ namespace Core.DisplayArea.Stage{
             }
             get => _currentHp;
         }
+
+        public void SyncHp(){
+            CurrentHp = Model.CurrentHp;
+        }
     }
 }

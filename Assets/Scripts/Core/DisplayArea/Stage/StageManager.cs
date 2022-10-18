@@ -37,8 +37,6 @@ namespace Core.DisplayArea.Stage{
             enemyView.BindToCurrentEnemy();
             enemyView.Appear(null);
         }
-        
-        // private void Present
 
         public void ProcessStageActionInfo(StageActionInfoBase info){
             playerView.stageActionInfo = info;
