@@ -1,10 +1,20 @@
 using System;
+using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
 using Utility;
 using Utility.Loader;
 
 namespace Model{
+
+    public enum StageType{
+        [Description("battle")]
+        Battle,
+        [Description("shop")]
+        Shop,
+        [Description("event")]
+        Event
+    }
 
 
     public class Stage : GameModel{
@@ -15,12 +25,14 @@ namespace Model{
 
         public Gear[] bonusGears = new Gear[]{ };
 
-    private int _enemyIndex = 0;
+        private int _enemyIndex = 0;
         public Enemy CurrentEnemy => _enemyIndex < enemies.Length ? enemies[_enemyIndex] : null;
+        public Event CurrentEvent{ get; set; } = null;
         public Enemy NextEnemy => _enemyIndex >= enemies.Length - 1 ? null : enemies[_enemyIndex + 1];
         public bool IsBeaten => _enemyIndex == enemies.Length;
         public int RemainingEnemyNumber => enemies.Length - _enemyIndex;
         public bool IsLast => nextStageChoice.Length == 0 || nextStageChoice[0] == -1;
+        public StageType type = StageType.Battle;
 
         public event ModelEvent OnStageBeaten;
         public event ModelEvent OnEnemyChanged;
@@ -83,7 +95,6 @@ namespace Model{
             if (info == null) return;
             id = stageId;
             desc = info["desc"] as string;
-            // nextStage = (int)info["next_stage"];
 
             var nextStageStr = (string)info["next_stage_choices"];
             if (!string.IsNullOrEmpty(nextStageStr)){
@@ -94,9 +105,23 @@ namespace Model{
                 bonusGears = ((string)info["bonus_gears"])!.Split(";").Select((s => new Gear(parent, IntUtility.ParseString(s)) )).ToArray();
             }
             bonusCoins = (int)info["bonus_coins"];
-            CurrentEnemy.BecomeCurrent();
+            type = EnumUtility.GetValue<StageType>(info["type"] as string);
+
+            switch (type){
+                case StageType.Battle:
+                    CurrentEnemy.BecomeCurrent();
+                    OnEnemyChanged?.Invoke(currentGame, this);
+                    break;
+                case StageType.Shop:
+                    break;
+                case StageType.Event:
+                    var eventId = (int)info["event_id"]; 
+                    CurrentEvent = new Event(this, eventId);
+                    break;
+            }
+            
+            
             OnNewConfigLoaded?.Invoke(currentGame, this);
-            OnEnemyChanged?.Invoke(currentGame, this);
         }
     }
 }
