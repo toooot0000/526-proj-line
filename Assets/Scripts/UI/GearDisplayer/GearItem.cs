@@ -38,16 +38,6 @@ namespace UI.GearDisplayer{
                 ballsize = (float)1.5;
             }
             rectTrans!.localScale = new Vector3(ballsize, ballsize, 1);
-            // _rectTransRect = rectTrans.rect;
-            // if (_rectTransRect.width > 1.5)
-            // {
-            //     _rectTransRect.width = (float)1.5;
-            // }
-            //
-            // if (_rectTransRect.height > 1.5)
-            // {
-            //     _rectTransRect.height = (float)1.5;
-            // }
             
             icon.sprite = Resources.Load<Sprite>(_model.imgPath);
 
@@ -56,11 +46,11 @@ namespace UI.GearDisplayer{
             {
                 ballspeed.text = "";
             }
-            if (_model.ball.speed > 0 && _model.ball.speed <= 0.5)
+            else if (_model.ball.speed <= 0.5 && _model.ball.speed > 0)
             {
                 ballspeed.text = ">";
             }
-            if ( _model.ball.speed > 0.5 && _model.ball.speed <= 1.5)
+            else if (_model.ball.speed <= 1.5 && _model.ball.speed > 0.5)
             {
                 ballspeed.text = ">>";
             }
