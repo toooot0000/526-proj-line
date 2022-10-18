@@ -101,6 +101,7 @@ namespace Tutorial.Tutorials.Combo{
             if (GameManager.shared.game.player.hitBalls.Count != 2){
                 _attBall.CurrentState = BallView.State.Controlled;
                 _defBall.CurrentState = BallView.State.Controlled;
+                GameManager.shared.game.player.hitBalls.Clear();
             } else{
                 base.StepComplete(controllable);
             }
