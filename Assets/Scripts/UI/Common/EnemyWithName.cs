@@ -34,7 +34,7 @@ namespace UI.Common
             }
             GetComponent<Image>().enabled = true;
             enemyImage.enabled = true;
-            nameText.text = enemy["desc"] as string;
+            nameText.text = enemy["name"] as string;
             enemyImage.sprite = Resources.Load<Sprite>(enemy["img_path"] as string);
 
         }
@@ -52,7 +52,7 @@ namespace UI.Common
             Debug.Log("enable prefab");
             GetComponent<Image>().enabled = true;
             enemyImage.enabled = true;
-            nameText.text = enemy.desc;
+            nameText.text = enemy.name;
             enemyImage.sprite = Resources.Load<Sprite>(enemy.imgPath);
         }
     }

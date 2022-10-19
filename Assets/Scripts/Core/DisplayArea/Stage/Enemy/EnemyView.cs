@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Core.DisplayArea.Stage.Player;
 using Model;
+using TMPro;
 using UnityEngine;
 
 namespace Core.DisplayArea.Stage.Enemy{
@@ -10,6 +11,7 @@ namespace Core.DisplayArea.Stage.Enemy{
         // public RemainingEnemy remaining;
         public IntentionDisplayer intentionDisplayer;
         public SpriteRenderer sprRenderer;
+        public TextMeshProUGUI enemyName;
 
         public override IDamageable Model{
             set{
@@ -23,6 +25,7 @@ namespace Core.DisplayArea.Stage.Enemy{
             isDead = false;
             Model = GameManager.shared.game.CurrentEnemy;
             sprRenderer.sprite = ((Model.Enemy)Model).GetSprite();
+            enemyName.text = ((Model.Enemy)Model).name;
             UpdateIntention();
         }
 
