@@ -6,23 +6,30 @@ namespace BackendApi{
         public virtual string URLPath => throw new NotImplementedException();
     }
 
-    public class EventPeopleEnterSuccesses : LoggableEvent {
+    public class EventPeopleEnterSuccesses : LoggableEvent 
+    {
         public int level;
         public string status; //"enter" or "success"
         public override string URLPath => "logPeopleEnterSuccesses";
     }
-
+    
+    Public class EventGearshows : LoggableEvent
+    {
+        public int gearId;
+        public override string URLPath => "logGearShows";
+    }
+    
+    public class EventGearObtains : LoggableEvent
+    {
+        public int gearId;
+        public override string URLPath => "logGearObtains";
+    }
+    
     public class EventGearUses : LoggableEvent
     {
         public int gearId;
         public string status;// "plain use" or "charge" or "combo"
         public override string URLPath => "logGearUses";
-    }
-
-    public class EventGearObtains : LoggableEvent
-    {
-        public int gearId;
-        public override string URLPath => "logGearObtains";
     }
 
     public class EventHpofEnemies : LoggableEvent
