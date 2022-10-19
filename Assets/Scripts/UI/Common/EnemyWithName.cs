@@ -9,11 +9,15 @@ namespace UI.Common
     public class EnemyWithName : MonoBehaviour
     {
         public TextMeshProUGUI nameText;
+        public Image bgFrame;
         public Image enemyImage;
 
         public bool Enabled{
             set{
-                
+                nameText.enabled = value;
+                enemyImage.enabled = value;
+                bgFrame.enabled = value;
+                enabled = value;
             }
             get => enabled;
         }

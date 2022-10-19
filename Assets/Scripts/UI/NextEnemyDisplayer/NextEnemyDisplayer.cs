@@ -16,8 +16,7 @@ namespace UI.NextEnemyDisplayer{
             UpdateEnemy(GameManager.shared.game, GameManager.shared.game.currentStage);
         }
 
-        private void UpdateEnemy(Game game, GameModel model)
-        {
+        private void UpdateEnemy(Game game, GameModel model){
             var stage = model as Stage;
             if (stage!.NextEnemy != null){
                 shownEnemyItem.Enabled = true;

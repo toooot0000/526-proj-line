@@ -303,6 +303,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: {fileID: 9176245360684524383}
+  bgFrame: {fileID: 6209652568027211242}
   enemyImage: {fileID: 6209652567542117268}
 --- !u!1 &7284461331914761675
 GameObject:

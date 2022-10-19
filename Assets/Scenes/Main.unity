@@ -1225,6 +1225,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6209652568027211243, guid: 5bee9b46f8da97948b03cab4b396acbe, type: 3}
   m_PrefabInstance: {fileID: 6209652568923219757}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &983040713 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1418311251978619868, guid: 5bee9b46f8da97948b03cab4b396acbe, type: 3}
+  m_PrefabInstance: {fileID: 6209652568923219757}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce336e9efdff4f749b79b60fdad7e363, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1393635032
 GameObject:
   m_ObjectHideFlags: 0
@@ -2542,7 +2553,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   edgeHider: {fileID: 1692009682}
-  shownEnemyItem: {fileID: 4647594425872786425}
+  shownEnemyItem: {fileID: 983040713}
   noMoreEnemy: {fileID: 208824091}
 --- !u!224 &1851098942 stripped
 RectTransform:
@@ -4663,17 +4674,6 @@ MonoBehaviour:
   ballPrefab: {fileID: 3584327994911392434, guid: 67a82a69b4e0bd247871a6ff43593ba0, type: 3}
   randomSpawnNumber: 5
   comboDisplayer: {fileID: 3322267685667555654}
---- !u!114 &4647594425872786425 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1608502626678801620, guid: 5bee9b46f8da97948b03cab4b396acbe, type: 3}
-  m_PrefabInstance: {fileID: 6209652568923219757}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 486b436747c9497594aeda7dc1449bb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &5902399932300061427
 PrefabInstance:
   m_ObjectHideFlags: 0
