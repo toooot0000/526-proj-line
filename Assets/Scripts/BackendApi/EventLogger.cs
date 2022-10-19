@@ -36,7 +36,6 @@ namespace BackendApi{
                     level = id,
                     status = "enter"
                 });
-                
             };
 
             GameManager.shared.game.currentStage.OnStageBeaten += (game1, stage) =>
