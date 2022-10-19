@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Linq;
 using Core.Common;
 using Core.DisplayArea.Stage;
+using Core.PlayArea.Balls;
 using Model;
 using Tutorial;
 using UnityEngine;
@@ -32,6 +34,7 @@ namespace Core.PlayArea.TouchTracking{
 
         private bool _isTracing;
         private RectTransform _rect;
+        private bool _mouseOnBall = false;
 
 
         private void Start(){
@@ -45,14 +48,16 @@ namespace Core.PlayArea.TouchTracking{
             if (!isAcceptingInput) return;
             TraceTouchPosition();
         }
-
+        
         private void OnMouseDown(){
             if (!isAcceptingInput) return;
             StartTracking();
         }
 
-        private void OnMouseExit(){
-            if (!isAcceptingInput) return;
+        private IEnumerator OnMouseExit(){
+            if (!isAcceptingInput) yield break;
+            yield return new WaitForEndOfFrame();
+            if (_mouseOnBall) yield break;
             StopTracking();
         }
 
@@ -74,7 +79,7 @@ namespace Core.PlayArea.TouchTracking{
 
         public void StartTracking(){
             _isTracing = true;
-            touchCollider.SetEnabled(true);
+            // touchCollider.SetEnabled(true);
             lineRenderer.positionCount = 0;
             _circleDetector.points.Clear();
             _currentLineLength = 0;
@@ -148,6 +153,24 @@ namespace Core.PlayArea.TouchTracking{
             // Add length
             _currentLineLength += curSegLength;
             progressBar.Percentage = 100 - _currentLineLength / totalLineLength * 100;
+        }
+
+        public void OnMouseEnterBall(BallView ball){
+            if (!_isTracing) return;
+            if (_currentLineLength >= totalLineLength) return;
+            _mouseOnBall = true;
+            ball.OnBeingTouched();
+        }
+
+        public void OnMouseExitBall(){
+            if (!_isTracing) return;
+            _mouseOnBall = false;
+        }
+
+        public void OnMouseUpBall(){
+            if (!_isTracing) return;
+            _mouseOnBall = false;
+            OnMouseUp();
         }
     }
 }

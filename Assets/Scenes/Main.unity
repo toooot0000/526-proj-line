@@ -1648,7 +1648,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 104.17288
+      value: 104.17251
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -2776,7 +2776,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8733874939970305820, guid: 2d0888a1fb28c2e4a9c1586ed803184b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 8733874939970305820, guid: 2d0888a1fb28c2e4a9c1586ed803184b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3304,7 +3304,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8733874939970305820, guid: f401609b114369449b54463b951882f6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 8733874939970305820, guid: f401609b114369449b54463b951882f6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4241,7 +4241,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -4575,7 +4575,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4328751458895938646}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.1}
+  m_LocalPosition: {x: 0, y: 0, z: -1.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4602,6 +4602,7 @@ MonoBehaviour:
   ballPrefab: {fileID: 3584327994911392434, guid: 67a82a69b4e0bd247871a6ff43593ba0, type: 3}
   randomSpawnNumber: 5
   comboDisplayer: {fileID: 3322267685667555654}
+  touchTracker: {fileID: 4328751458456131980}
 --- !u!1001 &5902399932300061427
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4611,7 +4612,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1621526305531755149, guid: 8fbe69571dfec8c4f82642e28deafc7d, type: 3}
       propertyPath: displayTime
-      value: 0.2
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1621526305531755149, guid: 8fbe69571dfec8c4f82642e28deafc7d, type: 3}
+      propertyPath: animationTime
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 2057461339295924300, guid: 8fbe69571dfec8c4f82642e28deafc7d, type: 3}
       propertyPath: m_AnchorMax.x
