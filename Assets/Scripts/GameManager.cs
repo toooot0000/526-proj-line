@@ -61,10 +61,10 @@ public class GameManager : MonoBehaviour{
     }
 
     private void Update(){
-        // if (Input.GetKeyUp(KeyCode.T)){
-        //     UIManager.shared.OpenUI("UIShopSystem");
-        // }
-        //
+        if (Input.GetKeyUp(KeyCode.T)){
+            UIManager.shared.OpenUI("UIShopSystem");
+        }
+        
         // if (Input.GetKeyUp(KeyCode.B)){
         //     UIManager.shared.OpenUI("UIEvent", new Model.Event(game, 0));
         // }
