@@ -18,6 +18,7 @@ namespace Model{
     public class Enemy : GameModel, IDamageable{
         public int attack = 1;
         public int id;
+        public string name;
         public string desc;
         public EnemyIntention[] intentions;
         public int defend;
@@ -35,6 +36,7 @@ namespace Model{
             this.id = id;
             var enemy = CsvLoader.TryToLoad("Configs/enemies", id);
             if (enemy == null) return;
+            name = enemy["name"] as string;
             desc = enemy["desc"] as string;
             HpUpLimit = (int)enemy["hp"];
             attack = (int)enemy["attack"];
@@ -44,7 +46,7 @@ namespace Model{
             var spStr = (enemy["special"] as string)!.Split(";");
             var className = spStr.First();
             if(className != "")
-            special = Activator.CreateInstance(Type.GetType($"Model.EnemySpecialAttacks.{className}", true),
+                special = Activator.CreateInstance(Type.GetType($"Model.EnemySpecialAttacks.{className}", true),
                     new object[]{ spStr[1..] }) as
                 SpecialAttackBase;
             defend = (int)enemy["defend"];
@@ -134,6 +136,10 @@ namespace Model{
 
         public void BecomeCurrent(){
             // currentGame.OnTurnChanged += DoAction;
+        }
+        
+        public Sprite GetSprite(){
+            return Resources.Load<Sprite>(imgPath);
         }
     }
 }

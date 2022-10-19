@@ -50,7 +50,7 @@ namespace Tutorial.Tutorials.Charge{
                         // set ball
                         var defBall = t.tutorialManager.ballManager.balls.First(b => b.Model.type == BallType.Defend);
                         var attBall = t.tutorialManager.ballManager.balls.First(b => b.Model.type == BallType.Physics);
-                        t.LiftToFront(defBall.gameObject);
+                        t.LiftToFront(defBall.gameObject, -50);
                         defBall.TutorialSetPosition(position);
                         attBall.TutorialSetPosition(position + new Vector3(0, -1, 0));
                         defBall.tutorCanBeCircled = true;
@@ -59,7 +59,7 @@ namespace Tutorial.Tutorials.Charge{
                         attBall.tutorCanBeHit = false;
                         
                         // set tracker
-                        t.LiftToFront(t.tutorialManager.tracker.gameObject);
+                        t.LiftToFront(t.tutorialManager.tracker.gameObject, 50);
                         t.tutorialManager.tracker.tutorKeepLine = true;
                         
                         // show texts

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Core.DisplayArea.Stage;
+using Core.PlayArea.TouchTracking;
 using Model;
 using Tutorial;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace Core.PlayArea.Balls{
         public int randomSpawnNumber = 5;
         public ComboDisplayer comboDisplayer;
         public readonly List<BallView> balls = new();
+        public TouchTracker touchTracker;
 
         private bool _isInTutorial = false;
 
@@ -55,6 +57,9 @@ namespace Core.PlayArea.Balls{
                     curBallView = newBallObject.GetComponent<BallView>();
                     curBallView.OnHitted += OnBallHit;
                     curBallView.OnCharged += OnBallCircled;
+                    curBallView.OnMouseEnterBall += touchTracker.OnMouseEnterBall;
+                    curBallView.OnMouseExitBall += touchTracker.OnMouseExitBall;
+                    curBallView.OnMouseUpBall += touchTracker.OnMouseUpBall;
                     balls.Add(curBallView);
                 }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Model;
 using Tutorial;
@@ -11,6 +12,10 @@ namespace Core.PlayArea.Balls{
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(BallConfig))]
     public class BallView : MonoBehaviour, ITutorialControllable{
+        public event Action<BallView> OnMouseEnterBall;
+        public event Action OnMouseExitBall;
+        public event Action OnMouseUpBall;
+        
         public enum State{
             Free,
             Touched,
@@ -99,6 +104,18 @@ namespace Core.PlayArea.Balls{
             if (CurrentState != State.Free && (CurrentState != State.Controlled || !tutorCanBeCircled)) return;
             _game.player.AddCircledBall(config.modelBall);
             OnCharged?.Invoke(this);
+        }
+
+        private void OnMouseEnter(){
+            OnMouseEnterBall?.Invoke(this);
+        }
+
+        private void OnMouseUp(){
+            OnMouseUpBall?.Invoke();
+        }
+
+        private void OnMouseExit(){
+            OnMouseExitBall?.Invoke();
         }
 
         public void ResetView(){

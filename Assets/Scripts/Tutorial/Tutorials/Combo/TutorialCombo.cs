@@ -56,12 +56,14 @@ namespace Tutorial.Tutorials.Combo{
                         combo._defBall.tutorCanBeHit = true;
                         
                         // highlight balls
-                        step.AddHighlightObject(combo._attBall.gameObject);
-                        step.AddHighlightObject(combo._defBall.gameObject);
-                        step.HighlightAll(combo);
+                        // step.AddHighlightObject(combo._attBall.gameObject);
+                        // step.AddHighlightObject(combo._defBall.gameObject);
+                        // step.HighlightAll(combo);
+                        combo.LiftToFront(combo._attBall.gameObject, -50);
+                        combo.LiftToFront(combo._defBall.gameObject, -50);
                         
                         // tracker
-                        combo.LiftToFront(combo.tutorialManager.tracker.gameObject, -1);
+                        combo.LiftToFront(combo.tutorialManager.tracker.gameObject, 50);
                         combo.tutorialManager.tracker.tutorKeepLine = true;
                     },
                     bind: (t, s) => {
@@ -82,6 +84,8 @@ namespace Tutorial.Tutorials.Combo{
                         t.tutorialManager.tracker.tutorKeepLine = false;
                         s.LowlightAll(t);
                         s.SetTextEnabled(false);
+                        t.PutToBack(t._attBall.gameObject);
+                        t.PutToBack(t._defBall.gameObject);
                     }
                 ),
                 new StepTapToContinue<TutorialCombo>(texts[4], tapCatcher, 
@@ -101,6 +105,7 @@ namespace Tutorial.Tutorials.Combo{
             if (GameManager.shared.game.player.hitBalls.Count != 2){
                 _attBall.CurrentState = BallView.State.Controlled;
                 _defBall.CurrentState = BallView.State.Controlled;
+                GameManager.shared.game.player.hitBalls.Clear();
             } else{
                 base.StepComplete(controllable);
             }

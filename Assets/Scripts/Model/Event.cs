@@ -94,7 +94,11 @@ namespace Model{
                         if (effectValue[i] > 0)
                             result += "You got " + effectValue[i] + " HP\n";
                         else
-                            result += "You lost " + effectValue[i] + " HP\n";
+                        {
+                            
+                            result += "You lost " + Math.Abs(effectValue[i]) + " HP\n";
+                        }
+                            
                         break;
                     case "GetGear":
                         var player = GameManager.shared.game.player;
