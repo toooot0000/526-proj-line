@@ -183,7 +183,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7469125957905066982, guid: 6fa9136e769f80a439d468c594bbb49f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 3.697113
+      value: 3.6971436
       objectReference: {fileID: 0}
     - target: {fileID: 7469125957905066982, guid: 6fa9136e769f80a439d468c594bbb49f, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -725,7 +725,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7469125957983533606, guid: 6fa9136e769f80a439d468c594bbb49f, type: 3}
       propertyPath: m_text
-      value: 'The sword ball turns green!\n It means you have triggered it''s <i>charge</i>
+      value: 'The shield ball turns green!\n It means you have triggered it''s <i>charge</i>
         effect!
 
 '
