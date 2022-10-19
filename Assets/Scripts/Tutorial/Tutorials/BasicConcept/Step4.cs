@@ -9,12 +9,12 @@ namespace Tutorial.Tutorials.BasicConcept{
             _ttr = (TutorialBasicConcept)tutorial;
             _ttr.desc[3].Enabled = true;
             _ball = _ttr.tutorialManager.ballManager.balls[0];
-            _ttr.LiftToFront(_ball.gameObject);
+            _ttr.LiftToFront(_ball.gameObject, -50);
             
             var position = _ttr.ballPosition.position;
             _ball.HandOverControlTo(_ttr);
             _ttr.tutorialManager.tracker.HandOverControlTo(_ttr);
-            _ttr.LiftToFront(_ttr.tutorialManager.tracker.gameObject);
+            _ttr.LiftToFront(_ttr.tutorialManager.tracker.gameObject, 50);
             _ball.transform.position = position;
             _ttr.movingPointer.Enabled = true;
             _ttr.movingPointer.Positions = new[]{
