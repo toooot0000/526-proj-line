@@ -123,17 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &116318516 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1827863919806770033, guid: b0c9031af085cc647bceb994d56eee5b, type: 3}
-  m_PrefabInstance: {fileID: 3470142368323874563}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &129123785 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1634567626803667178, guid: f1573dd14ab364944ad2697fcec1fb6d, type: 3}
@@ -1536,11 +1525,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 104.1735
+      value: 104.173195
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -90.04763
+      value: -90.04699
       objectReference: {fileID: 0}
     - target: {fileID: 1695437925376347613, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2441,17 +2430,6 @@ MonoBehaviour:
   transitionTime: 0.2
   direction: 0
   padding: 10
---- !u!114 &1673748783 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3470142367877705156, guid: b0c9031af085cc647bceb994d56eee5b, type: 3}
-  m_PrefabInstance: {fileID: 3470142368323874563}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1692009677
 GameObject:
   m_ObjectHideFlags: 0
@@ -2586,8 +2564,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   edgeHider: {fileID: 1692009682}
-  enemyImage: {fileID: 1673748783}
-  nameText: {fileID: 116318516}
+  enemyWithNamePrefab: {fileID: 2707477549782915330, guid: 941e5985cfe504061a9b13d8cf31351c, type: 3}
 --- !u!224 &1851098942 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5046069042650733561, guid: 1b9dd48346588bc4998040557ee731f7, type: 3}
@@ -3661,6 +3638,10 @@ PrefabInstance:
     - target: {fileID: 3470142367877705158, guid: b0c9031af085cc647bceb994d56eee5b, type: 3}
       propertyPath: m_Name
       value: EnemyItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 3470142367877705158, guid: b0c9031af085cc647bceb994d56eee5b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b0c9031af085cc647bceb994d56eee5b, type: 3}

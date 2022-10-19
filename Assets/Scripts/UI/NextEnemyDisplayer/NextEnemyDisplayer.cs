@@ -1,14 +1,16 @@
 using Model;
-using TMPro;
+using UI.Common;
 using UI.Common.SimpleAnimation;
-using UnityEngine;
-using UnityEngine.UI;
+
 
 namespace UI.NextEnemyDisplayer{
     public class NextEnemyDisplayer: UIComponent{
         public EdgeHider edgeHider;
-        public Image enemyImage;
-        public TextMeshProUGUI nameText;
+        //public Image enemyImage;
+        //public TextMeshProUGUI nameText;
+        //public EnemyItem enemyItemPrefab;
+        public EnemyWithName enemyWithNamePrefab;
+        private EnemyWithName _shownEnemyItem;
 
         private void Start(){
             GameManager.shared.game.currentStage.OnEnemyChanged += UpdateEnemy;
@@ -18,15 +20,9 @@ namespace UI.NextEnemyDisplayer{
 
         private void UpdateEnemy(Game game, GameModel stage)
         {
-            Debug.Log("Execute UpdateEnemy");
-            Enemy nextEnemy = (stage as Stage)!.NextEnemy;
-            if(nextEnemy == null){
-                nameText.text = "No More";
-                enemyImage.sprite = null;
-                return;
-            }
-            nameText.text = nextEnemy.desc;
-            enemyImage.sprite = Resources.Load<Sprite>(nextEnemy.imgPath);
+            if(_shownEnemyItem != null) Destroy(_shownEnemyItem.gameObject);
+            _shownEnemyItem = Instantiate(enemyWithNamePrefab, transform);
+            _shownEnemyItem.SetEnemy((stage as Stage)?.NextEnemy);
         }
         
 
