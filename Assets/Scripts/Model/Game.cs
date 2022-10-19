@@ -72,6 +72,6 @@ namespace Model{
         public void Restart(){
             OnGameRestart?.Invoke(this);
         }
-
+        
     }
 }

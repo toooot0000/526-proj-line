@@ -9,6 +9,7 @@ namespace Core.DisplayArea.Stage.Enemy{
     public class EnemyView : DamageableView{
         // public RemainingEnemy remaining;
         public IntentionDisplayer intentionDisplayer;
+        public SpriteRenderer sprRenderer;
 
         public override IDamageable Model{
             set{
@@ -21,6 +22,7 @@ namespace Core.DisplayArea.Stage.Enemy{
         public void BindToCurrentEnemy(){
             isDead = false;
             Model = GameManager.shared.game.CurrentEnemy;
+            sprRenderer.sprite = ((Model.Enemy)Model).GetSprite();
             UpdateIntention();
         }
 

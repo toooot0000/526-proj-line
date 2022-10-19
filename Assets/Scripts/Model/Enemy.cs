@@ -44,7 +44,7 @@ namespace Model{
             var spStr = (enemy["special"] as string)!.Split(";");
             var className = spStr.First();
             if(className != "")
-            special = Activator.CreateInstance(Type.GetType($"Model.EnemySpecialAttacks.{className}", true),
+                special = Activator.CreateInstance(Type.GetType($"Model.EnemySpecialAttacks.{className}", true),
                     new object[]{ spStr[1..] }) as
                 SpecialAttackBase;
             defend = (int)enemy["defend"];
@@ -134,6 +134,10 @@ namespace Model{
 
         public void BecomeCurrent(){
             // currentGame.OnTurnChanged += DoAction;
+        }
+        
+        public Sprite GetSprite(){
+            return Resources.Load<Sprite>(imgPath);
         }
     }
 }

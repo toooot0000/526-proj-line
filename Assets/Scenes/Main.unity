@@ -1220,6 +1220,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 960914827}
   transitionTime: 0.2
+--- !u!212 &970730297 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 3553191826918976808, guid: a7f85654bbd2be946af4cb04cb471b9e, type: 3}
+  m_PrefabInstance: {fileID: 1524296156}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &983040710 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6209652568027211243, guid: 5bee9b46f8da97948b03cab4b396acbe, type: 3}
@@ -1616,7 +1621,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 104.17318
+      value: 104.17319
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1996,6 +2001,7 @@ MonoBehaviour:
   damageNumberDisplay: {fileID: 802145626}
   armorDisplayer: {fileID: 1524296161}
   intentionDisplayer: {fileID: 7174772897203891013}
+  sprRenderer: {fileID: 970730297}
 --- !u!114 &1524296166 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5942149464333655685, guid: a7f85654bbd2be946af4cb04cb471b9e, type: 3}
@@ -4681,6 +4687,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 410171576}
     m_Modifications:
+    - target: {fileID: 1621526305531755149, guid: 8fbe69571dfec8c4f82642e28deafc7d, type: 3}
+      propertyPath: displayTime
+      value: 0.01
+      objectReference: {fileID: 0}
     - target: {fileID: 2057461339295924300, guid: 8fbe69571dfec8c4f82642e28deafc7d, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
