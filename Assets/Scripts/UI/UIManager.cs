@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Tutorial;
 using Tutorial.UI;
@@ -113,6 +114,12 @@ namespace UI{
 
         public T GetUIComponent<T>() where T : UIComponent{
             return _uiComponents.Find(b => b.GetType() == typeof(T)) as T;
+        }
+
+        private void Update(){
+            // if (Input.GetKeyUp(KeyCode.A)){
+            //     OpenUI("UISelectStage", new int[]{ 101, 102, 103 });
+            // }
         }
     }
 }
