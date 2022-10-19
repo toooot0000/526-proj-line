@@ -4689,7 +4689,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1621526305531755149, guid: 8fbe69571dfec8c4f82642e28deafc7d, type: 3}
       propertyPath: displayTime
-      value: 0.01
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 2057461339295924300, guid: 8fbe69571dfec8c4f82642e28deafc7d, type: 3}
       propertyPath: m_AnchorMax.x
