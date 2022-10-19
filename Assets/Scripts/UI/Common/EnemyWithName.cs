@@ -11,6 +11,13 @@ namespace UI.Common
         public TextMeshProUGUI nameText;
         public Image enemyImage;
 
+        public bool Enabled{
+            set{
+                
+            }
+            get => enabled;
+        }
+
         public void SetEnemy(int id)
         {
             var enemy = CsvLoader.TryToLoad("Configs/enemies", id);
