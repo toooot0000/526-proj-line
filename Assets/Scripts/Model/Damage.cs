@@ -22,6 +22,7 @@ namespace Model{
         public Type type;
         public IDamageable source;
         public IDamageable target;
+        public int finalDamagePoint = 0;
         public Damage(GameModel parent) : base(parent){ }
     }
 }

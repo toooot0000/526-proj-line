@@ -49,6 +49,7 @@ namespace Model{
 
         public int CurrentHp{
             set{
+                
                 _currentHp = Math.Clamp(value, 0, HpUpLimit);
                 if (value == 0) Die();
             }
@@ -64,10 +65,12 @@ namespace Model{
         }
 
 
-        public void TakeDamage(Damage damage){
+        public void TakeDamage(Damage damage)
+        {
+            damage.finalDamagePoint = Math.Max(damage.totalPoint - Armor, 0);
             CurrentHp -= Math.Max(damage.totalPoint - Armor, 0);
             Armor -= damage.totalPoint;
-            OnBeingAttacked?.Invoke(currentGame, this);
+            OnBeingAttacked?.Invoke(currentGame, damage);
         }
 
         public event ModelEvent OnHitBall;
@@ -76,10 +79,11 @@ namespace Model{
         public event ModelEvent OnBeingAttacked;
         public event ModelEvent OnDie;
         public event ModelEvent OnGearChanged;
+        public event ModelEvent OnGearAdded;
         public event ModelEvent OnInit;
         public event ModelEvent OnCoinChanged;
         public event ModelEvent OnArmorChanged;
-
+        
         public event ModelEvent OnStageChanged;
         public void Init(){
             HpUpLimit = (int)CsvLoader.GetConfig("player_init_hp");
@@ -155,6 +159,7 @@ namespace Model{
         public void AddGear(Gear gear){
             gear.parent = this;
             gears.Add(gear);
+            OnGearAdded?.Invoke(currentGame, gear);
             OnGearChanged?.Invoke(currentGame, this);
         }
         

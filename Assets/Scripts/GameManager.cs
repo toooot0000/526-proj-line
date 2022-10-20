@@ -35,14 +35,18 @@ public class GameManager : MonoBehaviour{
     private bool _isInShop = false;
     private bool _isInEvent = false;
 
+    public event Action OnPlayerAttack;
 
     private void Awake()
     {
         if (shared != null) Destroy(gameObject);
         shared = this;
+        PreInit();
         InitGame();
+        StartCoroutine(AfterInitGame());
         StartCoroutine(CoroutineUtility.Delayed(1, () =>
             UIManager.shared.OpenUI("UIGameStart")));
+        
     }
 
     private void Start(){
@@ -74,14 +78,18 @@ public class GameManager : MonoBehaviour{
     }
 
     private void InitGame(){
-        PreInit();
         game ??= new Game();
         game.CreatePlayer();
     }
 
+    private IEnumerator AfterInitGame()
+    {
+        yield return new WaitForEndOfFrame();
+        EventLogger.Shared.init();//should do this after game is initialized   
+    }
+
     public void GameStart(){
         game.LoadStage((int)CsvLoader.GetConfig("init_stage"));
-        EventLogger.Shared.init();//should do this after game is initialized
         stageManager.PresentStage(game.currentStage);
         StartCoroutine(StartBattleStage());
     }
@@ -201,6 +209,7 @@ public class GameManager : MonoBehaviour{
 
     public void OnPlayerFinishInput(){
         if (game.turn != Game.Turn.Player) return;
+        OnPlayerAttack?.Invoke();
         var currentAction = game.player.GetAttackActionInfo();
         game.player.ClearAllBalls();
         stageManager.ProcessStageActionInfo(currentAction);

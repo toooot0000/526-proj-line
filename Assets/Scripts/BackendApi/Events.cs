@@ -13,7 +13,7 @@ namespace BackendApi{
         public override string URLPath => "logPeopleEnterSuccesses";
     }
     
-    Public class EventGearshows : LoggableEvent
+    public class EventGearShows : LoggableEvent
     {
         public int gearId;
         public override string URLPath => "logGearShows";

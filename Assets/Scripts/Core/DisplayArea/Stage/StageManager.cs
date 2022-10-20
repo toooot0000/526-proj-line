@@ -116,6 +116,7 @@ namespace Core.DisplayArea.Stage{
                     yield return new WaitWhile(() => _pause);
                     yield return CoroutineUtility.Delayed(1f, GameManager.shared.SwitchTurn);
                 } else{
+                    dmg.currentGame.currentStage.Beaten();
                     yield return new WaitWhile(() => _pause);
                     if (!_modelStage.IsLast){
                         if (_modelStage.bonusCoins == -1){

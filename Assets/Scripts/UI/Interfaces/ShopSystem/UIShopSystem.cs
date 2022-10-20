@@ -12,7 +12,7 @@ using Utility.Loader;
 namespace UI.Interfaces.ShopSystem {
     public class UIShopSystem : UIBase{
         private const int UnifiedPrice = 6;
-        private List<Gear> _items;
+        public List<Gear> _items;
         private static Game Game => GameManager.shared.game;
         private CanvasGroup _canvasGroup;
         private bool _inAnimation;

@@ -62,11 +62,15 @@ namespace Model{
             LoadFromConfig(id);
         }
 
+        public void Beaten()
+        {
+            OnStageBeaten?.Invoke(currentGame, this);
+        }
+
         public void ForwardCurrentEnemy(){
             _enemyIndex++;
             if (_enemyIndex == enemies.Length){
                 _enemyIndex = 0;
-                GameManager.shared.Delayed(1, () => { OnStageBeaten?.Invoke(currentGame, this); });
             } else{
                 CurrentEnemy.BecomeCurrent();
                 OnEnemyChanged?.Invoke(currentGame, this);

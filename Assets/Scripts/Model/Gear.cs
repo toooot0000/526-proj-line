@@ -84,6 +84,13 @@ namespace Model{
             return player.hitBalls.Count >= comboNum && player.hitBalls.Any(b => b.parent == this);
         }
 
+        public bool IsUsed()
+        {
+            var player = (parent as Player)!;
+            return (player.hitBalls.Find(b => b.parent == this) != null)
+                   || (player.circledBalls.Find(b => b.parent == this) != null);
+        }
+
         public string ToDescString(){
             List<string> parts = new();
             if (type == GearType.Weapon){
