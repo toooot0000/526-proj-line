@@ -3,6 +3,7 @@ using System.Data;
 using UI;
 using UnityEngine;
 using Utility.Loader;
+using Random = System.Random;
 
 namespace Model{
 
@@ -117,6 +118,15 @@ namespace Model{
                         break;
                     case "GetArtifact":
                         Debug.Log("GetArtifact" + effectValue[i]);
+                        break;
+                    case "Gamble":
+                        Random r = new Random();
+                        int value = r.Next(-10, 10);
+                        GameManager.shared.game.player.Coin += value;
+                        if(value > 0)
+                            result += "You got " + value + " coins\n";
+                        else
+                            result += "You lost " + Math.Abs(value) + " coins\n";
                         break;
                     case "Nothing":
                         result = "Nothing happened";
