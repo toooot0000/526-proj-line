@@ -105,7 +105,7 @@ namespace Model{
                         var player = GameManager.shared.game.player;
                         if (player.gears.Find(g => g.id == effectValue[i]) == null){
                             player.AddGear(new Gear(player, effectValue[i]));
-                            result = "You got a gear: " + player.gears[^1].name;
+                            result = "You got a gear: " + player.gears[^1].name + "\n";
                         }
                         break;
                     case "GetCoin":
