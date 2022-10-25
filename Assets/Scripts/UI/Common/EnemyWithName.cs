@@ -11,6 +11,7 @@ namespace UI.Common
         public TextMeshProUGUI nameText;
         public Image bgFrame;
         public Image enemyImage;
+        public Enemy enemyModel;
 
         public bool Enabled{
             set{
@@ -36,7 +37,7 @@ namespace UI.Common
             enemyImage.enabled = true;
             nameText.text = enemy["name"] as string;
             enemyImage.sprite = Resources.Load<Sprite>(enemy["img_path"] as string);
-
+            enemyModel = new Enemy(GameManager.shared.game,id);
         }
         
         public void SetEnemy(Enemy enemy)
@@ -54,6 +55,12 @@ namespace UI.Common
             enemyImage.enabled = true;
             nameText.text = enemy.name;
             enemyImage.sprite = Resources.Load<Sprite>(enemy.imgPath);
+            enemyModel = enemy;
+        }
+
+        public void ShowDetail()
+        {
+            UIManager.shared.OpenUI("UIDetail", enemyModel);
         }
     }
 
