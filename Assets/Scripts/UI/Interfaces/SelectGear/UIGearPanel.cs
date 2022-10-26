@@ -8,7 +8,7 @@ namespace UI.Interfaces.SelectGear{
 
     public class UIGearPanel : MonoBehaviour{
         public TextMeshProUGUI text;
-        public Image image;
+        public Button icon;
         public Image highLight;
         private CanvasGroup _group;
 
@@ -18,8 +18,8 @@ namespace UI.Interfaces.SelectGear{
         public Gear Model{
             set{
                 _model = value;
-                image.sprite = Resources.Load<Sprite>(value.imgPath);
-                text.text = value.desc;
+                icon.image.sprite = Resources.Load<Sprite>(value.imgPath);
+                text.text = value.name;
             }
             get => _model;
         }
@@ -41,6 +41,11 @@ namespace UI.Interfaces.SelectGear{
             _parent = transform.parent;
         }
 
+        public void ShowGearInfo()
+        {
+            UIManager.shared.OpenUI("UIGearInfo",_model);
+        }
+        
         public event ClickEvent OnClick;
 
         public void Click(){
