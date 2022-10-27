@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using BackendApi;
 using Model;
+using TMPro;
+using UI.Common;
 using UI.Container;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -18,6 +20,7 @@ namespace UI.Interfaces.ShopSystem {
         private bool _inAnimation;
         private UIShopPanel[] _panels;
         private readonly List<int> _soldItems = new();
+        public TextMeshProUGUI coinWithNumber;
 
         private void Start() {
             _items = new List<Gear>();
@@ -84,6 +87,7 @@ namespace UI.Interfaces.ShopSystem {
                 curPanelInd++;
             }
             for (; curPanelInd < _panels.Length; curPanelInd++) _panels[curPanelInd].Show = false;
+            coinWithNumber.text = $"{GameManager.shared.game.player.Coin.ToString()}";
         }
 
         public void ConfirmButtonEvent() {
@@ -106,6 +110,7 @@ namespace UI.Interfaces.ShopSystem {
             foreach (var uiShopPanel in _panels){
                 uiShopPanel.UpdatePriceColor();
             }
+            coinWithNumber.text = $"{GameManager.shared.game.player.Coin.ToString()}";
         }
     }
 }
