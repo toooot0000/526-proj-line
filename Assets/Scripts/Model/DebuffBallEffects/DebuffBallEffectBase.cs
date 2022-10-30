@@ -4,6 +4,6 @@ namespace Model.DebuffBallEffects{
         public DebuffBallEffectBase(string[] args){
             this.args = args;
         }
-        public abstract void Execute(StageActionInfoPlayerAttack attackInfo);
+        public abstract void Execute(StageActionInfoPlayerAction actionInfo);
     }
 }

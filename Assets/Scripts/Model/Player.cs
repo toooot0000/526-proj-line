@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BackendApi;
+using Model.Buff;
 using Model.GearEffects;
 using UI;
 using Utility.Loader;
@@ -19,13 +20,14 @@ namespace Model{
         public readonly List<Ball> hitBalls = new();
         public readonly List<Ball> circledBalls = new();
         public readonly List<Ball> hitDebuffBalls = new();
-        public readonly List<Ball> activeDebuffBalls = new();
         
         private int _armor;
 
         private int _coin;
 
         private int _currentHp;
+
+        public readonly List<Buff.Buff> buffs = new();
 
 
         public Player(GameModel parent) : base(parent){
@@ -39,9 +41,6 @@ namespace Model{
             }
             get => _coin;
         }
-
-        [Obsolete("Use CurrentGears!")]
-        public Gear CurrentGear => gears.Count > 0 ? gears[^1] : null;
 
         public Gear[] CurrentGears => gears.ToArray();
 
@@ -143,8 +142,12 @@ namespace Model{
             };
         }
 
-        public StageActionInfoPlayerAttack GetAttackActionInfo(){
-            return new StageActionInfoPlayerAttack(this, GetTriggeredEffects()){
+        public StageActionInfoPlayerAction GetAttackActionInfo(){
+            return new StageActionInfoPlayerAction(
+                this, 
+                GetTriggeredEffects(),
+                GetBuffEffectsOnAttack()
+                ){
                 damage = GetDamage(),
                 defend = GetTotalDefendPoint(),
                 hitBalls = hitBalls.ToArray(),
@@ -205,13 +208,32 @@ namespace Model{
             hitBalls.Clear();
             circledBalls.Clear();
         }
-
-        public void GainDebuffBall(Ball ball){
-            activeDebuffBalls.Add(ball);
-        }
         
         public Gear FindGearOfId(int id){
             return gears.Find(g => g.id == id);
+        }
+        
+        public void AddBuffLayer<TBuff>(int layer) where TBuff : Buff.Buff{
+            var buff = Buff.Buff.GetBuffOfTypeFrom<TBuff>(this);
+            if (buff == null){
+                buffs.Add(Buff.Buff.MakeBuff<TBuff>(this, layer));
+            } else{
+                buff.AddLayer(layer);
+            }
+        }
+
+        public void RemoveBUffLayer<TBuff>(int layer) where TBuff : Buff.Buff{
+            var buff = Buff.Buff.GetBuffOfTypeFrom<TBuff>(this);
+            buff?.RemoveLayer(layer);
+        }
+
+        public Buff.Buff[] GetAllBuffs(){
+            return buffs.ToArray();
+        }
+
+        private IBuffEffect<StageActionInfoPlayerAction>[] GetBuffEffectsOnAttack(){
+            var triggers = Buff.Buff.GetBuffOfTriggerFrom<IBuffTriggerOnGetPlayerActionInfo>(this);
+            return triggers.Select(t => t.OnGetPlayerActionInfo()).ToArray();
         }
     }
 }

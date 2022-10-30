@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Model.EnemySpecialAttacks;
@@ -27,6 +28,7 @@ namespace Model{
         private int _currentHp;
         private int _nextActionInd;
         public SpecialAttackBase special;
+        public readonly List<Buff.Buff> buffs = new();
 
         public Enemy(GameModel parent) : base(parent){
             CurrentHp = HpUpLimit;
@@ -77,10 +79,7 @@ namespace Model{
             Armor = Math.Max(Armor - damage.totalPoint, 0);
             OnBeingAttacked?.Invoke(currentGame, this);
         }
-
-        public event ModelEvent OnAttack;
-        public event ModelEvent OnDefend;
-        public event ModelEvent OnSpecial;
+        
         public event ModelEvent OnBeingAttacked;
         public event ModelEvent OnDie;
         public event ModelEvent OnArmorChanged;
@@ -140,6 +139,25 @@ namespace Model{
         
         public Sprite GetSprite(){
             return Resources.Load<Sprite>(imgPath);
+        }
+        
+
+        public void AddBuffLayer<TBuff>(int layer) where TBuff : Buff.Buff{
+            var buff = Buff.Buff.GetBuffOfTypeFrom<TBuff>(this);
+            if (buff == null){
+                buffs.Add(Buff.Buff.MakeBuff<TBuff>(this, layer));
+            } else{
+                buff.AddLayer(layer);
+            }
+        }
+
+        public void RemoveBUffLayer<TBuff>(int layer) where TBuff : Buff.Buff{
+            var buff = Buff.Buff.GetBuffOfTypeFrom<TBuff>(this);
+            buff?.RemoveLayer(layer);
+        }
+
+        public Buff.Buff[] GetAllBuffs(){
+            return buffs.ToArray();
         }
     }
 }

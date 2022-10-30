@@ -1,7 +1,8 @@
 ﻿using System;
+using Model.Buff;
 
 namespace Model{
-    public interface IDamageable{
+    public interface IDamageable: IBuffHolder{
         public int CurrentHp{ get; set; }
         public int HpUpLimit{ get; set; }
         public int Armor{ get; set; }

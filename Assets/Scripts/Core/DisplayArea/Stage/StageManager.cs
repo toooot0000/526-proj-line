@@ -44,7 +44,7 @@ namespace Core.DisplayArea.Stage{
             playerView.stageActionInfo = info;
             enemyView.stageActionInfo = info;
             var procedure = info switch{
-                StageActionInfoPlayerAttack attack => ProcessPlayerAttack(attack),
+                StageActionInfoPlayerAction attack => ProcessPlayerAttack(attack),
                 StageActionInfoEnemyAttack attack => ProcessEnemyAttack(attack),
                 StageActionInfoEnemyDefend defend => ProcessEnemyDefend(defend),
                 StageActionInfoEnemySpecial special => ProcessEnemySpecialAttack(special),
@@ -53,7 +53,7 @@ namespace Core.DisplayArea.Stage{
             StartCoroutine(procedure);
         }
 
-        private IEnumerator ProcessPlayerAttack(StageActionInfoPlayerAttack info){
+        private IEnumerator ProcessPlayerAttack(StageActionInfoPlayerAction info){
             yield return new WaitWhile(() => _pause);
             info.Execute();
             ballManager.FlyAllBalls(this, 0.5f);
