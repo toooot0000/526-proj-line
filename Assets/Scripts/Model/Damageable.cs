@@ -20,31 +20,39 @@ namespace Model{
             }
         }
 
-        public void RemoveBUffLayer<TBuff>(int layer) where TBuff : Buff.Buff{
+        public void RemoveBuffLayer<TBuff>(int layer) where TBuff : Buff.Buff{
             var buff = Buff.Buff.GetBuffOfTypeFrom<TBuff>(this);
-            buff?.RemoveLayer(layer);
+            if (buff == null) return;
+            buff.RemoveLayer(layer);
+            if (buff.layer == 0){
+                _buffs.Remove(buff);
+            }
         }
 
-        public IEnumerable<Buff.Buff> GetAllBuffs() => _buffs;
+        public IEnumerable<Buff.Buff> GetAllBuffs() => _buffs.ToArray();
 
         private IEnumerable<IBuffEffect<Damageable>> GetOnTurnBeginBuffEffect(){
             var triggers = Buff.Buff.GetBuffOfTriggerFrom<IBuffTriggerOnTurnBegin>(this);
-            return triggers.Select(t => (IBuffEffect<Damageable>)t.OnTurnBegin());
+            return triggers?.Select(t => t.OnTurnBegin());
         }
 
         private IEnumerable<IBuffEffect<Damageable>> GetOnTurnEndBuffEffect(){
             var triggers = Buff.Buff.GetBuffOfTriggerFrom<IBuffTriggerOnTurnEnd>(this);
-            return triggers.Select(t => (IBuffEffect<Damageable>)t.OnTurnEnd());
+            return triggers?.Select(t => t.OnTurnEnd());
         }
 
         public void ExecuteOnTurnEndBuffEffect(){
-            foreach (var buffEffect in GetOnTurnEndBuffEffect()){
+            var effects = GetOnTurnEndBuffEffect();
+            if (effects == null) return;
+            foreach (var buffEffect in effects){
                 buffEffect.Execute(this);
             }
         }
 
         public void ExecuteOnTurnBeginBuffEffect(){
-            foreach (var buffEffect in GetOnTurnBeginBuffEffect()){
+            var effects = GetOnTurnBeginBuffEffect();
+            if (effects == null) return;
+            foreach (var buffEffect in effects){
                 buffEffect.Execute(this);
             }
         }

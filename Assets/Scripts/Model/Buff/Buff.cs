@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UnityEngine.Assertions;
 using Utility.Loader;
 
 namespace Model.Buff{
@@ -12,7 +13,11 @@ namespace Model.Buff{
 
     public interface IBuffHolder: IBuffModifiable{
         void AddBuffLayer<TBuff>(int layer) where TBuff: Buff;
-        void RemoveBUffLayer<TBuff>(int layer) where TBuff : Buff;
+        void RemoveBuffLayer<TBuff>(int layer) where TBuff : Buff;
+        /// <summary>
+        /// Get a stream of all buffs;
+        /// </summary>
+        /// <returns>Null if nothing!</returns>
         IEnumerable<Buff> GetAllBuffs();
     }
 
@@ -22,6 +27,7 @@ namespace Model.Buff{
         public string name;
         public string desc;
         public int layer;
+        public readonly IBuffHolder holder;
 
         public event ModelEvent OnBuffLayerRemoved;
 
@@ -30,11 +36,20 @@ namespace Model.Buff{
         public event ModelEvent OnBuffCanceled; // equal to remove layer to 0;
 
         public static IEnumerable<T> GetBuffOfTriggerFrom<T>(IBuffHolder buffable) where T : IBuffTrigger{
-            return buffable.GetAllBuffs()?.Where(b => b is T) as IEnumerable<T>;
+            var allBuffs = buffable.GetAllBuffs();
+            if(allBuffs == null) yield break;
+            foreach (var buff in allBuffs){
+                if(buff is not T typed) continue;
+                yield return typed;
+            }
         }
 
         public static T GetBuffOfTypeFrom<T>(IBuffHolder buffHolder) where T : Buff{
-            return (T)buffHolder.GetAllBuffs().First(b => b is T);
+            try{
+                return (T)buffHolder.GetAllBuffs()?.First(b => b is T);
+            } catch{
+                return null;
+            }
         }
 
         public static T MakeBuff<T>(GameModel parent, int layer) where T : Buff{
@@ -71,10 +86,8 @@ namespace Model.Buff{
             }
         }
 
-        protected Buff(GameModel parent) : base(parent){ }
-
         protected Buff(GameModel parent, int layer) : base(parent){
-             
+            holder = parent as IBuffHolder;
             this.layer = layer;
         }
 

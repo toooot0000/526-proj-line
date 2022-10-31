@@ -185,7 +185,7 @@ namespace Model{
         
         private IBuffEffect<StageActionPlayerAction>[] GetOnAttackBuffEffects(){
             var triggers = Buff.Buff.GetBuffOfTriggerFrom<IBuffTriggerOnGetPlayerActionInfo>(this);
-            return triggers.Select(t => t.OnGetPlayerActionInfo()).ToArray();
+            return triggers?.Select(t => t.OnGetPlayerActionInfo()).ToArray();
         }
         
         public Ball[] GetAllBalls(){

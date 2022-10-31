@@ -57,7 +57,7 @@ namespace Model{
             addSubParam += point;
         }
 
-        public void Execute(){
+        public void Resolve(){
             target.TakeDamage(this);
         }
     }

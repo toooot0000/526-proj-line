@@ -3,8 +3,7 @@ namespace Model.Buff.Buffs{
     public class BuffWeak: Buff, IBuffTriggerOnTurnEnd, IBuffTriggerOnGetPlayerActionInfo, IBuffTriggerOnGetEnemyActionInfo{
         private class TurnEndEffect: IBuffEffect<Damageable>{
             public void Execute(Damageable damageable){
-                var buff = Buff.GetBuffOfTypeFrom<BuffWeak>(damageable);
-                buff?.RemoveLayer(1);
+                damageable.RemoveBuffLayer<BuffWeak>(1);
             }
         }
 

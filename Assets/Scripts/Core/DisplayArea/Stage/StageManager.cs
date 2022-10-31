@@ -152,11 +152,15 @@ namespace Core.DisplayArea.Stage{
             GameManager.shared.touchTracker.isAcceptingInput = true;
             GameManager.shared.ballManager.SpawnBalls();
             yield return OnPlayerTurnStartTriggerTutorial();
+            if(_pause) yield return new WaitWhile(() => _pause);
+            playerView.Model.ExecuteOnTurnBeginBuffEffect();
         }
 
         private IEnumerator StartToEnemyTurn(){
             var enemyAction = GameManager.shared.game.CurrentEnemy.GetCurrentStageAction();
             yield return GameManager.shared.turnSignDisplayer.Show(Game.Turn.Enemy);
+            enemyView.Model.ExecuteOnTurnBeginBuffEffect();
+            if(_pause) yield return new WaitWhile(() => _pause);
             if (GameManager.shared.game.currentStage.id == 0)
                 switch (GameManager.shared.CurrentTurnNum){
                     case 1:
@@ -166,7 +170,7 @@ namespace Core.DisplayArea.Stage{
             yield return ProcessEnemyAction(enemyAction);
             if (playerView.isDead) GameManager.shared.GameEnd();
             if(_pause) yield return new WaitWhile(() => _pause);
-            
+            enemyView.Model.ExecuteOnTurnEndBuffEffect();
             if(_pause) yield return new WaitWhile(() => _pause);
             SwitchTurn();
             if(_pause) yield return new WaitWhile(() => _pause);
@@ -188,7 +192,8 @@ namespace Core.DisplayArea.Stage{
                     yield break;
                 }
                 yield return MoveToNextEnemy();
-            } 
+            }
+            playerView.Model.ExecuteOnTurnEndBuffEffect();
             yield return new WaitForSeconds(1f);
             SwitchTurn();
         }

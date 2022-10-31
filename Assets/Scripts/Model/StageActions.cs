@@ -15,10 +15,10 @@ namespace Model{
             extraDamages.Add(extraDamage);
         }
 
-        public void ComputeAllDamages(){
-            damage?.Execute();
+        public void ResolveAllDamages(){
+            damage?.Resolve();
             foreach (var extraDamage in extraDamages){
-                extraDamage.Execute();
+                extraDamage.Resolve();
             }
         }
     }
@@ -38,12 +38,12 @@ namespace Model{
         public override void Execute(){
             ExecuteSpecials();
             currentGame.player.Armor += defend;
-            ComputeAllDamages();
+            ResolveAllDamages();
         }
         
         public void ExecuteSpecials(){
-            foreach (var effect in effects) effect.Execute(this);
-            foreach (var effect in buffEffects) effect.Execute(this);
+            foreach (var effect in effects ?? Array.Empty<GearEffectBase>()) effect.Execute(this);
+            foreach (var effect in buffEffects ?? Array.Empty<IBuffEffect<StageActionPlayerAction>>()) effect.Execute(this);
         }
     }
 
@@ -66,7 +66,7 @@ namespace Model{
         public override void Execute(){
             ExecuteSpecials();
             currentGame.CurrentEnemy.Armor += defend;
-            ComputeAllDamages();
+            ResolveAllDamages();
         }
 
         public void ExecuteSpecials(){
