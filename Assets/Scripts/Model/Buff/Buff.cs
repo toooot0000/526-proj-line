@@ -13,7 +13,7 @@ namespace Model.Buff{
     public interface IBuffHolder: IBuffModifiable{
         void AddBuffLayer<TBuff>(int layer) where TBuff: Buff;
         void RemoveBUffLayer<TBuff>(int layer) where TBuff : Buff;
-        Buff[] GetAllBuffs();
+        IEnumerable<Buff> GetAllBuffs();
     }
 
 
@@ -29,19 +29,12 @@ namespace Model.Buff{
 
         public event ModelEvent OnBuffCanceled; // equal to remove layer to 0;
 
-        public static T[] GetBuffOfTriggerFrom<T>(IBuffHolder buffable) where T : IBuffTrigger{
-            List<T> ret = new();
-            foreach (var buff in buffable.GetAllBuffs()){
-                if(buff is not T trigger) continue;
-                ret.Add(trigger);
-            }
-            return ret.ToArray();
+        public static IEnumerable<T> GetBuffOfTriggerFrom<T>(IBuffHolder buffable) where T : IBuffTrigger{
+            return buffable.GetAllBuffs()?.Where(b => b is T) as IEnumerable<T>;
         }
 
         public static T GetBuffOfTypeFrom<T>(IBuffHolder buffHolder) where T : Buff{
-            var buffs = buffHolder.GetAllBuffs();
-            if (buffs.Length == 0) return null;
-            return (T)buffs.First(b => b is T);
+            return (T)buffHolder.GetAllBuffs().First(b => b is T);
         }
 
         public static T MakeBuff<T>(GameModel parent, int layer) where T : Buff{
@@ -104,12 +97,12 @@ namespace Model.Buff{
         /// <summary>
         /// Call in children's constructors
         /// </summary>
-        protected void SetUp(){
-            id = NameToId[GetBuffName()];
-            var info = CsvLoader.TryToLoad("Configs/buffs", id);
+        protected static void SetUp(Buff buff){
+            buff.id = NameToId[buff.GetBuffName()];
+            var info = CsvLoader.TryToLoad("Configs/buffs", buff.id);
             if (info == null) return;
-            name = info["name"] as string;
-            desc = info["desc"] as string;
+            buff.name = info["name"] as string;
+            buff.desc = info["desc"] as string;
         }
 
         public override string ToString(){

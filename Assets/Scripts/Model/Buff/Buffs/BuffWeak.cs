@@ -1,27 +1,28 @@
 namespace Model.Buff.Buffs{
 
     public class BuffWeak: Buff, IBuffTriggerOnTurnEnd, IBuffTriggerOnGetPlayerActionInfo, IBuffTriggerOnGetEnemyActionInfo{
-        class TurnEndEffect: IBuffEffect<IDamageable>{
-            public void Execute(IDamageable damageable){
+        private class TurnEndEffect: IBuffEffect<Damageable>{
+            public void Execute(Damageable damageable){
                 var buff = Buff.GetBuffOfTypeFrom<BuffWeak>(damageable);
                 buff?.RemoveLayer(1);
             }
         }
-        class PlayerActionEffect : IBuffEffect<StageActionPlayerAction>{
+
+        private class PlayerActionEffect : IBuffEffect<StageActionPlayerAction>{
             public void Execute(StageActionPlayerAction buffable){
                 buffable.damage.initPoint /= 2;
             }
         }
 
-        class EnemyActionEffect : IBuffEffect<StageActionEnemyAction>{
+        private class EnemyActionEffect : IBuffEffect<StageActionEnemyAction>{
             public void Execute(StageActionEnemyAction buffable){
                 buffable.damage.initPoint /= 2;
             }
         }
 
-        public BuffWeak(GameModel parent, int layer) : base(parent, layer){ SetUp(); }
+        public BuffWeak(GameModel parent, int layer) : base(parent, layer){ SetUp(this); }
 
-        public IBuffEffect<IDamageable> OnTurnEnd(){
+        public IBuffEffect<Damageable> OnTurnEnd(){
             return new TurnEndEffect();
         }
 
@@ -33,6 +34,6 @@ namespace Model.Buff.Buffs{
             return new EnemyActionEffect();
         }
 
-        protected override string GetBuffName() => "weak";
+        protected sealed override string GetBuffName() => "weak";
     }
 }

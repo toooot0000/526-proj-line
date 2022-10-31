@@ -1,14 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Model.Buff;
 using UnityEngine;
 
 namespace Model{
-    public interface IDamageable: IBuffHolder{
-        public int CurrentHp{ get; set; }
-        public int HpUpLimit{ get; set; }
-        public int Armor{ get; set; }
-        public void TakeDamage(Damage damage);
-    }
+    // public abstract class Damageable : IBuffHolder{
+    //     public abstract int CurrentHp{ get; set; }
+    //     public abstract int HpUpLimit{ get; set; }
+    //     public abstract int Armor{ get; set; }
+    //     public abstract void TakeDamage(Damage damage);
+    //     public abstract void AddBuffLayer<TBuff>(int layer) where TBuff : Buff.Buff;
+    //     public abstract Buff.Buff[] GetAllBuffs();
+    //     public abstract void RemoveBUffLayer<TBuff>(int layer) where TBuff : Buff.Buff;
+    // }
+
 
     [Serializable]
     public class Damage : GameModel{
@@ -23,11 +29,15 @@ namespace Model{
         public bool isPenetrate = false; 
         
         public Type type;
-        public IDamageable source;
-        public IDamageable target;
+        public Damageable source;
+        public Damageable target;
         public int finalDamagePoint = 0;
 
-        public Damage(GameModel parent, Type type, int point, IDamageable target): base(parent){
+        public static Damage Default<T>(T target) where T: Damageable{
+            return new(null, Type.Physics, 0, target);
+        }
+
+        public Damage(GameModel parent, Type type, int point, Damageable target): base(parent){
             this.type = type;
             this.initPoint = point;
             this.target = target;

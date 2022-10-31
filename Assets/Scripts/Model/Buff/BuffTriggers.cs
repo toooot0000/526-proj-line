@@ -6,11 +6,11 @@ namespace Model.Buff{
     }
 
     public interface IBuffTriggerOnTurnBegin : IBuffTrigger {
-        IBuffEffect<IDamageable> OnTurnBegin();
+        IBuffEffect<Damageable> OnTurnBegin();
     }
 
     public interface IBuffTriggerOnTurnEnd : IBuffTrigger {
-        IBuffEffect<IDamageable> OnTurnEnd();
+        IBuffEffect<Damageable> OnTurnEnd();
     }
 
     public interface IBuffTriggerOnBallSliced<in T, in TBall>: IBuffTrigger 
@@ -40,5 +40,9 @@ namespace Model.Buff{
 
     public interface IBuffTriggerOnTakeDamage : IBuffTrigger{
         IBuffEffect<IBuffModifiable> OnTakeDamage();
+    }
+
+    public interface IBuffTriggerOnApplyToDamageable : IBuffTrigger{
+        IBuffEffect<Damageable> OnApply();
     }
 }

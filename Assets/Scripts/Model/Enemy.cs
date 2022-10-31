@@ -16,7 +16,7 @@ namespace Model{
     }
 
     [Serializable]
-    public class Enemy : GameModel, IDamageable{
+    public class Enemy : Damageable{
         public int attack = 1;
         public int id;
         public string name;
@@ -58,9 +58,9 @@ namespace Model{
         }
 
         public EnemyIntention CurrentIntention => intentions[_nextActionInd];
-        public int HpUpLimit{ set; get; }
+        public sealed override int HpUpLimit{ set; get; }
 
-        public int CurrentHp{
+        public sealed override int CurrentHp{
             set{
                 _currentHp = value;
                 if (value <= 0) Die();
@@ -68,7 +68,7 @@ namespace Model{
             get => _currentHp;
         }
 
-        public int Armor{
+        public override int Armor{
             set{
                 _armor = Math.Max(value, 0);
                 OnArmorChanged?.Invoke(currentGame, this);
@@ -76,7 +76,7 @@ namespace Model{
             get => _armor;
         }
 
-        public void TakeDamage(Damage damage){
+        public override void TakeDamage(Damage damage){
             var finalPoint = damage.GetFinalPoint();
             CurrentHp -= Math.Max(finalPoint - Armor, 0);
             Armor = Math.Max(Armor - finalPoint, 0);
@@ -107,9 +107,12 @@ namespace Model{
         }
 
         private StageActionEnemySpecial GetEnemySpecialInfo(){
-            return new StageActionEnemySpecial(this){
+            var ret = new StageActionEnemySpecial(this){
+                damage = Damage.Default(currentGame.player),
                 special = special
             };
+            ret.damage.source = this;
+            return ret;
         }
 
         private void ForwardIntention(){
@@ -139,25 +142,6 @@ namespace Model{
         
         public Sprite GetSprite(){
             return Resources.Load<Sprite>(imgPath);
-        }
-        
-
-        public void AddBuffLayer<TBuff>(int layer) where TBuff : Buff.Buff{
-            var buff = Buff.Buff.GetBuffOfTypeFrom<TBuff>(this);
-            if (buff == null){
-                buffs.Add(Buff.Buff.MakeBuff<TBuff>(this, layer));
-            } else{
-                buff.AddLayer(layer);
-            }
-        }
-
-        public void RemoveBUffLayer<TBuff>(int layer) where TBuff : Buff.Buff{
-            var buff = Buff.Buff.GetBuffOfTypeFrom<TBuff>(this);
-            buff?.RemoveLayer(layer);
-        }
-
-        public Buff.Buff[] GetAllBuffs(){
-            return buffs.ToArray();
         }
     }
 }

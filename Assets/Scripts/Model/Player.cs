@@ -12,7 +12,7 @@ using Utility.Extensions;
 
 namespace Model{
     [Serializable]
-    public class Player : GameModel, IDamageable{
+    public class Player : Damageable{
         public List<Gear> gears;
         public int gearUpLimit;
         public int energy;
@@ -45,9 +45,9 @@ namespace Model{
 
         public Gear[] CurrentGears => gears.ToArray();
 
-        public int HpUpLimit{ set; get; }
+        public override int HpUpLimit{ set; get; }
 
-        public int CurrentHp{
+        public override int CurrentHp{
             set{
                 
                 _currentHp = Math.Clamp(value, 0, HpUpLimit);
@@ -56,7 +56,7 @@ namespace Model{
             get => _currentHp;
         }
 
-        public int Armor{
+        public override int Armor{
             set{
                 _armor = Math.Max(value, 0);
                 OnArmorChanged?.Invoke(currentGame, this);
@@ -65,7 +65,7 @@ namespace Model{
         }
 
 
-        public void TakeDamage(Damage damage){
+        public override void TakeDamage(Damage damage){
             var finalPoint = damage.GetFinalPoint();
             damage.finalDamagePoint = Math.Max(finalPoint - Armor, 0);
             CurrentHp -= Math.Max(finalPoint - Armor, 0);
@@ -84,7 +84,6 @@ namespace Model{
         public event ModelEvent OnCoinChanged;
         public event ModelEvent OnArmorChanged;
         
-        public event ModelEvent OnStageChanged;
         public void Init(){
             HpUpLimit = (int)CsvLoader.GetConfig("player_init_hp");
             Coin = (int)CsvLoader.GetConfig("player_init_coin");
@@ -184,24 +183,6 @@ namespace Model{
             return gears.Find(g => g.id == id);
         }
         
-        public void AddBuffLayer<TBuff>(int layer) where TBuff : Buff.Buff{
-            var buff = Buff.Buff.GetBuffOfTypeFrom<TBuff>(this);
-            if (buff == null){
-                buffs.Add(Buff.Buff.MakeBuff<TBuff>(this, layer));
-            } else{
-                buff.AddLayer(layer);
-            }
-        }
-
-        public void RemoveBUffLayer<TBuff>(int layer) where TBuff : Buff.Buff{
-            var buff = Buff.Buff.GetBuffOfTypeFrom<TBuff>(this);
-            buff?.RemoveLayer(layer);
-        }
-
-        public Buff.Buff[] GetAllBuffs(){
-            return buffs.ToArray();
-        }
-
         private IBuffEffect<StageActionPlayerAction>[] GetOnAttackBuffEffects(){
             var triggers = Buff.Buff.GetBuffOfTriggerFrom<IBuffTriggerOnGetPlayerActionInfo>(this);
             return triggers.Select(t => t.OnGetPlayerActionInfo()).ToArray();
@@ -218,16 +199,6 @@ namespace Model{
             var ret = new List<Ball>();
             gears.ForEach(g => ret.AddRange(g.GetBalls()));
             return ret.ToArray();
-        }
-
-        public IBuffEffect<Player>[] GetOnTurnBeginBuffEffect(){
-            var triggers = Buff.Buff.GetBuffOfTriggerFrom<IBuffTriggerOnTurnBegin>(this);
-            return triggers.Select(t => (IBuffEffect<Player>)t.OnTurnBegin()).ToArray();
-        }
-
-        public IBuffEffect<Player>[] GetOnTurnEndBuffEffect(){
-            var triggers = Buff.Buff.GetBuffOfTriggerFrom<IBuffTriggerOnTurnEnd>(this);
-            return triggers.Select(t => (IBuffEffect<Player>)t.OnTurnEnd()).ToArray();
         }
     }
 }

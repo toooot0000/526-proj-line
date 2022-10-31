@@ -16,7 +16,7 @@ namespace Model{
         }
 
         public void ComputeAllDamages(){
-            damage.Execute();
+            damage?.Execute();
             foreach (var extraDamage in extraDamages){
                 extraDamage.Execute();
             }

@@ -33,6 +33,7 @@ namespace Model{
         public Game(GameModel parent = null) : base(parent){
             currentGame = this;
             currentStage = new Stage(this);
+            CreatePlayer();
         }
         
         public Ball[] GetAllSkillBalls(){
@@ -53,7 +54,7 @@ namespace Model{
             OnTurnChanged?.Invoke(this);
         }
 
-        public void CreatePlayer(){
+        private void CreatePlayer(){
             player = new Player(this);
             OnPlayerInit?.Invoke(this);
         }
@@ -67,8 +68,12 @@ namespace Model{
         }
 
         public void Restart(){
+            Reset();
             OnGameRestart?.Invoke(this);
         }
-        
+
+        public void Reset(){
+            CreatePlayer();
+        }
     }
 }

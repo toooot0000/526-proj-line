@@ -9,11 +9,6 @@ using Model;
 using Model.Buff;
 using Model.Buff.Buffs;
 using Tutorial;
-using Tutorial.Tutorials.BasicConcept;
-using Tutorial.Tutorials.Charge;
-using Tutorial.Tutorials.Combo;
-using Tutorial.Tutorials.EnemyIntention;
-using Tutorial.Tutorials.Stage1Soft;
 using UI;
 using UI.Interfaces.ShopSystem;
 using UI.Interfaces.SpecialEvent;
@@ -37,7 +32,7 @@ public class GameManager : MonoBehaviour{
     private bool _isInShop = false;
     private bool _isInEvent = false;
 
-    public event Action OnPlayerAttack;
+    public event Action OnPlayerAttack; // Used by EventLogger
 
     private void Awake()
     {
@@ -45,16 +40,10 @@ public class GameManager : MonoBehaviour{
         shared = this;
         PreInit();
         InitGame();
-        StartCoroutine(AfterInitGame());
-        StartCoroutine(CoroutineUtility.Delayed(1, () =>
-            UIManager.shared.OpenUI("UIGameStart")));
-        
     }
     
-    private void Start(){
+    private IEnumerator Start(){
         Application.targetFrameRate = 120;
-        
-        
         UIManager.shared.OnCloseUI += ui => {
             if (ui is not UIShopSystem shop) return;
             _isInShop = false;
@@ -64,7 +53,8 @@ public class GameManager : MonoBehaviour{
             if (ui is not UIResult) return;
             _isInEvent = false;
         };
-
+        UIManager.shared.OpenUI("UIGameStart");
+        yield return BeforeGameStart();
     }
 
     private void Update(){
@@ -86,10 +76,9 @@ public class GameManager : MonoBehaviour{
 
     private void InitGame(){
         game ??= new Game();
-        game.CreatePlayer();
     }
 
-    private IEnumerator AfterInitGame()
+    private IEnumerator BeforeGameStart()
     {
         yield return new WaitForEndOfFrame();
         EventLogger.Shared.init(); //should do this after game is initialized   
@@ -101,6 +90,7 @@ public class GameManager : MonoBehaviour{
 
     public void GameComplete(){
         game.Complete();
+        UIManager.shared.OpenUI("UIGameComplete");
     }
 
     public void GameEnd(){
@@ -110,8 +100,7 @@ public class GameManager : MonoBehaviour{
 
     public void GameRestart(){
         game.Restart();
-        game.CreatePlayer();
-        game.LoadStage((int)CsvLoader.GetConfig("init_stage"));
+        GotoStage((int)CsvLoader.GetConfig("init_stage"));
     }
 
     private void PreInit(){
@@ -135,7 +124,6 @@ public class GameManager : MonoBehaviour{
             StageType.Event => StartEventStage(),
             _ => throw new ArgumentOutOfRangeException()
         });
-
     }
 
     private IEnumerator StartShopStage(){
@@ -152,20 +140,10 @@ public class GameManager : MonoBehaviour{
         UIManager.shared.OpenUI("UISelectStage", game.currentStage.nextStageChoice);
     }
 
-    public void Complete(){
-        game.Complete();
-    }
-
-    public void Restart(){
-        game.Restart();
-    }
 
     public void OnPlayerFinishInput(){
         if (game.turn != Game.Turn.Player) return;
         OnPlayerAttack?.Invoke();
-        var currentAction = game.player.GetAction();
-        game.player.ClearAllBalls();
-        stageManager.ProcessStageAction(currentAction);
+        StartCoroutine(stageManager.StartPlayerAction());
     }
-
 }

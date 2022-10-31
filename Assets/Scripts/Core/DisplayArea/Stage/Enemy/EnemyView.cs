@@ -13,7 +13,7 @@ namespace Core.DisplayArea.Stage.Enemy{
         public SpriteRenderer sprRenderer;
         public TextMeshProUGUI enemyName;
 
-        public override IDamageable Model{
+        public override Damageable Model{
             set{
                 base.Model = value;
                 // remaining.Number = GameManager.shared.game.currentStage.RemainingEnemyNumber;
@@ -102,7 +102,6 @@ namespace Core.DisplayArea.Stage.Enemy{
         }
 
         public IEnumerator TakeDamage(){
-            var point = stageAction.damage.initPoint;
             damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
             CurrentHp = Model.CurrentHp;
             armorDisplayer.Number = Model.Armor;
