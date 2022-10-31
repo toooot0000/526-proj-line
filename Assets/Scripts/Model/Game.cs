@@ -35,12 +35,8 @@ namespace Model{
             currentStage = new Stage(this);
         }
         
-        public List<Ball> GetAllSkillBalls(){
-            var ret = new List<Ball>();
-            foreach (var item in player.CurrentGears)
-                for (var i = 0; i < item.ballNum; i++)
-                    ret.Add(item.ball);
-            return ret;
+        public Ball[] GetAllSkillBalls(){
+            return player.GetAllBalls();
         }
 
         public void SwitchTurn(){

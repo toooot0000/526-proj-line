@@ -39,7 +39,9 @@ namespace Model.Buff{
         }
 
         public static T GetBuffOfTypeFrom<T>(IBuffHolder buffHolder) where T : Buff{
-            return buffHolder.GetAllBuffs().First(b => b is T) as T;
+            var buffs = buffHolder.GetAllBuffs();
+            if (buffs.Length == 0) return null;
+            return (T)buffs.First(b => b is T);
         }
 
         public static T MakeBuff<T>(GameModel parent, int layer) where T : Buff{
@@ -47,6 +49,14 @@ namespace Model.Buff{
                 new object[]{
                     parent, layer
                 }) as T;
+        }
+
+        public static string BuffsToString(IBuffHolder buffHolder){
+            string ret = "";
+            foreach (var buff in buffHolder.GetAllBuffs()){
+                ret = $"{ret}, {buff}";
+            }
+            return $"[{ret}]";
         }
 
         private static Dictionary<string, int> _nameToId = null;
@@ -90,7 +100,10 @@ namespace Model.Buff{
         }
 
         protected abstract string GetBuffName();
-
+        
+        /// <summary>
+        /// Call in children's constructors
+        /// </summary>
         protected void SetUp(){
             id = NameToId[GetBuffName()];
             var info = CsvLoader.TryToLoad("Configs/buffs", id);
@@ -99,5 +112,8 @@ namespace Model.Buff{
             desc = info["desc"] as string;
         }
 
+        public override string ToString(){
+            return $"Buff: [name={name}], [layer={layer.ToString()}]";
+        }
     }
 }

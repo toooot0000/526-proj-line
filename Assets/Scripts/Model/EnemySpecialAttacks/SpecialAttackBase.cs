@@ -6,6 +6,6 @@ namespace Model.EnemySpecialAttacks{
             this.args = args;
         }
 
-        public abstract void Execute(StageActionInfoBase info);
+        public abstract void Execute(StageActionBase info);
     }
 }

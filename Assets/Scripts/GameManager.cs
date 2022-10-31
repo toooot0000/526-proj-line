@@ -6,6 +6,8 @@ using Core.DisplayArea.Stage;
 using Core.PlayArea.Balls;
 using Core.PlayArea.TouchTracking;
 using Model;
+using Model.Buff;
+using Model.Buff.Buffs;
 using Tutorial;
 using Tutorial.Tutorials.BasicConcept;
 using Tutorial.Tutorials.Charge;
@@ -48,7 +50,7 @@ public class GameManager : MonoBehaviour{
             UIManager.shared.OpenUI("UIGameStart")));
         
     }
-
+    
     private void Start(){
         Application.targetFrameRate = 120;
         
@@ -62,11 +64,16 @@ public class GameManager : MonoBehaviour{
             if (ui is not UIResult) return;
             _isInEvent = false;
         };
+
     }
 
     private void Update(){
         if (Input.GetKeyUp(KeyCode.T)){
-            UIManager.shared.OpenUI("UIShopSystem");
+            game.player.AddBuffLayer<BuffWeak>(1);
+        }
+
+        if (Input.GetKeyUp(KeyCode.R)){
+            Debug.Log(Buff.BuffsToString(game.player));
         }
         
         // if (Input.GetKeyUp(KeyCode.B)){
@@ -85,13 +92,11 @@ public class GameManager : MonoBehaviour{
     private IEnumerator AfterInitGame()
     {
         yield return new WaitForEndOfFrame();
-        EventLogger.Shared.init();//should do this after game is initialized   
+        EventLogger.Shared.init(); //should do this after game is initialized   
     }
 
     public void GameStart(){
-        game.LoadStage((int)CsvLoader.GetConfig("init_stage"));
-        stageManager.PresentStage(game.currentStage);
-        StartCoroutine(StartBattleStage());
+        GotoStage((int)CsvLoader.GetConfig("init_stage"));
     }
 
     public void GameComplete(){
@@ -100,6 +105,7 @@ public class GameManager : MonoBehaviour{
 
     public void GameEnd(){
         game.End();
+        UIManager.shared.OpenUI("UIGameEnd");
     }
 
     public void GameRestart(){
@@ -111,7 +117,6 @@ public class GameManager : MonoBehaviour{
     private void PreInit(){
         // Backend API url
         EventLogger.serverURL = "https://test526.wn.r.appspot.com/";
-        // EventLogger.serverURL = "http://localhost:8080/";
     }
 
     public void Delayed(int frames, Action modelAction){
@@ -122,27 +127,15 @@ public class GameManager : MonoBehaviour{
         StartCoroutine(CoroutineUtility.Delayed(seconds, modelAction));
     }
 
-    /// <summary>
-    ///     Kick off the switch turn procedure
-    /// </summary>
-    public void SwitchTurn(){
-        game.SwitchTurn();
-        StartCoroutine(game.turn == Game.Turn.Player ? SwitchToPlayerTurn() : SwitchToEnemyTurn());
-    }
-
     public void GotoStage(int id){
         game.LoadStage(id);
         StartCoroutine(game.currentStage.type switch{
-            StageType.Battle => StartBattleStage(),
+            StageType.Battle => stageManager.StartBattleStage(),
             StageType.Shop => StartShopStage(),
-            StageType.Event => StartEventStage()
+            StageType.Event => StartEventStage(),
+            _ => throw new ArgumentOutOfRangeException()
         });
 
-    }
-
-    private IEnumerator StartBattleStage(){
-        stageManager.PresentStage(game.currentStage);
-        yield return SwitchToPlayerTurn();
     }
 
     private IEnumerator StartShopStage(){
@@ -167,52 +160,12 @@ public class GameManager : MonoBehaviour{
         game.Restart();
     }
 
-    private IEnumerator SwitchToPlayerTurn(){
-        yield return turnSignDisplayer.Show(Game.Turn.Player);
-        touchTracker.isAcceptingInput = true;
-        ballManager.SpawnBalls();
-        if (game.currentStage.id == 0){
-            switch (CurrentTurnNum){
-                case 1:
-                    StartCoroutine(CoroutineUtility.Delayed(1, 
-                        () => tutorialManager.LoadTutorial<TutorialBasicConcept>()));
-                    break;
-                case 2:
-                    tutorialManager.LoadTutorial<TutorialStage1Soft>();
-                    break;
-            }
-        } else if (game.currentStage.id == 1){
-            switch (CurrentTurnNum){
-                case 1:
-                    tutorialManager.LoadTutorial<TutorialCombo>();
-                    break;
-            }
-
-            if (game.currentStage.CurrentEnemy.id == -3){
-                tutorialManager.LoadTutorial<TutorialCharge>();
-            }
-        }
-    }
-
-    private IEnumerator SwitchToEnemyTurn(){
-        var stageInfo = game.CurrentEnemy.GetCurrentStageAction();
-        yield return turnSignDisplayer.Show(Game.Turn.Enemy);
-        if (game.currentStage.id == 0){
-            switch (CurrentTurnNum){
-                case 1:
-                    tutorialManager.LoadTutorial<TutorialEnemyIntention>();
-                    break;
-            }
-        }
-        stageManager.ProcessStageActionInfo(stageInfo);
-    }
-
     public void OnPlayerFinishInput(){
         if (game.turn != Game.Turn.Player) return;
         OnPlayerAttack?.Invoke();
-        var currentAction = game.player.GetAttackActionInfo();
+        var currentAction = game.player.GetAction();
         game.player.ClearAllBalls();
-        stageManager.ProcessStageActionInfo(currentAction);
+        stageManager.ProcessStageAction(currentAction);
     }
 
 }

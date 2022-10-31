@@ -47,7 +47,7 @@ namespace Core.PlayArea.Balls{
         public void SpawnBalls(){
             var skillBallModels = GameManager.shared.game.GetAllSkillBalls();
             var i = 0;
-            for (; i < skillBallModels.Count; i++){
+            for (; i < skillBallModels.Length; i++){
                 BallView curBallView = null;
                 if (i < balls.Count){
                     curBallView = balls[i];

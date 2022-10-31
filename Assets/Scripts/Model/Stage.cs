@@ -77,7 +77,7 @@ namespace Model{
             }
         }
         
-        public void ProcessStageAction(StageActionInfoBase info){
+        public void ProcessStageAction(StageActionBase info){
             info.Execute();
             OnProcessStageAction?.Invoke(currentGame, info);
         }

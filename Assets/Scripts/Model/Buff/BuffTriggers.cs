@@ -5,14 +5,12 @@ namespace Model.Buff{
         void Execute(T buffable);
     }
 
-    public interface IBuffTriggerOnTurnBegin<in T> : IBuffTrigger
-    where T: IBuffModifiable{
-        IBuffEffect<T> OnTurnBegin();
+    public interface IBuffTriggerOnTurnBegin : IBuffTrigger {
+        IBuffEffect<IDamageable> OnTurnBegin();
     }
 
-    public interface IBuffTriggerOnTurnEnd<in T> : IBuffTrigger
-    where T: IBuffModifiable{
-        IBuffEffect<T> OnTurnEnd();
+    public interface IBuffTriggerOnTurnEnd : IBuffTrigger {
+        IBuffEffect<IDamageable> OnTurnEnd();
     }
 
     public interface IBuffTriggerOnBallSliced<in T, in TBall>: IBuffTrigger 
@@ -33,11 +31,11 @@ namespace Model.Buff{
     }
 
     public interface IBuffTriggerOnGetPlayerActionInfo : IBuffTrigger{
-        IBuffEffect<StageActionInfoPlayerAction> OnGetPlayerActionInfo();
+        IBuffEffect<StageActionPlayerAction> OnGetPlayerActionInfo();
     }
 
     public interface IBuffTriggerOnGetEnemyActionInfo : IBuffTrigger{
-        IBuffEffect<StageActionInfoEnemyAction> OnGetEnemyActionInfo();
+        IBuffEffect<StageActionEnemyAction> OnGetEnemyActionInfo();
     }
 
     public interface IBuffTriggerOnTakeDamage : IBuffTrigger{

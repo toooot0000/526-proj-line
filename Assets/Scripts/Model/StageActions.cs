@@ -1,23 +1,36 @@
 using System;
+using System.Collections.Generic;
 using Model.Buff;
 using Model.EnemySpecialAttacks;
 using Model.GearEffects;
 
 namespace Model{
-    public abstract class StageActionInfoBase : GameModel, IBuffModifiable{
+    public abstract class StageActionBase : GameModel, IBuffModifiable{
         public Damage damage = null;
-        protected StageActionInfoBase(GameModel parent) : base(parent){ }
+        public readonly List<Damage> extraDamages = new();
+        protected StageActionBase(GameModel parent) : base(parent){ }
         public abstract void Execute();
+
+        public void AddExtraDamage(Damage extraDamage){
+            extraDamages.Add(extraDamage);
+        }
+
+        public void ComputeAllDamages(){
+            damage.Execute();
+            foreach (var extraDamage in extraDamages){
+                extraDamage.Execute();
+            }
+        }
     }
 
-    public class StageActionInfoPlayerAction : StageActionInfoBase{
+    public class StageActionPlayerAction : StageActionBase{
         public readonly GearEffectBase[] effects;
         public Ball[] circledBalls;
         public int defend;
         public Ball[] hitBalls;
-        public readonly IBuffEffect<StageActionInfoPlayerAction>[] buffEffects;
+        public readonly IBuffEffect<StageActionPlayerAction>[] buffEffects;
 
-        public StageActionInfoPlayerAction(GameModel parent, GearEffectBase[] effects, IBuffEffect<StageActionInfoPlayerAction>[] buffEffects) : base(parent){
+        public StageActionPlayerAction(GameModel parent, GearEffectBase[] effects, IBuffEffect<StageActionPlayerAction>[] buffEffects) : base(parent){
             this.effects = effects;
             this.buffEffects = buffEffects;
         }
@@ -25,7 +38,7 @@ namespace Model{
         public override void Execute(){
             ExecuteSpecials();
             currentGame.player.Armor += defend;
-            damage?.target.TakeDamage(damage);
+            ComputeAllDamages();
         }
         
         public void ExecuteSpecials(){
@@ -34,29 +47,26 @@ namespace Model{
         }
     }
 
-    [Obsolete]
-    public class StageActionInfoEnemyDefend : StageActionInfoEnemyAction{
-        public StageActionInfoEnemyDefend(GameModel parent) : base(parent){ }
+    public class StageActionEnemyDefend : StageActionEnemyAction{
+        public StageActionEnemyDefend(GameModel parent) : base(parent){ }
     }
     
-    [Obsolete]
-    public class StageActionInfoEnemyAttack : StageActionInfoEnemyAction{
-        public StageActionInfoEnemyAttack(GameModel parent) : base(parent){ }
+    public class StageActionEnemyAttack : StageActionEnemyAction{
+        public StageActionEnemyAttack(GameModel parent) : base(parent){ }
     }
 
-    [Obsolete]
-    public class StageActionInfoEnemySpecial : StageActionInfoEnemyAction{
-        public StageActionInfoEnemySpecial(GameModel parent) : base(parent){ }
+    public class StageActionEnemySpecial : StageActionEnemyAction{
+        public StageActionEnemySpecial(GameModel parent) : base(parent){ }
     }
 
-    public class StageActionInfoEnemyAction : StageActionInfoBase{
+    public class StageActionEnemyAction : StageActionBase{
         public int defend = 0;
         public SpecialAttackBase special = null;
-        public StageActionInfoEnemyAction(GameModel parent) : base(parent){ }
+        public StageActionEnemyAction(GameModel parent) : base(parent){ }
         public override void Execute(){
             ExecuteSpecials();
-            damage?.target.TakeDamage(damage);
             currentGame.CurrentEnemy.Armor += defend;
+            ComputeAllDamages();
         }
 
         public void ExecuteSpecials(){

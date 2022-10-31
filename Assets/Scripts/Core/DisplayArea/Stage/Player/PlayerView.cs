@@ -36,7 +36,7 @@ namespace Core.DisplayArea.Stage.Player{
         }
 
         public void TakeDamage(Action callback){
-            var point = stageActionInfo.damage.totalPoint;
+            var point = stageAction.damage.initPoint;
             damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
             CurrentHp = Model.CurrentHp;
             armorDisplayer.Number = Model.Armor;
@@ -47,7 +47,7 @@ namespace Core.DisplayArea.Stage.Player{
         }
 
         public IEnumerator TakeDamage(){
-            var point = stageActionInfo.damage.totalPoint;
+            var point = stageAction.damage.initPoint;
             damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
             CurrentHp = Model.CurrentHp;
             armorDisplayer.Number = Model.Armor;

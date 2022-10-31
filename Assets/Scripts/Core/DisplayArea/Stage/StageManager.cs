@@ -5,8 +5,13 @@ using Core.DisplayArea.Stage.Player;
 using Core.PlayArea.Balls;
 using Model;
 using Tutorial;
+using Tutorial.Tutorials.BasicConcept;
+using Tutorial.Tutorials.Charge;
+using Tutorial.Tutorials.Combo;
+using Tutorial.Tutorials.EnemyIntention;
 using Tutorial.Tutorials.EnemyUpdate;
 using Tutorial.Tutorials.Stage1Clear;
+using Tutorial.Tutorials.Stage1Soft;
 using UI;
 using UnityEngine;
 using Utility;
@@ -40,98 +45,77 @@ namespace Core.DisplayArea.Stage{
             if(_isInTutorial) OnEnemyAppear?.Invoke(this);
         }
 
-        public void ProcessStageActionInfo(StageActionInfoBase info){
-            playerView.stageActionInfo = info;
-            enemyView.stageActionInfo = info;
-            var procedure = info switch{
-                StageActionInfoPlayerAction attack => ProcessPlayerAttack(attack),
-                StageActionInfoEnemyAttack attack => ProcessEnemyAttack(attack),
-                StageActionInfoEnemyDefend defend => ProcessEnemyDefend(defend),
-                StageActionInfoEnemySpecial special => ProcessEnemySpecialAttack(special),
-                _ => throw new ArgumentOutOfRangeException(nameof(info), info, null)
+        public void ProcessStageAction(StageActionBase action){
+            playerView.stageAction = action;
+            enemyView.stageAction = action;
+            var procedure = action switch{
+                StageActionPlayerAction attack => ProcessPlayerAttack(attack),
+                StageActionEnemyAttack attack => ProcessEnemyAttack(attack),
+                StageActionEnemyDefend defend => ProcessEnemyDefend(defend),
+                StageActionEnemySpecial special => ProcessEnemySpecialAttack(special),
+                _ => throw new ArgumentOutOfRangeException(nameof(action), action, null)
             };
             StartCoroutine(procedure);
         }
 
-        private IEnumerator ProcessPlayerAttack(StageActionInfoPlayerAction info){
+        private IEnumerator ProcessPlayerAttack(StageActionPlayerAction action){
             yield return new WaitWhile(() => _pause);
-            info.Execute();
+            action.Execute();
             ballManager.FlyAllBalls(this, 0.5f);
             yield return new WaitForSeconds(0.4f);
             yield return new WaitWhile(() => _pause);
             playerView.Attack(null);
-            // yield return CoroutineUtility.Delayed(0.07f, () => enemyView.TakeDamage(null));
             yield return new WaitForSeconds(0.07f);
             yield return enemyView.TakeDamage();
-            // GameManager.shared.tutorialManager.LoadTutorial("TutorialDisplay");
             yield return new WaitWhile(() => _pause);
-            yield return OnPlayerAttackResolved(info);
+            yield return AfterPlayerAttacked();
         }
 
-        private IEnumerator ProcessEnemyAttack(StageActionInfoEnemyAttack info){
+        private IEnumerator ProcessEnemyAttack(StageActionEnemyAttack action){
             yield return new WaitWhile(() => _pause);
-            info.Execute();
+            action.Execute();
             enemyView.Attack(null);
             yield return new WaitForSeconds(0.1f);
             yield return playerView.TakeDamage();
             yield return new WaitWhile(() => _pause);
-            GameManager.shared.SwitchTurn();
+            SwitchTurn();
             yield return new WaitWhile(() => _pause);
-            if(playerView.isDead) UIManager.shared.OpenUI("UIGameEnd");
+            if(playerView.isDead) GameManager.shared.GameEnd();
             yield return new WaitWhile(() => _pause);
         }
 
-        private IEnumerator ProcessEnemySpecialAttack(StageActionInfoEnemySpecial info){
+        private IEnumerator ProcessEnemySpecialAttack(StageActionEnemySpecial action){
             yield return new WaitWhile(() => _pause);
-            info.Execute();
+            action.Execute();
             enemyView.SpecialAttack(null);
             yield return new WaitForSeconds(0.1f);
             yield return playerView.TakeDamage();
             yield return new WaitWhile(() => _pause);
-            GameManager.shared.SwitchTurn();
+            SwitchTurn();
             yield return new WaitWhile(() => _pause);
-            if(playerView.isDead) UIManager.shared.OpenUI("UIGameEnd");
+            if(playerView.isDead) GameManager.shared.GameEnd();
             yield return new WaitWhile(() => _pause);
         }
 
-        private IEnumerator ProcessEnemyDefend(StageActionInfoEnemyDefend info){
+        private IEnumerator ProcessEnemyDefend(StageActionEnemyDefend action){
             yield return new WaitWhile(() => _pause);
-            info.Execute();
+            action.Execute();
             yield return enemyView.Defend();
             yield return new WaitWhile(() => _pause);
-            GameManager.shared.SwitchTurn();
+            SwitchTurn();
             yield return new WaitWhile(() => _pause);
         }
 
-        private IEnumerator OnPlayerAttackResolved(StageActionInfoBase info){
-            var dmg = info.damage;
+        private IEnumerator AfterPlayerAttacked(){
             if (enemyView.isDead){
                 OnEnemyDieTriggerTutorial();
-                if (dmg.currentGame.currentStage.NextEnemy != null){
-                    dmg.currentGame.currentStage.ForwardCurrentEnemy();
-                    yield return new WaitWhile(() => _pause);
-                    enemyView.BindToCurrentEnemy();
-                    yield return enemyView.Appear(); 
-                    if(_isInTutorial) OnEnemyAppear?.Invoke(this);
-                    yield return new WaitWhile(() => _pause);
-                    yield return CoroutineUtility.Delayed(1f, GameManager.shared.SwitchTurn);
+                if (GameManager.shared.game.currentStage.NextEnemy != null){
+                    yield return MoveToNextEnemy();
                 } else{
-                    dmg.currentGame.currentStage.Beaten();
-                    yield return new WaitWhile(() => _pause);
-                    if (!_modelStage.IsLast){
-                        if (_modelStage.bonusCoins == -1){
-                            yield return new WaitWhile(() => _pause);
-                            UIManager.shared.OpenUI("UISelectGear", _modelStage.bonusGears);
-                        } else{
-                            yield return new WaitWhile(() => _pause);
-                            UIManager.shared.OpenUI("UIGetCoins", _modelStage.bonusCoins);
-                        }
-                    } else{
-                        UIManager.shared.OpenUI("UIGameComplete");
-                    }
+                    yield return CollectRewards();
                 }
             } else{
-                yield return CoroutineUtility.Delayed(1f, GameManager.shared.SwitchTurn);
+                yield return CoroutineUtility.Delayed(1f, SwitchTurn);
             }
         }
 
@@ -149,6 +133,91 @@ namespace Core.DisplayArea.Stage{
                     GameManager.shared.tutorialManager.LoadTutorial<TutorialEnemyUpdate>();
                     break;
             }
+        }
+
+        private IEnumerator MoveToNextEnemy(){
+            GameManager.shared.game.currentStage.ForwardCurrentEnemy();
+            yield return new WaitWhile(() => _pause);
+            enemyView.BindToCurrentEnemy();
+            yield return enemyView.Appear(); 
+            if(_isInTutorial) OnEnemyAppear?.Invoke(this);
+            yield return new WaitWhile(() => _pause);
+            yield return CoroutineUtility.Delayed(1f, SwitchTurn);
+        }
+
+        private IEnumerator CollectRewards(){
+            GameManager.shared.game.currentStage.Beaten();
+            yield return new WaitWhile(() => _pause);
+            if (!_modelStage.IsLast){
+                if (_modelStage.bonusCoins == -1){
+                    yield return new WaitWhile(() => _pause);
+                    UIManager.shared.OpenUI("UISelectGear", _modelStage.bonusGears);
+                } else{
+                    yield return new WaitWhile(() => _pause);
+                    UIManager.shared.OpenUI("UIGetCoins", _modelStage.bonusCoins);
+                }
+            } else{
+                UIManager.shared.OpenUI("UIGameComplete");
+            }
+        }
+
+        /// <summary>
+        ///     Kick off the switch turn procedure
+        /// </summary>
+        private void SwitchTurn(){
+            GameManager.shared.game.SwitchTurn();
+            StartCoroutine(GameManager.shared.game.turn == Game.Turn.Player ? StartPlayerTurn() : StartToEnemyTurn());
+        }
+        
+        private IEnumerator SwitchTurnEnumerator(){
+            GameManager.shared.game.SwitchTurn();
+            yield return GameManager.shared.game.turn == Game.Turn.Player ? StartPlayerTurn() : StartToEnemyTurn();
+        }
+
+        private IEnumerator StartPlayerTurn(){
+            yield return GameManager.shared.turnSignDisplayer.Show(Game.Turn.Player);
+            yield return new WaitWhile(() => _pause);
+            GameManager.shared.touchTracker.isAcceptingInput = true;
+            GameManager.shared.ballManager.SpawnBalls();
+            if (GameManager.shared.game.currentStage.id == 0){
+                switch (GameManager.shared.CurrentTurnNum){
+                    case 1:
+                        yield return null;
+                        GameManager.shared.tutorialManager.LoadTutorial<TutorialBasicConcept>();
+                        break;
+                    case 2:
+                        GameManager.shared.tutorialManager.LoadTutorial<TutorialStage1Soft>();
+                        break;
+                }
+            } else if (GameManager.shared.game.currentStage.id == 1){
+                switch (GameManager.shared.CurrentTurnNum){
+                    case 1:
+                        GameManager.shared.tutorialManager.LoadTutorial<TutorialCombo>();
+                        break;
+                }
+
+                if (GameManager.shared.game.currentStage.CurrentEnemy.id == -3){
+                    GameManager.shared.tutorialManager.LoadTutorial<TutorialCharge>();
+                }
+            }
+        }
+
+        private IEnumerator StartToEnemyTurn(){
+            var stageInfo = GameManager.shared.game.CurrentEnemy.GetCurrentStageAction();
+            yield return GameManager.shared.turnSignDisplayer.Show(Game.Turn.Enemy);
+            if (GameManager.shared.game.currentStage.id == 0){
+                switch (GameManager.shared.CurrentTurnNum){
+                    case 1:
+                        GameManager.shared.tutorialManager.LoadTutorial<TutorialEnemyIntention>();
+                        break;
+                }
+            }
+            ProcessStageAction(stageInfo);
+        }
+
+        public IEnumerator StartBattleStage(){
+            PresentStage(GameManager.shared.game.currentStage);
+            yield return StartPlayerTurn();
         }
     }
 }

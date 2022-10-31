@@ -28,6 +28,7 @@ namespace Model{
         private int _currentHp;
 
         public readonly List<Buff.Buff> buffs = new();
+        public readonly List<DebuffBall.DebuffBall> debuffBalls = new(); 
 
 
         public Player(GameModel parent) : base(parent){
@@ -64,11 +65,11 @@ namespace Model{
         }
 
 
-        public void TakeDamage(Damage damage)
-        {
-            damage.finalDamagePoint = Math.Max(damage.totalPoint - Armor, 0);
-            CurrentHp -= Math.Max(damage.totalPoint - Armor, 0);
-            Armor -= damage.totalPoint;
+        public void TakeDamage(Damage damage){
+            var finalPoint = damage.GetFinalPoint();
+            damage.finalDamagePoint = Math.Max(finalPoint - Armor, 0);
+            CurrentHp -= Math.Max(finalPoint - Armor, 0);
+            Armor -= finalPoint;
             OnBeingAttacked?.Invoke(currentGame, damage);
         }
 
@@ -134,19 +135,16 @@ namespace Model{
         }
 
         public Damage GetDamage(){
-            return new Damage(currentGame){
-                totalPoint = GetTotalAttackPoint(),
-                type = Damage.Type.Physics,
-                target = currentGame.CurrentEnemy,
+            return new Damage(currentGame, Damage.Type.Physics, GetTotalAttackPoint(), currentGame.CurrentEnemy){
                 source = this
             };
         }
 
-        public StageActionInfoPlayerAction GetAttackActionInfo(){
-            return new StageActionInfoPlayerAction(
+        public StageActionPlayerAction GetAction(){
+            return new StageActionPlayerAction(
                 this, 
                 GetTriggeredEffects(),
-                GetBuffEffectsOnAttack()
+                GetOnAttackBuffEffects()
                 ){
                 damage = GetDamage(),
                 defend = GetTotalDefendPoint(),
@@ -175,35 +173,8 @@ namespace Model{
         
         
         //special event system related functions
-        public void GetLife(int value)
-        {
-            int beforeHp = CurrentHp;
-            CurrentHp += value;
-            
-            if (CurrentHp > HpUpLimit)
-            {
-                CurrentHp = HpUpLimit;
-            }
-            else if (CurrentHp < 0)
-            {
-                Debug.Log("Player Died");
-                Die();
-            }
-            Debug.Log("Before:"+beforeHp.ToString()+ "After:" + CurrentHp.ToString());
-        }
 
-        public void GetCoin(int value)
-        {
-            Coin += value;
-            
-            if(Coin < 0)
-            {
-                Coin = 0;
-            }
-            Debug.Log("Coin:"+Coin.ToString());
-        }
-        
-        
+
         public void ClearAllBalls(){
             hitBalls.Clear();
             circledBalls.Clear();
@@ -231,9 +202,32 @@ namespace Model{
             return buffs.ToArray();
         }
 
-        private IBuffEffect<StageActionInfoPlayerAction>[] GetBuffEffectsOnAttack(){
+        private IBuffEffect<StageActionPlayerAction>[] GetOnAttackBuffEffects(){
             var triggers = Buff.Buff.GetBuffOfTriggerFrom<IBuffTriggerOnGetPlayerActionInfo>(this);
             return triggers.Select(t => t.OnGetPlayerActionInfo()).ToArray();
+        }
+        
+        public Ball[] GetAllBalls(){
+            var ret = new List<Ball>();
+            ret.AddRange(GetAllGearBalls());
+            ret.AddRange(debuffBalls);
+            return ret.ToArray();
+        }
+
+        public Ball[] GetAllGearBalls(){
+            var ret = new List<Ball>();
+            gears.ForEach(g => ret.AddRange(g.GetBalls()));
+            return ret.ToArray();
+        }
+
+        public IBuffEffect<Player>[] GetOnTurnBeginBuffEffect(){
+            var triggers = Buff.Buff.GetBuffOfTriggerFrom<IBuffTriggerOnTurnBegin>(this);
+            return triggers.Select(t => (IBuffEffect<Player>)t.OnTurnBegin()).ToArray();
+        }
+
+        public IBuffEffect<Player>[] GetOnTurnEndBuffEffect(){
+            var triggers = Buff.Buff.GetBuffOfTriggerFrom<IBuffTriggerOnTurnEnd>(this);
+            return triggers.Select(t => (IBuffEffect<Player>)t.OnTurnEnd()).ToArray();
         }
     }
 }

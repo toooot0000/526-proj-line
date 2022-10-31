@@ -21,7 +21,7 @@ namespace Core.DisplayArea.Stage{
 
         private IDamageable _model;
         // public StageManager.StageActionInfoWrapper wrappedActionInfo;
-        public StageActionInfoBase stageActionInfo;
+        public StageActionBase stageAction;
 
         public virtual IDamageable Model{
             set{

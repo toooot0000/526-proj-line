@@ -34,6 +34,8 @@ namespace Model{
             CurrentHp = HpUpLimit;
         }
 
+        public bool IsDead => CurrentHp <= 0;
+
         public Enemy(GameModel parent, int id) : base(parent){
             this.id = id;
             var enemy = CsvLoader.TryToLoad("Configs/enemies", id);
@@ -75,8 +77,9 @@ namespace Model{
         }
 
         public void TakeDamage(Damage damage){
-            CurrentHp -= Math.Max(damage.totalPoint - Armor, 0);
-            Armor = Math.Max(Armor - damage.totalPoint, 0);
+            var finalPoint = damage.GetFinalPoint();
+            CurrentHp -= Math.Max(finalPoint - Armor, 0);
+            Armor = Math.Max(Armor - finalPoint, 0);
             OnBeingAttacked?.Invoke(currentGame, this);
         }
         
@@ -86,28 +89,25 @@ namespace Model{
         public event ModelEvent OnIntentionChanged;
 
         private Damage GetDamage(){
-            return new Damage(currentGame){
-                totalPoint = attack,
-                type = Damage.Type.Physics,
-                target = currentGame.player,
+            return new Damage(currentGame, Damage.Type.Physics, attack, currentGame.player){
                 source = this
             };
         }
 
-        private StageActionInfoEnemyAttack GetEnemyAttackInfo(){
-            return new StageActionInfoEnemyAttack(this){
+        private StageActionEnemyAttack GetEnemyAttackInfo(){
+            return new StageActionEnemyAttack(this){
                 damage = GetDamage()
             };
         }
 
-        private StageActionInfoEnemyDefend GetEnemyDefendInfo(){
-            return new StageActionInfoEnemyDefend(this){
+        private StageActionEnemyDefend GetEnemyDefendInfo(){
+            return new StageActionEnemyDefend(this){
                 defend = defend
             };
         }
 
-        private StageActionInfoEnemySpecial GetEnemySpecialInfo(){
-            return new StageActionInfoEnemySpecial(this){
+        private StageActionEnemySpecial GetEnemySpecialInfo(){
+            return new StageActionEnemySpecial(this){
                 special = special
             };
         }
@@ -117,8 +117,8 @@ namespace Model{
             OnIntentionChanged?.Invoke(currentGame, this);
         }
 
-        public StageActionInfoBase GetCurrentStageAction(){
-            StageActionInfoBase ret =  intentions[_nextActionInd] switch{
+        public StageActionBase GetCurrentStageAction(){
+            StageActionBase ret =  intentions[_nextActionInd] switch{
                 EnemyIntention.Attack => GetEnemyAttackInfo(),
                 EnemyIntention.Defend => GetEnemyDefendInfo(),
                 EnemyIntention.SpecialAttack => GetEnemySpecialInfo(),

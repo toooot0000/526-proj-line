@@ -6,6 +6,6 @@ namespace Model.GearEffects{
             this.args = args;
         }
 
-        public abstract void Execute(StageActionInfoPlayerAction actionInfo);
+        public abstract void Execute(StageActionPlayerAction action);
     }
 }
