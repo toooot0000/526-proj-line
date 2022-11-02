@@ -69,9 +69,7 @@ public class GameManager : MonoBehaviour{
         // if (Input.GetKeyUp(KeyCode.B)){
         //     UIManager.shared.OpenUI("UIEvent", new Model.Event(game, 0));
         // }
-        // if (Input.GetKeyUp(KeyCode.K)){
-        //     UIManager.shared.OpenUI("UISelectStage", new int[] {1,2,3});
-        // }
+        
     }
 
     private void InitGame(){

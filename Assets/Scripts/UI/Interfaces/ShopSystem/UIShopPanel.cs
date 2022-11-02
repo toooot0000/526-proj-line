@@ -63,6 +63,11 @@ namespace UI.Interfaces.ShopSystem {
         public void Click() {
             OnClick?.Invoke(this);
         }
+        
+        // public void ShowGearInfo()
+        // {
+        //     UIManager.shared.OpenUI("UIGearInfo",_model);
+        // }
 
         public void UpdatePriceColor(){
             if (Price > GameManager.shared.game.player.Coin){
