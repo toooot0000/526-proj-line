@@ -199,25 +199,28 @@ namespace Core.DisplayArea.Stage{
         }
 
         private static IEnumerator OnPlayerTurnStartTriggerTutorial(){
-            if (GameManager.shared.game.currentStage.id == 0){
-                switch (GameManager.shared.CurrentTurnNum){
-                    case 1:
-                        yield return null;
-                        GameManager.shared.tutorialManager.LoadTutorial<TutorialBasicConcept>();
-                        break;
-                    case 2:
-                        GameManager.shared.tutorialManager.LoadTutorial<TutorialStage1Soft>();
-                        break;
+            switch (GameManager.shared.game.currentStage.id){
+                case 0:
+                    switch (GameManager.shared.CurrentTurnNum){
+                        case 1:
+                            yield return null;
+                            GameManager.shared.tutorialManager.LoadTutorial<TutorialBasicConcept>();
+                            break;
+                        case 2:
+                            GameManager.shared.tutorialManager.LoadTutorial<TutorialStage1Soft>();
+                            break;
+                    }
+                    break;
+                case 1:{
+                    switch (GameManager.shared.CurrentTurnNum){
+                        case 1:
+                            GameManager.shared.tutorialManager.LoadTutorial<TutorialCombo>();
+                            break;
+                    }
+                    if (GameManager.shared.game.currentStage.CurrentEnemy.id == -3)
+                        GameManager.shared.tutorialManager.LoadTutorial<TutorialCharge>();
+                    break;
                 }
-            } else if (GameManager.shared.game.currentStage.id == 1){
-                switch (GameManager.shared.CurrentTurnNum){
-                    case 1:
-                        GameManager.shared.tutorialManager.LoadTutorial<TutorialCombo>();
-                        break;
-                }
-
-                if (GameManager.shared.game.currentStage.CurrentEnemy.id == -3)
-                    GameManager.shared.tutorialManager.LoadTutorial<TutorialCharge>();
             }
         }
     }

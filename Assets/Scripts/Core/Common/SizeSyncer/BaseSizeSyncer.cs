@@ -7,7 +7,7 @@ namespace Core.Common.SizeSyncer{
         protected new Collider2D collider;
         protected RectTransform rect;
 
-        private void Start(){
+        private void Awake(){
             collider = GetCollider2D();
             rect = GetComponent<RectTransform>();
             SyncSize();

@@ -7,7 +7,7 @@ namespace Core.Common.SizeSyncer{
         private RectTransform _rectTransform;
         private SpriteRenderer _spriteRenderer;
 
-        private void Start(){
+        private void Awake(){
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _rectTransform = GetComponent<RectTransform>();
             SyncSize();

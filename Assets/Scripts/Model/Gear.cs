@@ -113,7 +113,7 @@ namespace Model{
         public Ball[] GetBalls(){
             var ret = new Ball[ballNum];
             for (var i = 0; i < ballNum; i++){
-                ret[i] = new Ball(this, ballId);
+                ret[i] = ball;
             }
             return ret;
         }

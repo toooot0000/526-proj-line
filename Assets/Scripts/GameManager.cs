@@ -146,4 +146,6 @@ public class GameManager : MonoBehaviour{
         OnPlayerAttack?.Invoke();
         StartCoroutine(stageManager.StartPlayerAction());
     }
+    
+    
 }

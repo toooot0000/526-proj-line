@@ -6,9 +6,6 @@ using UnityEngine.Assertions;
 using Utility.Loader;
 
 namespace Model.Buff{
-
-    
-
     public interface IBuffModifiable{ }
 
     public interface IBuffHolder: IBuffModifiable{
@@ -20,8 +17,7 @@ namespace Model.Buff{
         /// <returns>Null if nothing!</returns>
         IEnumerable<Buff> GetAllBuffs();
     }
-
-
+    
     public abstract class Buff: GameModel, IBuffModifiable{
         public int id;
         public string name;
