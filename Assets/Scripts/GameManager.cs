@@ -57,21 +57,28 @@ public class GameManager : MonoBehaviour{
         yield return BeforeGameStart();
     }
 
-    private void Update(){
-        if (Input.GetKeyUp(KeyCode.T)){
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.T))
+        {
             game.player.AddBuffLayer<BuffWeak>(1);
         }
 
         if (Input.GetKeyUp(KeyCode.R)){
             Debug.Log(Buff.BuffsToString(game.player));
         }
-        
+
         // if (Input.GetKeyUp(KeyCode.B)){
         //     UIManager.shared.OpenUI("UIEvent", new Model.Event(game, 0));
         // }
         // if (Input.GetKeyUp(KeyCode.K)){
         //     UIManager.shared.OpenUI("UISelectStage", new int[] {1,2,3});
         // }
+
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            UIManager.shared.OpenUI("UIEvent", new Model.Event(game, 2));
+        }
     }
 
     private void InitGame(){
