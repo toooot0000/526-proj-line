@@ -57,7 +57,7 @@ namespace Core.PlayArea.Balls{
                     curBallView = newBallObject.GetComponent<BallView>();
                     curBallView.OnHitted += OnBallHit;
                     curBallView.OnCharged += OnBallCircled;
-                    curBallView.OnMouseEnterBall += touchTracker.OnMouseEnterBall;
+                    curBallView.OnMouseEnterBall += touchTracker.ContinueTrackOnMouseExit;
                     curBallView.OnMouseExitBall += touchTracker.OnMouseExitBall;
                     curBallView.OnMouseUpBall += touchTracker.OnMouseUpBall;
                     balls.Add(curBallView);

@@ -4,6 +4,7 @@ using System.Linq;
 using Core.DisplayArea.Stage.Enemy;
 using Core.DisplayArea.Stage.Player;
 using Core.PlayArea.Balls;
+using Core.PlayArea.Mine;
 using Model;
 using Model.Buff;
 using Tutorial;
@@ -150,7 +151,7 @@ namespace Core.DisplayArea.Stage{
             yield return GameManager.shared.turnSignDisplayer.Show(Game.Turn.Player);
             if(_pause) yield return new WaitWhile(() => _pause);
             GameManager.shared.touchTracker.isAcceptingInput = true;
-            GameManager.shared.ballManager.SpawnBalls();
+            GameManager.shared.BallManager.SpawnBalls();
             yield return OnPlayerTurnStartTriggerTutorial();
             if(_pause) yield return new WaitWhile(() => _pause);
             playerView.Model.ExecuteOnTurnBeginBuffEffect();
@@ -222,6 +223,12 @@ namespace Core.DisplayArea.Stage{
                     break;
                 }
             }
+        }
+
+        public void OnPlayerHitMine(MineView mineView){
+            Debug.Log("Hit mine!");
+            var mine = mineView.model;
+            Debug.Log(mine);
         }
     }
 }

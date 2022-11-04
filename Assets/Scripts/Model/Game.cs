@@ -16,6 +16,7 @@ namespace Model{
         public readonly Stage currentStage;
         public Player player;
         public Turn turn = Turn.Player;
+        public PlayArea playArea;
 
 
         public bool IsLastStage => currentStage.IsLast;
@@ -56,6 +57,7 @@ namespace Model{
 
         private void CreatePlayer(){
             player = new Player(this);
+            playArea = new PlayArea(this);
             OnPlayerInit?.Invoke(this);
         }
 

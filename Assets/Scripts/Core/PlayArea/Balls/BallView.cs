@@ -12,7 +12,7 @@ namespace Core.PlayArea.Balls{
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(BallConfig))]
     public class BallView : MonoBehaviour, ITutorialControllable{
-        public event Action<BallView> OnMouseEnterBall;
+        public event Action OnMouseEnterBall;
         public event Action OnMouseExitBall;
         public event Action OnMouseUpBall;
         
@@ -107,7 +107,8 @@ namespace Core.PlayArea.Balls{
         }
 
         private void OnMouseEnter(){
-            OnMouseEnterBall?.Invoke(this);
+            OnBeingTouched();
+            OnMouseEnterBall?.Invoke();
         }
 
         private void OnMouseUp(){

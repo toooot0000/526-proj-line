@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Core.PlayArea.Balls;
+using Core.PlayArea.Mine;
 using UnityEngine;
 
 namespace Core.PlayArea.TouchTracking{
@@ -15,8 +16,9 @@ namespace Core.PlayArea.TouchTracking{
 
         private void OnTriggerStay2D(Collider2D col){
             var ball = col.GetComponent<BallView>();
-            if (ball == null) return;
-            ball.OnBeingCircled();
+            if (ball != null) ball.OnBeingCircled();
+            var mine = col.GetComponent<MineView>();
+            if(mine!= null) mine.OnBeingCircled();
         }
 
 

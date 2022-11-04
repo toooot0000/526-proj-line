@@ -13,6 +13,11 @@ using Utility;
  * TODO need to be refactored!
  */
 namespace Core.PlayArea.TouchTracking{
+
+    public interface IContinueTrackOnEnter{
+        
+    }
+    
     public class TouchTracker : MonoBehaviour, ITutorialControllable{
         public float minDistance = 5f;
         public LineRenderer lineRenderer;
@@ -32,7 +37,7 @@ namespace Core.PlayArea.TouchTracking{
         public bool isAcceptingInput = true;
 
 
-        private bool _isTracing;
+        public bool isTracing;
         private RectTransform _rect;
         private bool _mouseOnBall = false;
 
@@ -78,7 +83,7 @@ namespace Core.PlayArea.TouchTracking{
         public event TutorialControllableEvent OnTouchStart;
 
         public void StartTracking(){
-            _isTracing = true;
+            isTracing = true;
             // touchCollider.SetEnabled(true);
             lineRenderer.positionCount = 0;
             _circleDetector.points.Clear();
@@ -87,8 +92,8 @@ namespace Core.PlayArea.TouchTracking{
         }
 
         public void StopTracking(){
-            if (!_isTracing) return;
-            _isTracing = false;
+            if (!isTracing) return;
+            isTracing = false;
             touchCollider.SetEnabled(false);
             if (_isInTutorial) OnTouchEnd?.Invoke(this);
             if (_game.player.hitBalls.Count == 0 && _game.player.circledBalls.Count == 0) return;
@@ -113,7 +118,7 @@ namespace Core.PlayArea.TouchTracking{
         }
 
         private void TraceTouchPosition(){
-            if (!_isTracing) return;
+            if (!isTracing) return;
             if (_currentLineLength >= totalLineLength) return;
 #if UNITY_STANDALONE || UNITY_WEBGL
             var inputPosition = Input.mousePosition;
@@ -155,20 +160,19 @@ namespace Core.PlayArea.TouchTracking{
             progressBar.Percentage = 100 - _currentLineLength / totalLineLength * 100;
         }
 
-        public void OnMouseEnterBall(BallView ball){
-            if (!_isTracing) return;
+        public void ContinueTrackOnMouseExit(){
+            if (!isTracing) return;
             if (_currentLineLength >= totalLineLength) return;
             _mouseOnBall = true;
-            ball.OnBeingTouched();
         }
 
         public void OnMouseExitBall(){
-            if (!_isTracing) return;
+            if (!isTracing) return;
             _mouseOnBall = false;
         }
 
         public void OnMouseUpBall(){
-            if (!_isTracing) return;
+            if (!isTracing) return;
             _mouseOnBall = false;
             OnMouseUp();
         }

@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using BackendApi;
 using Core.DisplayArea.Stage;
+using Core.PlayArea;
 using Core.PlayArea.Balls;
 using Core.PlayArea.TouchTracking;
 using Model;
 using Model.Buff;
 using Model.Buff.Buffs;
+using Model.Obstacles;
 using Tutorial;
 using UI;
 using UI.Interfaces.ShopSystem;
@@ -24,7 +26,8 @@ public class GameManager : MonoBehaviour{
     public TutorialManager tutorialManager;
     public Game game;
     public Guid uuid = Guid.NewGuid();
-    public BallManager ballManager;
+    public BallManager BallManager => playAreaManager.ballManager;
+    public PlayAreaManager playAreaManager;
     public TurnSignDisplayer turnSignDisplayer;
     public TouchTracker touchTracker;
     public int CurrentTurnNum => game.currentTurnNum;
@@ -146,6 +149,4 @@ public class GameManager : MonoBehaviour{
         OnPlayerAttack?.Invoke();
         StartCoroutine(stageManager.StartPlayerAction());
     }
-    
-    
 }
