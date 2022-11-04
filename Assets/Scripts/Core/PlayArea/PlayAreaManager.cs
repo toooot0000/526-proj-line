@@ -4,6 +4,7 @@ using Core.PlayArea.Block;
 using Core.PlayArea.Mine;
 using Model;
 using Model.Obstacles;
+using Model.Obstacles.MineEffects;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -35,22 +36,21 @@ namespace Core.PlayArea{
             return blockManager.PlaceBlock(block);
         }
 
-        private BlockView _test;
+        public MineView AddMine(MineEffect effect) {
+            var mine = model.MakeAndPlaceMine(new MineEffectLoseLife());
+            return mineManager.PlaceMine(mine);
+        }
+
+        private BlockView _testBlock;
+        private MineView _mineView;
         private void Update(){
-            // var values = Enum.GetValues(typeof(BlockLevel));
-            // if (Input.GetKeyUp(KeyCode.A)){
-            //     var level = (BlockLevel)values.GetValue(Random.Range(0, values.Length));
-            //     var gridSize = Model.Obstacles.Block.GenerateGridSize(level);
-            //     var rect = model.RandomRectInt(gridSize);
-            //     if (rect != null){
-            //         var block = new Model.Obstacles.Block(null, rect.Value, level);
-            //         _test = blockManager.PlaceBlock(block);
-            //     }
-            // }
-            //
-            // if (Input.GetKeyUp(KeyCode.S)){
-            //     blockManager.RemoveBlock(_test);
-            // }
+            if (Input.GetKeyUp(KeyCode.A)) {
+                _mineView = AddMine(new MineEffectLoseLife(1));
+            }
+
+            if (Input.GetKeyUp(KeyCode.S)) {
+                mineManager.RemoveMine(_mineView);
+            }
         }
     }
 }

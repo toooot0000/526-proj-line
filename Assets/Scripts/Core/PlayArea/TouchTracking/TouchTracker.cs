@@ -41,6 +41,8 @@ namespace Core.PlayArea.TouchTracking{
         private RectTransform _rect;
         private bool _mouseOnBall = false;
 
+        public bool LineReachingLimit() => _currentLineLength >= totalLineLength;
+
 
         private void Start(){
             _rect = GetComponent<RectTransform>();

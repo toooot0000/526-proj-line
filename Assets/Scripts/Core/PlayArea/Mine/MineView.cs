@@ -22,16 +22,25 @@ namespace Core.PlayArea.Mine{
         public float flyTime = 0.2f;
         public TouchTracker tracker;
         public MineState state = MineState.Idle;
-        
+        public SpriteRenderer renderer;
+
+        public void Init() {
+            state = MineState.Idle;
+            renderer.color = Color.white;
+            animationController.Play(MineAnimation.Idle);
+        }
+
         private void OnMouseEnter(){
             if (!tracker.isTracing) return;
+            if (tracker.LineReachingLimit()) return;
             if (state != MineState.Idle) return;
             state = MineState.Triggered;
             tracker.TryToContinueTracking();
             FlyToLocation(flyTime, stageManager.playerView.transform.position, () => {
                 animationController.Play(MineAnimation.Explosion, () => {
+                    model.effect.Execute();
                     GameManager.shared.game.playArea.RemovePlayableObject(model);
-                    Destroy(gameObject);
+                    gameObject.SetActive(false);
                 });
             });
         }
@@ -41,7 +50,7 @@ namespace Core.PlayArea.Mine{
             state = MineState.Removed;
             animationController.Play(MineAnimation.Disappear, () => {
                 GameManager.shared.game.playArea.RemovePlayableObject(model);
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             });
         }
         
@@ -58,6 +67,7 @@ namespace Core.PlayArea.Mine{
                 y = targetWorldLocation.y,
                 z = startWorldLocation.z
             };
+            targetWorldLocation.z = startWorldLocation.z;
             var lerp = TweenUtility.Lerp(
                 seconds,
                 null,
