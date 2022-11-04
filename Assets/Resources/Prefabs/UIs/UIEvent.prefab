@@ -865,6 +865,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 2711965821399684269}
     m_Modifications:
     - target: {fileID: 6310348281030716088, guid: 1addf10ac94714e2d9be43c3831fed3a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6310348281030716088, guid: 1addf10ac94714e2d9be43c3831fed3a, type: 3}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6310348281030716088, guid: 1addf10ac94714e2d9be43c3831fed3a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -892,9 +900,41 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 6310348281030716089, guid: 1addf10ac94714e2d9be43c3831fed3a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 0b8bdf974014b4d44a6ebdc18ca353a2, type: 3}
+    - target: {fileID: 6310348281030716089, guid: 1addf10ac94714e2d9be43c3831fed3a, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6310348281030716089, guid: 1addf10ac94714e2d9be43c3831fed3a, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6310348281030716089, guid: 1addf10ac94714e2d9be43c3831fed3a, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6310348281030716089, guid: 1addf10ac94714e2d9be43c3831fed3a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6310348281030716089, guid: 1addf10ac94714e2d9be43c3831fed3a, type: 3}
+      propertyPath: m_Maskable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6310348281030716089, guid: 1addf10ac94714e2d9be43c3831fed3a, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6310348281030716090, guid: 1addf10ac94714e2d9be43c3831fed3a, type: 3}
       propertyPath: m_Name
       value: AnswerButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 6310348281030716090, guid: 1addf10ac94714e2d9be43c3831fed3a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6310348281030716091, guid: 1addf10ac94714e2d9be43c3831fed3a, type: 3}
       propertyPath: m_Pivot.x

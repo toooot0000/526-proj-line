@@ -38,6 +38,17 @@ namespace UI.Interfaces.SpecialEvent
                 }
             }
         }
+        
+        public bool Interactable{
+            set
+            {
+                Button _btn = gameObject.GetComponent<Button>();
+                _btn.interactable = value;
+                _btn.image.color = Color.gray;
+
+            }
+        }
+        
 
         private void Start(){
             _group = GetComponent<CanvasGroup>();

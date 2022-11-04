@@ -1,3 +1,5 @@
+using System;
+using Mono.Cecil;
 using TMPro;
 using UI.Container;
 using UnityEngine;
@@ -53,17 +55,38 @@ namespace UI.Interfaces.SpecialEvent{
                     _buttons[curButtonInd].Show = false;
                     curButtonInd++;
                 }
+                else if (Array.IndexOf(choice.effectToken, "GetCoin") == -1)
+                {
+                    int index = Array.IndexOf(choice.effectToken, "GetCoin");
+                    int netCoin = GameManager.shared.game.player.Coin + choice.values[index];
+                    if (netCoin < 0)
+                    {
+                        var answerButton = _buttons[curButtonInd];
+                        answerButton.Show = true;
+                        answerButton.Interactable = false;
+                        Debug.Log(curButtonInd);
+                        answerButton.Model = choice;
+                        curButtonInd++;
+                    }
+                    else
+                    {
+                        var answerButton = _buttons[curButtonInd];
+                        answerButton.Show = true;
+                        Debug.Log(curButtonInd);
+                        answerButton.Model = choice;
+                        curButtonInd++;
+                    }
+                }
                 else
                 {
                     var answerButton = _buttons[curButtonInd];
                     answerButton.Show = true;
                     Debug.Log(curButtonInd);
                     answerButton.Model = choice;
-                    curButtonInd++;
+                    curButtonInd++; 
                 }
             }
             container.UpdateLayout();
-
         }
 
         public void Close(int index) {
