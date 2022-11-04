@@ -66,6 +66,10 @@ public class GameManager : MonoBehaviour{
             Debug.Log(Buff.BuffsToString(game.player));
         }
         
+        if (Input.GetKeyUp(KeyCode.S)){
+            UIManager.shared.OpenUI("UIShopSystem");
+        }
+        
         // if (Input.GetKeyUp(KeyCode.B)){
         //     UIManager.shared.OpenUI("UIEvent", new Model.Event(game, 0));
         // }
