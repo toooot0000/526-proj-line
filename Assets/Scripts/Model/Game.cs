@@ -33,14 +33,11 @@ namespace Model{
         public Game(GameModel parent = null) : base(parent){
             currentGame = this;
             currentStage = new Stage(this);
+            CreatePlayer();
         }
         
-        public List<Ball> GetAllSkillBalls(){
-            var ret = new List<Ball>();
-            foreach (var item in player.CurrentGears)
-                for (var i = 0; i < item.ballNum; i++)
-                    ret.Add(item.ball);
-            return ret;
+        public Ball[] GetAllSkillBalls(){
+            return player.GetAllBalls();
         }
 
         public void SwitchTurn(){
@@ -57,7 +54,7 @@ namespace Model{
             OnTurnChanged?.Invoke(this);
         }
 
-        public void CreatePlayer(){
+        private void CreatePlayer(){
             player = new Player(this);
             OnPlayerInit?.Invoke(this);
         }
@@ -71,8 +68,12 @@ namespace Model{
         }
 
         public void Restart(){
+            Reset();
             OnGameRestart?.Invoke(this);
         }
-        
+
+        public void Reset(){
+            CreatePlayer();
+        }
     }
 }

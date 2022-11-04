@@ -1,63 +1,76 @@
+using System;
+using System.Collections.Generic;
+using Model.Buff;
 using Model.EnemySpecialAttacks;
 using Model.GearEffects;
 
 namespace Model{
-    public abstract class StageActionInfoBase : GameModel{
+    public abstract class StageActionBase : GameModel, IBuffModifiable{
         public Damage damage = null;
-        protected StageActionInfoBase(GameModel parent) : base(parent){ }
+        public readonly List<Damage> extraDamages = new();
+        protected StageActionBase(GameModel parent) : base(parent){ }
         public abstract void Execute();
-    }
 
-    public class StageActionInfoEnemyAttack : StageActionInfoBase{
-        public StageActionInfoEnemyAttack(GameModel parent) : base(parent){ }
+        public void AddExtraDamage(Damage extraDamage){
+            extraDamages.Add(extraDamage);
+        }
 
-        public override void Execute(){
-            damage.target.TakeDamage(damage);
+        public void ResolveAllDamages(){
+            damage?.Resolve();
+            foreach (var extraDamage in extraDamages){
+                extraDamage.Resolve();
+            }
         }
     }
 
-    public class StageActionInfoPlayerAttack : StageActionInfoBase{
+    public class StageActionPlayerAction : StageActionBase{
         public readonly GearEffectBase[] effects;
         public Ball[] circledBalls;
         public int defend;
         public Ball[] hitBalls;
-        public int lifeDeduction = 0;
+        public readonly IBuffEffect<StageActionPlayerAction>[] buffEffects;
 
-        public StageActionInfoPlayerAttack(GameModel parent, GearEffectBase[] effects) : base(parent){
+        public StageActionPlayerAction(GameModel parent, GearEffectBase[] effects, IBuffEffect<StageActionPlayerAction>[] buffEffects) : base(parent){
             this.effects = effects;
+            this.buffEffects = buffEffects;
         }
 
         public override void Execute(){
             ExecuteSpecials();
-            currentGame.player.CurrentHp -= lifeDeduction;
-            if (currentGame.player.CurrentHp <= 0) return;
-            damage?.target.TakeDamage(damage);
             currentGame.player.Armor += defend;
+            ResolveAllDamages();
         }
         
         public void ExecuteSpecials(){
-            foreach (var effect in effects) effect.Execute(this);
+            foreach (var effect in effects ?? Array.Empty<GearEffectBase>()) effect.Execute(this);
+            foreach (var effect in buffEffects ?? Array.Empty<IBuffEffect<StageActionPlayerAction>>()) effect.Execute(this);
         }
     }
 
-    public class StageActionInfoEnemyDefend : StageActionInfoBase{
-        public int defend;
-        public StageActionInfoEnemyDefend(GameModel parent) : base(parent){ }
-
-        public override void Execute(){
-            currentGame.CurrentEnemy.Armor += defend;
-        }
+    public class StageActionEnemyDefend : StageActionEnemyAction{
+        public StageActionEnemyDefend(GameModel parent) : base(parent){ }
+    }
+    
+    public class StageActionEnemyAttack : StageActionEnemyAction{
+        public StageActionEnemyAttack(GameModel parent) : base(parent){ }
     }
 
-    public class StageActionInfoEnemySpecial : StageActionInfoBase{
+    public class StageActionEnemySpecial : StageActionEnemyAction{
+        public StageActionEnemySpecial(GameModel parent) : base(parent){ }
+    }
+
+    public class StageActionEnemyAction : StageActionBase{
         public int defend = 0;
-        public SpecialAttackBase special;
-        public StageActionInfoEnemySpecial(GameModel parent) : base(parent){ }
-
+        public SpecialAttackBase special = null;
+        public StageActionEnemyAction(GameModel parent) : base(parent){ }
         public override void Execute(){
-            special.Execute(this);
-            damage?.target.TakeDamage(damage);
+            ExecuteSpecials();
             currentGame.CurrentEnemy.Armor += defend;
+            ResolveAllDamages();
+        }
+
+        public void ExecuteSpecials(){
+            special?.Execute(this);
         }
     }
 }

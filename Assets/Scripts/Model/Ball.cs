@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using Model.DebuffBallEffects;
 using Utility;
 using Utility.Loader;
 
@@ -15,7 +14,6 @@ namespace Model{
         public float speed;
         public float charge;
         public float combo;
-        public DebuffBallEffectBase debuffEffect;
 
         public Ball(GameModel parent) : base(parent){ }
 
@@ -33,13 +31,6 @@ namespace Model{
             point = (int)ball["point"];
             speed = (float)ball["speed"];
             size = (float)ball["size"];
-            var debuffEffectStr = ball["debuff_effect"] as string;
-            if (!string.IsNullOrEmpty(debuffEffectStr)){
-                var parts = debuffEffectStr.Split(";");
-                var className = parts[0];
-                debuffEffect = Activator.CreateInstance(Type.GetType($"Model.DebuffBallEffects.{className}", true),
-                    new object[]{ parts[1..] }) as DebuffBallEffectBase;
-            }
         }
     }
 

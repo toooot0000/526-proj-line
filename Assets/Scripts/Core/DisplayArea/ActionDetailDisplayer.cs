@@ -16,9 +16,9 @@ namespace Core.DisplayArea{
         }
 
         private void UpdateNumber(){
-            var info = _game.player.GetAttackActionInfo();
+            var info = _game.player.GetAction();
             info.ExecuteSpecials();
-            var attStr = info.damage.totalPoint > 0 ? $"Att: {info.damage.totalPoint}" : "";
+            var attStr = info.damage.initPoint > 0 ? $"Att: {info.damage.initPoint}" : "";
             var defStr = info.defend > 0 ? $"Def: {info.defend}" : "";
             text.text = $"{attStr} {defStr}";
         }

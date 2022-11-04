@@ -45,6 +45,7 @@ namespace Model{
                 type = GearType.Weapon;
             }
 
+            ballId = (int)gear["ball_id"];
             ball = new Ball(this, (int)gear["ball_id"]);
             ballNum = (int)gear["ball_num"];
             cooldown = (int)gear["cooldown"];
@@ -93,10 +94,12 @@ namespace Model{
 
         public string ToDescString(){
             List<string> parts = new();
+            var ballInfo = CsvLoader.TryToLoad("Configs/balls", ballId);
+            var ballPoint = (int)ballInfo["point"];
             if (type == GearType.Weapon){
-                parts.Add($"Att: {ball.point.ToString()}");
+                parts.Add($"Att: {ballPoint.ToString()}");
             } else{
-                parts.Add($"Def: {ball.point.ToString()}");
+                parts.Add($"Def: {ballPoint.ToString()}");
             }
             if (comboEffect != null && comboNum != -1){
                 parts.Add($"Combo({comboNum.ToString()}): {comboDesc}");
@@ -105,6 +108,14 @@ namespace Model{
                 parts.Add($"Charge({chargeNum.ToString()}): {chargeDesc}");
             }
             return string.Join("\n", parts);
+        }
+
+        public Ball[] GetBalls(){
+            var ret = new Ball[ballNum];
+            for (var i = 0; i < ballNum; i++){
+                ret[i] = new Ball(this, ballId);
+            }
+            return ret;
         }
     }
 

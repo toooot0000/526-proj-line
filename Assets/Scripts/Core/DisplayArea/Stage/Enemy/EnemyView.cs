@@ -13,7 +13,7 @@ namespace Core.DisplayArea.Stage.Enemy{
         public SpriteRenderer sprRenderer;
         public TextMeshProUGUI enemyName;
 
-        public override IDamageable Model{
+        public override Damageable Model{
             set{
                 base.Model = value;
                 // remaining.Number = GameManager.shared.game.currentStage.RemainingEnemyNumber;
@@ -73,7 +73,7 @@ namespace Core.DisplayArea.Stage.Enemy{
         }
 
         public void SpecialAttack(Action callback){
-            var info = (stageActionInfo as StageActionInfoEnemySpecial)!;
+            var info = (stageAction as StageActionEnemySpecial)!;
             if (info.damage != null){
                 Attack(null);
                 armorDisplayer.Number = Model.Armor;
@@ -82,7 +82,7 @@ namespace Core.DisplayArea.Stage.Enemy{
             }
         }
         public IEnumerator SpecialAttack(){
-            var info = (stageActionInfo as StageActionInfoEnemySpecial)!;
+            var info = (stageAction as StageActionEnemySpecial)!;
             if (info.damage != null){
                 yield return Attack();
             } else{
@@ -91,7 +91,7 @@ namespace Core.DisplayArea.Stage.Enemy{
         }
         
         public void TakeDamage(Action callback){
-            var point = stageActionInfo.damage.totalPoint;
+            var point = stageAction.damage.initPoint;
             damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
             CurrentHp = Model.CurrentHp;
             armorDisplayer.Number = Model.Armor;
@@ -102,7 +102,6 @@ namespace Core.DisplayArea.Stage.Enemy{
         }
 
         public IEnumerator TakeDamage(){
-            var point = stageActionInfo.damage.totalPoint;
             damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
             CurrentHp = Model.CurrentHp;
             armorDisplayer.Number = Model.Armor;

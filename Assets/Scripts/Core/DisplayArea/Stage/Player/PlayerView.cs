@@ -8,7 +8,7 @@ using Utility;
 namespace Core.DisplayArea.Stage.Player{
     [RequireComponent(typeof(PlayerAnimationController))]
     public class PlayerView : DamageableView{
-        public override IDamageable Model{
+        public override Damageable Model{
             set{
                 base.Model = value;
                 armorDisplayer.Number = value.Armor;
@@ -36,7 +36,7 @@ namespace Core.DisplayArea.Stage.Player{
         }
 
         public void TakeDamage(Action callback){
-            var point = stageActionInfo.damage.totalPoint;
+            var point = stageAction.damage.initPoint;
             damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
             CurrentHp = Model.CurrentHp;
             armorDisplayer.Number = Model.Armor;
@@ -47,7 +47,6 @@ namespace Core.DisplayArea.Stage.Player{
         }
 
         public IEnumerator TakeDamage(){
-            var point = stageActionInfo.damage.totalPoint;
             damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
             CurrentHp = Model.CurrentHp;
             armorDisplayer.Number = Model.Armor;

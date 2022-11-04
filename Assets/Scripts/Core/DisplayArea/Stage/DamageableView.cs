@@ -19,11 +19,11 @@ namespace Core.DisplayArea.Stage{
 
         private int _currentHp;
 
-        private IDamageable _model;
+        private Damageable _model;
         // public StageManager.StageActionInfoWrapper wrappedActionInfo;
-        public StageActionInfoBase stageActionInfo;
+        public StageActionBase stageAction;
 
-        public virtual IDamageable Model{
+        public virtual Damageable Model{
             set{
                 _model = value;
                 CurrentHp = _model.HpUpLimit;

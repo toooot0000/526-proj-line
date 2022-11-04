@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Model.EnemySpecialAttacks;
@@ -15,7 +16,7 @@ namespace Model{
     }
 
     [Serializable]
-    public class Enemy : GameModel, IDamageable{
+    public class Enemy : Damageable{
         public int attack = 1;
         public int id;
         public string name;
@@ -27,10 +28,13 @@ namespace Model{
         private int _currentHp;
         private int _nextActionInd;
         public SpecialAttackBase special;
+        public readonly List<Buff.Buff> buffs = new();
 
         public Enemy(GameModel parent) : base(parent){
             CurrentHp = HpUpLimit;
         }
+
+        public bool IsDead => CurrentHp <= 0;
 
         public Enemy(GameModel parent, int id) : base(parent){
             this.id = id;
@@ -54,9 +58,9 @@ namespace Model{
         }
 
         public EnemyIntention CurrentIntention => intentions[_nextActionInd];
-        public int HpUpLimit{ set; get; }
+        public sealed override int HpUpLimit{ set; get; }
 
-        public int CurrentHp{
+        public sealed override int CurrentHp{
             set{
                 _currentHp = value;
                 if (value <= 0) Die();
@@ -64,7 +68,7 @@ namespace Model{
             get => _currentHp;
         }
 
-        public int Armor{
+        public override int Armor{
             set{
                 _armor = Math.Max(value, 0);
                 OnArmorChanged?.Invoke(currentGame, this);
@@ -72,45 +76,43 @@ namespace Model{
             get => _armor;
         }
 
-        public void TakeDamage(Damage damage){
-            CurrentHp -= Math.Max(damage.totalPoint - Armor, 0);
-            Armor = Math.Max(Armor - damage.totalPoint, 0);
+        public override void TakeDamage(Damage damage){
+            var finalPoint = damage.GetFinalPoint();
+            CurrentHp -= Math.Max(finalPoint - Armor, 0);
+            Armor = Math.Max(Armor - finalPoint, 0);
             OnBeingAttacked?.Invoke(currentGame, this);
         }
-
-        public event ModelEvent OnAttack;
-        public event ModelEvent OnDefend;
-        public event ModelEvent OnSpecial;
+        
         public event ModelEvent OnBeingAttacked;
         public event ModelEvent OnDie;
         public event ModelEvent OnArmorChanged;
         public event ModelEvent OnIntentionChanged;
 
         private Damage GetDamage(){
-            return new Damage(currentGame){
-                totalPoint = attack,
-                type = Damage.Type.Physics,
-                target = currentGame.player,
+            return new Damage(currentGame, Damage.Type.Physics, attack, currentGame.player){
                 source = this
             };
         }
 
-        private StageActionInfoEnemyAttack GetEnemyAttackInfo(){
-            return new StageActionInfoEnemyAttack(this){
+        private StageActionEnemyAttack GetEnemyAttackInfo(){
+            return new StageActionEnemyAttack(this){
                 damage = GetDamage()
             };
         }
 
-        private StageActionInfoEnemyDefend GetEnemyDefendInfo(){
-            return new StageActionInfoEnemyDefend(this){
+        private StageActionEnemyDefend GetEnemyDefendInfo(){
+            return new StageActionEnemyDefend(this){
                 defend = defend
             };
         }
 
-        private StageActionInfoEnemySpecial GetEnemySpecialInfo(){
-            return new StageActionInfoEnemySpecial(this){
+        private StageActionEnemySpecial GetEnemySpecialInfo(){
+            var ret = new StageActionEnemySpecial(this){
+                damage = Damage.Default(currentGame.player),
                 special = special
             };
+            ret.damage.source = this;
+            return ret;
         }
 
         private void ForwardIntention(){
@@ -118,8 +120,8 @@ namespace Model{
             OnIntentionChanged?.Invoke(currentGame, this);
         }
 
-        public StageActionInfoBase GetCurrentStageAction(){
-            StageActionInfoBase ret =  intentions[_nextActionInd] switch{
+        public StageActionBase GetCurrentStageAction(){
+            StageActionBase ret =  intentions[_nextActionInd] switch{
                 EnemyIntention.Attack => GetEnemyAttackInfo(),
                 EnemyIntention.Defend => GetEnemyDefendInfo(),
                 EnemyIntention.SpecialAttack => GetEnemySpecialInfo(),

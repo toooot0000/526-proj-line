@@ -1,12 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Model.Buff;
+using UnityEngine;
 
 namespace Model{
-    public interface IDamageable{
-        public int CurrentHp{ get; set; }
-        public int HpUpLimit{ get; set; }
-        public int Armor{ get; set; }
-        public void TakeDamage(Damage damage);
-    }
+    // public abstract class Damageable : IBuffHolder{
+    //     public abstract int CurrentHp{ get; set; }
+    //     public abstract int HpUpLimit{ get; set; }
+    //     public abstract int Armor{ get; set; }
+    //     public abstract void TakeDamage(Damage damage);
+    //     public abstract void AddBuffLayer<TBuff>(int layer) where TBuff : Buff.Buff;
+    //     public abstract Buff.Buff[] GetAllBuffs();
+    //     public abstract void RemoveBUffLayer<TBuff>(int layer) where TBuff : Buff.Buff;
+    // }
+
 
     [Serializable]
     public class Damage : GameModel{
@@ -15,14 +23,42 @@ namespace Model{
             Magic
         }
 
-        public int totalPoint;
-
-        // public int hpDeduction;
-        // public int armorDeduction;
+        public int initPoint;
+        public float multipleParam;
+        public int addSubParam;
+        public bool isPenetrate = false; 
+        
         public Type type;
-        public IDamageable source;
-        public IDamageable target;
+        public Damageable source;
+        public Damageable target;
         public int finalDamagePoint = 0;
-        public Damage(GameModel parent) : base(parent){ }
+
+        public static Damage Default<T>(T target) where T: Damageable{
+            return new(null, Type.Physics, 0, target);
+        }
+
+        public Damage(GameModel parent, Type type, int point, Damageable target): base(parent){
+            this.type = type;
+            this.initPoint = point;
+            this.target = target;
+            multipleParam = 1;
+            addSubParam = 0;
+        }
+
+        public int GetFinalPoint(){
+            return Mathf.RoundToInt(Math.Max(initPoint + addSubParam, 0) * multipleParam);
+        }
+
+        public void ApplyMultipleParam(float param){
+            multipleParam = Mathf.Max(multipleParam + param, 0);
+        }
+
+        public void ApplyAddSubParam(int point){
+            addSubParam += point;
+        }
+
+        public void Resolve(){
+            target.TakeDamage(this);
+        }
     }
 }

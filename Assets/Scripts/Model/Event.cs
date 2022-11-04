@@ -92,11 +92,9 @@ namespace Model{
                 switch (effect[i]){
                     case "GetLife":
                         GameManager.shared.game.player.CurrentHp += effectValue[i];
-                        if (effectValue[i] > 0)
+                        if (effectValue[i] > 0){
                             result += "You got " + effectValue[i] + " HP\n";
-                        else
-                        {
-                            
+                        } else{
                             result += "You lost " + Math.Abs(effectValue[i]) + " HP\n";
                         }
                             

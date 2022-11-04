@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BackendApi;
+using Model.Buff;
 using Model.GearEffects;
 using UI;
 using Utility.Loader;
@@ -11,7 +12,7 @@ using Utility.Extensions;
 
 namespace Model{
     [Serializable]
-    public class Player : GameModel, IDamageable{
+    public class Player : Damageable{
         public List<Gear> gears;
         public int gearUpLimit;
         public int energy;
@@ -19,13 +20,15 @@ namespace Model{
         public readonly List<Ball> hitBalls = new();
         public readonly List<Ball> circledBalls = new();
         public readonly List<Ball> hitDebuffBalls = new();
-        public readonly List<Ball> activeDebuffBalls = new();
         
         private int _armor;
 
         private int _coin;
 
         private int _currentHp;
+
+        public readonly List<Buff.Buff> buffs = new();
+        public readonly List<DebuffBall.DebuffBall> debuffBalls = new(); 
 
 
         public Player(GameModel parent) : base(parent){
@@ -40,14 +43,11 @@ namespace Model{
             get => _coin;
         }
 
-        [Obsolete("Use CurrentGears!")]
-        public Gear CurrentGear => gears.Count > 0 ? gears[^1] : null;
-
         public Gear[] CurrentGears => gears.ToArray();
 
-        public int HpUpLimit{ set; get; }
+        public override int HpUpLimit{ set; get; }
 
-        public int CurrentHp{
+        public override int CurrentHp{
             set{
                 
                 _currentHp = Math.Clamp(value, 0, HpUpLimit);
@@ -56,7 +56,7 @@ namespace Model{
             get => _currentHp;
         }
 
-        public int Armor{
+        public override int Armor{
             set{
                 _armor = Math.Max(value, 0);
                 OnArmorChanged?.Invoke(currentGame, this);
@@ -65,11 +65,11 @@ namespace Model{
         }
 
 
-        public void TakeDamage(Damage damage)
-        {
-            damage.finalDamagePoint = Math.Max(damage.totalPoint - Armor, 0);
-            CurrentHp -= Math.Max(damage.totalPoint - Armor, 0);
-            Armor -= damage.totalPoint;
+        public override void TakeDamage(Damage damage){
+            var finalPoint = damage.GetFinalPoint();
+            damage.finalDamagePoint = Math.Max(finalPoint - Armor, 0);
+            CurrentHp -= Math.Max(finalPoint - Armor, 0);
+            Armor -= finalPoint;
             OnBeingAttacked?.Invoke(currentGame, damage);
         }
 
@@ -84,7 +84,6 @@ namespace Model{
         public event ModelEvent OnCoinChanged;
         public event ModelEvent OnArmorChanged;
         
-        public event ModelEvent OnStageChanged;
         public void Init(){
             HpUpLimit = (int)CsvLoader.GetConfig("player_init_hp");
             Coin = (int)CsvLoader.GetConfig("player_init_coin");
@@ -135,16 +134,17 @@ namespace Model{
         }
 
         public Damage GetDamage(){
-            return new Damage(currentGame){
-                totalPoint = GetTotalAttackPoint(),
-                type = Damage.Type.Physics,
-                target = currentGame.CurrentEnemy,
+            return new Damage(currentGame, Damage.Type.Physics, GetTotalAttackPoint(), currentGame.CurrentEnemy){
                 source = this
             };
         }
 
-        public StageActionInfoPlayerAttack GetAttackActionInfo(){
-            return new StageActionInfoPlayerAttack(this, GetTriggeredEffects()){
+        public StageActionPlayerAction GetAction(){
+            return new StageActionPlayerAction(
+                this, 
+                GetTriggeredEffects(),
+                GetOnAttackBuffEffects()
+                ){
                 damage = GetDamage(),
                 defend = GetTotalDefendPoint(),
                 hitBalls = hitBalls.ToArray(),
@@ -172,46 +172,33 @@ namespace Model{
         
         
         //special event system related functions
-        public void GetLife(int value)
-        {
-            int beforeHp = CurrentHp;
-            CurrentHp += value;
-            
-            if (CurrentHp > HpUpLimit)
-            {
-                CurrentHp = HpUpLimit;
-            }
-            else if (CurrentHp < 0)
-            {
-                Debug.Log("Player Died");
-                Die();
-            }
-            Debug.Log("Before:"+beforeHp.ToString()+ "After:" + CurrentHp.ToString());
-        }
 
-        public void GetCoin(int value)
-        {
-            Coin += value;
-            
-            if(Coin < 0)
-            {
-                Coin = 0;
-            }
-            Debug.Log("Coin:"+Coin.ToString());
-        }
-        
-        
+
         public void ClearAllBalls(){
             hitBalls.Clear();
             circledBalls.Clear();
         }
-
-        public void GainDebuffBall(Ball ball){
-            activeDebuffBalls.Add(ball);
-        }
         
         public Gear FindGearOfId(int id){
             return gears.Find(g => g.id == id);
+        }
+        
+        private IBuffEffect<StageActionPlayerAction>[] GetOnAttackBuffEffects(){
+            var triggers = Buff.Buff.GetBuffOfTriggerFrom<IBuffTriggerOnGetPlayerActionInfo>(this);
+            return triggers?.Select(t => t.OnGetPlayerActionInfo()).ToArray();
+        }
+        
+        public Ball[] GetAllBalls(){
+            var ret = new List<Ball>();
+            ret.AddRange(GetAllGearBalls());
+            ret.AddRange(debuffBalls);
+            return ret.ToArray();
+        }
+
+        public Ball[] GetAllGearBalls(){
+            var ret = new List<Ball>();
+            gears.ForEach(g => ret.AddRange(g.GetBalls()));
+            return ret.ToArray();
         }
     }
 }

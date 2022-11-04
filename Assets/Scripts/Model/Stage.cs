@@ -27,7 +27,7 @@ namespace Model{
 
         private int _enemyIndex = 0;
         public Enemy CurrentEnemy => _enemyIndex < enemies.Length ? enemies[_enemyIndex] : null;
-        public Event CurrentEvent{ get; set; } = null;
+        public Event CurrentEvent{ get; private set; } = null;
         public Enemy NextEnemy => _enemyIndex >= enemies.Length - 1 ? null : enemies[_enemyIndex + 1];
         public bool IsBeaten => _enemyIndex == enemies.Length;
         public int RemainingEnemyNumber => enemies.Length - _enemyIndex;
@@ -41,6 +41,7 @@ namespace Model{
         /// <summary>
         /// model = StageActionInfo
         /// </summary>
+        [Obsolete]
         public event ModelEvent OnProcessStageAction;
 
         public event ModelEvent OnNewConfigLoaded;
@@ -68,16 +69,15 @@ namespace Model{
         }
 
         public void ForwardCurrentEnemy(){
+            if (_enemyIndex >= enemies.Length) return;
             _enemyIndex++;
-            if (_enemyIndex == enemies.Length){
-                _enemyIndex = 0;
-            } else{
-                CurrentEnemy.BecomeCurrent();
-                OnEnemyChanged?.Invoke(currentGame, this);
-            }
+            if (_enemyIndex >= enemies.Length) return;
+            CurrentEnemy.BecomeCurrent();
+            OnEnemyChanged?.Invoke(currentGame, this);
         }
         
-        public void ProcessStageAction(StageActionInfoBase info){
+        [Obsolete]
+        public void ProcessStageAction(StageActionBase info){
             info.Execute();
             OnProcessStageAction?.Invoke(currentGame, info);
         }
