@@ -1,6 +1,14 @@
 ﻿using UnityEngine;
 
 namespace Model{
+    
+    
+    public delegate void ModelEvent(Game game, GameModel model);
+
+    public delegate void ModelEvent<in T>(Game game, T target) where T : GameModel;
+
+    public delegate void SimpleModelEvent(Game game);
+    
     /// <summary>
     ///     对数据负责，不对流程负责！
     /// </summary>

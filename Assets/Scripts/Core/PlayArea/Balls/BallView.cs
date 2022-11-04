@@ -12,7 +12,7 @@ namespace Core.PlayArea.Balls{
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(BallConfig))]
     public class BallView : MonoBehaviour, ITutorialControllable{
-        public event Action OnMouseEnterBall;
+        public event Action<BallView> OnMouseEnterBall;
         public event Action OnMouseExitBall;
         public event Action OnMouseUpBall;
         
@@ -82,8 +82,8 @@ namespace Core.PlayArea.Balls{
             CurrentState = State.Hide;
         }
 
-        public event BallViewEvent OnHitted;
-        public event BallViewEvent OnCharged;
+        public event BallViewEvent OnSliced;
+        public event BallViewEvent OnCircled;
 
         public void UpdateConfig(){
             config.ResetView();
@@ -94,21 +94,20 @@ namespace Core.PlayArea.Balls{
             velocity = new Vector2(velocity.x * wall.velocityChangeRate.x, velocity.y * wall.velocityChangeRate.y);
         }
 
-        public void OnBeingTouched(){
+        public void OnBeingSliced(){
             if (CurrentState != State.Free && (CurrentState != State.Controlled || !tutorCanBeHit)) return;
             _game.player.AddHitBall(config.modelBall);
-            OnHitted?.Invoke(this);
+            OnSliced?.Invoke(this);
         }
 
         public void OnBeingCircled(){
             if (CurrentState != State.Free && (CurrentState != State.Controlled || !tutorCanBeCircled)) return;
             _game.player.AddCircledBall(config.modelBall);
-            OnCharged?.Invoke(this);
+            OnCircled?.Invoke(this);
         }
 
         private void OnMouseEnter(){
-            OnBeingTouched();
-            OnMouseEnterBall?.Invoke();
+            OnMouseEnterBall?.Invoke(this);
         }
 
         private void OnMouseUp(){

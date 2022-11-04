@@ -3,9 +3,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Model{
-    public delegate void ModelEvent(Game game, GameModel model);
-
-    public delegate void SimpleModelEvent(Game game);
 
     public class Game : GameModel{
         public enum Turn{
@@ -29,7 +26,6 @@ namespace Model{
         public event SimpleModelEvent OnStageLoaded;
         public event SimpleModelEvent OnGameRestart;
         public event SimpleModelEvent OnPlayerInit;
-        public event ModelEvent OnGearShow;
         
         public Game(GameModel parent = null) : base(parent){
             currentGame = this;

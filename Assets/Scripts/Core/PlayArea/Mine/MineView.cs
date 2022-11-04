@@ -27,7 +27,7 @@ namespace Core.PlayArea.Mine{
             if (!tracker.isTracing) return;
             if (state != MineState.Idle) return;
             state = MineState.Triggered;
-            tracker.ContinueTrackOnMouseExit();
+            tracker.TryToContinueTracking();
             FlyToLocation(flyTime, stageManager.playerView.transform.position, () => {
                 animationController.Play(MineAnimation.Explosion, () => {
                     GameManager.shared.game.playArea.RemovePlayableObject(model);

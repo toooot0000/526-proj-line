@@ -36,19 +36,9 @@ namespace Model{
 
         public event ModelEvent OnStageBeaten;
         public event ModelEvent OnEnemyChanged;
-        [Obsolete("Use OnProcessStageAction")]
-        public event ModelEvent OnProcessDamage;
-        /// <summary>
-        /// model = StageActionInfo
-        /// </summary>
-        [Obsolete]
-        public event ModelEvent OnProcessStageAction;
-
         public event ModelEvent OnNewConfigLoaded;
         
-        [Obsolete("Use Next StageChoice")]
-        public int nextStage = 0;
-        public String desc;
+        public string desc;
         public int bonusCoins = -1;
         public int[] nextStageChoice;
         //public int[] nextStageChoiceInt;
@@ -72,14 +62,7 @@ namespace Model{
             if (_enemyIndex >= enemies.Length) return;
             _enemyIndex++;
             if (_enemyIndex >= enemies.Length) return;
-            CurrentEnemy.BecomeCurrent();
             OnEnemyChanged?.Invoke(currentGame, this);
-        }
-        
-        [Obsolete]
-        public void ProcessStageAction(StageActionBase info){
-            info.Execute();
-            OnProcessStageAction?.Invoke(currentGame, info);
         }
 
         public void LoadFromConfig(int stageId){

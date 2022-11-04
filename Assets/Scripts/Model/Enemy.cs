@@ -16,7 +16,7 @@ namespace Model{
     }
 
     [Serializable]
-    public class Enemy : Damageable{
+    public sealed class Enemy : Damageable{
         public int attack = 1;
         public int id;
         public string name;
@@ -24,8 +24,6 @@ namespace Model{
         public EnemyIntention[] intentions;
         public int defend;
         public string imgPath;
-        private int _armor;
-        private int _currentHp;
         private int _nextActionInd;
         public SpecialAttackBase special;
         public readonly List<Buff.Buff> buffs = new();
@@ -59,33 +57,6 @@ namespace Model{
 
         public EnemyIntention CurrentIntention => intentions[_nextActionInd];
         public sealed override int HpUpLimit{ set; get; }
-
-        public sealed override int CurrentHp{
-            set{
-                _currentHp = value;
-                if (value <= 0) Die();
-            }
-            get => _currentHp;
-        }
-
-        public override int Armor{
-            set{
-                _armor = Math.Max(value, 0);
-                OnArmorChanged?.Invoke(currentGame, this);
-            }
-            get => _armor;
-        }
-
-        public override void TakeDamage(Damage damage){
-            var finalPoint = damage.GetFinalPoint();
-            CurrentHp -= Math.Max(finalPoint - Armor, 0);
-            Armor = Math.Max(Armor - finalPoint, 0);
-            OnBeingAttacked?.Invoke(currentGame, this);
-        }
-        
-        public event ModelEvent OnBeingAttacked;
-        public event ModelEvent OnDie;
-        public event ModelEvent OnArmorChanged;
         public event ModelEvent OnIntentionChanged;
 
         private Damage GetDamage(){
@@ -130,15 +101,7 @@ namespace Model{
             ForwardIntention();
             return ret;
         }
-
-        public void Die(){
-            // currentGame.OnTurnChanged -= DoAction;
-            OnDie?.Invoke(currentGame, this);
-        }
-
-        public void BecomeCurrent(){
-            // currentGame.OnTurnChanged += DoAction;
-        }
+        
         
         public Sprite GetSprite(){
             return Resources.Load<Sprite>(imgPath);

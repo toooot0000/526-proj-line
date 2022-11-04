@@ -55,9 +55,9 @@ namespace Core.PlayArea.Balls{
                 } else{
                     var newBallObject = Instantiate(ballPrefab, transform, false);
                     curBallView = newBallObject.GetComponent<BallView>();
-                    curBallView.OnHitted += OnBallHit;
-                    curBallView.OnCharged += OnBallCircled;
-                    curBallView.OnMouseEnterBall += touchTracker.ContinueTrackOnMouseExit;
+                    curBallView.OnSliced += OnBallHit;
+                    curBallView.OnCircled += OnBallCircled;
+                    curBallView.OnMouseEnterBall += touchTracker.OnMouseEnterBall;
                     curBallView.OnMouseExitBall += touchTracker.OnMouseExitBall;
                     curBallView.OnMouseUpBall += touchTracker.OnMouseUpBall;
                     balls.Add(curBallView);

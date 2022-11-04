@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Model.Buff;
 using Model.EnemySpecialAttacks;
@@ -7,17 +8,25 @@ using Model.GearEffects;
 namespace Model{
     public abstract class StageActionBase : GameModel, IBuffModifiable{
         public Damage damage = null;
-        public readonly List<Damage> extraDamages = new();
+        private readonly List<Damage> _extraDamages = new();
         protected StageActionBase(GameModel parent) : base(parent){ }
         public abstract void Execute();
 
         public void AddExtraDamage(Damage extraDamage){
-            extraDamages.Add(extraDamage);
+            _extraDamages.Add(extraDamage);
         }
 
         public void ResolveAllDamages(){
             damage?.Resolve();
-            foreach (var extraDamage in extraDamages){
+            foreach (var extraDamage in _extraDamages){
+                extraDamage.Resolve();
+            }
+        }
+
+        public IEnumerator ResolveAllDamagesEnumerator(){
+            damage?.Resolve();
+            foreach (var extraDamage in _extraDamages){
+                yield return null;
                 extraDamage.Resolve();
             }
         }

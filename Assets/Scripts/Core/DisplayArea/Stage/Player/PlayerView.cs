@@ -8,14 +8,7 @@ using Utility;
 namespace Core.DisplayArea.Stage.Player{
     [RequireComponent(typeof(PlayerAnimationController))]
     public class PlayerView : DamageableView{
-        public override Damageable Model{
-            set{
-                base.Model = value;
-                armorDisplayer.Number = value.Armor;
-            }
-        }
-
-
+        
         private void Start(){
             Model = GameManager.shared.game.player;
         }

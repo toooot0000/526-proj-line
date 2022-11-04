@@ -160,9 +160,16 @@ namespace Core.PlayArea.TouchTracking{
             progressBar.Percentage = 100 - _currentLineLength / totalLineLength * 100;
         }
 
-        public void ContinueTrackOnMouseExit(){
+        public void TryToContinueTracking(){
             if (!isTracing) return;
             if (_currentLineLength >= totalLineLength) return;
+            _mouseOnBall = true;
+        }
+
+        public void OnMouseEnterBall(BallView ballView){
+            if (!isTracing) return;
+            if (_currentLineLength >= totalLineLength) return;
+            ballView.OnBeingSliced();
             _mouseOnBall = true;
         }
 

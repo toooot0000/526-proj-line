@@ -20,13 +20,13 @@ namespace Core.DisplayArea.Stage{
         private int _currentHp;
 
         private Damageable _model;
-        // public StageManager.StageActionInfoWrapper wrappedActionInfo;
         public StageActionBase stageAction;
 
         public virtual Damageable Model{
             set{
                 _model = value;
                 CurrentHp = _model.HpUpLimit;
+                armorDisplayer.Number = value.Armor;
             }
             get => _model;
         }

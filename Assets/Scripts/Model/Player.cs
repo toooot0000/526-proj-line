@@ -16,25 +16,13 @@ namespace Model{
         public List<Gear> gears;
         public int gearUpLimit;
         public int energy;
-
         public readonly List<Ball> hitBalls = new();
         public readonly List<Ball> circledBalls = new();
         public readonly List<Ball> hitDebuffBalls = new();
-        
-        private int _armor;
-
-        private int _coin;
-
-        private int _currentHp;
-
         public readonly List<Buff.Buff> buffs = new();
         public readonly List<DebuffBall.DebuffBall> debuffBalls = new(); 
-
-
-        public Player(GameModel parent) : base(parent){
-            Init();
-        }
-
+        
+        private int _coin;
         public int Coin{
             set{
                 _coin = Math.Max(value, 0);
@@ -45,44 +33,16 @@ namespace Model{
 
         public Gear[] CurrentGears => gears.ToArray();
 
-        public override int HpUpLimit{ set; get; }
-
-        public override int CurrentHp{
-            set{
-                
-                _currentHp = Math.Clamp(value, 0, HpUpLimit);
-                if (value == 0) Die();
-            }
-            get => _currentHp;
-        }
-
-        public override int Armor{
-            set{
-                _armor = Math.Max(value, 0);
-                OnArmorChanged?.Invoke(currentGame, this);
-            }
-            get => _armor;
-        }
-
-
-        public override void TakeDamage(Damage damage){
-            var finalPoint = damage.GetFinalPoint();
-            damage.finalDamagePoint = Math.Max(finalPoint - Armor, 0);
-            CurrentHp -= Math.Max(finalPoint - Armor, 0);
-            Armor -= finalPoint;
-            OnBeingAttacked?.Invoke(currentGame, damage);
-        }
-
         public event ModelEvent OnHitBall;
         public event ModelEvent OnCircledBall;
-        public event ModelEvent OnAttack;
-        public event ModelEvent OnBeingAttacked;
-        public event ModelEvent OnDie;
         public event ModelEvent OnGearChanged;
         public event ModelEvent OnGearAdded;
         public event ModelEvent OnInit;
         public event ModelEvent OnCoinChanged;
-        public event ModelEvent OnArmorChanged;
+        
+        public Player(GameModel parent) : base(parent){
+            Init();
+        }
         
         public void Init(){
             HpUpLimit = (int)CsvLoader.GetConfig("player_init_hp");
@@ -152,10 +112,11 @@ namespace Model{
             };
         }
 
-        private void Die(){
-            OnDie?.Invoke(currentGame, this);
+        public override void Die(){
+            base.Die();
             currentGame.End();
         }
+        
         public void AddGear(Gear gear){
             gear.parent = this;
             gears.Add(gear);
@@ -169,9 +130,6 @@ namespace Model{
             gears.RemoveAt(ind);
             OnGearChanged?.Invoke(currentGame, this);
         }
-        
-        
-        //special event system related functions
 
 
         public void ClearAllBalls(){

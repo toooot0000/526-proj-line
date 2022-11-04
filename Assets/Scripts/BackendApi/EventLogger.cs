@@ -126,13 +126,13 @@ namespace BackendApi{
                 }
             };
             //dmg of enemies
-            GameManager.shared.game.player.OnBeingAttacked += (game, damage) =>
+            GameManager.shared.game.player.OnTakeDamage += (game, damage) =>
             {
-                if((damage as Damage).finalDamagePoint>0)
+                if((damage).finalDamagePoint>0)
                     this.Log(new EventHpofEnemies()
                     {
                         enemyId = GameManager.shared.game.CurrentEnemy.id,
-                        hp = (damage as Damage).finalDamagePoint
+                        hp = (damage).finalDamagePoint
                     });
             };
             //hit of balls
