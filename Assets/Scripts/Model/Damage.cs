@@ -31,7 +31,7 @@ namespace Model{
         public Type type;
         public Damageable source;
         public Damageable target;
-        public int finalDamagePoint = 0;
+        public int lifeDeductionPoint = 0;
 
         public static Damage Default<T>(T target) where T: Damageable{
             return new(null, Type.Physics, 0, target);
@@ -45,9 +45,7 @@ namespace Model{
             addSubParam = 0;
         }
 
-        public int GetFinalPoint(){
-            return Mathf.RoundToInt(Math.Max(initPoint + addSubParam, 0) * multipleParam);
-        }
+        public int FinalDamagePoint => Mathf.RoundToInt(Math.Max(initPoint + addSubParam, 0) * multipleParam);
 
         public void ApplyMultipleParam(float param){
             multipleParam = Mathf.Max(multipleParam + param, 0);

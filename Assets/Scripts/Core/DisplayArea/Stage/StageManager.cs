@@ -63,30 +63,30 @@ namespace Core.DisplayArea.Stage{
 
         private IEnumerator ProcessPlayerAttack(StageActionBase action){
             yield return new WaitWhile(() => _pause);
-            action.Execute();
             ballManager.FlyAllBalls(this, 0.5f);
             yield return new WaitForSeconds(0.4f);
             if(_pause) yield return new WaitWhile(() => _pause);
             playerView.Attack(null);
             yield return new WaitForSeconds(0.07f);
+            action.Execute();
             yield return enemyView.TakeDamage();
             if(_pause) yield return new WaitWhile(() => _pause);
         }
 
         private IEnumerator ProcessEnemyAttack(StageActionBase action){
             yield return new WaitWhile(() => _pause);
-            action.Execute();
             enemyView.Attack(null);
             yield return new WaitForSeconds(0.1f);
+            action.Execute();
             yield return playerView.TakeDamage();
             yield return new WaitWhile(() => _pause);
         }
 
         private IEnumerator ProcessEnemySpecialAttack(StageActionBase action){
             yield return new WaitWhile(() => _pause);
-            action.Execute();
             enemyView.SpecialAttack(null);
             yield return new WaitForSeconds(0.1f);
+            action.Execute();
             yield return playerView.TakeDamage();
             if(_pause) yield return new WaitWhile(() => _pause);
         }

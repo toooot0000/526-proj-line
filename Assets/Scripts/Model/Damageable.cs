@@ -33,8 +33,8 @@ namespace Model{
 
         public event ModelEvent<Damage> OnTakeDamage;
         public virtual void TakeDamage(Damage damage){
-            var finalPoint = damage.GetFinalPoint();
-            damage.finalDamagePoint = Math.Max(finalPoint - Armor, 0);
+            var finalPoint = damage.FinalDamagePoint;
+            damage.lifeDeductionPoint = Math.Max(finalPoint - Armor, 0);
             CurrentHp -= Math.Max(finalPoint - Armor, 0);
             Armor -= finalPoint;
             OnTakeDamage?.Invoke(currentGame, damage);

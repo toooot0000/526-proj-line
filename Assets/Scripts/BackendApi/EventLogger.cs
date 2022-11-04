@@ -128,11 +128,11 @@ namespace BackendApi{
             //dmg of enemies
             GameManager.shared.game.player.OnTakeDamage += (game, damage) =>
             {
-                if((damage).finalDamagePoint>0)
+                if((damage).lifeDeductionPoint>0)
                     this.Log(new EventHpofEnemies()
                     {
                         enemyId = GameManager.shared.game.CurrentEnemy.id,
-                        hp = (damage).finalDamagePoint
+                        hp = (damage).lifeDeductionPoint
                     });
             };
             //hit of balls

@@ -83,10 +83,6 @@ namespace Core.DisplayArea.Stage.Enemy{
         }
         
         public void TakeDamage(Action callback){
-            var point = stageAction.damage.initPoint;
-            damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
-            CurrentHp = Model.CurrentHp;
-            armorDisplayer.Number = Model.Armor;
             if (isDead)
                 animationController.Play(PlayerAnimation.Die, callback);
             else
@@ -94,9 +90,6 @@ namespace Core.DisplayArea.Stage.Enemy{
         }
 
         public IEnumerator TakeDamage(){
-            damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
-            CurrentHp = Model.CurrentHp;
-            armorDisplayer.Number = Model.Armor;
             if (isDead)
                 yield return animationController.PlayUntilComplete(PlayerAnimation.Die);
             else
