@@ -1185,9 +1185,33 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -0.6054077
       objectReference: {fileID: 0}
+    - target: {fileID: 3749800339078258584, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4028160410759911298}
     - target: {fileID: 5547909481646914892, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
       propertyPath: m_Name
       value: ShopPanel (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7588166788553476913, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
       propertyPath: m_Pivot.x
@@ -1291,9 +1315,33 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -0.6054077
       objectReference: {fileID: 0}
+    - target: {fileID: 3749800339078258584, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4028160410759911298}
     - target: {fileID: 5547909481646914892, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
       propertyPath: m_Name
       value: ShopPanel (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7588166788553476913, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
       propertyPath: m_Pivot.x
@@ -1554,6 +1602,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 441427210331561282}
     m_Modifications:
+    - target: {fileID: 297540727804159260, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 297540727804159260, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 297540727804159260, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 297540727804159260, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 297540727804159260, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 297540727804159260, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 297540727804159260, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 1836441180760246391, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -0.00024414062
@@ -1562,9 +1638,45 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -0.6054077
       objectReference: {fileID: 0}
+    - target: {fileID: 3749800339078258584, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4028160410759911298}
     - target: {fileID: 5547909481646914892, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
       propertyPath: m_Name
       value: ShopPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7588166788553476913, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
       propertyPath: m_Pivot.x
@@ -1672,9 +1784,33 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -0.6054077
       objectReference: {fileID: 0}
+    - target: {fileID: 3749800339078258584, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4028160410759911298}
     - target: {fileID: 5547909481646914892, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
       propertyPath: m_Name
       value: ShopPanel (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7588166788553476913, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
       propertyPath: m_Pivot.x
@@ -1782,9 +1918,33 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -0.6054077
       objectReference: {fileID: 0}
+    - target: {fileID: 3749800339078258584, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4028160410759911298}
     - target: {fileID: 5547909481646914892, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
       propertyPath: m_Name
       value: ShopPanel (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7588166788553476913, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
       propertyPath: m_Pivot.x
@@ -1888,9 +2048,33 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -0.6054077
       objectReference: {fileID: 0}
+    - target: {fileID: 3749800339078258584, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4028160410759911298}
     - target: {fileID: 5547909481646914892, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
       propertyPath: m_Name
       value: ShopPanel (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5766776949151881809, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7588166788553476913, guid: 26a919a7fcdc54db3b4e997421886373, type: 3}
       propertyPath: m_Pivot.x

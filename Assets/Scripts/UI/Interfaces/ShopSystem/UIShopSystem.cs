@@ -21,7 +21,6 @@ namespace UI.Interfaces.ShopSystem {
         private CanvasGroup _canvasGroup;
         private bool _inAnimation;
         private UIShopPanel[] _panels;
-        private readonly List<int> _soldItems = new();
         public TextMeshProUGUI coinWithNumber;
         public TextMeshProUGUI refreshCoinWithNumber;
 
@@ -86,7 +85,6 @@ namespace UI.Interfaces.ShopSystem {
                 gearPanel.Show = true;
                 gearPanel.Model = gear;
                 gearPanel.Price = UnifiedPrice;
-                gearPanel.OnClick += PurchaseSelectedGear;
                 curPanelInd++;
             }
             for (; curPanelInd < _panels.Length; curPanelInd++) _panels[curPanelInd].Show = false;
@@ -100,17 +98,16 @@ namespace UI.Interfaces.ShopSystem {
         }
         
 
-        private void PurchaseSelectedGear(UIShopPanel clickedPanel)
+        public void PurchaseSelectedGear(UIShopPanel clickedPanel)
         {
             if (GameManager.shared.game.player.Coin < clickedPanel.Price) return; 
             GameManager.shared.game.player.Coin -= clickedPanel.Price; 
             GameManager.shared.game.player.AddGear(clickedPanel.Model);
-            _soldItems.Add(clickedPanel.Model.id);
             clickedPanel.soldOut.enabled = true;
             UpdatePriceTags();
         }
 
-        private void UpdatePriceTags(){
+        public void UpdatePriceTags(){
             foreach (var uiShopPanel in _panels){
                 uiShopPanel.UpdatePriceColor();
             }
