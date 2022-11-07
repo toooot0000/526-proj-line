@@ -9,7 +9,6 @@ using Core.PlayArea.TouchTracking;
 using Model;
 using Model.Buff;
 using Model.Buff.Buffs;
-using Model.Obstacles;
 using Tutorial;
 using UI;
 using UI.Interfaces.ShopSystem;

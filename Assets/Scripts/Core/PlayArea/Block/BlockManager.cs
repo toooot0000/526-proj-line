@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Model.Obstacles;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,7 +12,7 @@ namespace Core.PlayArea.Block{
 
         private readonly List<BlockView> _blockViews = new();
 
-        public BlockView PlaceBlock(Model.Obstacles.Block block){
+        public BlockView PlaceBlock(Model.Mechanics.PlayableObjects.Block block){
             var i = 0;
             for (; i < _blockViews.Count; i++){
                 if(_blockViews[i].gameObject.activeSelf) continue;
@@ -23,7 +22,7 @@ namespace Core.PlayArea.Block{
                 var newBlock = GenerateBlock();
                 _blockViews.Add(newBlock);
             }
-            var rect = GridRectToRect(block.RectInt);
+            var rect = GridRectToRect(block.InitGridPosition);
             
             _blockViews[i].gameObject.SetActive(true);
             _blockViews[i].Rect = rect;

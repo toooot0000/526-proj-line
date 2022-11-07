@@ -22,18 +22,17 @@ namespace Core.PlayArea.TouchTracking{
         public float minDistance = 5f;
         public LineRenderer lineRenderer;
         public new Camera camera;
-        public LineColliderGenerator lineColliderGenerator;
         public TouchCollider touchCollider;
         public CircleCollider polygonCollider;
         public float totalLineLength = 5f;
         public ProgressBar progressBar;
-        public PointDisplayer pointDisplayer;
-        public StageManager stageManager;
         private CircleDetector _circleDetector;
         private float _currentLineLength;
         private Game _game;
         private bool _isInTutorial;
+        [HideInInspector]
         public bool tutorKeepLine = false;
+        [HideInInspector]
         public bool isAcceptingInput = true;
 
 

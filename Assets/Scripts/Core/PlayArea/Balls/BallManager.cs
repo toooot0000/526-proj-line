@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Core.DisplayArea.Stage;
 using Core.PlayArea.TouchTracking;
 using Model;
+using Model.Mechanics.PlayableObjects;
 using Tutorial;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ namespace Core.PlayArea.Balls{
         public ComboDisplayer comboDisplayer;
         public readonly List<BallView> balls = new();
         public TouchTracker touchTracker;
+        public PlayAreaManager playAreaManager;
 
         private bool _isInTutorial = false;
 
@@ -55,7 +57,7 @@ namespace Core.PlayArea.Balls{
                 } else{
                     var newBallObject = Instantiate(ballPrefab, transform, false);
                     curBallView = newBallObject.GetComponent<BallView>();
-                    curBallView.OnSliced += OnBallHit;
+                    curBallView.OnSliced += OnBallSliced;
                     curBallView.OnCircled += OnBallCircled;
                     curBallView.OnMouseEnterBall += touchTracker.OnMouseEnterBall;
                     curBallView.OnMouseExitBall += touchTracker.OnMouseExitBall;
@@ -91,7 +93,7 @@ namespace Core.PlayArea.Balls{
             yield return new WaitForSeconds(seconds);
         }
 
-        private void OnBallHit(BallView view){
+        private void OnBallSliced(BallView view){
             comboDisplayer.Show(view.Model.currentGame.player.hitBalls.Count, view.transform.position);
             view.CurrentState = BallView.State.Touched;
             UpdateBallState();

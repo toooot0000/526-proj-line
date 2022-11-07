@@ -15,12 +15,12 @@ namespace Core.PlayArea.Mine{
 
         private readonly List<MineView> _mineViews = new();
 
-        public MineView PlaceMine(Model.Obstacles.Mine mine){
+        public MineView PlaceMine(Model.Mechanics.PlayableObjects.Mine mine){
             var newMine = _mineViews.FirstNotActiveOrNew(GenerateMineView);
             newMine.Init();
             newMine.model = mine;
             newMine.stageManager = stageManager;
-            var rect = playAreaManager.GridRectToRect(mine.RectInt);
+            var rect = playAreaManager.GridRectToRect(mine.InitGridPosition);
             var rectTrans = newMine.transform;
             ((RectTransform)rectTrans).anchoredPosition = rect.position;
             ((RectTransform)rectTrans).sizeDelta = rect.size;

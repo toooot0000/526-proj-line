@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Model.Buff;
 using Model.EnemySpecialAttacks;
 using Model.GearEffects;
+using Model.Mechanics.PlayableObjects;
 
 namespace Model{
     public abstract class StageActionBase : GameModel, IBuffModifiable{

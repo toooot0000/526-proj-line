@@ -1,4 +1,4 @@
-namespace Model.Obstacles.MineEffects{
+namespace Model.Mechanics.PlayableObjects.MineEffects{
     public class MineEffectLoseLife: MineEffect{
         public readonly int point;
 

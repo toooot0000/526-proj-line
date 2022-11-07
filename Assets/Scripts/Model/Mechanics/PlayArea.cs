@@ -1,14 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using Model.Obstacles;
+using Model.Mechanics.PlayableObjects;
 using UnityEngine;
 
-namespace Model{
-
-    public interface IPlayableObject{
-        RectInt RectInt{ get; set; }
-    }
-
+namespace Model.Mechanics{
     public class PlayArea: GameModel{
         public static readonly Vector2Int GridSize = new Vector2Int(8, 5);
         public const int ReservedNumber = 10;
@@ -25,7 +20,7 @@ namespace Model{
         private RectInt? RandomRectInt(Vector2Int size){
             if (RemainingPositionNumber() <= 0) return null;
             var candidates = new List<RectInt>();
-            var list = _objects.Select(o => o.RectInt).ToList();
+            var list = _objects.Select(o => o.InitGridPosition).ToList();
             // get all candidate position;
             for (var i = 0; i < GridSize.x - size.x + 1; i++){
                 for (var j = 0; j < GridSize.y - size.y + 1; j++){
@@ -42,20 +37,20 @@ namespace Model{
         }
 
         private bool IsOccupied(RectInt rect){
-            return _objects.FindIndex(o => o.RectInt.Overlaps(rect)) != -1;
+            return _objects.FindIndex(o => o.InitGridPosition.Overlaps(rect)) != -1;
         }
 
         private int RemainingPositionNumber(){
-            return GridSize.x * GridSize.y - ReservedNumber - _objects.Aggregate(0, (p, cur) => p + cur.RectInt.size.x * cur.RectInt.size.y);
+            return GridSize.x * GridSize.y - ReservedNumber - _objects.Aggregate(0, (p, cur) => p + cur.InitGridPosition.size.x * cur.InitGridPosition.size.y);
         }
 
         private bool PlaceObject(IPlayableObject playableObject, RectInt? rectInt = null){
             if (RemainingPositionNumber() <= 0) return false;
             if (rectInt == null){
-                if (IsOccupied(playableObject.RectInt)) return false;
+                if (IsOccupied(playableObject.InitGridPosition)) return false;
             } else{
                 if (IsOccupied(rectInt.Value)) return false;
-                playableObject.RectInt = rectInt.Value;
+                playableObject.InitGridPosition = rectInt.Value;
             }
             ForceToPlaceObject(playableObject);
             return true;

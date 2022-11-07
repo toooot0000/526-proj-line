@@ -41,7 +41,7 @@ namespace Core.PlayArea.TouchTracking{
             }
 
             var localPosition = (Vector2)_transform.InverseTransformPoint(worldPosition);
-            dir = dir.normalized.Rotate(90);
+            dir = dir.normalized.Rotated(90);
             var p1 = localPosition + dir * lineWidth / 2 * widthFactor;
             var p2 = localPosition - dir * lineWidth / 2 * widthFactor;
             _list.AddFirst(p1);

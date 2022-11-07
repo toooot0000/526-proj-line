@@ -2,7 +2,13 @@
 
 namespace Utility.Extensions{
     public static class Vector2Extension{
-        public static Vector2 Rotate(this Vector2 v, float degrees){
+        /// <summary>
+        /// Rotate the vector in degrees, clockwise; 
+        /// </summary>
+        /// <param name="v"></param>
+        /// <param name="degrees"></param>
+        /// <returns></returns>
+        public static Vector2 Rotated(this Vector2 v, float degrees){
             var sin = Mathf.Sin(degrees * Mathf.Deg2Rad);
             var cos = Mathf.Cos(degrees * Mathf.Deg2Rad);
 
@@ -12,10 +18,15 @@ namespace Utility.Extensions{
             v.y = sin * tx + cos * ty;
             return v;
         }
-
-        public static Vector2 Align(this Vector2 vec){
+        
+        /// <summary>
+        /// Align the vector to axis directions
+        /// </summary>
+        /// <param name="vec"></param>
+        /// <returns></returns>
+        public static Vector2 Aligned(this Vector2 vec){
             if (vec.magnitude == 0) return Vector2.zero;
-            vec = vec.Rotate(-45);
+            vec = vec.Rotated(-45);
             if (vec.x > 0){
                 if (vec.y > 0)
                     return Vector2.up;

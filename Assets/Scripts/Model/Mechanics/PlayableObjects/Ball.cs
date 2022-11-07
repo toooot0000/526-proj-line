@@ -1,11 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
+using UnityEngine;
 using Utility;
 using Utility.Loader;
 
-namespace Model{
+namespace Model.Mechanics.PlayableObjects{
     [Serializable]
-    public class Ball : GameModel{
+    public class Ball : GameModel, IPlayableObject{
         public int id;
         public string desc;
         public BallType type;
@@ -14,6 +15,7 @@ namespace Model{
         public float speed;
         public float charge;
         public float combo;
+        public RectInt InitGridPosition{ get; set; }
 
         public Ball(GameModel parent) : base(parent){ }
 
@@ -32,6 +34,7 @@ namespace Model{
             speed = (float)ball["speed"];
             size = (float)ball["size"];
         }
+
     }
 
     public enum BallType{

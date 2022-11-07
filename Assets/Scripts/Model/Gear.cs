@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Model.GearEffects;
+using Model.Mechanics.PlayableObjects;
 using Utility;
 using Utility.Loader;
 

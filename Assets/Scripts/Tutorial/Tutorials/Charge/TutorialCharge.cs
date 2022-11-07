@@ -1,5 +1,6 @@
 using System.Linq;
 using Model;
+using Model.Mechanics.PlayableObjects;
 using Tutorial.Common;
 using Tutorial.Utility;
 using UI;

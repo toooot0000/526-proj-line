@@ -4,6 +4,7 @@ using System.Linq;
 using BackendApi;
 using Model.Buff;
 using Model.GearEffects;
+using Model.Mechanics.PlayableObjects;
 using UI;
 using Utility.Loader;
 using UnityEngine;

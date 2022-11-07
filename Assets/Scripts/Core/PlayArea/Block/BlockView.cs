@@ -18,8 +18,8 @@ namespace Core.PlayArea.Block{
             }
         }
 
-        private Model.Obstacles.Block _model;
-        public Model.Obstacles.Block Model{
+        private Model.Mechanics.PlayableObjects.Block _model;
+        public Model.Mechanics.PlayableObjects.Block Model{
             get => _model;
             set{
                 _model = value;

@@ -16,19 +16,21 @@ namespace Core.PlayArea.Mine{
     
     public class MineView: MonoBehaviour{
         public MineAnimationController animationController;
-        public Model.Obstacles.Mine model;
+        public Model.Mechanics.PlayableObjects.Mine model;
         public StageManager stageManager;
         public AnimationCurve curve = AnimationCurve.Linear(0, 0, 1, 1);
         public float flyTime = 0.2f;
         public TouchTracker tracker;
         public MineState state = MineState.Idle;
-        public SpriteRenderer renderer;
+        public new SpriteRenderer renderer;
 
         public void Init() {
             state = MineState.Idle;
             renderer.color = Color.white;
             animationController.Play(MineAnimation.Idle);
         }
+        
+        
 
         private void OnMouseEnter(){
             if (!tracker.isTracing) return;

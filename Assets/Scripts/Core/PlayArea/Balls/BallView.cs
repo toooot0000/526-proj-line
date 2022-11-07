@@ -1,6 +1,6 @@
 using System;
-using System.Collections;
 using Model;
+using Model.Mechanics.PlayableObjects;
 using Tutorial;
 using UnityEngine;
 using Utility;
@@ -12,10 +12,6 @@ namespace Core.PlayArea.Balls{
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(BallConfig))]
     public class BallView : MonoBehaviour, ITutorialControllable{
-        public event Action<BallView> OnMouseEnterBall;
-        public event Action OnMouseExitBall;
-        public event Action OnMouseUpBall;
-        
         public enum State{
             Free,
             Touched,
@@ -24,11 +20,23 @@ namespace Core.PlayArea.Balls{
             Charged,
             Hide,
             Controlled,
-            Animating,
+            Animating
         }
 
         public Vector2 velocity;
+        public float velocityMultiplier = 1f;
+        public AnimationCurve curve;
+        public SpriteRenderer weaponIcon;
+
+        public bool tutorCanBeHit = true;
+
+        public bool tutorCanBeCircled = true;
+        public BallConfig config;
         private State _currentState = State.Free;
+
+        private Game _game;
+
+        private RectTransform _rectTransform;
 
         public State CurrentState{
             set{
@@ -44,18 +52,8 @@ namespace Core.PlayArea.Balls{
             }
             get => _currentState;
         }
-        public AnimationCurve curve;
-        public SpriteRenderer weaponIcon;
 
-        public bool tutorCanBeHit = true;
-
-        public bool tutorCanBeCircled = true;
-        public BallConfig config;
         private SpriteRenderer BallBg => config.bg;
-
-        private Game _game;
-
-        private RectTransform _rectTransform;
 
         public Ball Model{
             get => config.modelBall;
@@ -71,7 +69,19 @@ namespace Core.PlayArea.Balls{
 
         private void Update(){
             if (CurrentState != State.Free) return;
-            _rectTransform.position += (Vector3)velocity * Time.deltaTime;
+            _rectTransform.position += (Vector3)velocity * (Time.deltaTime * velocityMultiplier);
+        }
+
+        private void OnMouseEnter(){
+            OnMouseEnterBall?.Invoke(this);
+        }
+
+        private void OnMouseExit(){
+            OnMouseExitBall?.Invoke();
+        }
+
+        private void OnMouseUp(){
+            OnMouseUpBall?.Invoke();
         }
 
         public void HandOverControlTo(TutorialBase tutorial){
@@ -81,6 +91,10 @@ namespace Core.PlayArea.Balls{
         public void GainBackControlFrom(TutorialBase tutorial){
             CurrentState = State.Hide;
         }
+
+        public event Action<BallView> OnMouseEnterBall;
+        public event Action OnMouseExitBall;
+        public event Action OnMouseUpBall;
 
         public event BallViewEvent OnSliced;
         public event BallViewEvent OnCircled;
@@ -104,18 +118,6 @@ namespace Core.PlayArea.Balls{
             if (CurrentState != State.Free && (CurrentState != State.Controlled || !tutorCanBeCircled)) return;
             _game.player.AddCircledBall(config.modelBall);
             OnCircled?.Invoke(this);
-        }
-
-        private void OnMouseEnter(){
-            OnMouseEnterBall?.Invoke(this);
-        }
-
-        private void OnMouseUp(){
-            OnMouseUpBall?.Invoke();
-        }
-
-        private void OnMouseExit(){
-            OnMouseExitBall?.Invoke();
         }
 
         public void ResetView(){
@@ -180,6 +182,10 @@ namespace Core.PlayArea.Balls{
             if (CurrentState != State.Controlled) return;
             var transform1 = transform;
             transform1.position = new Vector3(worldPosition.x, worldPosition.y, transform1.position.z);
+        }
+
+        public void ChangeDirection(Vector2 newDir){
+            velocity = newDir * velocity.sqrMagnitude;
         }
     }
 }

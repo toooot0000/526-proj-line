@@ -1,8 +1,7 @@
-using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 
-namespace Model.Obstacles{
+namespace Model.Mechanics.PlayableObjects{
     
     
     public enum BlockLevel: int{
@@ -17,10 +16,12 @@ namespace Model.Obstacles{
     public class Block: GameModel, IPlayableObject{
 
         public BlockLevel level;
-        public RectInt RectInt{ get; set; }
+        public int remainingTurn = 0;
+        
+        public RectInt InitGridPosition{ get; set; }
 
         public Block(GameModel parent, RectInt rectInt, BlockLevel level) : base(parent){
-            RectInt = rectInt;
+            InitGridPosition = rectInt;
             this.level = level;
         }
         

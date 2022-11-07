@@ -3,14 +3,13 @@ using Core.PlayArea.Balls;
 using Core.PlayArea.Block;
 using Core.PlayArea.Mine;
 using Model;
-using Model.Obstacles;
-using Model.Obstacles.MineEffects;
+using Model.Mechanics.PlayableObjects;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Core.PlayArea{
     public class PlayAreaManager: MonoBehaviour{
-        public Model.PlayArea model;
+        public Model.Mechanics.PlayArea model;
         public BallManager ballManager;
         public BlockManager blockManager;
         public MineManager mineManager;
@@ -21,7 +20,7 @@ namespace Core.PlayArea{
         }
         
         public Rect GridRectToRect(RectInt gridRect){
-            var gridCellSize = ((RectTransform)transform).rect.size / Model.PlayArea.GridSize;
+            var gridCellSize = ((RectTransform)transform).rect.size / Model.Mechanics.PlayArea.GridSize;
             var ret = new Rect(){
                 position = gridRect.position * gridCellSize,
                 size = gridRect.size * gridCellSize
@@ -36,21 +35,22 @@ namespace Core.PlayArea{
             return blockManager.PlaceBlock(block);
         }
 
-        public MineView AddMine(MineEffect effect) {
-            var mine = model.MakeAndPlaceMine(new MineEffectLoseLife());
-            return mineManager.PlaceMine(mine);
-        }
-
-        private BlockView _testBlock;
-        private MineView _mineView;
+        private BlockView _test;
         private void Update(){
-            if (Input.GetKeyUp(KeyCode.A)) {
-                _mineView = AddMine(new MineEffectLoseLife(1));
-            }
-
-            if (Input.GetKeyUp(KeyCode.S)) {
-                mineManager.RemoveMine(_mineView);
-            }
+            // var values = Enum.GetValues(typeof(BlockLevel));
+            // if (Input.GetKeyUp(KeyCode.A)){
+            //     var level = (BlockLevel)values.GetValue(Random.Range(0, values.Length));
+            //     var gridSize = Model.Obstacles.Block.GenerateGridSize(level);
+            //     var rect = model.RandomRectInt(gridSize);
+            //     if (rect != null){
+            //         var block = new Model.Obstacles.Block(null, rect.Value, level);
+            //         _test = blockManager.PlaceBlock(block);
+            //     }
+            // }
+            //
+            // if (Input.GetKeyUp(KeyCode.S)){
+            //     blockManager.RemoveBlock(_test);
+            // }
         }
     }
 }

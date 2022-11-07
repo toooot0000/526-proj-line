@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using Model;
+using Model.Mechanics.PlayableObjects;
 using Newtonsoft.Json;
 using UI;
 using UI.Interfaces;
