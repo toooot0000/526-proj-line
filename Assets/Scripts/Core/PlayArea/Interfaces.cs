@@ -37,19 +37,16 @@ namespace Core.PlayArea{
 
         public void OnMouseUp(){
             if (this is ISliceable self){
-                TouchTracker.StopTracking();
+                StartCoroutine(TouchTracker.OnMouseUp());
             }
         }
     }
 
     public interface ISliceable{
-        // public Collider2D Collider2D{ get; }
-        // public float Radius{ get; }
         public void OnSliced();
     }
 
     public interface ICircleable{
-        public Collider2D Collider2D{ get; }
         public void OnCircled();
     }
 

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Model.Mechanics.PlayableObjects;
@@ -8,7 +9,6 @@ namespace Model.Mechanics{
         public static readonly Vector2Int GridSize = new Vector2Int(8, 5);
         public const int ReservedNumber = 10;
         private readonly List<IPlayableObject> _objects = new();
-        
 
         public PlayArea(GameModel parent) : base(parent){ }
         
@@ -84,19 +84,41 @@ namespace Model.Mechanics{
             return ret;
         }
 
-        private Mine MakeMine(MineEffect effect = null){
-            var size = new Vector2Int(1, 1);
-            var rectInt = RandomRectInt(size);
+        private Mine MakeMine(float speed = 2, float size = 1, MineEffect effect = null){
+            var gridSize = new Vector2Int(1, 1);
+            var rectInt = RandomRectInt(gridSize);
             if (rectInt == null) return null;
             return new Mine(this, rectInt.Value){
+                speed = speed,
+                size = size,
                 effect = effect
             };
         }
 
-        public Mine MakeAndPlaceMine(MineEffect effect = null){
-            var ret = MakeMine(effect);
+        public Mine MakeAndPlaceMine(float speed = 2, float size = 1, MineEffect effect = null){
+            var ret = MakeMine(speed, size, effect);
             ForceToPlaceObject(ret);
             return ret;
+        }
+
+        public IEnumerable<Vector2Int> GetOccupiedGridPositions(){
+            foreach (var obj in _objects){
+                for (var i = 0; i < obj.InitGridPosition.width; i++){
+                    for (var j = 0; j < obj.InitGridPosition.height; j++){
+                        yield return obj.InitGridPosition.position + new Vector2Int(i, j);
+                    }
+                }
+            }
+        }
+
+        public IEnumerable<Vector2Int> GetEmptyGridPositions(){
+            var occupied = GetOccupiedGridPositions().ToHashSet();
+            for (var i = 0; i < GridSize.x; i++){
+                for (var j = 0; j < GridSize.y; j++){
+                    if(occupied.Contains(new Vector2Int(i, j))) continue;
+                    yield return new Vector2Int(i, j);
+                }
+            }
         }
     }
 }

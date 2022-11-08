@@ -5,6 +5,7 @@ using Core.PlayArea.Mine;
 using Core.PlayArea.TouchTracking;
 using Model;
 using Model.Mechanics.PlayableObjects;
+using Model.Mechanics.PlayableObjects.MineEffects;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -39,20 +40,9 @@ namespace Core.PlayArea{
 
         private BlockView _test;
         private void Update(){
-            // var values = Enum.GetValues(typeof(BlockLevel));
-            // if (Input.GetKeyUp(KeyCode.A)){
-            //     var level = (BlockLevel)values.GetValue(Random.Range(0, values.Length));
-            //     var gridSize = Model.Obstacles.Block.GenerateGridSize(level);
-            //     var rect = model.RandomRectInt(gridSize);
-            //     if (rect != null){
-            //         var block = new Model.Obstacles.Block(null, rect.Value, level);
-            //         _test = blockManager.PlaceBlock(block);
-            //     }
-            // }
-            //
-            // if (Input.GetKeyUp(KeyCode.S)){
-            //     blockManager.RemoveBlock(_test);
-            // }
+            if (Input.GetKeyUp(KeyCode.A)){
+                mineManager.PlaceMine(model.MakeAndPlaceMine(2, 1, new MineEffectLoseLife(1)));
+            }
         }
     }
 }

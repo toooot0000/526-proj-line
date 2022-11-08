@@ -14,43 +14,39 @@ namespace Core.PlayArea.Mine{
         Removed
     }
     
-    public class MineView: PlayableObjectViewBase{
+    public class MineView: PlayableObjectViewBase, IMovable, ICircleable, ISliceable{
         public MineAnimationController animationController;
-        public Model.Mechanics.PlayableObjects.Mine model;
+        private Model.Mechanics.PlayableObjects.Mine _model;
+        public Model.Mechanics.PlayableObjects.Mine Model{
+            set{
+                _model = value;
+                Velocity =  _model.Velocity * Vector2Utility.RandomDirection;
+            }
+            get => _model;
+        }
         public StageManager stageManager;
         public AnimationCurve curve = AnimationCurve.Linear(0, 0, 1, 1);
         public float flyTime = 0.2f;
-        public TouchTracker tracker;
         public MineState state = MineState.Idle;
         public new SpriteRenderer renderer;
+        public Vector2 Velocity{ get; set; } = Vector2.zero;
 
+        public float VelocityMultiplier{
+            get => Model.VelocityMultiplier; 
+            set => Model.VelocityMultiplier = value;
+        }
+        
         public void Init() {
             state = MineState.Idle;
             renderer.color = Color.white;
             animationController.Play(MineAnimation.Idle);
         }
 
-
-        public override void OnMouseEnter(){
-            if (!tracker.isTracing) return;
-            if (tracker.LineReachingLimit()) return;
-            if (state != MineState.Idle) return;
-            state = MineState.Triggered;
-            // tracker.TryToContinueTracking();
-            FlyToLocation(flyTime, stageManager.playerView.transform.position, () => {
-                animationController.Play(MineAnimation.Explosion, () => {
-                    model.effect.Execute();
-                    GameManager.shared.game.playArea.RemovePlayableObject(model);
-                    gameObject.SetActive(false);
-                });
-            });
-        }
-
-        public void OnBeingCircled(){
+        public void OnCircled(){
             if (state != MineState.Idle) return;
             state = MineState.Removed;
             animationController.Play(MineAnimation.Disappear, () => {
-                GameManager.shared.game.playArea.RemovePlayableObject(model);
+                Model.OnCircled().Execute();
                 gameObject.SetActive(false);
             });
         }
@@ -79,6 +75,23 @@ namespace Core.PlayArea.Mine{
                 completion
                 );
             StartCoroutine(lerp());
+        }
+        public void UpdatePosition(){
+            if (state != MineState.Idle) return;
+            var rectTrans = (RectTransform)transform;
+            rectTrans.position += (Vector3)Velocity * (Time.deltaTime * VelocityMultiplier);
+        }
+        
+        public void OnSliced(){
+            if (state != MineState.Idle) return;
+            state = MineState.Triggered;
+            FlyToLocation(flyTime, stageManager.playerView.transform.position, () => {
+                animationController.Play(MineAnimation.Explosion, () => {
+                    Model.OnSliced().Execute();
+                    GameManager.shared.game.playArea.RemovePlayableObject(Model);
+                    gameObject.SetActive(false);
+                });
+            });
         }
     }
 }

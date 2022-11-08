@@ -1688,7 +1688,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 104.173164
+      value: 104.173195
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -4011,6 +4011,7 @@ MonoBehaviour:
   ballManager: {fileID: 4328751458895938648}
   blockManager: {fileID: 1978656420}
   mineManager: {fileID: 1488370912}
+  touchTracker: {fileID: 0}
 --- !u!212 &4328751458076031956
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4538,7 +4539,7 @@ MonoBehaviour:
   minDistance: 0.1
   lineRenderer: {fileID: 4328751458352862691}
   camera: {fileID: 519420031}
-  polygonCollider: {fileID: 4328751458190542158}
+  circleCollider: {fileID: 4328751458190542158}
   totalLineLength: 10
   progressBar: {fileID: 4328751458076031958}
   tutorKeepLine: 0
@@ -4654,8 +4655,8 @@ RectTransform:
   m_Father: {fileID: 4328751457965802250}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -4675,7 +4676,7 @@ MonoBehaviour:
   randomSpawnNumber: 5
   comboDisplayer: {fileID: 3322267685667555654}
   touchTracker: {fileID: 4328751458456131980}
-  playAreaManager: {fileID: 0}
+  playAreaManager: {fileID: 4328751457965802252}
 --- !u!1001 &5902399932300061427
 PrefabInstance:
   m_ObjectHideFlags: 0

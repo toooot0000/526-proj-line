@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Core.DisplayArea.Stage;
 using Core.PlayArea.TouchTracking;
 using Model;
@@ -18,35 +19,13 @@ namespace Core.PlayArea.Balls{
 
         private bool _isInTutorial = false;
 
-        public void SpawnNewBallView(Ball ball){
-            var newBallObject = Instantiate(ballPrefab, transform, false);
-            var newBallConfig = newBallObject.GetComponent<BallConfig>();
-            newBallConfig.modelBall = ball;
-            newBallObject.transform.localPosition = GenerateRandomLocalPosition();
-            newBallConfig.ResetView();
-        }
-
-        public void SpawnRandom() // Temp
-        {
-            for (var i = 0; i < randomSpawnNumber; i++){
-                var model = new Ball(GameManager.shared.game){
-                    point = Random.Range(1, 10),
-                    size = Random.Range(1, 3) / 2.0f,
-                    speed = Random.Range(1, 10) / 2.0f
-                };
-                SpawnNewBallView(model);
-            }
-        }
-
-        private Vector3 GenerateRandomLocalPosition(){
-            return new Vector3{
-                x = Random.Range(-1, 1),
-                y = Random.Range(-1, 1),
-                z = transform.position.z
-            }; // TODO
+        private Rect GenerateRandomLocalPosition(Vector2Int[] emptyPositions){
+            var gridPosition = emptyPositions[Random.Range(0, emptyPositions.Length)];
+            return playAreaManager.GridRectToRect(new RectInt(gridPosition, Vector2Int.one));
         }
 
         public void SpawnBalls(){
+            var emptyPositions = GameManager.shared.game.playArea.GetEmptyGridPositions().ToArray();
             var skillBallModels = GameManager.shared.game.GetAllSkillBalls();
             var i = 0;
             for (; i < skillBallModels.Length; i++){
@@ -59,15 +38,13 @@ namespace Core.PlayArea.Balls{
                     curBallView = newBallObject.GetComponent<BallView>();
                     curBallView.OnBallSliced += OnBallSliced;
                     curBallView.OnBallCircled += OnBallCircled;
-                    // curBallView.OnMouseEnterBall += touchTracker.OnMouseEnterBall;
-                    // curBallView.OnMouseExitBall += touchTracker.OnMouseExitBall;
-                    // curBallView.OnMouseUpBall += touchTracker.OnMouseUpBall;
                     balls.Add(curBallView);
                 }
 
                 curBallView.gameObject.SetActive(true);
                 curBallView.Model = skillBallModels[i];
-                curBallView.transform.localPosition = GenerateRandomLocalPosition();
+                var rect = GenerateRandomLocalPosition(emptyPositions);
+                ((RectTransform)curBallView.transform).anchoredPosition = rect.position;
                 curBallView.UpdateConfig();
             }
 

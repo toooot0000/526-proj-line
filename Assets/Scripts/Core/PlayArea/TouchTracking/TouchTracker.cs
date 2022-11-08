@@ -9,15 +9,8 @@ using Tutorial;
 using UnityEngine;
 using Utility;
 
-/*
- * TODO need to be refactored!
- */
 namespace Core.PlayArea.TouchTracking{
 
-    public interface IContinueTrackOnEnter{
-        
-    }
-    
     public class TouchTracker : MonoBehaviour, ITutorialControllable{
         public float minDistance = 5f;
         public LineRenderer lineRenderer;
@@ -36,11 +29,12 @@ namespace Core.PlayArea.TouchTracking{
         public bool isTracing;
         private bool _continueTracking = false;
 
-        public bool LineReachingLimit() => _currentLineLength >= totalLineLength;
+        public bool IsReachingLineLengthLimit() => _currentLineLength >= totalLineLength;
 
         private void Update(){
             if (!isTracing) return;
             TraceTouchPosition();
+            if(IsReachingLineLengthLimit()) StopTracking();
         }
         
         private void OnMouseDown(){
@@ -60,7 +54,7 @@ namespace Core.PlayArea.TouchTracking{
             yield return HideLine();
         }
 
-        private IEnumerator OnMouseUp(){
+        public IEnumerator OnMouseUp(){
             StopTracking();
             SendInput();
             if (_isInTutorial) yield return new WaitWhile(() => tutorKeepLine);
@@ -79,6 +73,7 @@ namespace Core.PlayArea.TouchTracking{
 
         public void StartTracking(){
             if (!isAcceptingInput) return;
+            ResetState();
             isTracing = true;
         }
 

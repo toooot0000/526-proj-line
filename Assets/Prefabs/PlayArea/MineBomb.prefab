@@ -129,7 +129,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: -0.15, y: -0.16}
   serializedVersion: 2
-  m_Radius: 0.3
+  m_Radius: 0.35
 --- !u!50 &4135946687082564965
 Rigidbody2D:
   serializedVersion: 4
@@ -202,6 +202,5 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   flyTime: 0.2
-  tracker: {fileID: 0}
   state: 0
   renderer: {fileID: 1802493836875413171}

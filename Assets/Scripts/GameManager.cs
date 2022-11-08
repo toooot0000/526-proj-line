@@ -147,6 +147,7 @@ public class GameManager : MonoBehaviour{
         if (game.turn != Game.Turn.Player) return;
         var action = game.player.GetAction();
         if (StageActionPlayerAction.IsEmpty(action)) return;
+        touchTracker.isAcceptingInput = false;
         OnPlayerAttack?.Invoke();
         StartCoroutine(stageManager.StartPlayerAction(action));
     }

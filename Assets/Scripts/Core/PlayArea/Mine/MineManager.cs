@@ -18,13 +18,12 @@ namespace Core.PlayArea.Mine{
         public MineView PlaceMine(Model.Mechanics.PlayableObjects.Mine mine){
             var newMine = _mineViews.FirstNotActiveOrNew(GenerateMineView);
             newMine.Init();
-            newMine.model = mine;
+            newMine.Model = mine;
             newMine.stageManager = stageManager;
             var rect = playAreaManager.GridRectToRect(mine.InitGridPosition);
             var rectTrans = newMine.transform;
             ((RectTransform)rectTrans).anchoredPosition = rect.position;
             ((RectTransform)rectTrans).sizeDelta = rect.size;
-            newMine.tracker = tracker;
             return newMine;
         }
 

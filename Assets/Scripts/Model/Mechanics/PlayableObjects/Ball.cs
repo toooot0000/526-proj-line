@@ -6,7 +6,7 @@ using Utility.Loader;
 
 namespace Model.Mechanics.PlayableObjects{
     [Serializable]
-    public class Ball : GameModel, IPlayableObject{
+    public class Ball : GameModel, IPlayableObject, IMovable{
         public int id;
         public string desc;
         public BallType type;
@@ -15,6 +15,8 @@ namespace Model.Mechanics.PlayableObjects{
         public float speed;
         public float charge;
         public float combo;
+        public float Velocity{ get => speed; set => speed = value; }
+        public float VelocityMultiplier{ get; set; } = 1;
         public RectInt InitGridPosition{ get; set; }
 
         public Ball(GameModel parent) : base(parent){ }

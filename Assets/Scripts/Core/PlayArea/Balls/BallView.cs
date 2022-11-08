@@ -11,7 +11,7 @@ namespace Core.PlayArea.Balls{
 
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(BallConfig))]
-    public class BallView : PlayableObjectViewBase, ITutorialControllable, IMovable, ISliceable{
+    public class BallView : PlayableObjectViewBase, ITutorialControllable, IMovable, ISliceable, ICircleable{
         public enum State{
             Free,
             Touched,
@@ -97,6 +97,7 @@ namespace Core.PlayArea.Balls{
         public void FlyToLocation(float seconds, Vector3 targetWorldLocation){
             CurrentState = State.Animating;
             var startWorldLocation = transform.position;
+            targetWorldLocation.z = startWorldLocation.z;
             var p1 = new Vector3{
                 x = startWorldLocation.x,
                 y = (startWorldLocation.y + targetWorldLocation.y) / 2,

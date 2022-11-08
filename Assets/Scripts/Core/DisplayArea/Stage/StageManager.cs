@@ -227,7 +227,7 @@ namespace Core.DisplayArea.Stage{
 
         public void OnPlayerHitMine(MineView mineView){
             Debug.Log("Hit mine!");
-            var mine = mineView.model;
+            var mine = mineView.Model;
             Debug.Log(mine);
         }
     }
