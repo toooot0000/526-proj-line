@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Model;
 using Model.GearEffects;
 using TMPro;
@@ -12,7 +10,7 @@ namespace UI.Interfaces.SelectGear
 {
     public class UIGearInfo:UIBase
     {
-        public Image _gearImage;
+        
         public TextMeshProUGUI _gearName;
         public TextMeshProUGUI _gearDesc;
         private CanvasGroup _canvasGroup;
@@ -41,7 +39,6 @@ namespace UI.Interfaces.SelectGear
             gearModel = (Gear)model;
             base.Open(model);
             _inAnimation = true;
-            _gearImage.sprite = Resources.Load<Sprite>(gearModel.imgPath);
             _gearName.text = gearModel.name;
             _gearDesc.text =  gearModel.desc;
             var ball = CsvLoader.TryToLoad("Configs/balls", gearModel.ballId);

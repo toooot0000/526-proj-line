@@ -72,8 +72,7 @@ namespace UI{
             _uiList.Remove(ui);
             if (_uiList.Count == 0) shade.SetActive(false);
         }
-
-
+        
         public void Open(string interfaceName){
             OpenUI(interfaceName);
         }
