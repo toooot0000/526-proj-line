@@ -3,6 +3,7 @@ using System.Collections;
 using Core.DisplayArea.Stage.Player;
 using Model;
 using TMPro;
+using UI;
 using UnityEngine;
 
 namespace Core.DisplayArea.Stage.Enemy{
@@ -110,5 +111,6 @@ namespace Core.DisplayArea.Stage.Enemy{
             else
                 yield return animationController.PlayUntilComplete(PlayerAnimation.BeingAttacked);
         }
+        
     }
 }

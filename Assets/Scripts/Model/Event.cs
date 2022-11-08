@@ -45,6 +45,7 @@ namespace Model{
         public int id;
         public string name;
         public string type;
+        public string imgPth;
         public readonly EventChoice[] choices;
 
 
@@ -59,6 +60,7 @@ namespace Model{
             name = event1["name"] as string;
             desc = event1["desc"] as string;
             type = event1["type"] as string;
+            imgPth = event1["img_path"] as string;
             argsArray[0] = event1["arg1"] as string;
             argsArray[1] = event1["arg2"] as string;
             argsArray[2] = event1["arg3"] as string;
