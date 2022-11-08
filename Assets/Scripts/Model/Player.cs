@@ -55,7 +55,7 @@ namespace Model{
         }
 
 
-        public void AddHitBall(Ball ball){
+        public void AddSlicedBall(Ball ball){
             if (ball.type == BallType.Debuff){
                 hitDebuffBalls.Add(ball);
             } else{

@@ -55,6 +55,13 @@ namespace Model{
             foreach (var effect in effects ?? Array.Empty<GearEffectBase>()) effect.Execute(this);
             foreach (var effect in buffEffects ?? Array.Empty<IBuffEffect<StageActionPlayerAction>>()) effect.Execute(this);
         }
+
+        public static bool IsEmpty(StageActionPlayerAction action){
+            return action.damage.initPoint == 0 
+                   && action.effects.Length == 0 
+                   && action.buffEffects.Length == 0 
+                   && action.defend == 0;
+        }
     }
 
     public class StageActionEnemyDefend : StageActionEnemyAction{

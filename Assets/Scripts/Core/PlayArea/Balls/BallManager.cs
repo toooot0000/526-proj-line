@@ -57,11 +57,11 @@ namespace Core.PlayArea.Balls{
                 } else{
                     var newBallObject = Instantiate(ballPrefab, transform, false);
                     curBallView = newBallObject.GetComponent<BallView>();
-                    curBallView.OnSliced += OnBallSliced;
-                    curBallView.OnCircled += OnBallCircled;
-                    curBallView.OnMouseEnterBall += touchTracker.OnMouseEnterBall;
-                    curBallView.OnMouseExitBall += touchTracker.OnMouseExitBall;
-                    curBallView.OnMouseUpBall += touchTracker.OnMouseUpBall;
+                    curBallView.OnBallSliced += OnBallSliced;
+                    curBallView.OnBallCircled += OnBallCircled;
+                    // curBallView.OnMouseEnterBall += touchTracker.OnMouseEnterBall;
+                    // curBallView.OnMouseExitBall += touchTracker.OnMouseExitBall;
+                    // curBallView.OnMouseUpBall += touchTracker.OnMouseUpBall;
                     balls.Add(curBallView);
                 }
 

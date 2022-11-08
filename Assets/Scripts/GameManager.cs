@@ -145,7 +145,9 @@ public class GameManager : MonoBehaviour{
 
     public void OnPlayerFinishInput(){
         if (game.turn != Game.Turn.Player) return;
+        var action = game.player.GetAction();
+        if (StageActionPlayerAction.IsEmpty(action)) return;
         OnPlayerAttack?.Invoke();
-        StartCoroutine(stageManager.StartPlayerAction());
+        StartCoroutine(stageManager.StartPlayerAction(action));
     }
 }

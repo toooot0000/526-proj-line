@@ -68,7 +68,7 @@ namespace Tutorial.Tutorials.Combo{
                         combo.tutorialManager.tracker.tutorKeepLine = true;
                     },
                     bind: (t, s) => {
-                        t.tutorialManager.tracker.OnTouchEnd += t.WrappedStepComplete;
+                        t.tutorialManager.tracker.OnInputReadyToSent += t.WrappedStepComplete;
                     },
                     cleanUp: (t, s) => {
                         s.SetTextEnabled(false);
@@ -76,7 +76,7 @@ namespace Tutorial.Tutorials.Combo{
                         t.PutToBack(t.tutorialManager.tracker.gameObject);
                     },
                     unbind: (t, s) => {
-                        t.tutorialManager.tracker.OnTouchEnd -= t.WrappedStepComplete;
+                        t.tutorialManager.tracker.OnInputReadyToSent -= t.WrappedStepComplete;
                     }
                 ),
                 new StepTapToContinue<TutorialCombo>(texts[3], tapCatcher,

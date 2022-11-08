@@ -15,10 +15,12 @@ namespace Core.PlayArea.TouchTracking{
         }
 
         private void OnTriggerStay2D(Collider2D col){
-            var ball = col.GetComponent<BallView>();
-            if (ball != null) ball.OnBeingCircled();
-            var mine = col.GetComponent<MineView>();
-            if(mine!= null) mine.OnBeingCircled();
+            // var ball = col.GetComponent<BallView>();
+            // if (ball != null) ball.OnCircled();
+            // var mine = col.GetComponent<MineView>();
+            // if(mine!= null) mine.OnBeingCircled();
+            var circleable = col.GetComponent<ICircleable>();
+            circleable.OnCircled();
         }
 
 

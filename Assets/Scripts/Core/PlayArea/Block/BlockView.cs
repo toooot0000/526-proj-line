@@ -4,7 +4,7 @@ using Core.PlayArea.Balls;
 using UnityEngine;
 
 namespace Core.PlayArea.Block{
-    public class BlockView: MonoBehaviour{
+    public class BlockView: PlayableObjectViewBase{
         public SpriteSizeSyncer sizeSyncer;
         public BoxCollider2DSizeSyncer collider2DSizeSyncer;
 
@@ -29,12 +29,12 @@ namespace Core.PlayArea.Block{
 
         private void OnCollisionEnter2D(Collision2D collision){
             var otherCollider = collision.collider;
-            var ball = otherCollider.GetComponent<BallView>();
+            var ball = otherCollider.GetComponent<IMovable>();
             if (ball == null) return;
             var contact = collision.GetContact(0);
             var normal = contact.normal;
-            var newVelocity = Vector2.Reflect(ball.velocity, normal);
-            ball.velocity = newVelocity;
+            var newVelocity = Vector2.Reflect(ball.Velocity, normal);
+            ball.Velocity = newVelocity;
         }
     }
 }

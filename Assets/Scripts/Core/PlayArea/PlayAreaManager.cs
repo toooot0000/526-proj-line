@@ -2,6 +2,7 @@ using System;
 using Core.PlayArea.Balls;
 using Core.PlayArea.Block;
 using Core.PlayArea.Mine;
+using Core.PlayArea.TouchTracking;
 using Model;
 using Model.Mechanics.PlayableObjects;
 using UnityEngine;
@@ -13,6 +14,7 @@ namespace Core.PlayArea{
         public BallManager ballManager;
         public BlockManager blockManager;
         public MineManager mineManager;
+        public TouchTracker touchTracker;
 
         private void Start(){
             model = GameManager.shared.game.playArea;

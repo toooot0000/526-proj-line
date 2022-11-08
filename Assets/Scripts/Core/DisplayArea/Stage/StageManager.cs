@@ -182,8 +182,8 @@ namespace Core.DisplayArea.Stage{
             yield return StartPlayerTurn();
         }
 
-        public IEnumerator StartPlayerAction(){
-            var currentAction = GameManager.shared.game.player.GetAction();
+        public IEnumerator StartPlayerAction(StageActionPlayerAction playerAction = null){
+            var currentAction = playerAction ?? GameManager.shared.game.player.GetAction();
             GameManager.shared.game.player.ClearAllBalls();
             yield return ProcessPlayerAttack(currentAction);
             if (enemyView.isDead){

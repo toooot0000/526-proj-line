@@ -19,7 +19,7 @@ namespace Core.PlayArea.Balls{
         public void ResetView(){
             var rectTransform = transform as RectTransform;
             rectTransform!.localScale = new Vector3(modelBall.size, modelBall.size, 1);
-            ballView.velocity = Vector2.one.Rotated(Random.Range(0, 360)).normalized * modelBall.speed;
+            ballView.Velocity = Vector2.one.Rotated(Random.Range(0, 360)).normalized * modelBall.speed;
             bg.sprite = sprNormal;
             bg.color = Color.white;
             if (modelBall.type == BallType.Debuff) bg.sprite = sprDebuff;

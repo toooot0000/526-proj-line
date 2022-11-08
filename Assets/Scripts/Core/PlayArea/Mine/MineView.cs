@@ -14,7 +14,7 @@ namespace Core.PlayArea.Mine{
         Removed
     }
     
-    public class MineView: MonoBehaviour{
+    public class MineView: PlayableObjectViewBase{
         public MineAnimationController animationController;
         public Model.Mechanics.PlayableObjects.Mine model;
         public StageManager stageManager;
@@ -29,15 +29,14 @@ namespace Core.PlayArea.Mine{
             renderer.color = Color.white;
             animationController.Play(MineAnimation.Idle);
         }
-        
-        
 
-        private void OnMouseEnter(){
+
+        public override void OnMouseEnter(){
             if (!tracker.isTracing) return;
             if (tracker.LineReachingLimit()) return;
             if (state != MineState.Idle) return;
             state = MineState.Triggered;
-            tracker.TryToContinueTracking();
+            // tracker.TryToContinueTracking();
             FlyToLocation(flyTime, stageManager.playerView.transform.position, () => {
                 animationController.Play(MineAnimation.Explosion, () => {
                     model.effect.Execute();

@@ -12,7 +12,7 @@ namespace Core.PlayArea.TouchTracking{
         private void OnTriggerEnter2D(Collider2D col){
             var ball = col.GetComponent<BallView>();
             if (ball == null) return;
-            ball.OnBeingSliced();
+            ball.OnSliced();
         }
 
         public void SetEnabled(bool value){
