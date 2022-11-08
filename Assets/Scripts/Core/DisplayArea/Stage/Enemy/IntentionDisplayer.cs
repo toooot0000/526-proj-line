@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Model;
 using TMPro;
+using UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,8 +12,11 @@ namespace Core.DisplayArea.Stage.Enemy{
         public TextMeshProUGUI number;
 
         public IntentionPair[] pairs;
+        public IntentionInfo _info;
 
-        public void UpdateIntention(IntentionInfo info){
+        public void UpdateIntention(IntentionInfo info)
+        {
+            _info = info;
             icon.sprite = pairs.First(p => p.intention == info.intention).sprite;
             if (info.number > 0){
                 number.enabled = true;
@@ -20,6 +24,9 @@ namespace Core.DisplayArea.Stage.Enemy{
             } else{
                 number.enabled = false;
             }
+            
+            // Debug.Log("show the next move");
+             //UIManager.shared.OpenUI("UIMove",info);
         }
 
         [Serializable]
@@ -31,6 +38,12 @@ namespace Core.DisplayArea.Stage.Enemy{
         public struct IntentionInfo{
             public EnemyIntention intention;
             public int number;
+        }
+
+        public void onClickIcon()
+        {
+            Debug.Log("click");
+            UIManager.shared.OpenUI("UIMove",_info);
         }
     }
 }

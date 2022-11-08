@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace UI.Interfaces.SelectGear{
     public delegate void ClickEvent(UIGearPanel panel);
 
-    public class UIGearPanel : MonoBehaviour{
+    public class UIGearPanel : MonoBehaviour{ 
         public TextMeshProUGUI text;
         public Button icon;
         public Image highLight;

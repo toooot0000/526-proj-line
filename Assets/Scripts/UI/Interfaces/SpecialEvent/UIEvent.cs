@@ -3,8 +3,10 @@ using Mono.Cecil;
 using TMPro;
 using UI.Container;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Utility;
 using Event = Model.Event;
+using Image = UnityEngine.UI.Image;
 
 namespace UI.Interfaces.SpecialEvent{
     public class UIEvent : UIBase
@@ -12,6 +14,7 @@ namespace UI.Interfaces.SpecialEvent{
         public UIContainerFlexBox container;
         public TextMeshProUGUI questionText;
         public Event eventModel;
+        public Image eventImage;
         private CanvasGroup _canvasGroup;
         private bool _inAnimation;
         private UIButton[] _buttons;
@@ -29,7 +32,9 @@ namespace UI.Interfaces.SpecialEvent{
             eventModel = (Event)model;
             base.Open(model);
             _inAnimation = true;
-
+            
+            
+            eventImage.sprite = Resources.Load<Sprite>(eventModel.imgPth);
             questionText.text = eventModel.desc;
             UpdateButton(eventModel);
 
@@ -55,7 +60,7 @@ namespace UI.Interfaces.SpecialEvent{
                     _buttons[curButtonInd].Show = false;
                     curButtonInd++;
                 }
-                else if (Array.IndexOf(choice.effectToken, "GetCoin") == -1)
+                else if (Array.IndexOf(choice.effectToken, "GetCoin") != -1)
                 {
                     int index = Array.IndexOf(choice.effectToken, "GetCoin");
                     int netCoin = GameManager.shared.game.player.Coin + choice.values[index];
