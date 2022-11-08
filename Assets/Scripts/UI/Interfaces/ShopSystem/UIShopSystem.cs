@@ -14,7 +14,7 @@ using Random = UnityEngine.Random;
 
 namespace UI.Interfaces.ShopSystem {
     public class UIShopSystem : UIBase{
-        private const int UnifiedPrice = 2;
+        private const int UnifiedPrice = 6;
         private int RefreshPrice = 1;
         public List<Gear> _items;
         private static Game Game => GameManager.shared.game;
