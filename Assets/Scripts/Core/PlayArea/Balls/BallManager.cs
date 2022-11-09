@@ -9,7 +9,7 @@ using Tutorial;
 using UnityEngine;
 
 namespace Core.PlayArea.Balls{
-    public class BallManager : MonoBehaviour, ITutorialControllable{
+    public class BallManager : MonoBehaviour, ITutorialControllable, IPlayableViewManager{
         public GameObject ballPrefab;
         public int randomSpawnNumber = 5;
         public ComboDisplayer comboDisplayer;
@@ -19,8 +19,8 @@ namespace Core.PlayArea.Balls{
 
         private bool _isInTutorial = false;
 
-        private Rect GenerateRandomLocalPosition(Vector2Int[] emptyPositions){
-            var gridPosition = emptyPositions[Random.Range(0, emptyPositions.Length)];
+        private Rect GenerateRandomLocalPosition(IReadOnlyList<Vector2Int> emptyPositions){
+            var gridPosition = emptyPositions[Random.Range(0, emptyPositions.Count)];
             return playAreaManager.GridRectToRect(new RectInt(gridPosition, Vector2Int.one));
         }
 
@@ -105,6 +105,10 @@ namespace Core.PlayArea.Balls{
             foreach (var ball in balls){
                 ball.GainBackControlFrom(tutorial);
             }
+        }
+
+        public IEnumerable<PlayableObjectViewBase> GetAllViews() {
+            return balls;
         }
     }
 }

@@ -1,11 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Core.PlayArea.Balls;
 using Core.PlayArea.BlackHoles;
-using Core.PlayArea.Block;
 using Core.PlayArea.Blocks;
 using Core.PlayArea.Mines;
-using Core.PlayArea.TouchTracking;
-using Model;
 using Model.Mechanics;
 using Model.Mechanics.PlayableObjects;
 using Model.Mechanics.PlayableObjects.MineEffects;
@@ -19,6 +17,15 @@ namespace Core.PlayArea{
         public BlockManager blockManager;
         public MineManager mineManager;
         public BlackHoleManager blackHoleManager;
+
+        private readonly List<PlayableObjectViewBase> _views = new();
+
+        public IEnumerable<IPlayableViewManager> AllManagers => new IPlayableViewManager[] {
+            ballManager,
+            blockManager,
+            mineManager,
+            blackHoleManager
+        };
 
         private void Start(){
             model = GameManager.shared.game.playArea;
@@ -35,15 +42,15 @@ namespace Core.PlayArea{
             return ret;
         }
 
-        public void SetPlayableObjectPosition<T>(T view, IPlayableObject objectModel) 
+        public void SetPlayableViewPosition<T>(T view, IPlayableObject objectModel) 
         where T: PlayableObjectViewBase{
             var rect = GridRectToRect(objectModel.InitGridPosition);
             var rectTrans = view.transform;
             ((RectTransform)rectTrans).anchoredPosition = rect.position;
             ((RectTransform)rectTrans).sizeDelta = rect.size;
         }
-        
-        
+
+
         public BlockView AddBlock(BlockLevel level){
             var block = model.MakeAndPlaceBlock(level);
             return blockManager.PlaceBlock(block);
@@ -57,6 +64,14 @@ namespace Core.PlayArea{
 
             if (Input.GetKeyUp(KeyCode.S)){
                 blackHoleManager.PlaceBlackHole(model.MakeAndPlaceBlackHole(0.2f, 3f));
+            }
+        }
+
+        public IEnumerable<T> GetAllViewsOfProperty<T>() where T: IPlayableObjectViewProperty {
+            foreach (var playableViewManager in AllManagers) {
+                foreach (var playableObjectViewBase in playableViewManager.GetAllViews()) {
+                    if (playableObjectViewBase is T typed) yield return typed;
+                }
             }
         }
     }

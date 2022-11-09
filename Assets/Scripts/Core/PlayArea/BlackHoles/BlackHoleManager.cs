@@ -5,23 +5,23 @@ using UnityEngine;
 using Utility.Extensions;
 
 namespace Core.PlayArea.BlackHoles{
-    public class BlackHoleManager: MonoBehaviour{
+    public class BlackHoleManager: MonoBehaviour, IPlayableViewManager{
 
         public GameObject minePrefab;
         public PlayAreaManager playAreaManager;
 
-        private readonly List<BlackHoleView> _mineViews = new();
+        private readonly List<BlackHoleView> _blackHoleViews = new();
 
         public BlackHoleView PlaceBlackHole(BlackHole blackHole){
-            var newMine = _mineViews.FirstNotActiveOrNew(GenerateMineView);
+            var newMine = _blackHoleViews.FirstNotActiveOrNew(GenerateMineView);
             newMine.Model = blackHole;
-            playAreaManager.SetPlayableObjectPosition(newMine, blackHole);
+            playAreaManager.SetPlayableViewPosition(newMine, blackHole);
             return newMine;
         }
 
         public bool RemoveMine(BlackHoleView blackHole){
             blackHole.gameObject.SetActive(false);
-            return _mineViews.Remove(blackHole);
+            return _blackHoleViews.Remove(blackHole);
         }
 
         private BlackHoleView GenerateMineView(){
@@ -30,10 +30,7 @@ namespace Core.PlayArea.BlackHoles{
             return ret;
         }
 
-        // private void Update(){
-        //     if (Input.GetKeyUp(KeyCode.S)){
-        //         
-        //     }
-        // }
+
+        public IEnumerable<PlayableObjectViewBase> GetAllViews() => _blackHoleViews;
     }
 }

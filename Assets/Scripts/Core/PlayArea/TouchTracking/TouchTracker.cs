@@ -29,6 +29,12 @@ namespace Core.PlayArea.TouchTracking{
         public bool isTracing;
         private bool _continueTracking = false;
 
+        [HideInInspector] 
+        public float initLineLength = 10f;
+        [HideInInspector] 
+        public float lineLengthAdder = 0;
+
+
         public bool IsReachingLineLengthLimit() => _currentLineLength >= totalLineLength;
 
         private void Update(){

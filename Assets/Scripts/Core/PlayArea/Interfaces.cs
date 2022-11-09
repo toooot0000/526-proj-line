@@ -6,6 +6,10 @@ using UnityEngine;
 
 namespace Core.PlayArea{
 
+    public interface IPlayableViewManager {
+        public IEnumerable<PlayableObjectViewBase> GetAllViews();
+    }
+
     public abstract class PlayableObjectViewBase: MonoBehaviour{
         private static TouchTracker TouchTracker => GameManager.shared.touchTracker;
         
@@ -41,15 +45,17 @@ namespace Core.PlayArea{
         }
     }
 
-    public interface ISliceableView{
+    public interface IPlayableObjectViewProperty { }
+
+    public interface ISliceableView: IPlayableObjectViewProperty{
         public void OnSliced();
     }
 
-    public interface ICircleableView{
+    public interface ICircleableView: IPlayableObjectViewProperty{
         public void OnCircled();
     }
 
-    public interface IMovableView{
+    public interface IMovableView: IPlayableObjectViewProperty{
         Vector2 Velocity{ get; set; }
         float VelocityMultiplier{ get; set; }
         void UpdatePosition();

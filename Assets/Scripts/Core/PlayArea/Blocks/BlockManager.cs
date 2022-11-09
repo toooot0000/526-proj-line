@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
-using Core.PlayArea.Blocks;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
-namespace Core.PlayArea.Block{
-    public class BlockManager: MonoBehaviour{
+namespace Core.PlayArea.Blocks{
+    public class BlockManager: MonoBehaviour, IPlayableViewManager{
         
         public GameObject blockPrefab;
         public float cellSizePaddingDelta = 0.1f;
@@ -55,5 +52,6 @@ namespace Core.PlayArea.Block{
         }
 
 
+        public IEnumerable<PlayableObjectViewBase> GetAllViews() => _blockViews;
     }
 }

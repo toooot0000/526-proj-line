@@ -5,7 +5,7 @@ using UnityEngine;
 using Utility.Extensions;
 
 namespace Core.PlayArea.Mines{
-    public class MineManager: MonoBehaviour{
+    public class MineManager: MonoBehaviour, IPlayableViewManager{
 
         public GameObject minePrefab;
         public PlayAreaManager playAreaManager;
@@ -36,5 +36,8 @@ namespace Core.PlayArea.Mines{
             return ret;
         }
 
+        public IEnumerable<PlayableObjectViewBase> GetAllViews() {
+            return _mineViews;
+        }
     }
 }
