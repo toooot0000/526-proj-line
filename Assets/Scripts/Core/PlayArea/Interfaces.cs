@@ -6,21 +6,17 @@ using UnityEngine;
 
 namespace Core.PlayArea{
 
-    public interface IPlayableObjectManager{
-        
-    }
-
     public abstract class PlayableObjectViewBase: MonoBehaviour{
         private static TouchTracker TouchTracker => GameManager.shared.touchTracker;
         
         public virtual void Update(){
-            if (this is IMovable self){
+            if (this is IMovableView self){
                 self.UpdatePosition();
             }
         }
 
         public virtual void OnMouseEnter(){
-            if (this is ISliceable self){
+            if (this is ISliceableView self){
                 if (TouchTracker.isTracing){
                     TouchTracker.ContinueTracking();
                     self.OnSliced();
@@ -29,28 +25,28 @@ namespace Core.PlayArea{
         }
 
         public virtual void OnMouseDown(){
-            if (this is ISliceable self){
+            if (this is ISliceableView self){
                 TouchTracker.StartTracking();
                 self.OnSliced();
             }
         }
 
         public void OnMouseUp(){
-            if (this is ISliceable self){
+            if (this is ISliceableView self){
                 StartCoroutine(TouchTracker.OnMouseUp());
             }
         }
     }
 
-    public interface ISliceable{
+    public interface ISliceableView{
         public void OnSliced();
     }
 
-    public interface ICircleable{
+    public interface ICircleableView{
         public void OnCircled();
     }
 
-    public interface IMovable{
+    public interface IMovableView{
         Vector2 Velocity{ get; set; }
         float VelocityMultiplier{ get; set; }
         void UpdatePosition();

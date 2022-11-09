@@ -1,14 +1,21 @@
+using System;
+using Model.EnemySpecialAttacks;
+using Model.Mechanics.PlayableObjects.MineEffects;
 using UnityEngine;
 
 namespace Model.Mechanics.PlayableObjects{
     
     public abstract class MineEffect: IExecutable{
         public abstract void Execute();
+
+        public static MineEffect Make(string name, string[] args) {
+            return Activator.CreateInstance(Type.GetType($"Model.Mechanics.PlayableObjects.MineEffects.{name}", true),
+                    new object[]{ args[1..] }) as
+                MineEffect;
+        }
     }
 
     internal class CircledEffect: IExecutable{
-        private static CircledEffect _shared = null;
-        public static CircledEffect Shared => _shared ??= new CircledEffect();
         public PlayArea playArea;
         public Mine mine;
         public void Execute(){
@@ -30,9 +37,10 @@ namespace Model.Mechanics.PlayableObjects{
         }
         
         public IExecutable OnCircled(){
-            var ret = CircledEffect.Shared;
-            ret.mine = this;
-            ret.playArea = (PlayArea)parent;
+            var ret = new CircledEffect {
+                mine = this,
+                playArea = (PlayArea)parent
+            };
             return ret;
         }
 

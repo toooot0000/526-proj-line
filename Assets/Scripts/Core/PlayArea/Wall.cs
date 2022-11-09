@@ -7,7 +7,7 @@ namespace Core.PlayArea{
 
 
         private void OnTriggerEnter2D(Collider2D col){
-            var ball = col.GetComponent<IMovable>();
+            var ball = col.GetComponent<IMovableView>();
             if (ball == null) return;
             var velocity = ball.Velocity;
             ball.Velocity = new Vector2(velocity.x * velocityChangeRate.x, velocity.y * velocityChangeRate.y);

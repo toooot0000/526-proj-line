@@ -11,7 +11,7 @@ namespace Core.PlayArea.Balls{
 
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(BallConfig))]
-    public class BallView : PlayableObjectViewBase, ITutorialControllable, IMovable, ISliceable, ICircleable{
+    public class BallView : PlayableObjectViewBase, ITutorialControllable, IMovableView, ISliceableView, ICircleableView{
         public enum State{
             Free,
             Touched,

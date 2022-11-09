@@ -14,7 +14,7 @@ namespace Core.PlayArea.Mine{
         Removed
     }
     
-    public class MineView: PlayableObjectViewBase, IMovable, ICircleable, ISliceable{
+    public class MineView: PlayableObjectViewBase, IMovableView, ICircleableView, ISliceableView{
         public MineAnimationController animationController;
         private Model.Mechanics.PlayableObjects.Mine _model;
         public Model.Mechanics.PlayableObjects.Mine Model{

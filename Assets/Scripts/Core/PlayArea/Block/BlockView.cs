@@ -29,7 +29,7 @@ namespace Core.PlayArea.Block{
 
         private void OnCollisionEnter2D(Collision2D collision){
             var otherCollider = collision.collider;
-            var ball = otherCollider.GetComponent<IMovable>();
+            var ball = otherCollider.GetComponent<IMovableView>();
             if (ball == null) return;
             var contact = collision.GetContact(0);
             var normal = contact.normal;

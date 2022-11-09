@@ -19,7 +19,7 @@ namespace Core.PlayArea.TouchTracking{
             // if (ball != null) ball.OnCircled();
             // var mine = col.GetComponent<MineView>();
             // if(mine!= null) mine.OnBeingCircled();
-            var circleable = col.GetComponent<ICircleable>();
+            var circleable = col.GetComponent<ICircleableView>();
             circleable.OnCircled();
         }
 
