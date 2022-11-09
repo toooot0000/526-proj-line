@@ -44,8 +44,6 @@ namespace UI.Interfaces.NextMove
             moveDesc.text = moveModel.intention + "Atk:" + moveModel.number;
             base.Open(model);
             _inAnimation = true;
-            
-            
 
             //moveTitle.text = moveModel.desc;
             
