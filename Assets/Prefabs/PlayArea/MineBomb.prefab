@@ -39,8 +39,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.316, y: 0.9}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &1802493836875413171
 SpriteRenderer:
@@ -203,4 +203,4 @@ MonoBehaviour:
     m_RotationOrder: 4
   flyTime: 0.2
   state: 0
-  spriteRenderer: {fileID: 1802493836875413171}
+  renderer: {fileID: 1802493836875413171}

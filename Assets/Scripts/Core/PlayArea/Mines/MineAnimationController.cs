@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using Utility.Animation;
 
-namespace Core.PlayArea.Mine{
+namespace Core.PlayArea.Mines{
 
     public enum MineAnimation{
         [Description("Idle")]

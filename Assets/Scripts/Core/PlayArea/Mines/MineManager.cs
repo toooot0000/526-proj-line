@@ -1,17 +1,15 @@
 using System;
 using System.Collections.Generic;
 using Core.DisplayArea.Stage;
-using Core.PlayArea.TouchTracking;
 using UnityEngine;
 using Utility.Extensions;
 
-namespace Core.PlayArea.Mine{
+namespace Core.PlayArea.Mines{
     public class MineManager: MonoBehaviour{
 
         public GameObject minePrefab;
         public PlayAreaManager playAreaManager;
         public StageManager stageManager;
-        public TouchTracker tracker;
 
         private readonly List<MineView> _mineViews = new();
 

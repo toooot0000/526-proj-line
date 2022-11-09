@@ -4,7 +4,7 @@ using System.Linq;
 using Core.DisplayArea.Stage.Enemy;
 using Core.DisplayArea.Stage.Player;
 using Core.PlayArea.Balls;
-using Core.PlayArea.Mine;
+using Core.PlayArea.Mines;
 using Model;
 using Model.Buff;
 using Tutorial;

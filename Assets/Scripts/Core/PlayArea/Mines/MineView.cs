@@ -1,20 +1,17 @@
 using System;
 using Core.DisplayArea.Stage;
-using Core.PlayArea.TouchTracking;
-using Model;
 using UnityEngine;
 using Utility;
-using Utility.Animation;
 using Utility.Bezier;
 
-namespace Core.PlayArea.Mine{
+namespace Core.PlayArea.Mines{
     public enum MineState{
         Idle,
         Triggered,
         Removed
     }
     
-    public class MineView: PlayableObjectViewBase, IMovableView, ICircleableView, ISliceableView{
+    public class MineView: PlayableObjectViewBase, ICircleableView, ISliceableView, IBlackHoleSuckableView{
         public MineAnimationController animationController;
         private Model.Mechanics.PlayableObjects.Mine _model;
         public Model.Mechanics.PlayableObjects.Mine Model{
@@ -29,6 +26,7 @@ namespace Core.PlayArea.Mine{
         public float flyTime = 0.2f;
         public MineState state = MineState.Idle;
         public new SpriteRenderer renderer;
+        private float _velocity;
         public Vector2 Velocity{ get; set; } = Vector2.zero;
 
         public float VelocityMultiplier{
@@ -88,10 +86,18 @@ namespace Core.PlayArea.Mine{
             FlyToLocation(flyTime, stageManager.playerView.transform.position, () => {
                 animationController.Play(MineAnimation.Explosion, () => {
                     Model.OnSliced().Execute();
-                    GameManager.shared.game.playArea.RemovePlayableObject(Model);
                     gameObject.SetActive(false);
                 });
             });
+        }
+
+        public Vector2 Acceleration{ get; set; }
+        public void OnSucked(){
+            OnSliced();
+        }
+
+        public void UpdateVelocity(){
+            Velocity += Acceleration * Time.deltaTime;
         }
     }
 }

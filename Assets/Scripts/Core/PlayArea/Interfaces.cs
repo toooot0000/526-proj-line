@@ -10,6 +10,9 @@ namespace Core.PlayArea{
         private static TouchTracker TouchTracker => GameManager.shared.touchTracker;
         
         public virtual void Update(){
+            if (this is IBlackHoleSuckableView suckable){
+                suckable.UpdateVelocity();
+            }
             if (this is IMovableView self){
                 self.UpdatePosition();
             }
@@ -50,5 +53,15 @@ namespace Core.PlayArea{
         Vector2 Velocity{ get; set; }
         float VelocityMultiplier{ get; set; }
         void UpdatePosition();
+    }
+
+    public interface IBlackHoleSuckableView: IMovableView{
+        Vector2 Acceleration{ get; set; }
+        public void OnSucked();
+        public void UpdateVelocity();
+    }
+
+    public interface ISplitable : IMovableView{
+        
     }
 }

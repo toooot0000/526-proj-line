@@ -100,6 +100,15 @@ namespace Model.Mechanics{
             ForceToPlaceObject(ret);
             return ret;
         }
+        
+        public BlackHole MakeAndPlaceBlackHole(float innerRange, float outerRange){
+            var ret = new BlackHole(this, innerRange, outerRange);
+            var rectInt = RandomRectInt(new Vector2Int(1, 1));
+            if (rectInt == null) return null;
+            ret.InitGridPosition = rectInt.Value;
+            ForceToPlaceObject(ret);
+            return ret;
+        }
 
         public IEnumerable<Vector2Int> GetOccupiedGridPositions(){
             foreach (var obj in _objects){

@@ -1,5 +1,6 @@
 using System;
 using Model;
+using Model.Mechanics;
 using Model.Mechanics.PlayableObjects;
 using Tutorial;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Core.PlayArea.Balls{
 
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(BallConfig))]
-    public class BallView : PlayableObjectViewBase, ITutorialControllable, IMovableView, ISliceableView, ICircleableView{
+    public class BallView : PlayableObjectViewBase, ITutorialControllable, ISliceableView, ICircleableView, IBlackHoleSuckableView{
         public enum State{
             Free,
             Touched,
@@ -24,6 +25,7 @@ namespace Core.PlayArea.Balls{
         }
 
         public Vector2 Velocity{ set; get; }
+
         public float VelocityMultiplier{ set; get; } = 1f;
 
         public AnimationCurve curve;
@@ -35,6 +37,7 @@ namespace Core.PlayArea.Balls{
         public BallConfig config;
         private State _currentState = State.Free;
         private Game _game;
+        private float _velocity;
 
         public State CurrentState{
             set{
@@ -163,6 +166,15 @@ namespace Core.PlayArea.Balls{
             if (CurrentState != State.Free) return;
             var rectTrans = (RectTransform)transform;
             rectTrans.position += (Vector3)Velocity * (Time.deltaTime * VelocityMultiplier);
+        }
+
+        public Vector2 Acceleration{ get; set; }
+        public void OnSucked(){
+            FadeOut(0.2f);
+        }
+
+        public void UpdateVelocity(){
+            Velocity += Acceleration * Time.deltaTime;
         }
     }
 }

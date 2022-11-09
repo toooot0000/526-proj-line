@@ -14,12 +14,16 @@ namespace Model.Mechanics.PlayableObjects{
         }
         
         public RectInt InitGridPosition{ get; set; }
-        public float range = 5;
+        public float outRange = 2;
+        public readonly float innerRange = 0.5f;
+
+        public event ModelEvent<BlackHole> OnRangeChanged; 
 
         protected BlackHole(GameModel parent) : base(parent){ }
 
-        public BlackHole(GameModel parent, int initRange) : base(parent) {
-            range = initRange;
+        public BlackHole(GameModel parent, float initInnerRange, float initOutRange) : base(parent) {
+            outRange = initOutRange;
+            innerRange = initInnerRange;
         }
         
         public IExecutable OnCircled() {
@@ -29,10 +33,11 @@ namespace Model.Mechanics.PlayableObjects{
         }
 
         public void Shrink() {
-            range--;
-            range = Math.Max(range, 0);
+            outRange--;
+            outRange = Math.Max(outRange, innerRange);
+            OnRangeChanged?.Invoke(currentGame, this);
         }
 
-        public bool IsDead() => range <= 0;
+        public bool IsDead() => outRange <= innerRange;
     }
 }

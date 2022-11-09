@@ -1,9 +1,7 @@
-using System;
 using Core.Common.SizeSyncer;
-using Core.PlayArea.Balls;
 using UnityEngine;
 
-namespace Core.PlayArea.Block{
+namespace Core.PlayArea.Blocks{
     public class BlockView: PlayableObjectViewBase{
         public SpriteSizeSyncer sizeSyncer;
         public BoxCollider2DSizeSyncer collider2DSizeSyncer;

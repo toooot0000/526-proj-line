@@ -41,7 +41,8 @@ namespace Core.PlayArea{
         }
 
         public void Show(int number, Vector3 worldPosition){
-            transform.position = new Vector3(worldPosition.x, worldPosition.y, transform.position.z);
+            var transform1 = transform;
+            transform1.position = new Vector3(worldPosition.x, worldPosition.y, transform1.position.z);
             ChargeNum = number;
         }
     }

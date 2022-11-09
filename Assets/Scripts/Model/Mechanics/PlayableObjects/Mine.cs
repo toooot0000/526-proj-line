@@ -37,14 +37,16 @@ namespace Model.Mechanics.PlayableObjects{
         }
         
         public IExecutable OnCircled(){
-            var ret = new CircledEffect {
-                mine = this,
-                playArea = (PlayArea)parent
-            };
-            return ret;
+            // var ret = new CircledEffect {
+            //     mine = this,
+            //     playArea = (PlayArea)parent
+            // };
+            ((PlayArea)parent).RemovePlayableObject(this);
+            return null;
         }
 
         public IExecutable OnSliced(){
+            ((PlayArea)parent).RemovePlayableObject(this);
             return effect;
         }
 
