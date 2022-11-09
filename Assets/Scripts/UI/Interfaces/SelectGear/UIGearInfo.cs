@@ -1,6 +1,6 @@
 using Model;
-using Model.GearEffects;
 using TMPro;
+using UI.Interfaces;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility;
@@ -8,7 +8,7 @@ using Utility.Loader;
 
 namespace UI.Interfaces.SelectGear
 {
-    public class UIGearInfo:UIBase
+    public class UIGearInfo : UIBase
     {
         
         public TextMeshProUGUI _gearName;
@@ -16,7 +16,6 @@ namespace UI.Interfaces.SelectGear
         private CanvasGroup _canvasGroup;
         public Gear gearModel;
         private bool _inAnimation;
-        public Image bg;
         public Image image;
         public Image icon;
         public TextMeshProUGUI desc;
@@ -26,7 +25,6 @@ namespace UI.Interfaces.SelectGear
         public float ballpoint;
         public TextMeshProUGUI ballsizetext;
         public TextMeshProUGUI ballspeedtext;
-        public GearType type;
 
         void Start()
         {
@@ -35,7 +33,7 @@ namespace UI.Interfaces.SelectGear
         }
 
         public override void Open(object model)
-        { 
+        {
             gearModel = (Gear)model;
             base.Open(model);
             _inAnimation = true;
@@ -53,7 +51,7 @@ namespace UI.Interfaces.SelectGear
             ballspeedtext.text = "Ball speed: " + ballspeed as string;
             desc.text = gearModel.ToDesc();
             descInfo.text = gearModel.ToDescComboCharge();
-
+            
             var coroutine = TweenUtility.Lerp(0.2f,
                 () => _canvasGroup.alpha = 0,
                 i => _canvasGroup.alpha = i,
@@ -61,25 +59,26 @@ namespace UI.Interfaces.SelectGear
             );
             StartCoroutine(coroutine());
         }
-        
-        public override void Close() {
+
+        public override void Close()
+        {
             _inAnimation = true;
             var coroutine = TweenUtility.Lerp(0.2f,
                 () => _canvasGroup.alpha = 1,
                 i => _canvasGroup.alpha = 1 - i,
-                () => {
+                () =>
+                {
                     _inAnimation = false;
                     base.Close();
                     Destroy(gameObject);
                 });
             StartCoroutine(coroutine());
-        } 
-        
+        }
+
         public void TapToContinue()
         {
             Close();
         }
+
     }
-
 }
-

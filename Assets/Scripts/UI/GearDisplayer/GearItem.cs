@@ -1,5 +1,3 @@
-using System;
-using Core.PlayArea.Balls;
 using Model;
 using TMPro;
 using UnityEngine;
@@ -12,6 +10,7 @@ namespace UI.GearDisplayer{
         public Image icon;
         private Gear _model;
         public float ballsize;
+        public TextMeshProUGUI ballNum;
         
         public Gear Model{
             set{
@@ -32,6 +31,8 @@ namespace UI.GearDisplayer{
             ballsize = Mathf.Min((float)ball["size"], 1.5f);
             (transform as RectTransform)!.localScale = new Vector3(ballsize, ballsize, 1);
             icon.sprite = Resources.Load<Sprite>(Model.imgPath);
+            
+            ballNum.text = $"x {Model.ballNum.ToString()}";
         }
     }
 }
