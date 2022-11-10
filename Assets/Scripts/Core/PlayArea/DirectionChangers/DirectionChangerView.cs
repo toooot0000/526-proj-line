@@ -3,12 +3,12 @@ using Model.Mechanics.PlayableObjects;
 using UnityEngine;
 
 namespace Core.PlayArea.DirectionChangers{
-    public class DirectionChangerView: PlayableObjectViewBase, ISliceableView, ICircleableView{
+    public class DirectionChangerView: PlayableObjectViewWithModel<DirectionChanger>, ISliceableView, ICircleableView{
         
         public SpriteRenderer spriteRenderer;
 
         private DirectionChanger _model;
-        public DirectionChanger Model{
+        public override DirectionChanger Model{
             set{
                 _model = value;
                 transform.localScale = new Vector3(value.size, value.size, value.size);
@@ -32,10 +32,6 @@ namespace Core.PlayArea.DirectionChangers{
         public void OnCircled(){
             Model.OnCircled().Execute();
             transform.rotation = Quaternion.Euler(0, 0, Model.targetAngle);
-        }
-
-        private void Start(){
-            Model = new DirectionChanger(GameManager.shared.game, 23);
         }
     }
 }

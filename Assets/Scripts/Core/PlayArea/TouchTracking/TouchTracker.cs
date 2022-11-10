@@ -16,7 +16,6 @@ namespace Core.PlayArea.TouchTracking{
         public LineRenderer lineRenderer;
         public new Camera camera;
         public CircleCollider circleCollider;
-        public float totalLineLength = 5f;
         public ProgressBar progressBar;
         private readonly CircleDetector _circleDetector = new CircleDetector();
         private float _currentLineLength;
@@ -24,10 +23,11 @@ namespace Core.PlayArea.TouchTracking{
         [HideInInspector]
         public bool tutorKeepLine = false;
         [HideInInspector]
-        public bool isAcceptingInput = true;
+        public bool isAcceptingInput = false;
         [HideInInspector]
         public bool isTracing;
         private bool _continueTracking = false;
+        private float TotalLineLength => initLineLength + lineLengthAdder;
 
         [HideInInspector] 
         public float initLineLength = 10f;
@@ -35,7 +35,7 @@ namespace Core.PlayArea.TouchTracking{
         public float lineLengthAdder = 0;
 
 
-        public bool IsReachingLineLengthLimit() => _currentLineLength >= totalLineLength;
+        public bool IsReachingLineLengthLimit() => _currentLineLength >= TotalLineLength;
 
         private void Update(){
             if (!isTracing) return;
@@ -83,9 +83,10 @@ namespace Core.PlayArea.TouchTracking{
             isTracing = true;
         }
 
-        public void StopTracking(){
-            if (!isTracing) return;
+        public bool StopTracking(){
+            if (!isTracing) return false;
             isTracing = false;
+            return true;
         }
 
         private IEnumerator HideLine(){
@@ -120,12 +121,12 @@ namespace Core.PlayArea.TouchTracking{
 
             // Add length
             _currentLineLength += curSegLength;
-            progressBar.Percentage = 100 - _currentLineLength / totalLineLength * 100;
+            progressBar.Percentage = 100 - _currentLineLength / TotalLineLength * 100;
         }
 
         private void SendInput(){
             if (_isInTutorial) OnInputReadyToSent?.Invoke(this);
-            GameManager.shared.OnPlayerFinishInput();
+            GameManager.shared.OnPlayerFinishDrawing();
         }
 
         public void ContinueTracking(){
@@ -145,7 +146,7 @@ namespace Core.PlayArea.TouchTracking{
             var positionCount = lineRenderer.positionCount;
             // Length validate
             if (positionCount > 0){
-                var remain = totalLineLength - _currentLineLength;
+                var remain = TotalLineLength - _currentLineLength;
                 var curSegLength = (worldPosition - lineRenderer.GetPosition(positionCount - 1)).magnitude;
                 if (curSegLength < minDistance) return -1;
                 curSegLength = Mathf.Min(curSegLength, remain);

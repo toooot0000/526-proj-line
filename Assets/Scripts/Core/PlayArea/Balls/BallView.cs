@@ -12,7 +12,7 @@ namespace Core.PlayArea.Balls{
 
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(BallConfig))]
-    public class BallView : PlayableObjectViewBase, ITutorialControllable, ISliceableView, ICircleableView, IBlackHoleSuckableView{
+    public class BallView : PlayableObjectViewWithModel<Ball>, ITutorialControllable, ISliceableView, ICircleableView, IBlackHoleSuckableView{
         public enum State{
             Free,
             Touched,
@@ -56,7 +56,7 @@ namespace Core.PlayArea.Balls{
 
         private SpriteRenderer BallBg => config.bg;
 
-        public Ball Model{
+        public override Ball Model{
             get => config.modelBall;
             set => config.modelBall = value;
         }

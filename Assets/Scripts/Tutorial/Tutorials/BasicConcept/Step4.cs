@@ -1,3 +1,4 @@
+using System.Linq;
 using Core.PlayArea.Balls;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace Tutorial.Tutorials.BasicConcept{
         public override void SetUp(TutorialBase tutorial){
             _ttr = (TutorialBasicConcept)tutorial;
             _ttr.desc[3].Enabled = true;
-            _ball = _ttr.tutorialManager.ballManager.balls[0];
+            _ball = _ttr.tutorialManager.ballManager.balls.First();
             _ttr.LiftToFront(_ball.gameObject, -50);
             
             var position = _ttr.ballPosition.position;

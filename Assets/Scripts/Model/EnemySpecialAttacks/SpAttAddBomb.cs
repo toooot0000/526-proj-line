@@ -1,3 +1,4 @@
+using Core.PlayArea.Mines;
 using Model.Mechanics.PlayableObjects;
 using Model.Mechanics.PlayableObjects.MineEffects;
 using Utility;
@@ -19,7 +20,7 @@ namespace Model.EnemySpecialAttacks {
                 eff = MineEffect.Make(name, effArgs);
             }
             var mine = GameManager.shared.game.playArea.MakeAndPlaceMine(spd, size, eff);
-            GameManager.shared.playAreaManager.mineManager.PlaceMine(mine);
+            GameManager.shared.playAreaManager.GetManager<MineManager>().Place(mine);
         }
     }
 }

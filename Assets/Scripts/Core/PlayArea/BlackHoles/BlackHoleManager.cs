@@ -5,7 +5,7 @@ using UnityEngine;
 using Utility.Extensions;
 
 namespace Core.PlayArea.BlackHoles{
-    public class BlackHoleManager: MonoBehaviour, IPlayableViewManager{
+    public class BlackHoleManager: PlayableViewManager<BlackHole>, IPlayableViewManager{
 
         public GameObject minePrefab;
         public PlayAreaManager playAreaManager;
@@ -19,18 +19,19 @@ namespace Core.PlayArea.BlackHoles{
             return newMine;
         }
 
-        public bool RemoveMine(BlackHoleView blackHole){
-            blackHole.gameObject.SetActive(false);
-            return _blackHoleViews.Remove(blackHole);
-        }
-
         private BlackHoleView GenerateMineView(){
             var ret = Instantiate(minePrefab, transform).GetComponent<BlackHoleView>();
             if (ret == null) throw new Exception();
             return ret;
         }
+        
+        public override PlayableObjectViewWithModel<BlackHole> Place(BlackHole model) => PlaceBlackHole(model);
 
+        public override void Remove(PlayableObjectViewWithModel<BlackHole> view) =>
+            _blackHoleViews.Remove(view as BlackHoleView);
 
-        public IEnumerable<PlayableObjectViewBase> GetAllViews() => _blackHoleViews;
+        protected override PlayableObjectViewWithModel<BlackHole> GenerateNewObject() => GenerateMineView();
+
+        public override IEnumerable<PlayableObjectViewBase> GetAllViews() => _blackHoleViews;
     }
 }

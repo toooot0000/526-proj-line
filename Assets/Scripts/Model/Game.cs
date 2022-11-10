@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using Model.Mechanics;
 using Model.Mechanics.PlayableObjects;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Model{
 
@@ -35,8 +37,16 @@ namespace Model{
             CreatePlayer();
         }
         
-        public Ball[] GetAllSkillBalls(){
-            return player.GetAllBalls();
+        public Ball[] GetAllBalls(){
+            var ret =  player.GetAllBallsWithoutGridPosition();
+            var emptyPositions = playArea.GetEmptyGridPositions().ToArray();
+            foreach (var ball in ret){
+                ball.InitGridRectInt = new RectInt(){
+                    position = emptyPositions[Random.Range(0, emptyPositions.Length)],
+                    size = new Vector2Int(1, 1),
+                };
+            }
+            return ret;
         }
 
         public void SwitchTurn(){

@@ -3,7 +3,7 @@ using Utility.Extensions;
 
 namespace Model.Mechanics.PlayableObjects{
     public class DirectionChanger: GameModel, IPlayableObject, ICircleable, ISliceable{
-        public RectInt InitGridPosition{ get; set; }
+        public RectInt InitGridRectInt{ get; set; }
         public Vector2 targetDirection = Vector2.right;
         public float targetAngle = 0;
         public float size = 0.8f;

@@ -1,5 +1,6 @@
 using System;
 using Core.DisplayArea.Stage;
+using Model.Mechanics.PlayableObjects;
 using UnityEngine;
 using Utility;
 using Utility.Bezier;
@@ -11,10 +12,10 @@ namespace Core.PlayArea.Mines{
         Removed
     }
     
-    public class MineView: PlayableObjectViewBase, ICircleableView, ISliceableView, IBlackHoleSuckableView{
+    public class MineView: PlayableObjectViewWithModel<Mine>, ICircleableView, ISliceableView, IBlackHoleSuckableView{
         public MineAnimationController animationController;
-        private Model.Mechanics.PlayableObjects.Mine _model;
-        public Model.Mechanics.PlayableObjects.Mine Model{
+        private Mine _model;
+        public override Mine Model{
             set{
                 _model = value;
                 Velocity =  _model.Velocity * Vector2Utility.RandomDirection;

@@ -1,8 +1,10 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using Core.PlayArea.Balls;
 using Core.PlayArea.BlackHoles;
 using Core.PlayArea.Blocks;
+using Core.PlayArea.Crystals;
+using Core.PlayArea.DirectionChangers;
 using Core.PlayArea.Mines;
 using Model.Mechanics;
 using Model.Mechanics.PlayableObjects;
@@ -17,15 +19,21 @@ namespace Core.PlayArea{
         public BlockManager blockManager;
         public MineManager mineManager;
         public BlackHoleManager blackHoleManager;
+        public Vector2 padding = new Vector2(.3f, .3f);
 
         private readonly List<PlayableObjectViewBase> _views = new();
+        private readonly List<IPlayableViewManager> _managers = new();
 
-        public IEnumerable<IPlayableViewManager> AllManagers => new IPlayableViewManager[] {
-            ballManager,
-            blockManager,
-            mineManager,
-            blackHoleManager
-        };
+        private readonly List<IResetable> _resetables = new();
+
+
+        public IEnumerable<IPlayableViewManager> AllManagers => _managers;
+
+        public T GetManager<T>() where T : IPlayableViewManager => (T)AllManagers.First(m => m is T);
+
+        public void RegisterManager(IPlayableViewManager manager){
+            _managers.Add(manager);
+        }
 
         private void Start(){
             model = GameManager.shared.game.playArea;
@@ -33,9 +41,9 @@ namespace Core.PlayArea{
         }
         
         public Rect GridRectToRect(RectInt gridRect){
-            var gridCellSize = ((RectTransform)transform).rect.size / Model.Mechanics.PlayArea.GridSize;
+            var gridCellSize = (((RectTransform)transform).rect.size - padding * 2) / Model.Mechanics.PlayArea.GridSize;
             var ret = new Rect(){
-                position = gridRect.position * gridCellSize,
+                position = gridRect.position * gridCellSize + padding,
                 size = gridRect.size * gridCellSize
             };
             ret.position += ret.size / 2;
@@ -44,10 +52,15 @@ namespace Core.PlayArea{
 
         public void SetPlayableViewPosition<T>(T view, IPlayableObject objectModel) 
         where T: PlayableObjectViewBase{
-            var rect = GridRectToRect(objectModel.InitGridPosition);
+            var rect = GridRectToRect(objectModel.InitGridRectInt);
             var rectTrans = view.transform;
             ((RectTransform)rectTrans).anchoredPosition = rect.position;
             ((RectTransform)rectTrans).sizeDelta = rect.size;
+        }
+
+        public void SetPlayableViewPosition<T>(PlayableObjectViewWithModel<T> view)
+        where T:IPlayableObject {
+            SetPlayableViewPosition(view, view.Model);
         }
 
 
@@ -59,12 +72,40 @@ namespace Core.PlayArea{
         private BlockView _test;
         private void Update(){
             if (Input.GetKeyUp(KeyCode.A)){
-                mineManager.PlaceMine(model.MakeAndPlaceMine(2, 1, new MineEffectLoseLife(1)));
+                mineManager.Place(model.MakeAndPlaceMine(2, 1, new MineEffectLoseLife(1)));
             }
 
             if (Input.GetKeyUp(KeyCode.S)){
-                blackHoleManager.PlaceBlackHole(model.MakeAndPlaceBlackHole(0.2f, 3f));
+                blackHoleManager.Place(model.MakeAndPlaceBlackHole(0.2f, 3f));
             }
+
+            if (Input.GetKeyUp(KeyCode.D)){
+                var crystal = new Crystal(GameManager.shared.game, CrystalType.FreezeMovable, 0.1f);
+                var rect = model.RandomRectInt(Vector2Int.one)!;
+                crystal.InitGridRectInt = rect.Value;
+                model.PlaceObject(crystal);
+                GetManager<CrystalManager>().Place(crystal);
+            }
+            
+            if (Input.GetKeyUp(KeyCode.F)){
+                var crystal = new Crystal(GameManager.shared.game, CrystalType.LengthenLine, 10f);
+                var rect = model.RandomRectInt(Vector2Int.one)!;
+                crystal.InitGridRectInt = rect.Value;
+                model.PlaceObject(crystal);
+                GetManager<CrystalManager>().Place(crystal);
+            }
+
+            if (Input.GetKeyUp(KeyCode.G)){
+                var dc = new DirectionChanger(model, Random.Range(0, 361)){
+                    InitGridRectInt = model.RandomRectInt(Vector2Int.one)!.Value
+                };
+                model.PlaceObject(dc);
+                GetManager<DirectionChangerManager>().Place(dc);
+            }
+        }
+
+        public void RegisterResetEffect(IResetable resetable){
+            _resetables.Add(resetable);
         }
 
         public IEnumerable<T> GetAllViewsOfProperty<T>() where T: IPlayableObjectViewProperty {
@@ -73,6 +114,16 @@ namespace Core.PlayArea{
                     if (playableObjectViewBase is T typed) yield return typed;
                 }
             }
+        }
+
+        public void OnPlayerFinishDrawing(){
+            foreach (var view in GetAllViewsOfProperty<IOnPlayerFinishDrawing>()){
+                view.OnPlayerFinishDrawing();
+            }
+            foreach (var resetable in _resetables){
+                resetable.Reset();
+            }
+            _resetables.Clear();
         }
     }
 }

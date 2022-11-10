@@ -16,16 +16,15 @@ namespace Model.Mechanics.PlayableObjects{
     }
 
     internal class CircledEffect: IExecutable{
-        public PlayArea playArea;
         public Mine mine;
         public void Execute(){
-            playArea.RemovePlayableObject(mine);
+            GameManager.shared.game.playArea.RemovePlayableObject(mine);
         }
     }
     
     public class Mine: GameModel, IPlayableObject, IMovable, ICircleable, ISliceable{
         
-        public RectInt InitGridPosition{ get; set; }
+        public RectInt InitGridRectInt{ get; set; }
         public MineEffect effect;
         public float speed = 2;
         public float size = 1;
@@ -33,16 +32,13 @@ namespace Model.Mechanics.PlayableObjects{
         public float VelocityMultiplier{ get; set; } = 1;
 
         public Mine(GameModel parent, RectInt rectInt) : base(parent) {
-            InitGridPosition = rectInt;
+            InitGridRectInt = rectInt;
         }
         
         public IExecutable OnCircled(){
-            // var ret = new CircledEffect {
-            //     mine = this,
-            //     playArea = (PlayArea)parent
-            // };
-            ((PlayArea)parent).RemovePlayableObject(this);
-            return null;
+            return new CircledEffect(){
+                mine = this
+            };
         }
 
         public IExecutable OnSliced(){

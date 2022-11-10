@@ -143,8 +143,9 @@ public class GameManager : MonoBehaviour{
     }
 
 
-    public void OnPlayerFinishInput(){
+    public void OnPlayerFinishDrawing(){
         if (game.turn != Game.Turn.Player) return;
+        playAreaManager.OnPlayerFinishDrawing();
         var action = game.player.GetAction();
         if (StageActionPlayerAction.IsEmpty(action)) return;
         touchTracker.isAcceptingInput = false;

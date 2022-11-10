@@ -18,10 +18,10 @@ namespace Model.Mechanics.PlayableObjects{
         public BlockLevel level;
         public int remainingTurn = 0;
         
-        public RectInt InitGridPosition{ get; set; }
+        public RectInt InitGridRectInt{ get; set; }
 
         public Block(GameModel parent, RectInt rectInt, BlockLevel level) : base(parent){
-            InitGridPosition = rectInt;
+            InitGridRectInt = rectInt;
             this.level = level;
         }
         

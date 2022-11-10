@@ -1,8 +1,9 @@
 using Core.Common.SizeSyncer;
+using Model.Mechanics.PlayableObjects;
 using UnityEngine;
 
 namespace Core.PlayArea.Blocks{
-    public class BlockView: PlayableObjectViewBase{
+    public class BlockView: PlayableObjectViewWithModel<Block>{
         public SpriteSizeSyncer sizeSyncer;
         public BoxCollider2DSizeSyncer collider2DSizeSyncer;
 
@@ -16,8 +17,8 @@ namespace Core.PlayArea.Blocks{
             }
         }
 
-        private Model.Mechanics.PlayableObjects.Block _model;
-        public Model.Mechanics.PlayableObjects.Block Model{
+        private Block _model;
+        public override Block Model{
             get => _model;
             set{
                 _model = value;

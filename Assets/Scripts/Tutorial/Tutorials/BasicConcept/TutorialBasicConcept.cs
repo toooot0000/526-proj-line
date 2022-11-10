@@ -1,3 +1,4 @@
+using System.Linq;
 using Tutorial.Common;
 using Tutorial.Utility;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace Tutorial.Tutorials.BasicConcept{
             _steps = new StepBase[]{
                 new StepTapToContinue<TutorialBasicConcept>(desc[0], tutorialTapCatcher, mng.stageManager.playerView.gameObject),
                 new StepTapToContinue<TutorialBasicConcept>(desc[1], tutorialTapCatcher, mng.stageManager.enemyView.gameObject),
-                new StepTapToContinue<TutorialBasicConcept>(desc[2], tutorialTapCatcher, mng.ballManager.balls[0].gameObject),
+                new StepTapToContinue<TutorialBasicConcept>(desc[2], tutorialTapCatcher, mng.ballManager.balls.First().gameObject),
                 new Step4(),
             };
             mng.stageManager.HandOverControlTo(this);

@@ -5,9 +5,13 @@ namespace Model.Mechanics{
     public interface IExecutable{
         void Execute();
     }
+
+    public interface IResetable: IExecutable{
+        void Reset();
+    }
     
     public interface IPlayableObject{
-        RectInt InitGridPosition{ get; set; }
+        RectInt InitGridRectInt{ get; set; }
     }
 
     public interface IMovable{

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Core.PlayArea.TouchTracking;
 using Model.Mechanics;
 using UnityEngine;
+using Utility.Extensions;
 
 namespace Core.PlayArea{
 
@@ -10,13 +11,38 @@ namespace Core.PlayArea{
         public IEnumerable<PlayableObjectViewBase> GetAllViews();
     }
 
-    public abstract class PlayableObjectViewBase: MonoBehaviour{
+
+    public abstract class PlayableViewManager<TModel> : MonoBehaviour, IPlayableViewManager
+    where TModel: IPlayableObject{
+        protected readonly List<PlayableObjectViewWithModel<TModel>> views = new();
+
+        public virtual PlayableObjectViewWithModel<TModel> Place(TModel model){
+            var curItem = views.FirstNotActiveOrNew(GenerateNewObject);
+            curItem.Model = model;
+            curItem.gameObject.SetActive(true);
+            GameManager.shared.playAreaManager.SetPlayableViewPosition(curItem);
+            return curItem;
+        }
+        protected abstract PlayableObjectViewWithModel<TModel> GenerateNewObject();
+        public virtual void Remove(PlayableObjectViewWithModel<TModel> view){
+            views.Remove(view);
+        }
+        public virtual  IEnumerable<PlayableObjectViewBase> GetAllViews(){
+            return views;
+        }
+        public virtual void Start(){
+            GameManager.shared.playAreaManager.RegisterManager(this);
+        }
+    }
+    
+    public abstract class PlayableObjectViewBase : MonoBehaviour{
         private static TouchTracker TouchTracker => GameManager.shared.touchTracker;
-        
+
         public virtual void Update(){
             if (this is IBlackHoleSuckableView suckable){
                 suckable.UpdateVelocity();
             }
+
             if (this is IMovableView self){
                 self.UpdatePosition();
             }
@@ -45,6 +71,11 @@ namespace Core.PlayArea{
         }
     }
 
+    public abstract class PlayableObjectViewWithModel<TModel> : PlayableObjectViewBase
+    where TModel: IPlayableObject{
+        public abstract TModel Model{ set; get; }
+    }
+
     public interface IPlayableObjectViewProperty { }
 
     public interface ISliceableView: IPlayableObjectViewProperty{
@@ -68,6 +99,10 @@ namespace Core.PlayArea{
     }
 
     public interface ISplitable : IMovableView{
-        
+        public void Split();
+    }
+
+    public interface IOnPlayerFinishDrawing: IPlayableObjectViewProperty{
+        public void OnPlayerFinishDrawing();
     }
 }

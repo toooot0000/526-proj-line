@@ -5,13 +5,13 @@ using UnityEngine;
 using Utility;
 
 namespace Core.PlayArea.BlackHoles{
-    public class BlackHoleView: PlayableObjectViewBase{
+    public class BlackHoleView: PlayableObjectViewWithModel<BlackHole>{
 
         public InnerRange inner;
         public OuterRange outer;
         public ShrinkingRange shrinkingRange;
         private BlackHole _model;
-        public BlackHole Model {
+        public override BlackHole Model {
             set{
                 _model = value;
                 outer.Range = value.outRange;

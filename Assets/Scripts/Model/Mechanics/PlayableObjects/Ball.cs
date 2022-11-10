@@ -17,7 +17,7 @@ namespace Model.Mechanics.PlayableObjects{
         public float combo;
         public float Velocity{ get => speed; set => speed = value; }
         public float VelocityMultiplier{ get; set; } = 1;
-        public RectInt InitGridPosition{ get; set; }
+        public RectInt InitGridRectInt{ get; set; }
 
         public Ball(GameModel parent) : base(parent){ }
 

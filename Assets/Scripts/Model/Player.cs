@@ -147,7 +147,7 @@ namespace Model{
             return triggers?.Select(t => t.OnGetPlayerActionInfo()).ToArray();
         }
         
-        public Ball[] GetAllBalls(){
+        public Ball[] GetAllBallsWithoutGridPosition(){
             var ret = new List<Ball>();
             ret.AddRange(GetAllGearBalls());
             ret.AddRange(debuffBalls);

@@ -1,33 +1,24 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Core.DisplayArea.Stage;
+using Model.Mechanics.PlayableObjects;
 using UnityEngine;
 using Utility.Extensions;
 
 namespace Core.PlayArea.Mines{
-    public class MineManager: MonoBehaviour, IPlayableViewManager{
+    public class MineManager: PlayableViewManager<Mine>{
 
         public GameObject minePrefab;
-        public PlayAreaManager playAreaManager;
         public StageManager stageManager;
 
-        private readonly List<MineView> _mineViews = new();
 
-        public MineView PlaceMine(Model.Mechanics.PlayableObjects.Mine mine){
-            var newMine = _mineViews.FirstNotActiveOrNew(GenerateMineView);
-            newMine.Init();
-            newMine.Model = mine;
-            newMine.stageManager = stageManager;
-            var rect = playAreaManager.GridRectToRect(mine.InitGridPosition);
-            var rectTrans = newMine.transform;
-            ((RectTransform)rectTrans).anchoredPosition = rect.position;
-            ((RectTransform)rectTrans).sizeDelta = rect.size;
-            return newMine;
-        }
-
-        public bool RemoveMine(MineView mine){
-            mine.gameObject.SetActive(false);
-            return _mineViews.Remove(mine);
+        public override PlayableObjectViewWithModel<Mine> Place(Mine model){
+            var ret = base.Place(model) as MineView;
+            ret!.Init();
+            ret!.stageManager = stageManager;
+            return ret;
         }
 
         private MineView GenerateMineView(){
@@ -36,8 +27,8 @@ namespace Core.PlayArea.Mines{
             return ret;
         }
 
-        public IEnumerable<PlayableObjectViewBase> GetAllViews() {
-            return _mineViews;
+        protected override PlayableObjectViewWithModel<Mine> GenerateNewObject(){
+            return GenerateMineView();
         }
     }
 }

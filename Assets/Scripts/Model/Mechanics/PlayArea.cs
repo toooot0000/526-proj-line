@@ -17,10 +17,10 @@ namespace Model.Mechanics{
         /// </summary>
         /// <param name="size"></param>
         /// <returns></returns>
-        private RectInt? RandomRectInt(Vector2Int size){
+        public RectInt? RandomRectInt(Vector2Int size){
             if (RemainingPositionNumber() <= 0) return null;
             var candidates = new List<RectInt>();
-            var list = _objects.Select(o => o.InitGridPosition).ToList();
+            var list = _objects.Select(o => o.InitGridRectInt).ToList();
             // get all candidate position;
             for (var i = 0; i < GridSize.x - size.x + 1; i++){
                 for (var j = 0; j < GridSize.y - size.y + 1; j++){
@@ -37,20 +37,20 @@ namespace Model.Mechanics{
         }
 
         private bool IsOccupied(RectInt rect){
-            return _objects.FindIndex(o => o.InitGridPosition.Overlaps(rect)) != -1;
+            return _objects.FindIndex(o => o.InitGridRectInt.Overlaps(rect)) != -1;
         }
 
         private int RemainingPositionNumber(){
-            return GridSize.x * GridSize.y - ReservedNumber - _objects.Aggregate(0, (p, cur) => p + cur.InitGridPosition.size.x * cur.InitGridPosition.size.y);
+            return GridSize.x * GridSize.y - ReservedNumber - _objects.Aggregate(0, (p, cur) => p + cur.InitGridRectInt.size.x * cur.InitGridRectInt.size.y);
         }
 
-        private bool PlaceObject(IPlayableObject playableObject, RectInt? rectInt = null){
+        public bool PlaceObject(IPlayableObject playableObject, RectInt? rectInt = null){
             if (RemainingPositionNumber() <= 0) return false;
             if (rectInt == null){
-                if (IsOccupied(playableObject.InitGridPosition)) return false;
+                if (IsOccupied(playableObject.InitGridRectInt)) return false;
             } else{
                 if (IsOccupied(rectInt.Value)) return false;
-                playableObject.InitGridPosition = rectInt.Value;
+                playableObject.InitGridRectInt = rectInt.Value;
             }
             ForceToPlaceObject(playableObject);
             return true;
@@ -103,18 +103,18 @@ namespace Model.Mechanics{
         
         public BlackHole MakeAndPlaceBlackHole(float innerRange, float outerRange){
             var ret = new BlackHole(this, innerRange, outerRange);
-            var rectInt = RandomRectInt(new Vector2Int(1, 1));
+            var rectInt = RandomRectInt(new Vector2Int(3, 3));
             if (rectInt == null) return null;
-            ret.InitGridPosition = rectInt.Value;
+            ret.InitGridRectInt = rectInt.Value;
             ForceToPlaceObject(ret);
             return ret;
         }
 
         public IEnumerable<Vector2Int> GetOccupiedGridPositions(){
             foreach (var obj in _objects){
-                for (var i = 0; i < obj.InitGridPosition.width; i++){
-                    for (var j = 0; j < obj.InitGridPosition.height; j++){
-                        yield return obj.InitGridPosition.position + new Vector2Int(i, j);
+                for (var i = 0; i < obj.InitGridRectInt.width; i++){
+                    for (var j = 0; j < obj.InitGridRectInt.height; j++){
+                        yield return obj.InitGridRectInt.position + new Vector2Int(i, j);
                     }
                 }
             }

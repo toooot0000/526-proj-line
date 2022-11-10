@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using Model.Mechanics.PlayableObjects;
 using UnityEngine;
 
 namespace Core.PlayArea.Blocks{
-    public class BlockManager: MonoBehaviour, IPlayableViewManager{
+    public class BlockManager: PlayableViewManager<Block>, IPlayableViewManager{
         
         public GameObject blockPrefab;
         public float cellSizePaddingDelta = 0.1f;
@@ -10,7 +11,7 @@ namespace Core.PlayArea.Blocks{
 
         private readonly List<BlockView> _blockViews = new();
 
-        public BlockView PlaceBlock(Model.Mechanics.PlayableObjects.Block block){
+        public BlockView PlaceBlock(Block block){
             var i = 0;
             for (; i < _blockViews.Count; i++){
                 if(_blockViews[i].gameObject.activeSelf) continue;
@@ -20,7 +21,7 @@ namespace Core.PlayArea.Blocks{
                 var newBlock = GenerateBlock();
                 _blockViews.Add(newBlock);
             }
-            var rect = GridRectToRect(block.InitGridPosition);
+            var rect = GridRectToRect(block.InitGridRectInt);
             
             _blockViews[i].gameObject.SetActive(true);
             _blockViews[i].Rect = rect;
@@ -51,7 +52,12 @@ namespace Core.PlayArea.Blocks{
             return ret;
         }
 
+        public override PlayableObjectViewWithModel<Block> Place(Block model) => PlaceBlock(model);
 
-        public IEnumerable<PlayableObjectViewBase> GetAllViews() => _blockViews;
+        public override void Remove(PlayableObjectViewWithModel<Block> view) => RemoveBlock(view as BlockView);
+
+        protected override PlayableObjectViewWithModel<Block> GenerateNewObject() => GenerateBlock();
+
+        public override IEnumerable<PlayableObjectViewBase> GetAllViews() => _blockViews;
     }
 }

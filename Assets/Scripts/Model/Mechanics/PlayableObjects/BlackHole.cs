@@ -13,7 +13,7 @@ namespace Model.Mechanics.PlayableObjects{
             }
         }
         
-        public RectInt InitGridPosition{ get; set; }
+        public RectInt InitGridRectInt{ get; set; }
         public float outRange = 2;
         public readonly float innerRange = 0.5f;
 
