@@ -19,7 +19,7 @@ namespace UI.NextEnemyDisplayer
         private CanvasGroup _canvasGroup;
         public Enemy enemyModel;
         private bool _inAnimation;
-        
+
         void Start()
         {
             _canvasGroup = GetComponent<CanvasGroup>();

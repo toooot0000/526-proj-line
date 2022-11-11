@@ -1,3 +1,4 @@
+using System.Linq;
 using Core.DisplayArea.Stage.Enemy;
 using Model;
 using TMPro;
@@ -12,17 +13,19 @@ namespace UI.Interfaces.NextMove
         public TextMeshProUGUI moveTitle;
         public TextMeshProUGUI moveDesc;
         public IntentionDisplayer.IntentionInfo moveModel;
+        public IntentionDisplayer.IntentionPair[] pairs;
+        public Image moveIcon;
         private Transform _parent;
         private CanvasGroup _canvasGroup;
         private bool _inAnimation;
         private bool isDestroyed;
         private float timer;
-        
+
         void Start()
         {
             _canvasGroup = GetComponent<CanvasGroup>();
             _canvasGroup.alpha = 0;
-            timer = 1.0f;
+            timer = 3.0f;
 
         }
         
@@ -40,12 +43,21 @@ namespace UI.Interfaces.NextMove
 
         public override void Open(object model){
             moveModel = (IntentionDisplayer.IntentionInfo) model;
-            moveTitle.text = moveModel.intention.ToString();
-            moveDesc.text = moveModel.intention + "Atk:" + moveModel.number;
             base.Open(model);
             _inAnimation = true;
-
-            //moveTitle.text = moveModel.desc;
+            
+            moveTitle.text = moveModel.intention.ToString();
+            if (moveModel.number != 0)
+            {
+                moveDesc.text = moveModel.intention + ":" + moveModel.number;
+            }
+            else
+            {
+                moveDesc.text = moveModel.intention.ToString();
+            }
+            
+            moveIcon.sprite = pairs.First(p => p.intention == moveModel.intention).sprite;
+            
             
             var coroutine = TweenUtility.Lerp(0.2f,
                 () => _canvasGroup.alpha = 0,
@@ -55,8 +67,7 @@ namespace UI.Interfaces.NextMove
             StartCoroutine(coroutine());
             
         }
-        
-       
+
         public void Close() {
             _inAnimation = true;
             var coroutine = TweenUtility.Lerp(0.2f,
@@ -69,6 +80,11 @@ namespace UI.Interfaces.NextMove
                 });
             StartCoroutine(coroutine());
         } 
+        
+        public void TapToContinue()
+        {
+            Close();
+        }
         
     }
 }

@@ -11,6 +11,7 @@ namespace Core.DisplayArea.Stage.Enemy{
     public class EnemyView : DamageableView{
         // public RemainingEnemy remaining;
         public IntentionDisplayer intentionDisplayer;
+        public MoveCollider moveCollider;
         public SpriteRenderer sprRenderer;
         public TextMeshProUGUI enemyName;
 
@@ -40,15 +41,19 @@ namespace Core.DisplayArea.Stage.Enemy{
 
         private void UpdateIntention(){
             var enemy = (Model.Enemy)Model;
-            intentionDisplayer.UpdateIntention(new IntentionDisplayer.IntentionInfo{
+            IntentionDisplayer.IntentionInfo info = new IntentionDisplayer.IntentionInfo
+            {
                 intention = enemy.CurrentIntention,
-                number = ((Model.Enemy)Model).CurrentIntention switch{
+                number = ((Model.Enemy)Model).CurrentIntention switch
+                {
                     EnemyIntention.Attack => enemy.attack,
                     EnemyIntention.Defend => enemy.defend,
                     EnemyIntention.SpecialAttack => 0,
                     _ => throw new ArgumentOutOfRangeException()
                 }
-            });
+            };
+            intentionDisplayer.UpdateIntention(info);
+            moveCollider.SetInfo(info);
         }
         public void Attack(Action callback){
             animationController.Play(PlayerAnimation.Attack, 0.07f, ()=> {
