@@ -11,6 +11,7 @@ using Model.Buff;
 using Model.Buff.Buffs;
 using Tutorial;
 using UI;
+using UI.Interfaces.SelectStage;
 using UI.Interfaces.ShopSystem;
 using UI.Interfaces.SpecialEvent;
 using UI.TurnSignDisplayer;
@@ -33,7 +34,6 @@ public class GameManager : MonoBehaviour{
 
     private bool _isInShop = false;
     private bool _isInEvent = false;
-
     public event Action OnPlayerAttack; // Used by EventLogger
 
     private void Awake()
@@ -68,11 +68,12 @@ public class GameManager : MonoBehaviour{
             Debug.Log(Buff.BuffsToString(game.player));
         }
         
+        // if (Input.GetKeyUp(KeyCode.S)){
+        //     UIManager.shared.OpenUI("UIShopSystem");
+        // }
+        
         // if (Input.GetKeyUp(KeyCode.B)){
         //     UIManager.shared.OpenUI("UIEvent", new Model.Event(game, 0));
-        // }
-        // if (Input.GetKeyUp(KeyCode.K)){
-        //     UIManager.shared.OpenUI("UISelectStage", new int[] {1,2,3});
         // }
     }
 
