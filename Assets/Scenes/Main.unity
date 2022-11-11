@@ -1839,7 +1839,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 104.17313
+      value: 104.17316
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -4830,7 +4830,7 @@ MonoBehaviour:
   randomSpawnNumber: 5
   comboDisplayer: {fileID: 3322267685667555654}
   touchTracker: {fileID: 4328751458456131980}
-  playAreaManager: {fileID: 4328751457965802252}
+  playAreaManager: {fileID: 0}
 --- !u!1001 &5902399932300061427
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using Model.GearEffects;
 using Model.Mechanics.PlayableObjects;
@@ -95,13 +96,14 @@ namespace Model{
 
         public string ToDescString(){
             List<string> parts = new();
-            var ballInfo = CsvLoader.TryToLoad("Configs/balls", ballId);
-            var ballPoint = (int)ballInfo["point"];
+            var ballPoint = ball.point;
             if (type == GearType.Weapon){
                 parts.Add($"Att: {ballPoint.ToString()}");
             } else{
                 parts.Add($"Def: {ballPoint.ToString()}");
             }
+            parts.Add($"Size: {ball.size.ToString(CultureInfo.InvariantCulture)}");
+            parts.Add($"Speed: {ball.speed.ToString(CultureInfo.InvariantCulture)}");
             if (comboEffect != null && comboNum != -1){
                 parts.Add($"Combo({comboNum.ToString()}): {comboDesc}");
             }
@@ -111,30 +113,6 @@ namespace Model{
             return string.Join("\n", parts);
         }
 
-        public string ToDesc()
-        {
-            List<string> parts = new();
-            var ballInfo = CsvLoader.TryToLoad("Configs/balls", ballId);
-            var ballPoint = (int)ballInfo["point"];
-            if (type == GearType.Weapon){
-                parts.Add($"Attack: {ballPoint.ToString()}");
-            } else{
-                parts.Add($"Defend: {ballPoint.ToString()}");
-            }
-            return string.Join("\n", parts);
-        }
-        
-        public string ToDescComboCharge(){
-            List<string> parts = new();
-            if (comboEffect != null && comboNum != -1){
-                parts.Add($"Combo({comboNum.ToString()}): {comboDesc}");
-            }
-            if (chargeEffect != null && chargeNum != -1){
-                parts.Add($"Charge({chargeNum.ToString()}): {chargeDesc}");
-            }
-            return string.Join("\n", parts);
-        }
-        
         public Ball[] GetBalls(){
             var ret = new Ball[ballNum];
             for (var i = 0; i < ballNum; i++){
