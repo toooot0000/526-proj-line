@@ -4,6 +4,11 @@ using UnityEngine;
 using Utility;
 
 namespace UI.Interfaces{
+
+    public interface IUISetUpOptions<in T> where T: UIBase{
+        void ApplyOptions(T uiBase);
+    }
+    
     public abstract class UIBase : MonoBehaviour{
 
         public static IEnumerator FadeIn(CanvasGroup canvasGroup, Action completion = null){
@@ -23,7 +28,7 @@ namespace UI.Interfaces{
             yield return coroutine();
         }
         
-        public string Name => "Base";
+        public virtual string Name => "Base";
 
         public virtual void Open(object nextStageChoice){
             OnOpen?.Invoke(this);

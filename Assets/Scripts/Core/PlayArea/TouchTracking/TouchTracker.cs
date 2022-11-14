@@ -54,6 +54,7 @@ namespace Core.PlayArea.TouchTracking{
                 _continueTracking = false;
                 yield break;
             }
+
             StopTracking();
             SendInput();
             if (_isInTutorial) yield return new WaitWhile(() => tutorKeepLine);
@@ -125,6 +126,7 @@ namespace Core.PlayArea.TouchTracking{
         }
 
         private void SendInput(){
+            if (!isAcceptingInput) return;
             if (_isInTutorial) OnInputReadyToSent?.Invoke(this);
             GameManager.shared.OnPlayerFinishDrawing();
         }

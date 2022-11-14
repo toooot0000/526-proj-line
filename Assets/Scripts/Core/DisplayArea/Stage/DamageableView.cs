@@ -16,6 +16,7 @@ namespace Core.DisplayArea.Stage{
         public PlayerAnimationController animationController;
         public DamageNumberDisplay damageNumberDisplay;
         public ArmorDisplayer armorDisplayer;
+        public BuffDisplayer.BuffDisplayer buffDisplayer;
 
         private int _currentHp;
 
@@ -30,6 +31,7 @@ namespace Core.DisplayArea.Stage{
                 CurrentHp = _model.HpUpLimit;
                 armorDisplayer.Number = value.Armor;
                 BindEvents(_model);
+                buffDisplayer.Target = value;
             }
             get => _model;
         }

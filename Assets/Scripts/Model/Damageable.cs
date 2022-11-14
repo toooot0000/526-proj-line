@@ -41,14 +41,18 @@ namespace Model{
         }
         
         private readonly List<Buff.Buff> _buffs = new();
-        
+        public event ModelEvent<Buff.Buff> OnBuffLayerAdded;
+        public event ModelEvent<Buff.Buff> OnBuffLayerRemoved;
+
         public void AddBuffLayer<TBuff>(int layer) where TBuff : Buff.Buff{
             var buff = Buff.Buff.GetBuffOfTypeFrom<TBuff>(this);
             if (buff == null){
-                _buffs.Add(Buff.Buff.MakeBuff<TBuff>(this, layer));
+                buff = Buff.Buff.MakeBuff<TBuff>(this, layer);
+                _buffs.Add(buff);
             } else{
                 buff.AddLayer(layer);
             }
+            OnBuffLayerAdded?.Invoke(currentGame, buff);
         }
 
         public void RemoveBuffLayer<TBuff>(int layer) where TBuff : Buff.Buff{
@@ -58,6 +62,7 @@ namespace Model{
             if (buff.layer == 0){
                 _buffs.Remove(buff);
             }
+            OnBuffLayerRemoved?.Invoke(currentGame, buff);
         }
 
         public IEnumerable<Buff.Buff> GetAllBuffs() => _buffs.ToArray();

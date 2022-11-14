@@ -1,6 +1,6 @@
 namespace Model.Buff.Buffs{
     public class BuffPoison: Buff, IBuffTriggerOnTurnEnd{
-        protected BuffPoison(GameModel parent, int layer) : base(parent, layer){ }
+        public BuffPoison(GameModel parent, int layer) : base(parent, layer){ }
         protected override string GetBuffName() => "poison";
 
         private class TurnEndEffect: IBuffEffect<Damageable>{

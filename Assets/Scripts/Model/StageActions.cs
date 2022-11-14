@@ -55,11 +55,15 @@ namespace Model{
             foreach (var effect in effects ?? Array.Empty<GearEffectBase>()) effect.Execute(this);
             foreach (var effect in buffEffects ?? Array.Empty<IBuffEffect<StageActionPlayerAction>>()) effect.Execute(this);
         }
-
+        
+        /// <summary>
+        /// Return false if all Player invoke action is empty!
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
         public static bool IsEmpty(StageActionPlayerAction action){
             return action.damage.initPoint == 0 
                    && action.effects.Length == 0 
-                   && action.buffEffects.Length == 0 
                    && action.defend == 0;
         }
     }

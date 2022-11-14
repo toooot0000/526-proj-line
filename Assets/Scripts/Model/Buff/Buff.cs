@@ -27,11 +27,11 @@ namespace Model.Buff{
         public string icon;
         public string display;
 
-        public event ModelEvent OnBuffLayerRemoved;
+        public event ModelEvent<Buff> OnBuffLayerRemoved;
 
-        public event ModelEvent OnBuffLayerAdded;
+        public event ModelEvent<Buff> OnBuffLayerAdded;
 
-        public event ModelEvent OnBuffCanceled; // equal to remove layer to 0;
+        public event ModelEvent<Buff> OnBuffCanceled; // equal to remove layer to 0;
 
         public static IEnumerable<T> GetBuffOfTriggerFrom<T>(IBuffHolder buffable) where T : IBuffTrigger{
             var allBuffs = buffable.GetAllBuffs();

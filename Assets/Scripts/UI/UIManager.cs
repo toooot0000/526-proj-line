@@ -67,13 +67,20 @@ namespace UI{
             return cur;
         }
 
+        public T OpenUI<T>(string uiPrefabName, IUISetUpOptions<T> arg) where T : UIBase{
+            var ret = OpenUI(uiPrefabName) as T;
+            if (ret == null) return null;
+            arg.ApplyOptions(ret);
+            return ret;
+        }
+
         public void RemoveUI(UIBase ui){
             OnCloseUI?.Invoke(ui);
             _uiList.Remove(ui);
             if (_uiList.Count == 0) shade.SetActive(false);
         }
-        
-        public void Open(string interfaceName){
+
+        private void Open(string interfaceName){
             OpenUI(interfaceName);
         }
 
