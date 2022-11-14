@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UnityEngine;
 using UnityEngine.Assertions;
 using Utility.Loader;
 
@@ -120,5 +121,11 @@ namespace Model.Buff{
         public override string ToString(){
             return $"Buff: [name={name}], [layer={layer.ToString()}]";
         }
+
+        public string ToDetailString(){
+            return $"Name: {name}\nLayer: {layer.ToString()}\nDetail: {desc}";
+        }
+
+        public Sprite IconSprite => Resources.Load<Sprite>(icon);
     }
 }

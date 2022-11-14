@@ -35,6 +35,7 @@ namespace Model.Mechanics.PlayableObjects{
         public void Shrink() {
             outRange--;
             outRange = Math.Max(outRange, innerRange);
+            InitGridRectInt = new(InitGridRectInt.position, InitGridRectInt.size - Vector2Int.one);
             OnRangeChanged?.Invoke(currentGame, this);
         }
 

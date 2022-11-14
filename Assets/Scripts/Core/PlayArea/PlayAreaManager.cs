@@ -73,11 +73,13 @@ namespace Core.PlayArea{
         private BlockView _test;
         private void Update(){
             if (Input.GetKeyUp(KeyCode.A)){
-                mineManager.Place(model.MakeAndPlaceMine(2, 1, new MineEffectLoseLife(1)));
+                var mine = model.MakeAndPlaceMine(2, 1, new MineEffectLoseLife(1));
+                mineManager.Place(mine);
             }
 
             if (Input.GetKeyUp(KeyCode.S)){
-                blackHoleManager.Place(model.MakeAndPlaceBlackHole(0.2f, 3f));
+                var blackHole = model.MakeAndPlaceBlackHole(0.2f, 3f);
+                if(blackHole != null) blackHoleManager.Place(blackHole);
             }
 
             if (Input.GetKeyUp(KeyCode.D)){

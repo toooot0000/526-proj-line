@@ -2,6 +2,7 @@ using Model;
 using Model.Buff;
 using TMPro;
 using UI;
+using UI.Interfaces.BuffDetail;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,7 +20,7 @@ namespace Core.DisplayArea.BuffDisplayer{
                     _buff.OnBuffLayerRemoved -= UpdateLayerText;
                 }
                 _buff = value;
-                img.sprite = Resources.Load<Sprite>(value.icon);
+                img.sprite = value.IconSprite;
                 text.text = $"{value.layer.ToString()}";
                 _buff.OnBuffLayerAdded += UpdateLayerText;
                 _buff.OnBuffLayerRemoved += UpdateLayerText;
@@ -28,7 +29,9 @@ namespace Core.DisplayArea.BuffDisplayer{
         }
 
         public void OnClick(){
-            UIManager.shared.OpenUI("UIBuffDetail", Model);
+            UIManager.shared.OpenUI("UIBuffDetail", new UIBuffDetailOption(){
+                buff = Model
+            });
         }
 
         private void UpdateLayerText(Game game, Buff buff){
