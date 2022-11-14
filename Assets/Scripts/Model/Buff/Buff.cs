@@ -24,6 +24,8 @@ namespace Model.Buff{
         public string desc;
         public int layer;
         public readonly IBuffHolder holder;
+        public string icon;
+        public string display;
 
         public event ModelEvent OnBuffLayerRemoved;
 
@@ -49,10 +51,12 @@ namespace Model.Buff{
         }
 
         public static T MakeBuff<T>(GameModel parent, int layer) where T : Buff{
-            return typeof(T).GetConstructor(new []{ typeof(GameModel), typeof(int) })?.Invoke(
+            var ret = typeof(T).GetConstructor(new []{ typeof(GameModel), typeof(int) })?.Invoke(
                 new object[]{
                     parent, layer
                 }) as T;
+            SetUp(ret);
+            return ret;
         }
 
         public static string BuffsToString(IBuffHolder buffHolder){
@@ -103,15 +107,14 @@ namespace Model.Buff{
 
         protected abstract string GetBuffName();
         
-        /// <summary>
-        /// Call in children's constructors
-        /// </summary>
-        protected static void SetUp(Buff buff){
+        private static void SetUp(Buff buff){
             buff.id = NameToId[buff.GetBuffName()];
             var info = CsvLoader.TryToLoad("Configs/buffs", buff.id);
             if (info == null) return;
             buff.name = info["name"] as string;
             buff.desc = info["desc"] as string;
+            buff.icon = info["icon"] as string;
+            buff.display = info["display_name"] as string;
         }
 
         public override string ToString(){

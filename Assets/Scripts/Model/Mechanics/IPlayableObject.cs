@@ -26,4 +26,8 @@ namespace Model.Mechanics{
     public interface ICircleable{
         IExecutable OnCircled();
     }
+
+    public interface ISplittable<out T> where T: GameModel{
+        T Split();
+    }
 }

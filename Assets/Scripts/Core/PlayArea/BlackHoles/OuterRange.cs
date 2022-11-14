@@ -10,7 +10,7 @@ namespace Core.PlayArea.BlackHoles{
         }
 
         private void OnTriggerStay2D(Collider2D col){
-            var suckable = col.GetComponent<IBlackHoleSuckableView>();
+            var suckable = col.GetComponent<IForceableView>();
             if (suckable == null) return;
             var direction = (Vector2)transform.position - (Vector2)col.transform.position ;
             direction *= direction.magnitude * accelerateFactor;
@@ -18,7 +18,7 @@ namespace Core.PlayArea.BlackHoles{
         }
 
         private void OnTriggerExit2D(Collider2D col){
-            var suckable = col.GetComponent<IBlackHoleSuckableView>();
+            var suckable = col.GetComponent<IForceableView>();
             if (suckable == null) return;
             suckable.Acceleration = Vector2.zero;
         }

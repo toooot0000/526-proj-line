@@ -19,7 +19,7 @@ namespace Model.Buff.Buffs{
             }
         }
 
-        public BuffWeak(GameModel parent, int layer) : base(parent, layer){ SetUp(this); }
+        protected BuffWeak(GameModel parent, int layer) : base(parent, layer){ }
 
         public IBuffEffect<Damageable> OnTurnEnd(){
             return new TurnEndEffect();

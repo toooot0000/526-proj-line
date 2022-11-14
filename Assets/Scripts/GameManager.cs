@@ -21,6 +21,7 @@ using Utility.Loader;
 
 public class GameManager : MonoBehaviour{
     public static GameManager shared;
+    public static Game SharedGame => shared.game;
     
     public StageManager stageManager;
     public TutorialManager tutorialManager;
@@ -60,13 +61,13 @@ public class GameManager : MonoBehaviour{
     }
 
     private void Update(){
-        if (Input.GetKeyUp(KeyCode.T)){
-            game.player.AddBuffLayer<BuffWeak>(1);
-        }
-
-        if (Input.GetKeyUp(KeyCode.R)){
-            Debug.Log(Buff.BuffsToString(game.player));
-        }
+        // if (Input.GetKeyUp(KeyCode.T)){
+        //     game.player.AddBuffLayer<BuffWeak>(1);
+        // }
+        //
+        // if (Input.GetKeyUp(KeyCode.R)){
+        //     Debug.Log(Buff.BuffsToString(game.player));
+        // }
         
         // if (Input.GetKeyUp(KeyCode.S)){
         //     UIManager.shared.OpenUI("UIShopSystem");

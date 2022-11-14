@@ -21,7 +21,7 @@ namespace Model{
         public readonly List<Ball> circledBalls = new();
         public readonly List<Ball> hitDebuffBalls = new();
         public readonly List<Buff.Buff> buffs = new();
-        public readonly List<DebuffBall.DebuffBall> debuffBalls = new(); 
+        // public readonly List<DebuffBall.DebuffBall> debuffBalls = new(); 
         
         private int _coin;
         public int Coin{
@@ -150,7 +150,7 @@ namespace Model{
         public Ball[] GetAllBallsWithoutGridPosition(){
             var ret = new List<Ball>();
             ret.AddRange(GetAllGearBalls());
-            ret.AddRange(debuffBalls);
+            // ret.AddRange(debuffBalls);
             return ret.ToArray();
         }
 

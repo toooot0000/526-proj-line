@@ -110,6 +110,35 @@ namespace Model.Mechanics{
             return ret;
         }
 
+        public Crystal MakeAndPlaceCrystal(CrystalType type, object arg){
+            var ret = new Crystal(this, type, arg);
+            var rectInt = RandomRectInt(new Vector2Int(1, 1));
+            if (rectInt == null) return null;
+            ret.InitGridRectInt = rectInt.Value;
+            ForceToPlaceObject(ret);
+            return ret;
+        }
+
+        public DirectionChanger MakeAndPlaceDirectionChanger(float angle){
+            var ret = new DirectionChanger(this, angle);
+            var rectInt = RandomRectInt(new Vector2Int(1, 1));
+            if (rectInt == null) return null;
+            ret.InitGridRectInt = rectInt.Value;
+            ForceToPlaceObject(ret);
+            return ret;
+        }
+
+        public Splitter MakeAndPlaceDirectionSplitter(float sizeLimit){
+            var ret = new Splitter(this){
+                sizeLimit = sizeLimit
+            };
+            var rectInt = RandomRectInt(new Vector2Int(1, 1));
+            if (rectInt == null) return null;
+            ret.InitGridRectInt = rectInt.Value;
+            ForceToPlaceObject(ret);
+            return ret;
+        }
+
         public IEnumerable<Vector2Int> GetOccupiedGridPositions(){
             foreach (var obj in _objects){
                 for (var i = 0; i < obj.InitGridRectInt.width; i++){

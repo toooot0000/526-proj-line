@@ -6,6 +6,7 @@ using Core.PlayArea.Blocks;
 using Core.PlayArea.Crystals;
 using Core.PlayArea.DirectionChangers;
 using Core.PlayArea.Mines;
+using Model;
 using Model.Mechanics;
 using Model.Mechanics.PlayableObjects;
 using Model.Mechanics.PlayableObjects.MineEffects;
@@ -59,7 +60,7 @@ namespace Core.PlayArea{
         }
 
         public void SetPlayableViewPosition<T>(PlayableObjectViewWithModel<T> view)
-        where T:IPlayableObject {
+        where T:GameModel, IPlayableObject {
             SetPlayableViewPosition(view, view.Model);
         }
 

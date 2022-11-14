@@ -36,7 +36,6 @@ namespace Core.PlayArea.Balls{
         public bool tutorCanBeCircled = true;
         public BallConfig config;
         private State _currentState = State.Free;
-        private Game _game;
         private float _velocity;
 
         public State CurrentState{
@@ -65,7 +64,6 @@ namespace Core.PlayArea.Balls{
         public event BallViewEvent OnBallCircled;
 
         private void Start(){
-            _game = GameManager.shared.game;
             config = GetComponent<BallConfig>();
         }
         
@@ -83,13 +81,13 @@ namespace Core.PlayArea.Balls{
 
         public void OnSliced(){
             if (CurrentState != State.Free && (CurrentState != State.Controlled || !tutorCanBeHit)) return;
-            _game.player.AddSlicedBall(config.modelBall);
+            Model.OnSliced().Execute();
             OnBallSliced?.Invoke(this);
         }
 
         public void OnCircled(){
             if (CurrentState != State.Free && (CurrentState != State.Controlled || !tutorCanBeCircled)) return;
-            _game.player.AddCircledBall(config.modelBall);
+            Model.OnCircled().Execute();
             OnBallCircled?.Invoke(this);
         }
 
@@ -158,10 +156,6 @@ namespace Core.PlayArea.Balls{
             transform1.position = new Vector3(worldPosition.x, worldPosition.y, transform1.position.z);
         }
 
-        public void ChangeDirection(Vector2 newDir){
-            Velocity = newDir * Velocity.sqrMagnitude;
-        }
-        
         public void UpdatePosition(){
             if (CurrentState != State.Free) return;
             var rectTrans = (RectTransform)transform;

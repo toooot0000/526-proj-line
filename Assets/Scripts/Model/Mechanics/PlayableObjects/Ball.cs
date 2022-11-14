@@ -6,7 +6,7 @@ using Utility.Loader;
 
 namespace Model.Mechanics.PlayableObjects{
     [Serializable]
-    public class Ball : GameModel, IPlayableObject, IMovable{
+    public class Ball : GameModel, IPlayableObject, IMovable, ISplittable<Ball>, ISliceable, ICircleable{
         public int id;
         public string desc;
         public BallType type;
@@ -18,6 +18,20 @@ namespace Model.Mechanics.PlayableObjects{
         public float Velocity{ get => speed; set => speed = value; }
         public float VelocityMultiplier{ get; set; } = 1;
         public RectInt InitGridRectInt{ get; set; }
+
+        private class CircledEffect : IExecutable{
+            public Ball ball;
+            public void Execute(){
+                GameManager.SharedGame.player.AddCircledBall(ball);
+            }
+        }
+
+        private class SlicedEffect : IExecutable{
+            public Ball ball;
+            public void Execute(){
+                GameManager.SharedGame.player.AddSlicedBall(ball);
+            }
+        }
 
         public Ball(GameModel parent) : base(parent){ }
 
@@ -37,6 +51,21 @@ namespace Model.Mechanics.PlayableObjects{
             size = (float)ball["size"];
         }
 
+        public Ball Split(){
+            return new Ball(parent as Gear, id);
+        }
+
+        public IExecutable OnSliced(){
+            return new SlicedEffect(){
+                ball = this
+            };
+        }
+
+        public IExecutable OnCircled(){
+            return new CircledEffect(){
+                ball = this
+            };
+        }
     }
 
     public enum BallType{
