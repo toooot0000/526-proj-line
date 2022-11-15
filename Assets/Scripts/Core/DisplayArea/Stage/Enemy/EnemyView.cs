@@ -11,7 +11,6 @@ namespace Core.DisplayArea.Stage.Enemy{
     public class EnemyView : DamageableView{
         // public RemainingEnemy remaining;
         public IntentionDisplayer intentionDisplayer;
-        public MoveCollider moveCollider;
         public SpriteRenderer sprRenderer;
         public TextMeshProUGUI enemyName;
 
