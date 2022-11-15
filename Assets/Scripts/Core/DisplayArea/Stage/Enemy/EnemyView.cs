@@ -53,7 +53,6 @@ namespace Core.DisplayArea.Stage.Enemy{
                 }
             };
             intentionDisplayer.UpdateIntention(info);
-            moveCollider.SetInfo(info);
         }
         public void Attack(Action callback){
             animationController.Play(PlayerAnimation.Attack, 0.07f, ()=> {
