@@ -1780,7 +1780,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 104.17323
+      value: 104.17318
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1967,17 +1967,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minePrefab: {fileID: 1802493836875413169, guid: f200f09973162184cbe5c51c74a551cb, type: 3}
   stageManager: {fileID: 2123417103}
---- !u!114 &1522073680 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1251169695852008884, guid: a7f85654bbd2be946af4cb04cb471b9e, type: 3}
-  m_PrefabInstance: {fileID: 1524296156}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c3f37ff64d4491c91e3c2d779994f59, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1524296156
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2249,7 +2238,7 @@ MonoBehaviour:
   animationController: {fileID: 1524296166}
   damageNumberDisplay: {fileID: 802145626}
   armorDisplayer: {fileID: 1524296161}
-  buffDisplayer: {fileID: 1522073680}
+  buffDisplayer: {fileID: 0}
   intentionDisplayer: {fileID: 7174772897203891013}
   sprRenderer: {fileID: 970730297}
   enemyName: {fileID: 900311436}
@@ -3341,7 +3330,7 @@ MonoBehaviour:
   playerView: {fileID: 946138703}
   enemyView: {fileID: 1524296162}
   ballManager: {fileID: 4328751458895938648}
-  playAreaManager: {fileID: 0}
+  playAreaManager: {fileID: 4328751457965802252}
 --- !u!1001 &2834634534027371978
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4142,7 +4131,7 @@ MonoBehaviour:
   blockManager: {fileID: 1978656420}
   mineManager: {fileID: 1488370912}
   blackHoleManager: {fileID: 946235199}
-  padding: {x: 1, y: 1}
+  padding: {x: 0.3, y: 0.3}
 --- !u!212 &4328751458076031956
 SpriteRenderer:
   m_ObjectHideFlags: 0

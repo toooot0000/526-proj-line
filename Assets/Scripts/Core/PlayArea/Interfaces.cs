@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Core.PlayArea.TouchTracking;
 using Model;
 using Model.Mechanics;
+using Tutorial;
 using UnityEngine;
 using Utility.Extensions;
 
@@ -37,8 +38,11 @@ namespace Core.PlayArea{
         }
     }
     
-    public abstract class PlayableObjectViewBase : MonoBehaviour{
+    public abstract class PlayableObjectViewBase : MonoBehaviour, ITutorialControllable{
         private static TouchTracker TouchTracker => GameManager.shared.touchTracker;
+        protected bool isInTutorial = false;
+        protected bool tutorIsSliceable = true;
+        protected bool tutorIsCircleable = true;
 
         public virtual void Update(){
             if (this is IForceableView forceableView){
@@ -54,7 +58,7 @@ namespace Core.PlayArea{
             if (this is ISliceableView self){
                 if (TouchTracker.isTracing){
                     TouchTracker.ContinueTracking();
-                    self.OnSliced();
+                    if(!isInTutorial || tutorIsSliceable) self.OnSliced();
                 }
             }
         }
@@ -62,7 +66,7 @@ namespace Core.PlayArea{
         public virtual void OnMouseDown(){
             if (this is ISliceableView self){
                 TouchTracker.StartTracking();
-                self.OnSliced();
+                if(!isInTutorial || tutorIsSliceable) self.OnSliced();
             }
         }
 
@@ -82,7 +86,14 @@ namespace Core.PlayArea{
             if (view is not IForceableView forceableView) return;
             forceableView.Velocity += forceableView.Acceleration * Time.deltaTime;
         }
-        
+
+        public void HandOverControlTo(TutorialBase tutorial) {
+            isInTutorial = true;
+        }
+
+        public void GainBackControlFrom(TutorialBase tutorial) {
+            isInTutorial = false;
+        }
     }
 
     public abstract class PlayableObjectViewWithModel<TModel> : PlayableObjectViewBase

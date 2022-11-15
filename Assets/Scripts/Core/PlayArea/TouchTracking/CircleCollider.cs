@@ -7,9 +7,7 @@ namespace Core.PlayArea.TouchTracking{
     public class CircleCollider : MonoBehaviour{
         public ChargeDisplayer chargeDisplayer;
         private Vector2 _centeredLocalPosition;
-
         private PolygonCollider2D _collider2D;
-
         private readonly HashSet<ICircleableView> _seen = new();
 
         private void Start(){
