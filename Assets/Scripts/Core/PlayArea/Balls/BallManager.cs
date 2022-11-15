@@ -1,75 +1,39 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Core.DisplayArea.Stage;
 using Core.PlayArea.TouchTracking;
 using Model;
+using Model.Mechanics.PlayableObjects;
 using Tutorial;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Core.PlayArea.Balls{
-    public class BallManager : MonoBehaviour, ITutorialControllable{
+    public class BallManager : PlayableViewManager<Ball>, ITutorialControllable, IPlayableViewManager{
         public GameObject ballPrefab;
         public int randomSpawnNumber = 5;
         public ComboDisplayer comboDisplayer;
-        public readonly List<BallView> balls = new();
+        public IEnumerable<BallView> balls => views.Select(v => v as BallView);
         public TouchTracker touchTracker;
+        public PlayAreaManager playAreaManager;
 
         private bool _isInTutorial = false;
 
-        public void SpawnNewBallView(Ball ball){
-            var newBallObject = Instantiate(ballPrefab, transform, false);
-            var newBallConfig = newBallObject.GetComponent<BallConfig>();
-            newBallConfig.modelBall = ball;
-            newBallObject.transform.localPosition = GenerateRandomLocalPosition();
-            newBallConfig.ResetView();
-        }
-
-        public void SpawnRandom() // Temp
-        {
-            for (var i = 0; i < randomSpawnNumber; i++){
-                var model = new Ball(GameManager.shared.game){
-                    point = Random.Range(1, 10),
-                    size = Random.Range(1, 3) / 2.0f,
-                    speed = Random.Range(1, 10) / 2.0f
-                };
-                SpawnNewBallView(model);
-            }
-        }
-
-        private Vector3 GenerateRandomLocalPosition(){
-            return new Vector3{
-                x = Random.Range(-1, 1),
-                y = Random.Range(-1, 1),
-                z = transform.position.z
-            }; // TODO
+        private Rect GenerateRandomLocalPosition(IReadOnlyList<Vector2Int> emptyPositions){
+            var gridPosition = emptyPositions[Random.Range(0, emptyPositions.Count)];
+            return playAreaManager.GridRectToRect(new RectInt(gridPosition, Vector2Int.one));
         }
 
         public void SpawnBalls(){
-            var skillBallModels = GameManager.shared.game.GetAllSkillBalls();
-            var i = 0;
-            for (; i < skillBallModels.Length; i++){
-                BallView curBallView = null;
-                if (i < balls.Count){
-                    curBallView = balls[i];
-                    curBallView.ResetView();
-                } else{
-                    var newBallObject = Instantiate(ballPrefab, transform, false);
-                    curBallView = newBallObject.GetComponent<BallView>();
-                    curBallView.OnHitted += OnBallHit;
-                    curBallView.OnCharged += OnBallCircled;
-                    curBallView.OnMouseEnterBall += touchTracker.OnMouseEnterBall;
-                    curBallView.OnMouseExitBall += touchTracker.OnMouseExitBall;
-                    curBallView.OnMouseUpBall += touchTracker.OnMouseUpBall;
-                    balls.Add(curBallView);
-                }
-
-                curBallView.gameObject.SetActive(true);
-                curBallView.Model = skillBallModels[i];
-                curBallView.transform.localPosition = GenerateRandomLocalPosition();
-                curBallView.UpdateConfig();
+            foreach (var ballView in balls){
+                ballView.gameObject.SetActive(false);
             }
-
-            for (; i < balls.Count; i++) balls[i].gameObject.SetActive(false);
+            var skillBallModels = GameManager.shared.game.GetAllBalls();
+            foreach (var skillBallModel in skillBallModels){
+                Place(skillBallModel);
+            }
         }
 
         public void FlyAllBalls(StageManager stageManager, float seconds){
@@ -91,7 +55,7 @@ namespace Core.PlayArea.Balls{
             yield return new WaitForSeconds(seconds);
         }
 
-        private void OnBallHit(BallView view){
+        private void OnBallSliced(BallView view){
             comboDisplayer.Show(view.Model.currentGame.player.hitBalls.Count, view.transform.position);
             view.CurrentState = BallView.State.Touched;
             UpdateBallState();
@@ -126,6 +90,22 @@ namespace Core.PlayArea.Balls{
             foreach (var ball in balls){
                 ball.GainBackControlFrom(tutorial);
             }
+        }
+
+        public override PlayableObjectViewWithModel<Ball> Place(Ball model){
+            var ret =  base.Place(model) as BallView;
+            ret!.UpdateConfig();
+            ret!.ResetView();
+            return ret;
+        }
+
+        protected override PlayableObjectViewWithModel<Ball> GenerateNewObject(){
+            var newBallObject = Instantiate(ballPrefab, transform, false);
+            var ballView = newBallObject.GetComponent<BallView>();
+            if (ballView == null) throw new Exception("Ball Prefab doesn't have a ballView component!");
+            ballView.OnBallSliced += OnBallSliced;
+            ballView.OnBallCircled += OnBallCircled;
+            return ballView;
         }
     }
 }

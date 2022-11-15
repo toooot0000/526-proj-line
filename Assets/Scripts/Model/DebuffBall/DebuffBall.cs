@@ -1,4 +1,5 @@
 using System;
+using Model.Mechanics.PlayableObjects;
 using Utility.Loader;
 
 namespace Model.DebuffBall{

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using Core.PlayArea.Balls;
 using UnityEngine;
 
@@ -9,14 +10,17 @@ namespace Core.PlayArea.TouchTracking{
 
         private PolygonCollider2D _collider2D;
 
+        private readonly HashSet<ICircleableView> _seen = new();
+
         private void Start(){
             _collider2D = GetComponent<PolygonCollider2D>();
         }
 
         private void OnTriggerStay2D(Collider2D col){
-            var ball = col.GetComponent<BallView>();
-            if (ball == null) return;
-            ball.OnBeingCircled();
+            var circleable = col.GetComponent<ICircleableView>();
+            if (circleable == null || _seen.Contains(circleable)) return;
+            _seen.Add(circleable);
+            circleable.OnCircled();
         }
 
 
@@ -34,6 +38,7 @@ namespace Core.PlayArea.TouchTracking{
             _centeredLocalPosition = Vector2.zero;
             foreach (var vec in circlePoints) _centeredLocalPosition += vec;
             _centeredLocalPosition /= circlePoints.Length;
+            _seen.Clear();
             StartCoroutine(ScheduledDisable());
         }
     }

@@ -1,23 +1,33 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Model.Buff;
 using Model.EnemySpecialAttacks;
 using Model.GearEffects;
+using Model.Mechanics.PlayableObjects;
 
 namespace Model{
     public abstract class StageActionBase : GameModel, IBuffModifiable{
         public Damage damage = null;
-        public readonly List<Damage> extraDamages = new();
+        private readonly List<Damage> _extraDamages = new();
         protected StageActionBase(GameModel parent) : base(parent){ }
         public abstract void Execute();
 
         public void AddExtraDamage(Damage extraDamage){
-            extraDamages.Add(extraDamage);
+            _extraDamages.Add(extraDamage);
         }
 
         public void ResolveAllDamages(){
             damage?.Resolve();
-            foreach (var extraDamage in extraDamages){
+            foreach (var extraDamage in _extraDamages){
+                extraDamage.Resolve();
+            }
+        }
+
+        public IEnumerator ResolveAllDamagesEnumerator(){
+            damage?.Resolve();
+            foreach (var extraDamage in _extraDamages){
+                yield return null;
                 extraDamage.Resolve();
             }
         }
@@ -44,6 +54,17 @@ namespace Model{
         public void ExecuteSpecials(){
             foreach (var effect in effects ?? Array.Empty<GearEffectBase>()) effect.Execute(this);
             foreach (var effect in buffEffects ?? Array.Empty<IBuffEffect<StageActionPlayerAction>>()) effect.Execute(this);
+        }
+        
+        /// <summary>
+        /// Return false if all Player invoke action is empty!
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static bool IsEmpty(StageActionPlayerAction action){
+            return action.damage.initPoint == 0 
+                   && action.effects.Length == 0 
+                   && action.defend == 0;
         }
     }
 

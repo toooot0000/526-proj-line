@@ -11,7 +11,6 @@ namespace Core.DisplayArea{
             _game = GameManager.shared.game;
             _game.player.OnHitBall += (game, model) => UpdateNumber();
             _game.player.OnCircledBall += (game, model) => UpdateNumber();
-            _game.player.OnAttack += (game, model) => UpdateNumber();
             UpdateNumber();
         }
 

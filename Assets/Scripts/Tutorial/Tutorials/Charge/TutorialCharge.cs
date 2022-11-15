@@ -1,5 +1,6 @@
 using System.Linq;
 using Model;
+using Model.Mechanics.PlayableObjects;
 using Tutorial.Common;
 using Tutorial.Utility;
 using UI;
@@ -66,7 +67,7 @@ namespace Tutorial.Tutorials.Charge{
                         t.texts[1].Enabled = true;
                     }, 
                     bind: (t, s) => {
-                        t.tutorialManager.tracker.OnTouchEnd += t.WrappedStepComplete;
+                        t.tutorialManager.tracker.OnInputReadyToSent += t.WrappedStepComplete;
                     },
                     cleanUp: (t, s) => {
                         t.movingPointer.Enabled = false;
@@ -74,7 +75,7 @@ namespace Tutorial.Tutorials.Charge{
                         t.PutToBack(t.tutorialManager.tracker.gameObject);
                     },
                     unbind: (t, s) => {
-                        t.tutorialManager.tracker.OnTouchEnd -= WrappedStepComplete;
+                        t.tutorialManager.tracker.OnInputReadyToSent -= WrappedStepComplete;
                     }
                 ),
                 new StepTapToContinue<TutorialCharge>(texts[2], tapCatcher, 

@@ -13,6 +13,7 @@ namespace UI.Interfaces.ShopSystem {
         public TextMeshProUGUI desc;
         public Image image;
         public Image highLight;
+        public Button buyButton;
         private CanvasGroup _group;
 
         private Gear _model;
@@ -63,10 +64,16 @@ namespace UI.Interfaces.ShopSystem {
         public void Click() {
             OnClick?.Invoke(this);
         }
+        
+        public void ShowGearInfo()
+        {
+            UIManager.shared.OpenUI("UIGearInfo",_model);
+        }
 
         public void UpdatePriceColor(){
             if (Price > GameManager.shared.game.player.Coin){
                 coinWithNumber.color = Color.red;
+                buyButton.image.color = Color.gray;
             } else{
                 coinWithNumber.color = Color.black;
             }

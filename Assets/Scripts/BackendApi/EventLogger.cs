@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using Model;
+using Model.Mechanics.PlayableObjects;
 using Newtonsoft.Json;
 using UI;
 using UI.Interfaces;
@@ -126,13 +127,13 @@ namespace BackendApi{
                 }
             };
             //dmg of enemies
-            GameManager.shared.game.player.OnBeingAttacked += (game, damage) =>
+            GameManager.shared.game.player.OnTakeDamage += (game, damage) =>
             {
-                if((damage as Damage).finalDamagePoint>0)
+                if((damage).lifeDeductionPoint>0)
                     this.Log(new EventHpofEnemies()
                     {
                         enemyId = GameManager.shared.game.CurrentEnemy.id,
-                        hp = (damage as Damage).finalDamagePoint
+                        hp = (damage).lifeDeductionPoint
                     });
             };
             //hit of balls

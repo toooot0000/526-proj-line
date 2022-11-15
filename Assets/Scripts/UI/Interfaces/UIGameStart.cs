@@ -25,5 +25,11 @@ namespace UI.Interfaces{
                 });
             StartCoroutine(coroutine()); 
         }
+
+        public void GotoSelectStage()
+        {
+            UIManager.shared.OpenUI("UIStage");
+            Close();
+        }
     }
 }

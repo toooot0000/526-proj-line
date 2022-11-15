@@ -9,61 +9,63 @@ using Tutorial;
 using UnityEngine;
 using Utility;
 
-/*
- * TODO need to be refactored!
- */
 namespace Core.PlayArea.TouchTracking{
+
     public class TouchTracker : MonoBehaviour, ITutorialControllable{
         public float minDistance = 5f;
         public LineRenderer lineRenderer;
         public new Camera camera;
-        public LineColliderGenerator lineColliderGenerator;
-        public TouchCollider touchCollider;
-        public CircleCollider polygonCollider;
-        public float totalLineLength = 5f;
+        public CircleCollider circleCollider;
         public ProgressBar progressBar;
-        public PointDisplayer pointDisplayer;
-        public StageManager stageManager;
-        private CircleDetector _circleDetector;
+        private readonly CircleDetector _circleDetector = new CircleDetector();
         private float _currentLineLength;
-        private Game _game;
         private bool _isInTutorial;
+        [HideInInspector]
         public bool tutorKeepLine = false;
-        public bool isAcceptingInput = true;
+        [HideInInspector]
+        public bool isAcceptingInput = false;
+        [HideInInspector]
+        public bool isTracing;
+        private bool _continueTracking = false;
+        private float TotalLineLength => initLineLength + lineLengthAdder;
+
+        [HideInInspector] 
+        public float initLineLength = 10f;
+        [HideInInspector] 
+        public float lineLengthAdder = 0;
 
 
-        private bool _isTracing;
-        private RectTransform _rect;
-        private bool _mouseOnBall = false;
-
-
-        private void Start(){
-            _rect = GetComponent<RectTransform>();
-            _circleDetector = new CircleDetector();
-            touchCollider.SetEnabled(false);
-            _game = GameManager.shared.game;
-        }
+        public bool IsReachingLineLengthLimit() => _currentLineLength >= TotalLineLength;
 
         private void Update(){
-            if (!isAcceptingInput) return;
+            if (!isTracing) return;
             TraceTouchPosition();
+            if(IsReachingLineLengthLimit()) StopTracking();
         }
         
         private void OnMouseDown(){
-            if (!isAcceptingInput) return;
+            ResetState();
             StartTracking();
         }
 
         private IEnumerator OnMouseExit(){
-            if (!isAcceptingInput) yield break;
             yield return new WaitForEndOfFrame();
-            if (_mouseOnBall) yield break;
+            if (_continueTracking){
+                _continueTracking = false;
+                yield break;
+            }
+
             StopTracking();
+            SendInput();
+            if (_isInTutorial) yield return new WaitWhile(() => tutorKeepLine);
+            yield return HideLine();
         }
 
-        private void OnMouseUp(){
-            if (!isAcceptingInput) return;
+        public IEnumerator OnMouseUp(){
             StopTracking();
+            SendInput();
+            if (_isInTutorial) yield return new WaitWhile(() => tutorKeepLine);
+            yield return HideLine();
         }
 
         public void HandOverControlTo(TutorialBase tutorial){
@@ -74,47 +76,30 @@ namespace Core.PlayArea.TouchTracking{
             _isInTutorial = false;
         }
 
-        public event TutorialControllableEvent OnTouchEnd;
-        public event TutorialControllableEvent OnTouchStart;
+        public event TutorialControllableEvent OnInputReadyToSent;
 
         public void StartTracking(){
-            _isTracing = true;
-            // touchCollider.SetEnabled(true);
-            lineRenderer.positionCount = 0;
-            _circleDetector.points.Clear();
-            _currentLineLength = 0;
-            OnTouchStart?.Invoke(this);
+            if (!isAcceptingInput) return;
+            ResetState();
+            isTracing = true;
         }
 
-        public void StopTracking(){
-            if (!_isTracing) return;
-            _isTracing = false;
-            touchCollider.SetEnabled(false);
-            if (_isInTutorial) OnTouchEnd?.Invoke(this);
-            if (_game.player.hitBalls.Count == 0 && _game.player.circledBalls.Count == 0) return;
-
-            isAcceptingInput = false;
-            StartCoroutine(HideLine());
-            GameManager.shared.OnPlayerFinishInput();
+        public bool StopTracking(){
+            if (!isTracing) return false;
+            isTracing = false;
+            return true;
         }
 
         private IEnumerator HideLine(){
-            if (_isInTutorial){
-                yield return new WaitWhile(() => tutorKeepLine);
-            }
             yield return CoroutineUtility.Delayed(0.1f, () => lineRenderer.positionCount = 0);
         }
         
-        
-
         private Vector2 GetCurrentTouchPosition(){
             if (Input.touchCount == 0) return Vector2.zero;
             return Input.touches[0].position;
         }
 
         private void TraceTouchPosition(){
-            if (!_isTracing) return;
-            if (_currentLineLength >= totalLineLength) return;
 #if UNITY_STANDALONE || UNITY_WEBGL
             var inputPosition = Input.mousePosition;
 #else
@@ -124,53 +109,58 @@ namespace Core.PlayArea.TouchTracking{
                 inputPosition.y,
                 camera.nearClipPlane));
             if (!_isInTutorial) worldPosition.z = -0.1f;
-
             var positionCount = lineRenderer.positionCount;
-            touchCollider.transform.SetPositionAndRotation(worldPosition, Quaternion.Euler(0, 0, 0));
+            
+            var curSegLength = PointDistanceValidate(worldPosition);
+            if (curSegLength < 0) return;
 
-            // TODO change point displayer position
-
-            // Length validate
-            var curSegLength = 0.0f;
-            if (positionCount > 0){
-                var remain = totalLineLength - _currentLineLength;
-                curSegLength = (worldPosition - lineRenderer.GetPosition(positionCount - 1)).magnitude;
-                if (curSegLength < minDistance) return;
-                curSegLength = Mathf.Min(curSegLength, remain);
-            }
-
-            // Circle handling 
-            _circleDetector.AddPoint(worldPosition);
-            var circle = _circleDetector.DetectCircle();
-            if (circle != null)
-                polygonCollider.SetCircle(circle
-                    .Select(v => (Vector2)polygonCollider.transform.InverseTransformPoint(v)).ToArray());
-
+            ActivateCircleCollider(worldPosition);
+            
             // Add point to lineRenderer
             lineRenderer.positionCount = positionCount + 1;
             lineRenderer.SetPosition(positionCount, worldPosition);
 
             // Add length
             _currentLineLength += curSegLength;
-            progressBar.Percentage = 100 - _currentLineLength / totalLineLength * 100;
+            progressBar.Percentage = 100 - _currentLineLength / TotalLineLength * 100;
         }
 
-        public void OnMouseEnterBall(BallView ball){
-            if (!_isTracing) return;
-            if (_currentLineLength >= totalLineLength) return;
-            _mouseOnBall = true;
-            ball.OnBeingTouched();
+        private void SendInput(){
+            if (!isAcceptingInput) return;
+            if (_isInTutorial) OnInputReadyToSent?.Invoke(this);
+            GameManager.shared.OnPlayerFinishDrawing();
         }
 
-        public void OnMouseExitBall(){
-            if (!_isTracing) return;
-            _mouseOnBall = false;
+        public void ContinueTracking(){
+            _continueTracking = true;
         }
 
-        public void OnMouseUpBall(){
-            if (!_isTracing) return;
-            _mouseOnBall = false;
-            OnMouseUp();
+        private void ActivateCircleCollider(Vector3 worldPosition){
+            // Circle handling 
+            _circleDetector.AddPoint(worldPosition);
+            var circle = _circleDetector.DetectCircle();
+            if (circle != null)
+                circleCollider.SetCircle(circle
+                    .Select(v => (Vector2)circleCollider.transform.InverseTransformPoint(v)).ToArray());
+        }
+
+        private float PointDistanceValidate(Vector3 worldPosition){
+            var positionCount = lineRenderer.positionCount;
+            // Length validate
+            if (positionCount > 0){
+                var remain = TotalLineLength - _currentLineLength;
+                var curSegLength = (worldPosition - lineRenderer.GetPosition(positionCount - 1)).magnitude;
+                if (curSegLength < minDistance) return -1;
+                curSegLength = Mathf.Min(curSegLength, remain);
+                return curSegLength;
+            }
+            return 0;
+        }
+
+        private void ResetState(){
+            lineRenderer.positionCount = 0;
+            _circleDetector.points.Clear();
+            _currentLineLength = 0;
         }
     }
 }

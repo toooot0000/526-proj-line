@@ -1,3 +1,4 @@
+using System.Linq;
 using Core.PlayArea.Balls;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace Tutorial.Tutorials.BasicConcept{
         public override void SetUp(TutorialBase tutorial){
             _ttr = (TutorialBasicConcept)tutorial;
             _ttr.desc[3].Enabled = true;
-            _ball = _ttr.tutorialManager.ballManager.balls[0];
+            _ball = _ttr.tutorialManager.ballManager.balls.First();
             _ttr.LiftToFront(_ball.gameObject, -50);
             
             var position = _ttr.ballPosition.position;
@@ -24,7 +25,7 @@ namespace Tutorial.Tutorials.BasicConcept{
             _ttr.movingPointer.StartMoving();
             _ball.tutorCanBeCircled = false;
             _ball.tutorCanBeHit = true;
-            _ttr.tutorialManager.tracker.OnTouchEnd += WrappedComplete;
+            _ttr.tutorialManager.tracker.OnInputReadyToSent += WrappedComplete;
         }
 
         private void WrappedComplete(ITutorialControllable controllable){
@@ -42,7 +43,7 @@ namespace Tutorial.Tutorials.BasicConcept{
             _ttr.PutToBack(_ttr.tutorialManager.tracker.gameObject);
             _ttr.desc[3].Enabled = false;
             _ttr.movingPointer.Enabled = false;
-            tutorial.tutorialManager.tracker.OnTouchEnd -= WrappedComplete;
+            tutorial.tutorialManager.tracker.OnInputReadyToSent -= WrappedComplete;
         }
     }
 }

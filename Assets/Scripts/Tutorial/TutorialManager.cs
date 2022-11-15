@@ -44,12 +44,14 @@ namespace Tutorial{
         private Type _curTutorialType;
 
         private void Update(){
-            // if (Input.GetKeyUp(KeyCode.A)){ 
-            //     UIManager.shared.OpenUI("UISelectStage", new int []{2, 3});
-            //     StartCoroutine(CoroutineUtility.Delayed(0.5f, () => {
-            //         ForceLoadTutorial<UITutorialStageTypes>();
-            //     }));
-            // }
+            if (Input.GetKeyUp(KeyCode.A)){ 
+                // UIManager.shared.OpenUI("UISelectStage", new int []{2, 3});
+                // StartCoroutine(CoroutineUtility.Delayed(0.5f, () => {
+                //     ForceLoadTutorial<UITutorialStageTypes>();
+                // }));
+                // ForceLoadTutorial<TutorialBasicConcept>();
+                // ForceLoadTutorial<TutorialCombo>();
+            }
         }
         
         [Obsolete("Use the generic one")]

@@ -1,13 +1,34 @@
+using System;
+using System.Collections;
 using UnityEngine;
+using Utility;
 
 namespace UI.Interfaces{
+
+    public interface IUISetUpOptions<in T> where T: UIBase{
+        void ApplyOptions(T uiBase);
+    }
+    
     public abstract class UIBase : MonoBehaviour{
-        public string Name => "Base";
-        // public virtual string PrefabName{ get; } = "UIxxxxx";
-        //
-        // public static T Open<T, P>(P parameters) where T: UIBase{
-        //     return UIManager.shared.OpenUI(PrefabName, parameters) as T;
-        // }
+
+        public static IEnumerator FadeIn(CanvasGroup canvasGroup, Action completion = null){
+            var coroutine = TweenUtility.Lerp(0.2f,
+                () => canvasGroup.alpha = 0,
+                i => canvasGroup.alpha = i,
+                completion
+            );
+            yield return coroutine();
+        }
+
+        public static IEnumerator FadeOut(CanvasGroup canvasGroup, Action completion = null){
+            var coroutine = TweenUtility.Lerp(0.2f,
+                () => canvasGroup.alpha = 1,
+                i => canvasGroup.alpha = 1 - i,
+                completion);
+            yield return coroutine();
+        }
+        
+        public virtual string Name => "Base";
 
         public virtual void Open(object nextStageChoice){
             OnOpen?.Invoke(this);

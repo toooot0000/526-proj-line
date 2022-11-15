@@ -93,5 +93,17 @@ namespace Utility{
                 complete: () => { image.color = endColor;}
             )();
         }
+        
+        public static IEnumerator Fade(float seconds, SpriteRenderer image, Color startColor, Color endColor, AnimationCurve curve = null){
+            return Lerp(
+                seconds: seconds,
+                begin: () => { image.color = startColor; },
+                update: (i) => {
+                    if (curve != null) i = curve.Evaluate(i);
+                    image.color = Color.Lerp(startColor, endColor, i);
+                },
+                complete: () => { image.color = endColor;}
+            )();
+        }
     }
 }

@@ -1,3 +1,5 @@
+using Model.Mechanics.PlayableObjects;
+
 namespace Model.Buff{
     public interface IBuffTrigger{ }
     

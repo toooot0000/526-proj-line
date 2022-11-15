@@ -9,18 +9,10 @@ using UnityEngine;
 namespace Core.DisplayArea.Stage.Enemy{
     [RequireComponent(typeof(PlayerAnimationController))]
     public class EnemyView : DamageableView{
-        // public RemainingEnemy remaining;
         public IntentionDisplayer intentionDisplayer;
         public SpriteRenderer sprRenderer;
         public TextMeshProUGUI enemyName;
-
-        public override Damageable Model{
-            set{
-                base.Model = value;
-                // remaining.Number = GameManager.shared.game.currentStage.RemainingEnemyNumber;
-                armorDisplayer.Number = value.Armor;
-            }
-        }
+        
 
         public void BindToCurrentEnemy(){
             isDead = false;
@@ -95,10 +87,6 @@ namespace Core.DisplayArea.Stage.Enemy{
         }
         
         public void TakeDamage(Action callback){
-            var point = stageAction.damage.initPoint;
-            damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
-            CurrentHp = Model.CurrentHp;
-            armorDisplayer.Number = Model.Armor;
             if (isDead)
                 animationController.Play(PlayerAnimation.Die, callback);
             else
@@ -106,9 +94,6 @@ namespace Core.DisplayArea.Stage.Enemy{
         }
 
         public IEnumerator TakeDamage(){
-            damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
-            CurrentHp = Model.CurrentHp;
-            armorDisplayer.Number = Model.Armor;
             if (isDead)
                 yield return animationController.PlayUntilComplete(PlayerAnimation.Die);
             else

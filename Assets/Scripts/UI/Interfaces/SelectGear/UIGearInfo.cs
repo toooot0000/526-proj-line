@@ -1,23 +1,21 @@
 using Model;
 using TMPro;
+using UI.Interfaces;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility;
+using Utility.Loader;
 
 namespace UI.Interfaces.SelectGear
 {
-    public class UIGearInfo:UIBase
+    public class UIGearInfo : UIBase
     {
-        public Image _gearImage;
-        public TextMeshProUGUI _gearDesc;
-        public TextMeshProUGUI _gearType;
+        
+        public TextMeshProUGUI gearName;
+        public TextMeshProUGUI gearDesc;
+        public TextMeshProUGUI details;
         private CanvasGroup _canvasGroup;
-        public Gear gearModel;
-        private bool _inAnimation;
-        public Image shade;
-        public Image image;
-        public TextMeshProUGUI _chargeDesc;
-        public TextMeshProUGUI _comboDesc;
+        public Image icon;
 
         void Start()
         {
@@ -26,43 +24,28 @@ namespace UI.Interfaces.SelectGear
         }
 
         public override void Open(object model)
-        { 
-            gearModel = (Gear)model;
+        {
+            var gearModel = (Gear)model;
             base.Open(model);
-            _inAnimation = true;
-
-            _gearImage.sprite = Resources.Load<Sprite>(gearModel.imgPath);
-            _gearDesc.text =  gearModel.desc;
-            _gearType.text =  "Gear Type: " + gearModel.type;
-            _chargeDesc.text = gearModel.chargeDesc;
-            _comboDesc.text = gearModel.comboDesc;
-            
-            var coroutine = TweenUtility.Lerp(0.2f,
-                () => _canvasGroup.alpha = 0,
-                i => _canvasGroup.alpha = i,
-                () => _inAnimation = false
-            );
-            StartCoroutine(coroutine());
+            gearName.text = gearModel.name;
+            gearDesc.text =  gearModel.desc;
+            icon.sprite = Resources.Load<Sprite>(gearModel.imgPath);
+            details.text = gearModel.ToDescString();
+            StartCoroutine(FadeIn(_canvasGroup));
         }
-        
-        public override void Close() {
-            _inAnimation = true;
-            var coroutine = TweenUtility.Lerp(0.2f,
-                () => _canvasGroup.alpha = 1,
-                i => _canvasGroup.alpha = 1 - i,
-                () => {
-                    _inAnimation = false;
-                    base.Close();
-                    Destroy(gameObject);
-                });
-            StartCoroutine(coroutine());
-        } 
-        
+
+        public override void Close()
+        {
+            StartCoroutine(FadeOut(_canvasGroup, () => {
+                base.Close();
+                Destroy(gameObject);
+            }));
+        }
+
         public void TapToContinue()
         {
             Close();
         }
+
     }
-
 }
-

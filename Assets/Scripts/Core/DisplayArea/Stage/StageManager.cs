@@ -3,7 +3,9 @@ using System.Collections;
 using System.Linq;
 using Core.DisplayArea.Stage.Enemy;
 using Core.DisplayArea.Stage.Player;
+using Core.PlayArea;
 using Core.PlayArea.Balls;
+using Core.PlayArea.Mines;
 using Model;
 using Model.Buff;
 using Tutorial;
@@ -26,6 +28,7 @@ namespace Core.DisplayArea.Stage{
         public PlayerView playerView;
         public EnemyView enemyView;
         public BallManager ballManager;
+        public PlayAreaManager playAreaManager;
         private bool _isInTutorial;
 
         private Model.Stage _modelStage;
@@ -62,30 +65,30 @@ namespace Core.DisplayArea.Stage{
 
         private IEnumerator ProcessPlayerAttack(StageActionBase action){
             yield return new WaitWhile(() => _pause);
-            action.Execute();
             ballManager.FlyAllBalls(this, 0.5f);
             yield return new WaitForSeconds(0.4f);
             if(_pause) yield return new WaitWhile(() => _pause);
             playerView.Attack(null);
             yield return new WaitForSeconds(0.07f);
+            action.Execute();
             yield return enemyView.TakeDamage();
             if(_pause) yield return new WaitWhile(() => _pause);
         }
 
         private IEnumerator ProcessEnemyAttack(StageActionBase action){
             yield return new WaitWhile(() => _pause);
-            action.Execute();
             enemyView.Attack(null);
             yield return new WaitForSeconds(0.1f);
+            action.Execute();
             yield return playerView.TakeDamage();
             yield return new WaitWhile(() => _pause);
         }
 
         private IEnumerator ProcessEnemySpecialAttack(StageActionBase action){
             yield return new WaitWhile(() => _pause);
-            action.Execute();
             enemyView.SpecialAttack(null);
             yield return new WaitForSeconds(0.1f);
+            action.Execute();
             yield return playerView.TakeDamage();
             if(_pause) yield return new WaitWhile(() => _pause);
         }
@@ -150,7 +153,7 @@ namespace Core.DisplayArea.Stage{
             yield return GameManager.shared.turnSignDisplayer.Show(Game.Turn.Player);
             if(_pause) yield return new WaitWhile(() => _pause);
             GameManager.shared.touchTracker.isAcceptingInput = true;
-            GameManager.shared.ballManager.SpawnBalls();
+            GameManager.shared.BallManager.SpawnBalls();
             yield return OnPlayerTurnStartTriggerTutorial();
             if(_pause) yield return new WaitWhile(() => _pause);
             playerView.Model.ExecuteOnTurnBeginBuffEffect();
@@ -181,13 +184,14 @@ namespace Core.DisplayArea.Stage{
             yield return StartPlayerTurn();
         }
 
-        public IEnumerator StartPlayerAction(){
-            var currentAction = GameManager.shared.game.player.GetAction();
+        public IEnumerator StartPlayerAction(StageActionPlayerAction playerAction = null){
+            var currentAction = playerAction ?? GameManager.shared.game.player.GetAction();
             GameManager.shared.game.player.ClearAllBalls();
             yield return ProcessPlayerAttack(currentAction);
             if (enemyView.isDead){
                 OnEnemyDieTriggerTutorial();
                 if (_modelStage.NextEnemy == null){
+                    playAreaManager.ClearAllObjects();
                     yield return CollectRewards();
                     yield break;
                 }
@@ -199,25 +203,28 @@ namespace Core.DisplayArea.Stage{
         }
 
         private static IEnumerator OnPlayerTurnStartTriggerTutorial(){
-            if (GameManager.shared.game.currentStage.id == 0){
-                switch (GameManager.shared.CurrentTurnNum){
-                    case 1:
-                        yield return null;
-                        GameManager.shared.tutorialManager.LoadTutorial<TutorialBasicConcept>();
-                        break;
-                    case 2:
-                        GameManager.shared.tutorialManager.LoadTutorial<TutorialStage1Soft>();
-                        break;
+            switch (GameManager.shared.game.currentStage.id){
+                case 0:
+                    switch (GameManager.shared.CurrentTurnNum){
+                        case 1:
+                            yield return null;
+                            GameManager.shared.tutorialManager.LoadTutorial<TutorialBasicConcept>();
+                            break;
+                        case 2:
+                            GameManager.shared.tutorialManager.LoadTutorial<TutorialStage1Soft>();
+                            break;
+                    }
+                    break;
+                case 1:{
+                    switch (GameManager.shared.CurrentTurnNum){
+                        case 1:
+                            GameManager.shared.tutorialManager.LoadTutorial<TutorialCombo>();
+                            break;
+                    }
+                    if (GameManager.shared.game.currentStage.CurrentEnemy.id == -3)
+                        GameManager.shared.tutorialManager.LoadTutorial<TutorialCharge>();
+                    break;
                 }
-            } else if (GameManager.shared.game.currentStage.id == 1){
-                switch (GameManager.shared.CurrentTurnNum){
-                    case 1:
-                        GameManager.shared.tutorialManager.LoadTutorial<TutorialCombo>();
-                        break;
-                }
-
-                if (GameManager.shared.game.currentStage.CurrentEnemy.id == -3)
-                    GameManager.shared.tutorialManager.LoadTutorial<TutorialCharge>();
             }
         }
     }

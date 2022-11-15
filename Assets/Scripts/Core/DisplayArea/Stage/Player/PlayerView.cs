@@ -8,14 +8,7 @@ using Utility;
 namespace Core.DisplayArea.Stage.Player{
     [RequireComponent(typeof(PlayerAnimationController))]
     public class PlayerView : DamageableView{
-        public override Damageable Model{
-            set{
-                base.Model = value;
-                armorDisplayer.Number = value.Armor;
-            }
-        }
-
-
+        
         private void Start(){
             Model = GameManager.shared.game.player;
         }
@@ -26,7 +19,7 @@ namespace Core.DisplayArea.Stage.Player{
 
         public void Attack(Action callback){
             animationController.Play(PlayerAnimation.Attack, 0.07f, () => {
-                armorDisplayer.Number = Model.Armor;
+                // armorDisplayer.Number = Model.Armor;
                 callback?.Invoke();
             });
         }
@@ -36,10 +29,6 @@ namespace Core.DisplayArea.Stage.Player{
         }
 
         public void TakeDamage(Action callback){
-            var point = stageAction.damage.initPoint;
-            damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
-            CurrentHp = Model.CurrentHp;
-            armorDisplayer.Number = Model.Armor;
             if (isDead)
                 animationController.Play(PlayerAnimation.Die, callback);
             else
@@ -47,9 +36,6 @@ namespace Core.DisplayArea.Stage.Player{
         }
 
         public IEnumerator TakeDamage(){
-            damageNumberDisplay.Number = CurrentHp - Model.CurrentHp;
-            CurrentHp = Model.CurrentHp;
-            armorDisplayer.Number = Model.Armor;
             if (isDead)
                 yield return animationController.PlayUntilComplete(PlayerAnimation.Die);
             else

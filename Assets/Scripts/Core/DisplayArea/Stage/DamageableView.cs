@@ -16,17 +16,22 @@ namespace Core.DisplayArea.Stage{
         public PlayerAnimationController animationController;
         public DamageNumberDisplay damageNumberDisplay;
         public ArmorDisplayer armorDisplayer;
+        public BuffDisplayer.BuffDisplayer buffDisplayer;
 
         private int _currentHp;
 
         private Damageable _model;
-        // public StageManager.StageActionInfoWrapper wrappedActionInfo;
         public StageActionBase stageAction;
 
         public virtual Damageable Model{
             set{
+                if (value == null) return;
+                if (_model != null) UnbindEvents(_model);
                 _model = value;
                 CurrentHp = _model.HpUpLimit;
+                armorDisplayer.Number = value.Armor;
+                BindEvents(_model);
+                buffDisplayer.Target = value;
             }
             get => _model;
         }
@@ -41,8 +46,29 @@ namespace Core.DisplayArea.Stage{
             get => _currentHp;
         }
 
-        public void SyncHp(){
-            CurrentHp = Model.CurrentHp;
+        private void UnbindEvents(Damageable damageable){
+            damageable.OnHpChanged -= SyncHp;
+            damageable.OnArmorChanged -= SyncArmor;
+            damageable.OnTakeDamage -= OnTakeDamage;
         }
+
+        private void BindEvents(Damageable damageable){
+            damageable.OnHpChanged += SyncHp;
+            damageable.OnArmorChanged += SyncArmor;
+            damageable.OnTakeDamage += OnTakeDamage;
+        }
+
+        private void OnTakeDamage(Game game, Damage damage){
+            damageNumberDisplay.Number = damage.lifeDeductionPoint;
+        }
+
+        private void SyncHp(Game game, Damageable damageable){
+            CurrentHp = damageable.CurrentHp;
+        }
+
+        private void SyncArmor(Game game, Damageable damageable){
+            armorDisplayer.Number = damageable.Armor;
+        }
+
     }
 }

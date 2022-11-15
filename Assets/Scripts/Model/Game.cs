@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
+using Model.Mechanics;
+using Model.Mechanics.PlayableObjects;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Model{
-    public delegate void ModelEvent(Game game, GameModel model);
-
-    public delegate void SimpleModelEvent(Game game);
 
     public class Game : GameModel{
         public enum Turn{
@@ -16,6 +17,7 @@ namespace Model{
         public readonly Stage currentStage;
         public Player player;
         public Turn turn = Turn.Player;
+        public PlayArea playArea;
 
 
         public bool IsLastStage => currentStage.IsLast;
@@ -28,7 +30,6 @@ namespace Model{
         public event SimpleModelEvent OnStageLoaded;
         public event SimpleModelEvent OnGameRestart;
         public event SimpleModelEvent OnPlayerInit;
-        public event ModelEvent OnGearShow;
         
         public Game(GameModel parent = null) : base(parent){
             currentGame = this;
@@ -36,8 +37,16 @@ namespace Model{
             CreatePlayer();
         }
         
-        public Ball[] GetAllSkillBalls(){
-            return player.GetAllBalls();
+        public Ball[] GetAllBalls(){
+            var ret =  player.GetAllBallsWithoutGridPosition();
+            var emptyPositions = playArea.GetEmptyGridPositions().ToArray();
+            foreach (var ball in ret){
+                ball.InitGridRectInt = new RectInt(){
+                    position = emptyPositions[Random.Range(0, emptyPositions.Length)],
+                    size = new Vector2Int(1, 1),
+                };
+            }
+            return ret;
         }
 
         public void SwitchTurn(){
@@ -56,6 +65,7 @@ namespace Model{
 
         private void CreatePlayer(){
             player = new Player(this);
+            playArea = new PlayArea(this);
             OnPlayerInit?.Invoke(this);
         }
 
