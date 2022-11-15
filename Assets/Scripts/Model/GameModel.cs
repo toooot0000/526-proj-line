@@ -14,8 +14,8 @@ namespace Model{
     /// </summary>
     public class GameModel{
         public Game currentGame;
-        public GameObject gameObject = null;
         public GameModel parent;
+        public MonoBehaviour view = null;
 
         protected GameModel(GameModel parent){
             if (parent == null) return;

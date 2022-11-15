@@ -26,8 +26,7 @@ namespace Core.PlayArea{
         private readonly List<IPlayableViewManager> _managers = new();
 
         private readonly List<IResetable> _resetables = new();
-
-
+        
         public IEnumerable<IPlayableViewManager> AllManagers => _managers;
 
         public T GetManager<T>() where T : IPlayableViewManager => (T)AllManagers.First(m => m is T);
@@ -38,7 +37,7 @@ namespace Core.PlayArea{
 
         private void Start(){
             model = GameManager.shared.game.playArea;
-            model.gameObject = gameObject;
+            model.view = this;
         }
         
         public Rect GridRectToRect(RectInt gridRect){
@@ -119,6 +118,16 @@ namespace Core.PlayArea{
             }
         }
 
+        public IEnumerable<T> GetAllViewsOfType<T>() where T : PlayableObjectViewBase{
+            foreach (var playableObjectViewBase in GetAllViews()){
+                if (playableObjectViewBase is T typed) yield return typed;
+            }
+        }
+
+        public IEnumerable<PlayableObjectViewBase> GetAllViews(){
+            return AllManagers.SelectMany(playableViewManager => playableViewManager.GetAllViews());
+        }
+
         public void OnPlayerFinishDrawing(){
             foreach (var view in GetAllViewsOfProperty<IOnPlayerFinishDrawing>()){
                 view.OnPlayerFinishDrawing();
@@ -127,6 +136,15 @@ namespace Core.PlayArea{
                 resetable.Reset();
             }
             _resetables.Clear();
+        }
+
+        public void ClearAllObjects(){
+            foreach (var playableViewManager in AllManagers){
+                foreach (var playableObjectViewBase in playableViewManager.GetAllViews()){
+                    playableObjectViewBase.gameObject.SetActive(false);
+                }
+            }
+            model.ClearAllObjects();
         }
     }
 }

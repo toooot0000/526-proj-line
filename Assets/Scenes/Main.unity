@@ -1211,7 +1211,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3038730448829971635, guid: a7f85654bbd2be946af4cb04cb471b9e, type: 3}
       propertyPath: m_SortingLayerID
-      value: 1466744637
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3328204496941334169, guid: a7f85654bbd2be946af4cb04cb471b9e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1780,7 +1780,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 104.17228
+      value: 104.17323
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -2097,6 +2097,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 519420031}
+    - target: {fileID: 3038730448829971635, guid: a7f85654bbd2be946af4cb04cb471b9e, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1466744637
+      objectReference: {fileID: 0}
     - target: {fileID: 3286306210102883994, guid: a7f85654bbd2be946af4cb04cb471b9e, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -3337,6 +3341,7 @@ MonoBehaviour:
   playerView: {fileID: 946138703}
   enemyView: {fileID: 1524296162}
   ballManager: {fileID: 4328751458895938648}
+  playAreaManager: {fileID: 0}
 --- !u!1001 &2834634534027371978
 PrefabInstance:
   m_ObjectHideFlags: 0

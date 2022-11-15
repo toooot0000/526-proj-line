@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using Core.DisplayArea.Stage.Enemy;
 using Core.DisplayArea.Stage.Player;
+using Core.PlayArea;
 using Core.PlayArea.Balls;
 using Core.PlayArea.Mines;
 using Model;
@@ -27,6 +28,7 @@ namespace Core.DisplayArea.Stage{
         public PlayerView playerView;
         public EnemyView enemyView;
         public BallManager ballManager;
+        public PlayAreaManager playAreaManager;
         private bool _isInTutorial;
 
         private Model.Stage _modelStage;
@@ -189,6 +191,7 @@ namespace Core.DisplayArea.Stage{
             if (enemyView.isDead){
                 OnEnemyDieTriggerTutorial();
                 if (_modelStage.NextEnemy == null){
+                    playAreaManager.ClearAllObjects();
                     yield return CollectRewards();
                     yield break;
                 }

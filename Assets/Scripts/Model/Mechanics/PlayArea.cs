@@ -158,5 +158,9 @@ namespace Model.Mechanics{
                 }
             }
         }
+
+        public void ClearAllObjects(){
+            _objects.Clear();
+        }
     }
 }

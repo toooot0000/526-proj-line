@@ -22,7 +22,6 @@ namespace Core.PlayArea.Blocks{
             get => _model;
             set{
                 _model = value;
-                _model.gameObject = gameObject;
             }
         }
 
