@@ -1350,6 +1350,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce336e9efdff4f749b79b60fdad7e363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1195093288 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8423325667303788219, guid: 7e26f00d94e55544f9cd6cb1105435ba, type: 3}
+  m_PrefabInstance: {fileID: 7174772897203891009}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1195093293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195093288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!223 &1195093294
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195093288}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &1343759397
 GameObject:
   m_ObjectHideFlags: 0
@@ -1780,7 +1823,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 104.17323
+      value: 104.17321
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3341,7 +3384,7 @@ MonoBehaviour:
   playerView: {fileID: 946138703}
   enemyView: {fileID: 1524296162}
   ballManager: {fileID: 4328751458895938648}
-  playAreaManager: {fileID: 0}
+  playAreaManager: {fileID: 4328751457965802252}
 --- !u!1001 &2834634534027371978
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5221,6 +5264,10 @@ PrefabInstance:
     - target: {fileID: 2431071203708602351, guid: 7e26f00d94e55544f9cd6cb1105435ba, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -0.1524
+      objectReference: {fileID: 0}
+    - target: {fileID: 4422919449545600197, guid: 7e26f00d94e55544f9cd6cb1105435ba, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickIcon
       objectReference: {fileID: 0}
     - target: {fileID: 5277506089511093732, guid: 7e26f00d94e55544f9cd6cb1105435ba, type: 3}
       propertyPath: m_fontSize
