@@ -12,7 +12,7 @@ namespace UI.Interfaces.NextMove
     {
         public TextMeshProUGUI moveTitle;
         public TextMeshProUGUI moveDesc;
-        public IntentionDisplayer.IntentionInfo moveModel;
+        public Intention moveModel;
         public IntentionDisplayer.IntentionPair[] pairs;
         public Image moveIcon;
         private Transform _parent;
@@ -42,21 +42,26 @@ namespace UI.Interfaces.NextMove
         
 
         public override void Open(object model){
-            moveModel = (IntentionDisplayer.IntentionInfo) model;
+            //moveModel = (IntentionDisplayer.IntentionInfo) model;
+
+            moveModel = (Intention)model;
             base.Open(model);
             _inAnimation = true;
-            
-            moveTitle.text = moveModel.intention.ToString();
-            if (moveModel.number != 0)
-            {
-                moveDesc.text = moveModel.intention + ":" + moveModel.number;
-            }
-            else
-            {
-                moveDesc.text = moveModel.intention.ToString();
-            }
-            
-            moveIcon.sprite = pairs.First(p => p.intention == moveModel.intention).sprite;
+
+            moveTitle.text = moveModel.name;
+            moveDesc.text = moveModel.desc;
+            moveIcon.sprite = Resources.Load<Sprite>(moveModel.imgPth);
+            // moveTitle.text = moveModel.intention.ToString();
+            // if (moveModel.number != 0)
+            // {
+            //     moveDesc.text = moveModel.intention + ":" + moveModel.number;
+            // }
+            // else
+            // {
+            //     moveDesc.text = moveModel.intention.ToString();
+            // }
+            //
+            // moveIcon.sprite = pairs.First(p => p.intention == moveModel.intention).sprite;
             
             
             var coroutine = TweenUtility.Lerp(0.2f,

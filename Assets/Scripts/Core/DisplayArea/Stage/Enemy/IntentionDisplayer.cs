@@ -16,11 +16,12 @@ namespace Core.DisplayArea.Stage.Enemy{
         public IntentionPair[] pairs;
         
         public EnemyIntention infoIntention;
+        public IntentionInfo _info;
         
 
         public void UpdateIntention(IntentionInfo info)
         {
-
+            _info = info;
             Debug.Log("UpdateIntention");
 
             icon.sprite = pairs.First(p => p.intention == info.intention).sprite;
@@ -43,6 +44,11 @@ namespace Core.DisplayArea.Stage.Enemy{
         public struct IntentionInfo{
             public EnemyIntention intention;
             public int number;
+        }
+
+        public void OnClickIcon()
+        {
+            UIManager.shared.OpenUI("UIMove",new Intention((int)_info.intention));
         }
     }
 }
