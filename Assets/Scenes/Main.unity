@@ -1791,7 +1791,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 104.17319
+      value: 104.17272
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -2898,6 +2898,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1978656419}
   - component: {fileID: 1978656420}
+  - component: {fileID: 1978656421}
   m_Layer: 0
   m_Name: BlockManager
   m_TagString: Untagged
@@ -2940,6 +2941,27 @@ MonoBehaviour:
   blockPrefab: {fileID: 3976118010062778992, guid: b6125be370b39144281173393eb02bdd, type: 3}
   cellSizePaddingDelta: 0.25
   playAreaManager: {fileID: 4328751457965802252}
+--- !u!223 &1978656421
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1978656418}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 519420031}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &1993333626
 GameObject:
   m_ObjectHideFlags: 0

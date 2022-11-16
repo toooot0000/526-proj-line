@@ -30,4 +30,8 @@ namespace Model.Mechanics{
     public interface ISplittable<out T> where T: GameModel{
         T Split();
     }
+
+    public interface ITurnBasedRemovable{
+        int RemainingTurnNum{ get; set; }
+    }
 }

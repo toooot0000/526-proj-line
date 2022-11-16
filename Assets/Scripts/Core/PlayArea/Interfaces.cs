@@ -145,4 +145,8 @@ namespace Core.PlayArea{
     public interface IOnPlayerFinishDrawing: IPlayableObjectViewProperty{
         public void OnPlayerFinishDrawing();
     }
+
+    public interface IOnPlayerTurnEnd : IPlayableObjectViewProperty{
+        public void OnPlayerTurnEnd();
+    }
 }

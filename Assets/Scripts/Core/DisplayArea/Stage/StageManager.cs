@@ -200,6 +200,9 @@ namespace Core.DisplayArea.Stage{
                 yield return MoveToNextEnemy();
             }
             playerView.Model.ExecuteOnTurnEndBuffEffect();
+            foreach (var onPlayerTurnEnd in playAreaManager.GetAllViewsOfProperty<IOnPlayerTurnEnd>()){
+                onPlayerTurnEnd.OnPlayerTurnEnd();
+            }
             yield return new WaitForSeconds(1f);
             SwitchTurn();
         }
