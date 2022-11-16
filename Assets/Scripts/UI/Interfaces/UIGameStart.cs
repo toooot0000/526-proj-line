@@ -28,7 +28,7 @@ namespace UI.Interfaces{
 
         public void GotoSelectStage()
         {
-            UIManager.shared.OpenUI("UIStage");
+            UIManager.shared.OpenUI("Stage");
             Close();
         }
     }
