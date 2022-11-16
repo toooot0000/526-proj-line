@@ -1313,6 +1313,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minePrefab: {fileID: 2013811300397455778, guid: ca6a54f72c823fc469916e113501302d, type: 3}
   playAreaManager: {fileID: 4328751457965802252}
+--- !u!114 &952494111 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1251169695852008884, guid: a7f85654bbd2be946af4cb04cb471b9e, type: 3}
+  m_PrefabInstance: {fileID: 1524296156}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c3f37ff64d4491c91e3c2d779994f59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &960914826 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8370655700739548214, guid: 8b29ce899c16fe34a95cdce970ee8211, type: 3}
@@ -1780,7 +1791,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 104.17318
+      value: 104.17266
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -2238,7 +2249,7 @@ MonoBehaviour:
   animationController: {fileID: 1524296166}
   damageNumberDisplay: {fileID: 802145626}
   armorDisplayer: {fileID: 1524296161}
-  buffDisplayer: {fileID: 0}
+  buffDisplayer: {fileID: 952494111}
   intentionDisplayer: {fileID: 7174772897203891013}
   sprRenderer: {fileID: 970730297}
   enemyName: {fileID: 900311436}

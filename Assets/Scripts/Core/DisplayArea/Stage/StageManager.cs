@@ -5,6 +5,7 @@ using Core.DisplayArea.Stage.Enemy;
 using Core.DisplayArea.Stage.Player;
 using Core.PlayArea;
 using Core.PlayArea.Balls;
+using Core.PlayArea.Blocks;
 using Core.PlayArea.Mines;
 using Model;
 using Model.Buff;
@@ -14,6 +15,7 @@ using Tutorial.Tutorials.Charge;
 using Tutorial.Tutorials.Combo;
 using Tutorial.Tutorials.EnemyIntention;
 using Tutorial.Tutorials.EnemyUpdate;
+using Tutorial.Tutorials.Mechanics;
 using Tutorial.Tutorials.Stage1Clear;
 using Tutorial.Tutorials.Stage1Soft;
 using UI;
@@ -226,6 +228,12 @@ namespace Core.DisplayArea.Stage{
                     break;
                 }
             }
+
+            if (GameManager.shared.playAreaManager.HasViewOf<BlockView>()){
+                GameManager.shared.tutorialManager.LoadTutorial<TutorialBlock>();
+            }
+            
+            // if(GameManager.shared.playAreaManager.HasViewOf<>())
         }
     }
 }

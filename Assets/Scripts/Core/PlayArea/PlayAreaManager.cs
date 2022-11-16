@@ -118,12 +118,6 @@ namespace Core.PlayArea{
             }
         }
 
-        public IEnumerable<T> GetAllViewsOfType<T>() where T : PlayableObjectViewBase{
-            foreach (var playableObjectViewBase in GetAllViews()){
-                if (playableObjectViewBase is T typed) yield return typed;
-            }
-        }
-
         public IEnumerable<PlayableObjectViewBase> GetAllViews(){
             return AllManagers.SelectMany(playableViewManager => playableViewManager.GetAllViews());
         }
@@ -139,12 +133,14 @@ namespace Core.PlayArea{
         }
 
         public void ClearAllObjects(){
-            foreach (var playableViewManager in AllManagers){
-                foreach (var playableObjectViewBase in playableViewManager.GetAllViews()){
-                    playableObjectViewBase.gameObject.SetActive(false);
-                }
+            foreach (var playableObjectViewBase in GetAllViews()){
+                playableObjectViewBase.gameObject.SetActive(false);
             }
             model.ClearAllObjects();
+        }
+
+        public bool HasViewOf<TView>() where TView : PlayableObjectViewBase{
+            return GetAllViews().OfType<TView>().Any();
         }
     }
 }
