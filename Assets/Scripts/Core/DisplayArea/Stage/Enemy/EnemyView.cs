@@ -37,6 +37,9 @@ namespace Core.DisplayArea.Stage.Enemy{
                     EnemyIntention.Attack => enemy.attack,
                     EnemyIntention.Defend => enemy.defend,
                     EnemyIntention.SpecialAttack => 0,
+                    EnemyIntention.Sp1 => 0,
+                    EnemyIntention.Sp2 => 0,
+                    EnemyIntention.Sp3 => 0,
                     _ => throw new ArgumentOutOfRangeException()
                 }
             });

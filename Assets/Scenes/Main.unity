@@ -1791,7 +1791,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 104.17266
+      value: 104.17319
       objectReference: {fileID: 0}
     - target: {fileID: 1236858338657334431, guid: 114e02ee082e5ae409fd9d4664e40871, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -5206,6 +5206,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2123417102}
     m_Modifications:
+    - target: {fileID: 702607026030504679, guid: 7e26f00d94e55544f9cd6cb1105435ba, type: 3}
+      propertyPath: pairs.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 702607026030504679, guid: 7e26f00d94e55544f9cd6cb1105435ba, type: 3}
+      propertyPath: pairs.Array.data[3].sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c6db97717b2d7db49931d53beea4d532, type: 3}
+    - target: {fileID: 702607026030504679, guid: 7e26f00d94e55544f9cd6cb1105435ba, type: 3}
+      propertyPath: pairs.Array.data[4].sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c6db97717b2d7db49931d53beea4d532, type: 3}
+    - target: {fileID: 702607026030504679, guid: 7e26f00d94e55544f9cd6cb1105435ba, type: 3}
+      propertyPath: pairs.Array.data[5].sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c6db97717b2d7db49931d53beea4d532, type: 3}
+    - target: {fileID: 702607026030504679, guid: 7e26f00d94e55544f9cd6cb1105435ba, type: 3}
+      propertyPath: pairs.Array.data[3].intention
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 702607026030504679, guid: 7e26f00d94e55544f9cd6cb1105435ba, type: 3}
+      propertyPath: pairs.Array.data[4].intention
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 702607026030504679, guid: 7e26f00d94e55544f9cd6cb1105435ba, type: 3}
+      propertyPath: pairs.Array.data[5].intention
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 2431071203708602351, guid: 7e26f00d94e55544f9cd6cb1105435ba, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0.7057
