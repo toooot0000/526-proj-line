@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Core.PlayArea.TouchTracking;
 using Model;
 using Model.Mechanics;
@@ -33,6 +34,10 @@ namespace Core.PlayArea{
         public virtual  IEnumerable<PlayableObjectViewBase> GetAllViews(){
             return views;
         }
+
+        public virtual IEnumerable<PlayableObjectViewBase> GetActiveViews(){
+            return GetAllViews().Where(playableObjectViewBase => playableObjectViewBase.gameObject.activeSelf);
+        }
         public virtual void Start(){
             GameManager.shared.playAreaManager.RegisterManager(this);
         }
@@ -40,33 +45,32 @@ namespace Core.PlayArea{
     
     public abstract class PlayableObjectViewBase : MonoBehaviour, ITutorialControllable{
         private static TouchTracker TouchTracker => GameManager.shared.touchTracker;
-        protected bool isInTutorial = false;
-        protected bool tutorIsSliceable = true;
-        protected bool tutorIsCircleable = true;
+        public bool IsInTutorial{ get; private set; }
+        public bool tutorIsSliceable = true;
+        public bool tutorIsCircleable = true;
+        public bool tutorCanMove = true;
 
         public virtual void Update(){
             if (this is IForceableView forceableView){
-                forceableView.UpdateVelocity();
+                if(!IsInTutorial || tutorCanMove) forceableView.UpdateVelocity();
             }
 
             if (this is IMovableView self){
-                self.UpdatePosition();
+                if(!IsInTutorial || tutorCanMove) self.UpdatePosition();
             }
         }
 
         public virtual void OnMouseEnter(){
-            if (this is ISliceableView self){
-                if (TouchTracker.isTracing){
-                    TouchTracker.ContinueTracking();
-                    if(!isInTutorial || tutorIsSliceable) self.OnSliced();
-                }
+            if (this is ISliceableView self && TouchTracker.isTracing){
+                TouchTracker.ContinueTracking();
+                if(!IsInTutorial || tutorIsSliceable) self.OnSliced();
             }
         }
 
         public virtual void OnMouseDown(){
             if (this is ISliceableView self){
                 TouchTracker.StartTracking();
-                if(!isInTutorial || tutorIsSliceable) self.OnSliced();
+                if(!IsInTutorial || tutorIsSliceable) self.OnSliced();
             }
         }
 
@@ -88,11 +92,11 @@ namespace Core.PlayArea{
         }
 
         public void HandOverControlTo(TutorialBase tutorial) {
-            isInTutorial = true;
+            IsInTutorial = true;
         }
 
         public void GainBackControlFrom(TutorialBase tutorial) {
-            isInTutorial = false;
+            IsInTutorial = false;
         }
     }
 

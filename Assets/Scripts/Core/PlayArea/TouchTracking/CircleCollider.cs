@@ -17,6 +17,7 @@ namespace Core.PlayArea.TouchTracking{
         private void OnTriggerStay2D(Collider2D col){
             var circleable = col.GetComponent<ICircleableView>();
             if (circleable == null || _seen.Contains(circleable)) return;
+            if (circleable is PlayableObjectViewBase{ IsInTutorial: true, tutorIsCircleable: false }) return;
             _seen.Add(circleable);
             circleable.OnCircled();
         }

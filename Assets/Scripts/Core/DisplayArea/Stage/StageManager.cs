@@ -5,10 +5,13 @@ using Core.DisplayArea.Stage.Enemy;
 using Core.DisplayArea.Stage.Player;
 using Core.PlayArea;
 using Core.PlayArea.Balls;
+using Core.PlayArea.BlackHoles;
 using Core.PlayArea.Blocks;
+using Core.PlayArea.Crystals;
 using Core.PlayArea.Mines;
 using Model;
 using Model.Buff;
+using Model.Mechanics.PlayableObjects;
 using Tutorial;
 using Tutorial.Tutorials.BasicConcept;
 using Tutorial.Tutorials.Charge;
@@ -232,10 +235,24 @@ namespace Core.DisplayArea.Stage{
                 }
             }
 
-            if (GameManager.shared.playAreaManager.HasViewOf<BlockView>()){
+            if (!GameManager.shared.tutorialManager.TutorialHasTriggered<TutorialBlock>() && 
+                GameManager.shared.playAreaManager.HasViewOf<BlockView>()){
                 GameManager.shared.tutorialManager.LoadTutorial<TutorialBlock>();
-            }
+            } else if (!GameManager.shared.tutorialManager.TutorialHasTriggered<TutorialBomb>() && 
+                       GameManager.shared.playAreaManager.HasViewOf<MineView>()){
+                GameManager.shared.tutorialManager.LoadTutorial<TutorialBomb>();
+            } else if (!GameManager.shared.tutorialManager.TutorialHasTriggered<TutorialBlackHole>() &&
+                       GameManager.shared.playAreaManager.HasViewOf<BlackHoleView>()){
+                GameManager.shared.tutorialManager.LoadTutorial<TutorialBlackHole>();
+            }  else if (!GameManager.shared.tutorialManager.TutorialHasTriggered<TutorialCrystalFreeze>() &&
+                        GameManager.shared.playAreaManager.HasViewOf<CrystalView>() && GameManager.shared.playAreaManager.GetAllViews().OfType<CrystalView>().First().Model.type == CrystalType.FreezeMovable){
+                GameManager.shared.tutorialManager.LoadTutorial<TutorialCrystalFreeze>();
+            } else if (!GameManager.shared.tutorialManager.TutorialHasTriggered<TutorialCrystalStrengthen>() &&
+                       GameManager.shared.playAreaManager.HasViewOf<CrystalView>() && GameManager.shared.playAreaManager.GetAllViews().OfType<CrystalView>().First().Model.type == CrystalType.LengthenLine){
+                GameManager.shared.tutorialManager.LoadTutorial<TutorialCrystalStrengthen>();
+            } 
             
+
             // if(GameManager.shared.playAreaManager.HasViewOf<>())
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using BackendApi;
 using Core.DisplayArea.Stage;
 using Core.PlayArea;
@@ -149,7 +150,7 @@ public class GameManager : MonoBehaviour{
         if (game.turn != Game.Turn.Player) return;
         playAreaManager.OnPlayerFinishDrawing();
         var action = game.player.GetAction();
-        if (StageActionPlayerAction.IsEmpty(action)) return;
+        if (playAreaManager.ballManager.GetAllViews().Count() != 0 && StageActionPlayerAction.IsEmpty(action)) return;
         touchTracker.isAcceptingInput = false;
         OnPlayerAttack?.Invoke();
         StartCoroutine(stageManager.StartPlayerAction(action));
