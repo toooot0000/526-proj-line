@@ -16,7 +16,7 @@ namespace Model.Mechanics.PlayableObjects{
     public class Block: GameModel, IPlayableObject{
 
         public BlockLevel level;
-        public int remainingTurn = 0;
+        public int remainingTurn = 2;
         
         public RectInt InitGridRectInt{ get; set; }
 

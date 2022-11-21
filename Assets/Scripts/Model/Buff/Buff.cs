@@ -24,9 +24,10 @@ namespace Model.Buff{
         public string name;
         public string desc;
         public int layer;
-        public readonly IBuffHolder holder;
+        public IBuffHolder holder;
         public string icon;
         public string display;
+        public string className;
 
         public event ModelEvent<Buff> OnBuffLayerRemoved;
 
@@ -59,6 +60,26 @@ namespace Model.Buff{
             SetUp(ret);
             return ret;
         }
+        
+        /// <summary>
+        /// Create a buff using the class name of a buff
+        /// </summary>
+        /// <param name="className">The class name in Buffs folder, the unique identifier</param>
+        /// <param name="parent">The buff holder</param>
+        /// <param name="layer">The layer</param>
+        /// <returns></returns>
+        public static Buff MakeBuffByClassName(string className, GameModel parent, int layer){
+            var ret = Activator.CreateInstance(Type.GetType($"Model.Buff.Buffs.{className}", true),
+                new object[]{ parent, layer }) as Buff;
+            SetUp(ret);
+            return ret;
+        }
+
+        public static Buff MakeBuffByBuffName(string buffName, GameModel parent, int layer){
+            var className = CsvLoader.TryToLoad("Configs/buffs", NameToId[buffName])["class_name"];
+            return className == null ? null : MakeBuffByClassName(className as string, parent, layer);
+        }
+        
 
         public static string BuffsToString(IBuffHolder buffHolder){
             string ret = "";
@@ -70,7 +91,7 @@ namespace Model.Buff{
 
         private static Dictionary<string, int> _nameToId = null;
 
-        private static Dictionary<string, int> NameToId{
+        public static Dictionary<string, int> NameToId{
             get{
                 if (_nameToId == null){
                     MakeNameToIdDict();                    
@@ -116,6 +137,7 @@ namespace Model.Buff{
             buff.desc = info["desc"] as string;
             buff.icon = info["icon"] as string;
             buff.display = info["display_name"] as string;
+            buff.className = info["class_name"] as string;
         }
 
         public override string ToString(){
@@ -123,7 +145,7 @@ namespace Model.Buff{
         }
 
         public string ToDetailString(){
-            return $"Name: {name}\nLayer: {layer.ToString()}\nDetail: {desc}";
+            return $"Name: {display}\nLayer: {layer.ToString()}\nDetail: {desc}";
         }
 
         public Sprite IconSprite => Resources.Load<Sprite>(icon);

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Model.Buff;
+using UnityEditor;
 
 namespace Model{
     public abstract class Damageable: GameModel, IBuffHolder{
@@ -52,6 +53,19 @@ namespace Model{
             } else{
                 buff.AddLayer(layer);
             }
+            OnBuffLayerAdded?.Invoke(currentGame, buff);
+        }
+
+        public void AddBuff(Buff.Buff buff){
+            foreach (var curBuff in _buffs){
+                if (curBuff.GetType() == buff.GetType()){
+                    curBuff.layer += buff.layer;
+                    OnBuffLayerAdded?.Invoke(currentGame, curBuff);
+                    return;
+                }
+            }
+            _buffs.Add(buff);
+            buff.holder = this;
             OnBuffLayerAdded?.Invoke(currentGame, buff);
         }
 

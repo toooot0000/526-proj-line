@@ -1,11 +1,13 @@
 using Core.Common.SizeSyncer;
 using Model.Mechanics.PlayableObjects;
+using TMPro;
 using UnityEngine;
 
 namespace Core.PlayArea.Blocks{
-    public class BlockView: PlayableObjectViewWithModel<Block>{
+    public class BlockView: PlayableObjectViewWithModel<Block>, IOnPlayerTurnEnd{
         public SpriteSizeSyncer sizeSyncer;
         public BoxCollider2DSizeSyncer collider2DSizeSyncer;
+        public TextMeshProUGUI turnNum;
 
         public Rect Rect{
             set{
@@ -22,6 +24,7 @@ namespace Core.PlayArea.Blocks{
             get => _model;
             set{
                 _model = value;
+                turnNum.text =  $"{Model.remainingTurn.ToString()}";
             }
         }
 
@@ -33,6 +36,14 @@ namespace Core.PlayArea.Blocks{
             var normal = contact.normal;
             var newVelocity = Vector2.Reflect(ball.Velocity, normal);
             ball.Velocity = newVelocity;
+        }
+
+        public void OnPlayerTurnEnd(){
+            Model.remainingTurn--;
+            turnNum.text = $"{Model.remainingTurn.ToString()}";
+            if (Model.remainingTurn == 0){
+                gameObject.SetActive(false);
+            }
         }
     }
 }

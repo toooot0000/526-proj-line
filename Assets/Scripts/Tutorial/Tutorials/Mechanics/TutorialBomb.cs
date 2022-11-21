@@ -1,30 +1,31 @@
 using System.Linq;
-using Core.PlayArea;
 using Core.PlayArea.Blocks;
+using Core.PlayArea.Mines;
 using Tutorial.Common;
 using Tutorial.Utility;
 using UnityEngine;
 
 namespace Tutorial.Tutorials.Mechanics{
-    public class TutorialMechanicsBase<T>: TutorialBase
-    where T: PlayableObjectViewBase{
-        public new const string PrefabName = "TutorialBlock";
+    public class TutorialBomb: TutorialBase{
+        public new const string PrefabName = "TutorialBomb";
         public TutorialText[] texts;
         public TutorialTapCatcher tapCatcher;
         private StepBase[] _steps;
         protected override StepBase[] Steps => _steps;
-        private T _target;
+        private MineView _target;
 
         public override void OnLoaded(TutorialManager mng){
-            _target = GameManager.shared.playAreaManager.GetAllViews().OfType<T>().First();
-            _target.HandOverControlTo(this);
+            _target = GameManager.shared.playAreaManager.GetAllViews().OfType<MineView>().First();
             Debug.Assert(_target != null);
+            _target.HandOverControlTo(this);
+            _target.tutorIsCircleable = false;
+            _target.tutorIsSliceable = false;
             var o = _target.gameObject;
             _steps = new StepBase[]{
-                // This is block! Balls that collide into it will be bouncing back.
-                new StepTapToContinue<TutorialBlock>(texts[0], tapCatcher, o),
-                // And also you can't draw lines over it.
-                new StepTapToContinue<TutorialBlock>(texts[1], tapCatcher, o)
+                // This is a bomb. Don't touch it. It will explode if you touch it!
+                new StepTapToContinue<TutorialBomb>(texts[0], tapCatcher, o),
+                // Circling it can remove it from the game!
+                new StepTapToContinue<TutorialBomb>(texts[1], tapCatcher, o)
             };
             base.OnLoaded(mng);
         }

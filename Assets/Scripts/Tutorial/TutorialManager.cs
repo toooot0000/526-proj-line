@@ -36,12 +36,14 @@ namespace Tutorial{
         public TurnSignDisplayer turnSignDisplayer;
         public TutorialUIController uiController;
 
-        private readonly HashSet<string> _completeTutorials = new();
+        // private readonly HashSet<string> _completeTutorials = new();
         private readonly HashSet<Type> _completeTutorialTypes = new();
         private float _nextDelay;
         private string _nextName;
         private string _curName;
         private Type _curTutorialType;
+
+        public bool TutorialHasTriggered<T>() => _completeTutorialTypes.Contains(typeof(T));
 
         private void Update(){
             if (Input.GetKeyUp(KeyCode.A)){ 
@@ -57,7 +59,7 @@ namespace Tutorial{
         [Obsolete("Use the generic one")]
         public TutorialBase LoadTutorial(string tutorialName){
             if (!IsActive) return null;
-            if (_completeTutorials.Contains(tutorialName)) return null;
+            // if (_completeTutorials.Contains(tutorialName)) return null;
             if (_curName != null){
                 Debug.Log("Replicated Tutorial Invoke!");
                 return null;
@@ -79,7 +81,7 @@ namespace Tutorial{
         public void CompleteTutorial(TutorialBase tutorial){
             // TODO: clean up;
             shade.SetActive(false);
-            _completeTutorials.Add(_curName);
+            // _completeTutorials.Add(_curName);
             _curName = null;
             uiController.shade.SetActive(false);
             _completeTutorialTypes.Add(_curTutorialType);

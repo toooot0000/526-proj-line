@@ -7,7 +7,8 @@ namespace Model.EnemySpecialAttacks {
     /// <summary>
     /// Args: [speed: float];[size: int];[mine effect name: string];[mine effect args: string[]]
     /// </summary>
-    public class SpAttAddBomb: SpecialAttackBase {
+    public class SpAttAddBomb: SpecialAttackBase{
+        public override string Desc => "Throw a bomb in the area. Watch out!";
         public SpAttAddBomb(string[] args) : base(args) { }
 
         public override void Execute(StageActionBase info) {

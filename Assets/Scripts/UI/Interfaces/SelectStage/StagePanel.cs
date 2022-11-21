@@ -34,6 +34,10 @@ namespace UI.Interfaces.SelectStage
             var stageIds = CsvLoader.Load("Configs/stages").Keys;
 
             foreach (var stage in stageIds) {
+                if ((string)CsvLoader.TryToLoad("Configs/stages", stage)["type"] != "battle")
+                {
+                    continue;
+                }
               
                 var stagePanel = _panels[curPanelInd];
                 stagePanel.OnClick += GotoStage;
